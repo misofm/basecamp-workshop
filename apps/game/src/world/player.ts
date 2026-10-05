@@ -61,7 +61,7 @@ export class Player {
     private collision: Collision,
     private canvas: HTMLCanvasElement,
   ) {
-    this.character = createTamashi(CAST.player, { role: "player", castShadow: true });
+    this.character = createTamashi(CAST.player.id, { role: "player", castShadow: true });
     this.root = this.character.root;
     scene.add(this.root);
     document.documentElement.dataset.character = "ready";

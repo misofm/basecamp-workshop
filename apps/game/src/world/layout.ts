@@ -3,7 +3,7 @@
  *
  * Owns: world bounds, road/sidewalk/building rectangles, the shop footprint and
  * doorway, lanes, crosswalks, pedestrian routes, parked-car slots and the fixed
- * positions of the shop's stations.
+ * positions of the shop's stations and the named cast (CAST_SPOTS).
  * Must not: import Three.js or touch the scene. Other world modules read these
  * numbers so the minimap, collision, traffic and rendering always agree.
  *
@@ -96,6 +96,41 @@ export const BUYER_EXIT = [
   { x: 3.2, z: 2.9 },
   { x: -30, z: 2.9 },
 ];
+
+/**
+ * Where the named story characters (src/tamashi/cast.ts, `spot` keys) stand, sit or crouch.
+ * PLACEHOLDER positions in the current layout: an environment pass will move them (and
+ * may add the props they lean on). Heading: radians, 0 = facing +z (south).
+ * Kept clear of the walker routes, the crosswalks, buildings, interactables, the ATM, the
+ * bench, the collector and the walk from the spawn to the shop door.
+ */
+export const CAST_SPOTS: Record<string, { x: number; z: number; heading: number }> = {
+  // Inside the shop: crouched just east of the listening deck's right speaker, facing the
+  // deck (2.9 m from its interact point, outside its 1.6 m radius).
+  inicio: { x: -2.8, z: -12.3, heading: -1.79 },
+  // The band, sitting on the north curb east of the intersection, facing the street.
+  band1: { x: 26.3, z: 3.7, heading: 0.12 },
+  band2: { x: 27.4, z: 3.7, heading: 0.04 },
+  band3: { x: 28.5, z: 3.7, heading: -0.04 },
+  band4: { x: 29.6, z: 3.7, heading: -0.12 },
+  // Two fans on the south sidewalk across from the band, turned a little to each other
+  // (east of the street tree at x 27, behind the streetlight at x 29).
+  fan1: { x: 28.2, z: 15.9, heading: Math.PI - 0.3 },
+  fan2: { x: 29.4, z: 15.9, heading: Math.PI + 0.3 },
+  // Against the north-east building's south face (the casino), and one by its door.
+  casinoWall1: { x: 31.0, z: 0.5, heading: 0 },
+  casinoWall2: { x: 32.5, z: 0.5, heading: 0 },
+  casinoDoor: { x: 33.6, z: 2.0, heading: -2.5 },
+  // The diner alley, south side, west end.
+  alley1: { x: -31.4, z: 17.3, heading: Math.PI / 2 },
+  alley2: { x: -30.6, z: 17.3, heading: -Math.PI / 2 },
+  dinerDoor: { x: -28.4, z: 17.6, heading: Math.PI },
+  // The hotel front, north side, west end (well west of route 0's corner at x -25).
+  hotel1: { x: -28.7, z: 1.3, heading: -Math.PI / 2 },
+  hotel2: { x: -29.5, z: 1.0, heading: 0 },
+  hotel3: { x: -30.4, z: 1.9, heading: 2.36 },
+  hotel4: { x: -28.6, z: 2.3, heading: -2.53 },
+};
 
 /** Pedestrian routes (closed loops or ping-pong lines), all on sidewalks/crosswalks. */
 export const PED_ROUTES: { points: { x: number; z: number }[]; loop: boolean }[] = [

@@ -31,7 +31,7 @@ permission; **not covered by the Apache-2.0 code licence** (see the repo-root `N
 - `public/tamashi/portraits/<n>.webp` are 256 px portraits of all 100 Tamashi, for dialogs
   and the collection.
 
-Who plays whom (player #95, clerk, collector, crowd) is set in `src/tamashi/cast.ts`.
+Who plays whom (the player, the shopkeeper, the collector, the named story characters and the crowd) is set in `src/tamashi/cast.ts`; where the named ones stand is `CAST_SPOTS` in `src/world/layout.ts`.
 `?gallery=1` shows all 100 in a grid, `?gallery=<id>` one up close next to its artwork.
 
 ## Original assets

@@ -17,7 +17,7 @@
  *   __game.measure()                  draw calls / triangles for one frame
  *   __game.deckDebug()                deck source, <audio> currentTime, preview window start
  *   __game.buyerReturnNow()           bring the collector back now (normally ~20 s after a sale)
- *   __game.crowdStats()               street crowd: members on screen, distinct Tamashi ids shown so far
+ *   __game.crowdStats()               crowd on screen, distinct Tamashi ids shown so far, named cast (id, name, spot, onScreen)
  *   __game.tamashiGallery()           open the Tamashi gallery (?gallery=1) instead of the game
  */
 import type { MisoAdapter } from "./miso/adapter";

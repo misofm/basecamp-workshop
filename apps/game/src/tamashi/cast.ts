@@ -1,34 +1,254 @@
 /**
  * The cast: which Tamashi plays which role in the game. The ONE place to change it.
  *
- * Owns: token ids for the player, the cashier, the collector and the street crowd.
- * Must not: build anything. The cashier, collector and crowd picks are PLACEHOLDERS
- * until the story pass sets them; the player is Tamashi #95.
+ * Owns: token ids, names and lines for the player, the shopkeeper, the collector, the
+ * named story characters around the block, and the street crowd (everyone else).
+ * Canon: the Nozomi world bible, chapter 3.0 setting (§2 characters, §7.9 NPC positions
+ * and lines). Lines are verbatim canon lines or new lines in the character's canon voice,
+ * as listed there. Speech bubbles for the named NPCs are not wired yet (a later pass).
+ * Must not: hold coordinates. A role's `spot` is a key into CAST_SPOTS in
+ * src/world/layout.ts, so the environment pass can move everyone in one place.
  */
 import { TAMASHI_COUNT } from "./traits";
 
+/** How a placed character holds itself (TamashiCharacter.pose). */
+export type CastPose = "stand" | "sit" | "crouch";
+
+export interface CastRole {
+  /** Tamashi token number (1..100). */
+  id: number;
+  name: string;
+  /** Who they are in this scene (one line, for humans reading the code). */
+  role: string;
+  /** Things they say (speech bubbles, later). */
+  lines: string[];
+}
+
+/** A named NPC standing, sitting or crouching somewhere on the block. */
+export interface PlacedRole extends CastRole {
+  /** Key into CAST_SPOTS (src/world/layout.ts); null = not placed (e.g. a voice only). */
+  spot: string | null;
+  pose: CastPose;
+}
+
 export interface Cast {
   /** The player character. */
-  player: number;
-  /** Behind the shop counter. Placeholder. */
-  cashier: number;
-  /** The collector on the sidewalk who buys your records. Placeholder. */
-  collector: number;
+  player: CastRole;
+  /** Behind the shop counter. */
+  cashier: CastRole;
+  /** Buys your records on the street (BUYER_SPOT in layout.ts). */
+  collector: CastRole;
+  /** Named NPCs placed around the block (never swapped out). */
+  named: PlacedRole[];
   /**
-   * Street crowd, in order of appearance. Walkers and idlers take ids from this list and
-   * swap to the next unused one now and then (out of view), so over a session every id
-   * in it shows up. Placeholder: everyone not cast above.
+   * Street crowd, in order of appearance: every id not cast above. Walkers and idlers take
+   * ids from this list and swap to the next unused one now and then (out of view), so over
+   * a session every id in it shows up.
    */
   crowd: number[];
 }
 
-const PLAYER = 95;
-const CASHIER = 7; // placeholder: tuxedo + bowtie, reads as staff
-const COLLECTOR = 100; // placeholder: crowned "king of wax"
+const PLAYER: CastRole = {
+  id: 95,
+  name: "Gamer",
+  role: "the player; a Takahashi who goes by Gamer now",
+  lines: ["'Gamer' is my name now."],
+};
+
+const CASHIER: CastRole = {
+  id: 52,
+  name: "Jazz",
+  role: "shopkeeper of the record shop; the band member who left (joined Team Order)",
+  lines: [
+    "Saisei. Means 'playback.' Also means starting over. Seemed fitting.",
+    "Cash only. The card readers still answer to the Triangle network.",
+    "Four of the five out there drinking? Don't tell them I'm in here. ...Tell Disco the jacket still looks like a beehive.",
+  ],
+};
+
+const COLLECTOR: CastRole = {
+  id: 35,
+  name: "Stonks",
+  role: "record collector and hoarder, behind a folding BUYING table across from the shop",
+  lines: [
+    "You need to HODL them now and wait until there's demand.",
+    "Records! It's limited. No one's going to make any more. It's a limited supply.",
+    "What's the rent on this place anyway?",
+  ],
+};
+
+const NAMED: PlacedRole[] = [
+  // Inside the shop.
+  {
+    id: 74,
+    name: "Inicio",
+    role: "Gamer's new friend, a tinkerer; crouched at the listening bar with tools",
+    spot: "inicio",
+    pose: "crouch",
+    lines: [
+      "It's amazing how much tech is lying around the facility!",
+      "It's not really anything",
+      "It looks cool though, right?",
+      "Motor was dead. Gave it a nudge. Want to hear something?",
+    ],
+  },
+  // The band, on the curb by the casino's east fire exit, sharing Disco's sake.
+  {
+    id: 60,
+    name: "Habiki",
+    role: "the band's DJ",
+    spot: "band1",
+    pose: "sit",
+    lines: ["Well that got out of hand", "Has anyone seen Jazz?", "Hey... that's our old mix. Who's spinning that?"],
+  },
+  {
+    id: 66,
+    name: "Ongaku",
+    role: "the band's guitarist, the gruff one",
+    spot: "band2",
+    pose: "sit",
+    lines: ["Just like old times… All we need now's some liquor.", "I miss that jackass."],
+  },
+  {
+    id: 76,
+    name: "Disco",
+    role: "the band's joker; smuggles sake",
+    spot: "band3",
+    pose: "sit",
+    lines: [
+      "But this jacket will win you over one of these days!",
+      "Sake's for grown-ups, kid. The jacket, though — the jacket is for everyone.",
+    ],
+  },
+  {
+    id: 38,
+    name: "Wolfgang",
+    role: "the band's violist",
+    spot: "band4",
+    pose: "sit",
+    lines: ["No. Not since he joined Team Order."],
+  },
+  // Celebrity fans watching the band (canon: on a bench across from them; standing until there is one).
+  {
+    id: 54,
+    name: "Kasimir",
+    role: "celebrity living incognito; a fan of the band",
+    spot: "fan1",
+    pose: "stand",
+    lines: ["Is that them?", "Don't worry darling. We're going to make this work."],
+  },
+  {
+    id: 65,
+    name: "Natsuki",
+    role: "celebrity escaping fame; a fan of the band",
+    spot: "fan2",
+    pose: "stand",
+    lines: ["At least four of the five, yeah?", "...Turn that off. Please. We're nobody. Just fans."],
+  },
+  // Near the casino at the east end.
+  {
+    id: 78,
+    name: "Mizuto",
+    role: "sitting against the wall by the dead hydrant",
+    spot: "casinoWall1",
+    pose: "sit",
+    lines: ["Every time I blink, there's another fire.", "Although it would be nice to have a working fire truck."],
+  },
+  {
+    id: 6,
+    name: "Heart",
+    role: "sitting against the wall by the dead hydrant; reacts to the car smash",
+    spot: "casinoWall2",
+    pose: "sit",
+    lines: ["They just want to feel something.", "But someone needs to look out for these people."],
+  },
+  {
+    id: 39,
+    name: "Shimo",
+    role: "crossing to the casino fire door with a med kit",
+    spot: "casinoDoor",
+    pose: "stand",
+    lines: ["Is everyone alright here?"],
+  },
+  // The diner alley.
+  {
+    id: 82,
+    name: "Noir",
+    role: "in the diner alley, telling Takahashi stories",
+    spot: "alley1",
+    pose: "stand",
+    lines: ["'Strong men shape the world'. I'll never forget it."],
+  },
+  {
+    id: 79,
+    name: "Itamae",
+    role: "in the diner alley",
+    spot: "alley2",
+    pose: "stand",
+    lines: ["Tell me a Takahashi story.", "No one back there can cook as well as me."],
+  },
+  {
+    id: 55,
+    name: "Waitress",
+    role: "at the diner door",
+    spot: "dinerDoor",
+    pose: "stand",
+    lines: ["Pancakes are off. Coffee's mostly hot water. Jukebox still works, though."],
+  },
+  // The hotel end (west): Gamer's mother at a window, and the tableau around Vine.
+  {
+    id: 57,
+    name: "Miné",
+    role: "Gamer's mother; a voice from a hotel window at the west end",
+    spot: null, // voice only in canon; the environment pass adds the hotel window
+    pose: "stand",
+    lines: ["Ka-Gamer... home before dark!"],
+  },
+  {
+    id: 50,
+    name: "Kasumi",
+    role: "kneeling by Vine at the hotel front",
+    spot: "hotel1",
+    pose: "crouch",
+    lines: ["We're going to get you help, alright?", "Carry a little nozomi home with you."],
+  },
+  {
+    id: 3,
+    name: "Vine",
+    role: "sitting by her dent at the hotel front",
+    spot: "hotel2",
+    pose: "sit",
+    lines: ["I … I … there's so much anger … urgh."],
+  },
+  {
+    id: 10,
+    name: "Birdcage",
+    role: "at the hotel front",
+    spot: "hotel3",
+    pose: "stand",
+    lines: ["Go on home, kid. It's been a day."],
+  },
+  {
+    id: 73,
+    name: "Hero",
+    role: "at the hotel front",
+    spot: "hotel4",
+    pose: "stand",
+    lines: ["Is she going to be alright?"],
+  },
+];
+
+const taken = new Set([PLAYER.id, CASHIER.id, COLLECTOR.id, ...NAMED.map((r) => r.id)]);
 
 export const CAST: Cast = {
   player: PLAYER,
   cashier: CASHIER,
   collector: COLLECTOR,
-  crowd: Array.from({ length: TAMASHI_COUNT }, (_, i) => i + 1).filter((id) => id !== PLAYER && id !== CASHIER && id !== COLLECTOR),
+  named: NAMED,
+  crowd: Array.from({ length: TAMASHI_COUNT }, (_, i) => i + 1).filter((id) => !taken.has(id)),
 };
+
+/** Named role for a token id (player, cashier, collector or placed), if it has one. */
+export function castRoleFor(id: number): CastRole | undefined {
+  return [CAST.player, CAST.cashier, CAST.collector, ...CAST.named].find((r) => r.id === id);
+}

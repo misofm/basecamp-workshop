@@ -112,7 +112,7 @@ src/
   tamashi/           the procedural Tamashi characters (player, clerk, collector, street crowd)
     character.ts     createTamashi(id): TV head + screen + body, procedural rig (walk, carry, swing, cheer)
     tv-head.ts screen.ts body.ts …  the parts character.ts assembles
-    cast.ts          who plays whom (player #95, clerk, collector, crowd ids)
+    cast.ts          who plays whom: Gamer #95, Jazz the shopkeeper, Stonks the collector, the named story NPCs (spots in world/layout.ts CAST_SPOTS), the crowd
     traits.ts/.json  per-token traits hand-read from the artwork (© Studio Mirai, see NOTICE.md)
     gallery.ts       ?gallery= visual QA page
   audio/             deck.ts (HLS/synth previews), sfx.ts, ambience.ts, context.ts (master bus/mute)
@@ -306,7 +306,7 @@ time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (de
 the testnet spec uses `test-results/shots-testnet/`). `window.__game` (see `src/debug.ts`)
 offers `teleportTo`, `interact`, `press`, `failNext`, `setFailureMode`, `setLatency`,
 `state()`, `measure()`, `deckDebug()`, `buyerReturnNow()`, `crowdStats()` (street crowd:
-on screen now, distinct Tamashi ids shown so far) and `tamashiGallery()` (opens `?gallery=1`).
+on screen now, distinct Tamashi ids shown so far, and the named cast with id, name, spot, onScreen) and `tamashiGallery()` (opens `?gallery=1`).
 
 ## Assets
 

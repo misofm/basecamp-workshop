@@ -1,8 +1,9 @@
 /**
- * Non-player characters: the street crowd, the shop clerk and the collector buyer,
- * all Tamashi (src/tamashi/; who plays whom is src/tamashi/cast.ts).
+ * Non-player characters: the named story cast, the street crowd, the shop clerk and the
+ * collector buyer, all Tamashi (src/tamashi/; who plays whom is src/tamashi/cast.ts).
  *
- * Owns: the crowd (walkers spread along the sidewalk routes, pausing / sidestepping when
+ * Owns: the named NPCs (CAST.named) at their CAST_SPOTS (layout.ts) in their pose, with a
+ * small collision box, never swapped out (their names and lines are not shown yet); the crowd (walkers spread along the sidewalk routes, pausing / sidestepping when
  * the player is in the way; idlers chatting in pairs, looking in the shop window and
  * browsing inside the shop, each with a small collision box), cycling the crowd through
  * every CAST.crowd id over time (one out-of-view member swaps to the next unused id every
@@ -17,11 +18,11 @@ import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { Collision, type Obstacle } from "./collision";
 import { Interactables } from "./interactables";
-import { BUYER_EXIT, BUYER_SPOT, COUNTER, groundHeight, PED_ROUTES, SHOP_FLOOR_Y } from "./layout";
+import { BUYER_EXIT, BUYER_SPOT, CAST_SPOTS, COUNTER, groundHeight, PED_ROUTES, SHOP_FLOOR_Y } from "./layout";
 import { SpeechBubble } from "./labels";
 import type { Holder } from "./record-item";
 import { createTamashi, type TamashiCharacter } from "../tamashi/character";
-import { CAST } from "../tamashi/cast";
+import { CAST, type PlacedRole } from "../tamashi/cast";
 
 export const BUYER_ID = "buyer:collector";
 
@@ -45,7 +46,7 @@ const SWAP_DISTANCE = 25;
 const FULL_RATE_DISTANCE = 30;
 
 /** Walkers per route (PED_ROUTES index → count), spread evenly along it. */
-const WALKERS_PER_ROUTE = [11, 5, 4, 4];
+const WALKERS_PER_ROUTE = [6, 3, 3, 2];
 
 type IdleMode = "chat" | "window" | "browse";
 /**
@@ -60,10 +61,6 @@ const IDLE_SPOTS: { x: number; z: number; heading: number; mode: IdleMode }[] = 
   { x: -12.1, z: 1.0, heading: -Math.PI / 2, mode: "chat" },
   { x: -4.4, z: 17.2, heading: Math.PI / 2, mode: "chat" },
   { x: -3.6, z: 17.2, heading: -Math.PI / 2, mode: "chat" },
-  { x: 8.6, z: 17.1, heading: Math.PI / 2, mode: "chat" },
-  { x: 9.4, z: 17.1, heading: -Math.PI / 2, mode: "chat" },
-  { x: 25.4, z: -4.0, heading: 0, mode: "chat" },
-  { x: 25.4, z: -3.2, heading: Math.PI, mode: "chat" },
   // Looking in the shop's west window (the ATM is further east, at x -4.4).
   { x: -7.2, z: 0.75, heading: Math.PI, mode: "window" },
   // Browsing inside the shop.
@@ -102,6 +99,13 @@ interface Idler extends Member {
   obstacle: Obstacle;
 }
 
+/** A named story character at its CAST_SPOTS spot. */
+interface Named extends Member {
+  role: PlacedRole;
+  spot: string;
+  phase: number;
+}
+
 interface Buyer {
   character: TamashiCharacter;
   route: { x: number; z: number }[];
@@ -124,6 +128,7 @@ function angleDelta(from: number, to: number) {
 export class Npcs {
   private walkers: Walker[] = [];
   private idlers: Idler[] = [];
+  private named: Named[] = [];
   private clerk: TamashiCharacter;
   readonly clerkBubble = new SpeechBubble(3.0, 7);
   private buyer: Buyer;
@@ -219,13 +224,26 @@ export class Npcs {
       });
     });
 
+    // The named cast at their spots (placeholders until the environment pass).
+    CAST.named.forEach((role, i) => {
+      const spot = role.spot ? CAST_SPOTS[role.spot] : undefined;
+      if (!role.spot || !spot) return;
+      const c = createTamashi(role.id, { role: "npc", castShadow: false });
+      c.pose = role.pose;
+      c.root.position.set(spot.x, groundHeight(spot.x, spot.z), spot.z);
+      c.root.rotation.y = spot.heading;
+      scene.add(c.root);
+      collision.add({ x: spot.x, z: spot.z, w: 0.55, d: 0.55, h: 0, tag: "npc" });
+      this.named.push({ character: c, id: role.id, pendingDt: 0, slot: slot++, role, spot: role.spot, phase: i * 2.3 });
+    });
+
     // The clerk behind the counter.
-    this.clerk = createTamashi(CAST.cashier, { role: "npc", castShadow: false });
+    this.clerk = createTamashi(CAST.cashier.id, { role: "npc", castShadow: false });
     this.clerk.root.position.set(COUNTER.x, SHOP_FLOOR_Y, COUNTER.clerkZ);
     scene.add(this.clerk.root);
 
     // The collector, with a tote full of records.
-    const buyer = createTamashi(CAST.collector, { role: "npc", castShadow: false });
+    const buyer = createTamashi(CAST.collector.id, { role: "npc", castShadow: false });
     buyer.root.position.set(BUYER_SPOT.x, SHOP_FLOOR_Y, BUYER_SPOT.z);
     buyer.root.rotation.y = BUYER_SPOT.heading;
     addCollectorTote(buyer);
@@ -340,8 +358,12 @@ export class Npcs {
       this.animateMember(w, dt, camera);
     }
     for (const i of this.idlers) {
-      this.idle(i);
+      this.idle(i.character, i.mode, i.phase);
       this.animateMember(i, dt, camera);
+    }
+    for (const n of this.named) {
+      this.idle(n.character, n.role.pose === "stand" ? "chat" : "browse", n.phase);
+      this.animateMember(n, dt, camera);
     }
     this.clerk.update(dt, camera);
     this.updateBuyer(dt, camera);
@@ -411,7 +433,7 @@ export class Npcs {
     }
   }
 
-  /** Crowd numbers for debugging: members on screen now, distinct ids shown so far. */
+  /** For QA: crowd members on screen now, distinct crowd ids shown so far, and the named cast roster. */
   crowdStats(camera: THREE.Camera) {
     this.updateFrustum(camera);
     const members: Member[] = [...this.walkers, ...this.idlers];
@@ -424,6 +446,7 @@ export class Npcs {
       castSize: CAST.crowd.length,
       queued: this.queue.length,
       showing: members.map((m) => m.id),
+      named: this.named.map((n) => ({ id: n.id, name: n.role.name, spot: n.spot, onScreen: this.inView(n.character) })),
     };
   }
 
@@ -488,11 +511,10 @@ export class Npcs {
   }
 
   /** Idle body language: chatting pairs take turns talking; browsers and window-shoppers tilt their heads. */
-  private idle(i: Idler) {
-    const c = i.character;
-    const t = this.time + i.phase;
+  private idle(c: TamashiCharacter, mode: IdleMode, phase: number) {
+    const t = this.time + phase;
     c.speed = 0;
-    if (i.mode === "chat") {
+    if (mode === "chat") {
       const talking = Math.floor(t / 4) % 2 === 0;
       c.nod = talking ? 0.08 : 0.03;
       c.tilt = Math.sin(t * 0.6) * (talking ? 0.05 : 0.12);
@@ -604,6 +626,7 @@ export class Npcs {
       return { x: p.x + w.offset.x, z: p.z + w.offset.z };
     });
     for (const i of this.idlers) list.push({ x: i.x, z: i.z });
+    for (const n of this.named) list.push({ x: n.character.root.position.x, z: n.character.root.position.z });
     if (!this.buyer.gone) list.push(this.buyerPosition);
     return list;
   }

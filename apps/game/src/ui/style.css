@@ -239,7 +239,14 @@ html[data-mouse-look="true"] #world::after {
   transform: rotate(2.5deg);
   box-shadow: 1px 2px 0 rgba(0, 0, 0, 0.5);
 }
+.money-pending {
+  order: 3;
+}
+.net-status {
+  order: 2;
+}
 .mute-badge {
+  order: 4;
   display: flex;
   align-items: center;
   gap: calc(8 * var(--u));
@@ -588,7 +595,6 @@ html[data-mouse-look="true"] #world::after {
   margin: 0;
   font: 700 calc(44 * var(--u)) / 1.05 var(--display);
   letter-spacing: -0.005em;
-  text-transform: uppercase;
 }
 .dlg-p {
   margin: calc(10 * var(--u)) 0 0;
@@ -1162,8 +1168,8 @@ html[data-mouse-look="true"] #world::after {
 }
 .intro-card .net-status {
   position: absolute;
-  top: calc(16 * var(--u));
-  right: calc(22 * var(--u));
+  bottom: calc(18 * var(--u));
+  right: calc(24 * var(--u));
   margin: 0;
 }
 .intro-title {
@@ -1201,6 +1207,9 @@ html[data-mouse-look="true"] #world::after {
   font: 700 calc(32 * var(--u)) var(--display);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+.intro-start .intro-word {
+  font-size: calc(26 * var(--u));
 }
 .intro-start kbd {
   background: #f4ecd9;

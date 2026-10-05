@@ -215,48 +215,68 @@ export class SpeechBubble {
     const shift = up ? 42 : 0;
     c.save();
     c.translate(0, shift);
-    // Shadow, body, accent border.
-    c.fillStyle = "rgba(0,0,0,0.35)";
-    roundRect(c, 14, 14, w - 20, bodyH - 4, 56);
+    // Hand-cut paper: a hard offset shadow (no blur), ink edge, slightly uneven corners.
+    const cut = (ox: number, oy: number) => {
+      const x0 = 6 + ox,
+        y0 = 4 + oy,
+        x1 = w - 14 + ox,
+        y1 = bodyH - 4 + oy;
+      c.beginPath();
+      c.moveTo(x0 + 14, y0 + 6);
+      c.lineTo(x0 + (x1 - x0) * 0.42, y0 - 2);
+      c.lineTo(x1 - 10, y0 + 8);
+      c.lineTo(x1 + 2, y0 + (y1 - y0) * 0.5);
+      c.lineTo(x1 - 14, y1 - 2);
+      c.lineTo(x0 + (x1 - x0) * 0.58, y1 + 3);
+      c.lineTo(x0 + 6, y1 - 6);
+      c.lineTo(x0 - 3, y0 + (y1 - y0) * 0.45);
+      c.closePath();
+    };
+    cut(14, 12);
+    c.fillStyle = "rgba(0,0,0,0.55)";
     c.fill();
-    c.fillStyle = "#fffaf0";
-    roundRect(c, 6, 4, w - 20, bodyH - 8, 56);
+    cut(0, 0);
+    c.fillStyle = "#efe6d2";
     c.fill();
-    c.lineWidth = 12;
-    c.strokeStyle = this.style.accent;
+    c.lineWidth = 8;
+    c.lineJoin = "round";
+    c.strokeStyle = "#2a2017";
     c.stroke();
     // Tail.
     c.beginPath();
     if (up) {
-      c.moveTo(w / 2 - 40, 14);
-      c.lineTo(w / 2, 6 - shift);
-      c.lineTo(w / 2 + 40, 14);
+      c.moveTo(w / 2 - 40, 10);
+      c.lineTo(w / 2 + 8, 6 - shift);
+      c.lineTo(w / 2 + 40, 10);
     } else {
-      c.moveTo(w / 2 - 40, bodyH - 10);
-      c.lineTo(w / 2, h - 6);
-      c.lineTo(w / 2 + 40, bodyH - 10);
+      c.moveTo(w / 2 - 40, bodyH - 6);
+      c.lineTo(w / 2 - 6, h - 6);
+      c.lineTo(w / 2 + 40, bodyH - 6);
     }
-    c.closePath();
-    c.fillStyle = "#fffaf0";
+    c.fillStyle = "#efe6d2";
     c.fill();
-    c.strokeStyle = this.style.accent;
     c.stroke();
-    c.fillStyle = "#fffaf0";
-    if (up) c.fillRect(w / 2 - 34, 8, 68, 16);
-    else c.fillRect(w / 2 - 34, bodyH - 22, 68, 16);
-    // Speaker name tag (top left), pushing the text down a little.
+    c.fillStyle = "#efe6d2";
+    if (up) c.fillRect(w / 2 - 34, 8, 68, 14);
+    else c.fillRect(w / 2 - 34, bodyH - 20, 68, 14);
+    // Speaker name: a small red stamp, slightly crooked, pushing the text down a little.
     let top = 0;
     if (this.style.name) {
       const tag = this.style.name.toUpperCase();
-      c.font = `700 50px ${FONT_STACK}`;
+      c.font = `700 46px ${FONT_STACK}`;
       const tw = c.measureText(tag).width;
-      c.fillStyle = this.style.accent;
-      roundRect(c, 60, 14, tw + 40, 58, 26);
-      c.fill();
-      c.fillStyle = "#1d2422";
+      c.save();
+      c.translate(66 + (tw + 36) / 2, 44);
+      c.rotate(-0.04);
+      c.globalAlpha = 0.92;
+      c.strokeStyle = "#c0392b";
+      c.lineWidth = 6;
+      c.strokeRect(-(tw + 36) / 2, -28, tw + 36, 56);
+      c.fillStyle = "#c0392b";
       c.textBaseline = "middle";
-      c.textAlign = "left";
-      c.fillText(tag, 80, 45);
+      c.textAlign = "center";
+      c.fillText(tag, 0, 3);
+      c.restore();
       top = 40;
     }
     // Text (one or two lines), optional spinner on the left.
@@ -265,7 +285,7 @@ export class SpeechBubble {
       const cx = 120,
         cy = bodyH / 2;
       c.lineWidth = 16;
-      c.strokeStyle = "#e3ddd0";
+      c.strokeStyle = "#cfc2a4";
       c.beginPath();
       c.arc(cx, cy, 52, 0, Math.PI * 2);
       c.stroke();
@@ -280,7 +300,7 @@ export class SpeechBubble {
     }
     let text = this.text;
     if (this.style.busy) text = text.replace(/[.…]+$/, "") + ".".repeat(1 + (Math.floor(this.time * 3) % 3));
-    c.fillStyle = "#1d2422";
+    c.fillStyle = "#2a2017";
     c.textBaseline = "middle";
     c.textAlign = this.style.busy ? "left" : "center";
     const maxW = w - left - 60;

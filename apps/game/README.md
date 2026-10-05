@@ -29,6 +29,14 @@ npm run deploy       # npm run build && wrangler deploy (see "Hosted build" firs
 npm run typecheck    # tsc --noEmit
 ```
 
+### Play
+
+Open the page: a small loading screen ("NOZOMI · 再生") fills a bar while the street compiles,
+then shows **Press Enter to continue** (a click works too). That press unlocks audio and starts
+the game; any later key or click also unlocks audio silently if the browser still refuses it.
+**U** hides all overlays (HUD, minimap, prompts, markers) for clean gameplay screenshots; `?ui=0`
+starts hidden (after the loading screen). Look and copy rules: `docs/UI-STYLE.md`.
+
 ### URL parameters
 
 | Param | Values | What it does |
@@ -39,7 +47,8 @@ npm run typecheck    # tsc --noEmit
 | `?mockhls=1` | | Mock only: every track streams a real testnet HLS quilt from `cdn.miso.fm` instead of the synth loop. |
 | `?quality=` | `high` \| `medium` \| `low` | `high` is the default on WebGPU (2K textures, full post-processing); `medium` is the WebGL2 fallback tier; `low` = 1K textures, tone mapping only, lowest render scale, low Tamashi detail, fewer particles (weak GPUs, projectors on battery). Automated browsers (`navigator.webdriver`, e.g. Playwright) start at `low` unless a tier is given. |
 | `?backend=` | `webgpu` \| `webgl` | Forces the renderer backend (default: WebGPU when available, else WebGL2). The game logic never depends on it. |
-| `?debug=1` | | Developer overlay (top centre): active backend, quality tier, FPS / frame time, draw calls. Never shown otherwise. |
+| `?debug=1` | | Developer overlay (top centre): active backend, quality tier, render scale / AO / bloom, FPS / frame time, draw calls. Never shown otherwise. |
+| `?ui=0` | | Starts with the overlay hidden (press **U** to show it). The loading screen still appears first. |
 | `?exposure=` | `0.3`–`4` | Overrides the dusk exposure (default `2.1`, tuned on the WebGL2 fallback). Use it to match the look on the stage machine and projector, e.g. `?exposure=1.6`. |
 | `?adapt=0` | | Pins adaptive quality as started (no render-scale / bloom changes), for screenshots and perf runs. |
 | `?rain=1` | | Enables drizzle over the dusk street (off by default). |
@@ -69,6 +78,7 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 | C | Your collection, read from the chain (`listOwnedRecords()`) |
 | M | Mute / unmute |
 | H | Help (and **Reset demo**) |
+| U | Hide / show the overlay (HUD, minimap, prompts, markers) for clean screenshots |
 | Esc | Close a menu (Enter / Esc / click also dismiss the chapter title card) |
 | ↑ ↓ / W S, Enter / E / Space | Select and confirm in menus |
 | L or drag, + / −, Home | Mouse look, zoom, reset camera |
@@ -84,34 +94,30 @@ his BUYING table, the scorched block and a rubble lot. The dead Triangle sedan s
 curb across from the shop.
 
 0. Short on FakeUSD? The mission points you to the **ATM in TriMart, next door**:
-   **E** → *Withdraw 50 FUSD* (its CRT greeting glitches on Gamer's real name, then reads
+   **E** → *Withdraw 50* (its CRT greeting glitches on Gamer's real name, then reads
    "ACCOUNT HOLDER: GAMER") (minted from the testnet faucet; on mock, from thin air) →
-   receipt: "Receipt no." (short tx digest) + *View receipt ↗* (devxplorer). The balance
-   counter counts up.
+   "済 CASH OUT +50.00 FUSD" + *View receipt ↗* (devxplorer). The balance counter counts up.
 1. Spawn at the hotel side door, walk east and into Saisei Records.
-2. **E** on a record → sleeve, liner notes, price, edition ("N / max sold" = minted / max supply),
-   and a one-line note from Jazz on its section → *Pick up*.
+2. **E** on a record → a price tag: title, "Artist · #106/250" (the copy you would get), price → *Pick up*.
 3. **E** on the deck → place it → *Drop the needle* (30 s from mid-track) → *Next track* → *Take it back*.
-4. **E** at the counter (Jazz) → *Pay* → "Ringing it up…" → receipt: *View record ↗* (the Record
-   object), "Receipt no." + *View receipt ↗* (the transaction), both on devxplorer. Fails?
-   Friendly message + *Retry* (not enough FakeUSD: "The ATM in TriMart next door dispenses
-   cash."). Walking out with unpaid stock is blocked: "Oi! Pay for that first."
+4. **E** at the counter (Jazz) → *Pay* → "PROCESSING ▮▮▮▯▯" → "領収 PAID" + *View receipt ↗*
+   (devxplorer). Fails? Short message + *Retry* ("Jazz frowns: short on cash." when broke; the
+   mission points at the ATM). Walking out with unpaid stock is blocked: "Oi! Pay for that first."
 5. Outside, **E** on the dead Triangle sedan (`car:0`) while holding the record → smash →
    **RECORD CONDITION: STILL MINT**.
-6. **E** on Stonks → "Sell *title* for N FUSD" (1.5× shop price, capped at 150) → the
+6. **E** on Stonks → "Stonks wants it: N FUSD for *title*" (1.5× shop price, capped at 150) → "済 SOLD" → the
    Record moves to his wallet, FakeUSD comes to yours, the cash counter counts up and he
    takes it inside.
 7. **C** → your collection and sales history, read back via `listOwnedRecords()`.
-8. **Exit beat**: "Job done. Head home with Inicio: hotel door, west end." **E** at the hotel
+8. **Exit beat**: "Head home with Inicio." **E** at the hotel
    door → the boom from the facility (camera shake, brown-out), iron footsteps far away →
-   title card *Book 3 — Dawn of the Machin* → the mission reads "Home. Press H to reset
-   the demo." You can still walk around.
+   title card *Book 3 — Dawn of the Machin* → the mission reads "Home. Press H to reset." You can still walk around.
 9. ~20 s after the sale Stonks is back at his table: pick another record and go again.
 
 Everything the player sees reads like a normal game: no "Sui", "chain", "testnet", "wallet",
 "digest" or "object" in the HUD, dialogs, toasts or errors (developer detail goes to the
 console). The HUD shows only a quiet **online** (testnet) / **offline demo** (mock) indicator;
-receipts link out with *View receipt ↗* / *View record ↗* (devxplorer). See `docs/UX.md`.
+receipts link out with one *View receipt ↗* (devxplorer). See `docs/UX.md`.
 
 ## Architecture
 
@@ -154,7 +160,7 @@ src/
     traits.ts/.json  per-token traits hand-read from the artwork (© Studio Mirai, see NOTICE.md)
     gallery.ts       ?gallery= visual QA page
   audio/             deck.ts (HLS/synth previews), sfx.ts, ambience.ts, context.ts (master bus/mute)
-  ui/                DOM only: hud.ts, minimap.ts, dialogs.ts, intro.ts, title-card.ts (exit beat), style.css
+  ui/                DOM only: hud.ts, minimap.ts, dialogs.ts, intro.ts (loading screen), title-card.ts (exit beat), ui-visibility.ts (U toggle), style.css
 ```
 
 Module boundaries (each file's header comment says what it owns and must not do):
@@ -237,8 +243,8 @@ Setup:
 
    `npm run dev` also picks up `.env.local`; open it with `?chain=testnet`.
 
-Without keys the testnet build still loads the live catalog, and the intro says
-"Cash: The shop's till is offline right now. Try again later." (players never see chain
+Without keys the testnet build still loads the live catalog, and a purchase says
+"The till's offline. Try later." (players never see chain
 details); the browser console says "Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and
 VITE_GAME_SUI_PRIVATE_KEY in apps/game/.env.local, then rebuild." Buying, the ATM and selling
 stay unavailable.
@@ -302,10 +308,9 @@ and the payout digest **before** the payout is submitted. On Retry:
   failed, pay again; if the node still doesn't know it after ~10 s, pay again. That last case
   is the one double-pay window (a payout that was submitted but not visible yet can land
   later); it only ever over-pays testnet FakeUSD, so it is accepted;
-- the GAME owns it and there is no pending entry → "The collector already has this record."
+- the GAME owns it and there is no pending entry → "Stonks already has this one."
 
-A payout failure reads "The collector has your record but hasn't paid yet: … Press Retry to
-ask again; the record won't be sent twice." Until it is paid the Record keeps showing in your
+A payout failure reads "Stonks hasn't paid yet. …" with *Retry* (the record won't be sent twice). Until it is paid the Record keeps showing in your
 collection so you can Retry. The entry is cleared after a confirmed payout.
 
 ### Testing on testnet

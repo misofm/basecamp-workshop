@@ -18,6 +18,9 @@ FUSD. ("Mint condition" is the vinyl sense and stays.)
 
 ## The loop
 
+> **Note:** the overlays were restyled and the copy shortened (docs/UI-STYLE.md). Where this table
+> disagrees with the game, UI-STYLE.md and the code win; the rows below are the older, longer wording.
+
 | Step | Player action | What they see | Chain call |
 | --- | --- | --- | --- |
 | 0 | Intro | Dusk card (orange-to-violet, CRT scanlines): NOZOMI · "Book 3 — As The World Shook", level "Playback", the 57-word intro, "Buy a record. Smash a car with it. Sell it on.", loading lines, *Press Enter*, "Tamashi and Nozomi © Studio Mirai" | catalog + wallet reads |

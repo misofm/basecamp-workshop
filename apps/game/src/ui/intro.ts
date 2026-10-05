@@ -35,7 +35,7 @@ export class Intro {
   constructor(host: HTMLElement, network: "mock" | "testnet") {
     this.fill = h("i");
     this.bar = h("div", { class: "intro-bar", role: "progressbar", "aria-label": "Loading", "aria-valuemin": 0, "aria-valuemax": 100 }, this.fill);
-    this.button = h("button", { class: "intro-start", type: "button", hidden: true }, h("kbd", null, "Enter"), h("span", null, "Press Enter"));
+    this.button = h("button", { class: "intro-start", type: "button", hidden: true }, h("span", { class: "intro-word" }, "Press"), h("kbd", null, "Enter"), h("span", { class: "intro-word" }, "to continue"));
     this.button.addEventListener("click", () => this.start());
     this.root = h(
       "div",

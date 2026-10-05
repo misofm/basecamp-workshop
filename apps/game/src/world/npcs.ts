@@ -47,14 +47,14 @@ export const BUYER_ID = "buyer:collector";
 
 const BUYER_LINES = {
   idle: "Got any wax?",
-  thinking: "Hmm, let me check it…",
-  happy: "Mint condition! Pleasure doing business.",
+  thinking: "Let me see…",
+  happy: "Mint condition. Pleasure.",
   error: "Maybe some other time.",
 } as const;
 const CASHIER_LINES = {
-  processing: "Processing…",
-  success: "Paid ✓ Enjoy!",
-  error: "Hmm, that didn't go through",
+  processing: "One sec…",
+  success: "Paid. Enjoy.",
+  error: "Register's jammed.",
 } as const;
 
 /** Every this many seconds, one crowd member that is out of view (or far) becomes the next cast id. */

@@ -282,7 +282,7 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   await expect(dialog.locator(".pending")).toBeVisible();
   await shot(page, "tnl-07-sell-pending");
   const sold = await Promise.race([
-    page.locator(".big-toast", { hasText: "SOLD" }).waitFor({ timeout: 240_000 }).then(() => true),
+    dialog.locator(".dlg-title", { hasText: /済 SOLD/ }).waitFor({ timeout: 240_000 }).then(() => true),
     dialog.locator(".err-msg").waitFor({ timeout: 240_000 }).then(() => false),
   ]);
   if (!sold) {
@@ -295,7 +295,10 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   const sale = await page.evaluate(() => (window as any).__game.state().lastReceipt);
   console.log("sale digest", sale?.digest, "paid", paid.toString());
   expect(paid).toBe(EXPECTED_PAID);
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveAttribute("href", /^https:\/\/devxplorer\.io\/\?search=/);
   await shot(page, "tnl-08-sold");
+  await page.keyboard.press("Enter"); // OK closes the sold card; C is ignored while a dialog is open
+  await expect(dialog).toHaveCount(0);
 
   await page.keyboard.press("KeyC");
   await expect(dialog.locator(".coll-sold-row")).toContainText(TITLE, { timeout: 60_000 });

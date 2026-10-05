@@ -597,7 +597,21 @@ export class GameWorld implements WorldApi {
     } else this.render(time);
   }
 
+  /** Hide / show the 3D helper markers (waypoint, interact ring, speech bubbles) for clean screenshots. */
+  setHelpersVisible(visible: boolean) {
+    this.helpersVisible = visible;
+  }
+  private helpersVisible = true;
+
   private render(time: number) {
+    if (this.helpersVisible) return this.renderScene(time);
+    const hidden = [this.waypoint.root, this.interactables.ring, ...this.npcs.helperObjects()].filter((o) => o.visible);
+    for (const o of hidden) o.visible = false;
+    this.renderScene(time);
+    for (const o of hidden) o.visible = true;
+  }
+
+  private renderScene(time: number) {
     if (this.postfx) this.postfx.render(time * 0.001);
     else this.renderer.render(this.scene, this.camera);
   }

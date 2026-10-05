@@ -88,6 +88,8 @@ export interface WorldApi {
   setInteractableEnabled(id: string, enabled: boolean): void;
   /** Floating GTA-style marker above a target (and on the minimap). null hides it. */
   setWaypoint(target: { x: number; z: number } | null): void;
+  /** Show / hide the 3D helper markers (waypoint, interact ring, speech bubbles). */
+  setHelpersVisible(visible: boolean): void;
   /** Cashier speech bubble / spinner while a transaction is in flight. null clears. */
   setCashierStatus(status: "idle" | "processing" | "success" | "error"): void;
   /** Swing the held record at a car: glass particles, dent, hazard lights, camera shake. Resolves when the swing lands. */

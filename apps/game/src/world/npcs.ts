@@ -215,6 +215,10 @@ export class Npcs {
   /** Miné's voice from the hotel window. */
   readonly mineBubble = new SpeechBubble(2.6, 7);
   private buyerRing: THREE.Mesh;
+  /** HUD-like 3D helpers (speech bubbles, the collector's ground ring): hidden for clean screenshots. */
+  helperObjects(): THREE.Object3D[] {
+    return [this.clerkBubble.sprite, this.buyerBubble.sprite, this.namedBubble.sprite, this.mineBubble.sprite, this.buyerRing];
+  }
   private buyerObstacle: Obstacle;
   private buyerStatusTimer = 0;
   private buyerStatus: "idle" | "thinking" | "happy" | "error" = "idle";

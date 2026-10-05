@@ -77,6 +77,11 @@ export interface WorldApi {
   setDeckPlaying(playing: boolean): void;
   /** Freeze player input while a menu is open. */
   setBlocked(blocked: boolean): void;
+  /**
+   * Allow or forbid Space-jumping (default true). The controller turns it off while a
+   * chain transaction is pending. Menus (setBlocked) and the smash swing already forbid it.
+   */
+  setJumpAllowed(allowed: boolean): void;
   /** Invisible wall in the shop doorway (used to stop the player leaving with unpaid stock). */
   setExitBlocked(blocked: boolean): void;
   setInteractableEnabled(id: string, enabled: boolean): void;

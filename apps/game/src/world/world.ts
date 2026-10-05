@@ -202,6 +202,10 @@ export class GameWorld implements WorldApi {
     this.player.setBlocked(blocked);
   }
 
+  setJumpAllowed(allowed: boolean) {
+    this.player.setJumpAllowed(allowed);
+  }
+
   setExitBlocked(blocked: boolean) {
     this.collision.doorWall.enabled = blocked;
   }

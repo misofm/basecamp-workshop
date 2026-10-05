@@ -1,6 +1,7 @@
 /**
  * A Tamashi character: assembles the TV head, screen and body for one token and runs a
- * procedural animation rig (idle, walk, run, carry, overhead swing, cheer, sit, crouch).
+ * procedural animation rig (idle, walk, run, carry, overhead swing, cheer, sit, crouch,
+ * jump: crouch anticipation, airborne tuck, landing squash).
  *
  * Owns: per-token geometry cache (one merged skinned mesh per LOD, built once per id),
  * per-instance skeleton + bones, the screen mesh (child of the head bone), distance LOD,
@@ -138,6 +139,12 @@ export class TamashiCharacter {
   waving = false;
   /** Whole-body pose: "sit" (on the ground/curb) or "crouch" (kneeling, tinkering). `speed` is ignored unless standing. */
   pose: TamashiPose = "stand";
+  /** 0..1: jump anticipation crouch (knees bend, arms back), ramped up just before lift-off. */
+  jumpCrouch = 0;
+  /** Off the ground: blends into the jump pose (arms up, legs tucked). The root's y is the caller's. */
+  airborne = false;
+  /** Vertical speed while airborne, m/s (up positive): rising reaches up, falling reaches the legs down. */
+  verticalSpeed = 0;
 
   /** The two body meshes (high / low detail) and the screen. */
   readonly bodyHi: THREE.SkinnedMesh;
@@ -155,6 +162,11 @@ export class TamashiCharacter {
   private waveW = 0;
   private sitW = 0;
   private crouchW = 0;
+  private jumpCrouchW = 0;
+  private airW = 0;
+  /** Seconds since the last land() (Infinity: none), and its strength 0..1. */
+  private landT = Infinity;
+  private landK = 0;
   private far = false;
   private skip = 0;
   private pendingDt = 0;
@@ -209,6 +221,16 @@ export class TamashiCharacter {
     this.cheerT = 1.2;
   }
 
+  /**
+   * Touchdown after a jump: a small squash (knees give, body squashes), antennas wobble.
+   * `impact` 0..1 scales it (1 = landing from a full jump).
+   */
+  land(impact = 1): void {
+    this.landT = 0;
+    this.landK = clamp(impact, 0, 1);
+    this.airW = 0;
+  }
+
   /** True when the far (low-detail) mesh is showing. */
   get lowDetail(): boolean {
     return this.far;
@@ -229,7 +251,7 @@ export class TamashiCharacter {
     }
     // Far characters animate at half rate.
     this.pendingDt += dt;
-    if (this.far && this.cheerT <= 0 && ++this.skip % 2 === 1) return;
+    if (this.far && this.cheerT <= 0 && !this.airborne && this.landT > 0.4 && ++this.skip % 2 === 1) return;
     const step = Math.min(this.pendingDt, 0.1);
     this.pendingDt = 0;
     this.animate(step);
@@ -370,6 +392,54 @@ export class TamashiCharacter {
       hips.position.z = this.rest[BI.hips].z - cw * 0.08;
     } else hips.position.z = this.rest[BI.hips].z;
 
+    // Jump: anticipation crouch → airborne (arms up, legs tucked) → landing squash.
+    // Before carry/swing so a held record stays in the right hand the whole time.
+    this.jumpCrouchW += (clamp(this.jumpCrouch, 0, 1) - this.jumpCrouchW) * (1 - Math.exp(-dt * 30));
+    this.airW += ((this.airborne ? 1 : 0) - this.airW) * (1 - Math.exp(-dt * (this.airborne ? 16 : 30)));
+    this.landT += dt;
+    // Landing: a quick dip that springs back (~0.3 s).
+    const landEnv = this.landT < 0.35 ? this.landK * Math.sin(Math.PI * Math.min(1, this.landT / 0.35)) * Math.exp(-this.landT * 4) : 0;
+    const dip = Math.max(this.jumpCrouchW, landEnv * 1.25) * stand;
+    if (dip > 0.001) {
+      hipY -= 0.13 * dip;
+      for (const side of ["L", "R"] as const) {
+        R(`thigh${side}`).x += -0.55 * dip;
+        R(`shin${side}`).x += 1.0 * dip;
+        R(`foot${side}`).x += -0.45 * dip;
+      }
+      R("spine").x += 0.2 * dip;
+      R("neck").x -= 0.12 * dip;
+      // Arms swing back to load the jump.
+      R("upperArmL").x += 0.55 * this.jumpCrouchW;
+      R("upperArmR").x += 0.55 * this.jumpCrouchW;
+    }
+    const aw = this.airW * stand;
+    if (aw > 0.001) {
+      const rise = clamp(this.verticalSpeed / 6, -1, 1);
+      const fall = Math.max(0, -rise);
+      // Legs tucked (most at lift-off and the apex), reaching down for the floor as it falls.
+      const tuck = lerp(1, 0.45, fall);
+      for (const side of ["L", "R"] as const) {
+        const sg = side === "L" ? 1 : -1;
+        const lead = side === "L" ? 1 : 0.75; // a little asymmetry reads less stiff
+        R(`thigh${side}`).x = lerp(R(`thigh${side}`).x, -1.05 * tuck * lead, aw);
+        R(`thigh${side}`).z = lerp(R(`thigh${side}`).z, sg * 0.08, aw);
+        R(`shin${side}`).x = lerp(R(`shin${side}`).x, 1.45 * tuck * lead + 0.15, aw);
+        R(`foot${side}`).x = lerp(R(`foot${side}`).x, -0.35 * tuck, aw);
+        // Arms up and out while rising, spreading for balance on the way down.
+        const ua = R(`upperArm${side}`);
+        ua.z = lerp(ua.z, sg * lerp(2.35, 1.35, fall), aw);
+        ua.x = lerp(ua.x, -0.35, aw);
+        R(`foreArm${side}`).x = lerp(R(`foreArm${side}`).x, -0.25, aw);
+        R(`foreArm${side}`).z = lerp(R(`foreArm${side}`).z, sg * 0.35, aw);
+      }
+      hipY += 0.06 * aw * tuck; // the tuck pulls the hips up a little
+      R("spine").x = lerp(R("spine").x, 0.12 * tuck - 0.05 * Math.max(0, rise), aw);
+      R("neck").x = lerp(R("neck").x, -0.08, aw);
+      R("hips").y *= 1 - aw;
+      R("chest").y *= 1 - aw;
+    }
+
     // Carry: right arm holding a record out at the side, hand level.
     const c = clamp(this.carry, 0, 1);
     if (c > 0) {
@@ -443,14 +513,20 @@ export class TamashiCharacter {
     R("head").z += this.tilt;
 
     // Antennas: a little sway, bigger when running, wild while cheering.
-    const wob = 0.035 * Math.sin(t * 1.7 + this.seed) + (0.05 * walkW + 0.13 * runW) * Math.sin(2 * ph + 0.9) + 0.4 * wiggle * Math.sin(t * 22);
-    const bob = (0.03 * walkW + 0.1 * runW) * Math.cos(2 * ph + 0.6) + 0.15 * wiggle * Math.sin(t * 17);
+    // Landing: a damped boing; airborne: they trail the motion (down while rising, up while falling).
+    const boing = this.landT < 1.2 ? this.landK * Math.exp(-this.landT * 4.5) * Math.sin(this.landT * 28) : 0;
+    const trail = -0.22 * aw * clamp(this.verticalSpeed / 6, -1, 1);
+    const wob = 0.035 * Math.sin(t * 1.7 + this.seed) + (0.05 * walkW + 0.13 * runW) * Math.sin(2 * ph + 0.9) + 0.4 * wiggle * Math.sin(t * 22) + 0.22 * boing;
+    const bob = (0.03 * walkW + 0.1 * runW) * Math.cos(2 * ph + 0.6) + 0.15 * wiggle * Math.sin(t * 17) + 0.35 * boing + trail;
     R("antennaL").z = wob - R("head").z * 0.8;
     R("antennaR").z = wob * 0.9 - R("head").z * 0.8;
     R("antennaL").x = bob;
     R("antennaR").x = bob * 1.1;
 
     hips.position.y = hipY;
+    // Landing squash on the whole body (short, small; the root and the camera never move).
+    const sq = 0.09 * landEnv;
+    this.model.scale.set(1 + sq * 0.5, 1 - sq, 1 + sq * 0.5);
   }
 }
 

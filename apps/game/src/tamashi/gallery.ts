@@ -13,13 +13,14 @@
  */
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { PMREMGenerator, WebGPURenderer } from "three/webgpu";
 import { createTamashi, tamashiStats, type TamashiCharacter } from "./character";
 import { screensReady } from "./screen";
 import { TAMASHI_COUNT } from "./traits";
 
 type Anim = "idle" | "carrywalk" | "stroll" | "walk" | "run" | "carry" | "swing" | "cheer" | "wave" | "nod" | "sit" | "crouch";
 
-export function runGallery(host: HTMLElement, param: string): void {
+export async function runGallery(host: HTMLElement, param: string): Promise<void> {
   const q = new URLSearchParams(location.search);
   const anim = (q.get("anim") ?? "idle") as Anim;
   const freezeAt = q.has("t") ? Number(q.get("t")) : null;
@@ -35,7 +36,7 @@ export function runGallery(host: HTMLElement, param: string): void {
   view.style.cssText = `position:relative;flex:${single ? "0 0 58%" : "1 1 auto"};height:100%;overflow:hidden`;
   host.append(view);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  const renderer = new WebGPURenderer({ antialias: true, forceWebGL: new URLSearchParams(location.search).get("backend") === "webgl" });
   renderer.setPixelRatio(Math.min(2, devicePixelRatio));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.2;
@@ -46,7 +47,8 @@ export function runGallery(host: HTMLElement, param: string): void {
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color("#3a4f62");
-  const pmrem = new THREE.PMREMGenerator(renderer);
+  await renderer.init();
+  const pmrem = new PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   scene.environmentIntensity = 0.32;
   scene.add(new THREE.HemisphereLight("#a9c3dc", "#5a4a3c", 1.25));

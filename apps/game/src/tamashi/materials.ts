@@ -9,7 +9,8 @@
  *
  * Tamashi characters and artwork © Studio Mirai, LLC. All rights reserved. See NOTICE.md.
  */
-import * as THREE from "three";
+import * as THREE from "three/webgpu";
+import { attribute, vertexColor } from "three/tsl";
 
 /** Surface response per vertex: roughness, metalness, emissive (× base colour). */
 export interface Finish {
@@ -27,24 +28,20 @@ export const GOLD: Finish = { r: 0.3, m: 0.85 };
 export const RUBBER: Finish = { r: 0.8, m: 0 };
 export const glow = (e: number, r = 0.5): Finish => ({ r, m: 0, e });
 
-let shared: THREE.MeshStandardMaterial | null = null;
+let shared: THREE.MeshStandardNodeMaterial | null = null;
 
-/** The shared body material (vertex colours + per-vertex roughness/metalness/emissive). */
-export function bodyMaterial(): THREE.MeshStandardMaterial {
+/**
+ * The shared body material (vertex colours + per-vertex roughness/metalness/emissive). A TSL
+ * node material, so it runs on WebGPU and on three's WebGL2 fallback (WebGPURenderer only).
+ */
+export function bodyMaterial(): THREE.MeshStandardNodeMaterial {
   if (shared) return shared;
-  const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 1 });
+  const m = new THREE.MeshStandardNodeMaterial({ vertexColors: true, roughness: 1, metalness: 1 });
   m.name = "tamashi-body";
-  m.onBeforeCompile = (s) => {
-    s.vertexShader = s.vertexShader
-      .replace("#include <common>", "#include <common>\nattribute vec3 rme;\nvarying vec3 vRme;")
-      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvRme = rme;");
-    s.fragmentShader = s.fragmentShader
-      .replace("#include <common>", "#include <common>\nvarying vec3 vRme;")
-      .replace("#include <roughnessmap_fragment>", "float roughnessFactor = vRme.x;")
-      .replace("#include <metalnessmap_fragment>", "float metalnessFactor = vRme.y;")
-      .replace("#include <emissivemap_fragment>", "totalEmissiveRadiance += diffuseColor.rgb * vRme.z;");
-  };
-  m.customProgramCacheKey = () => "tamashi-body-rme";
+  const rme = attribute("rme", "vec3");
+  m.roughnessNode = rme.x;
+  m.metalnessNode = rme.y;
+  m.emissiveNode = vertexColor().rgb.mul(rme.z);
   shared = m;
   return m;
 }

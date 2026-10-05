@@ -105,8 +105,11 @@ export class MockAdapter implements MisoAdapter {
   private clock = 0;
   /** Purchases that landed but whose answer was lost, by shop record id (Retry returns them). */
   private lostPurchases = new Map<string, PurchaseResult>();
-  /** Sales that landed but whose answer was lost, by Record id (Retry returns them). */
-  private lostSales = new Map<string, SellResult>();
+  /**
+   * Sales that landed but whose answer was lost, by Record id. Like the testnet adapter's
+   * pending sales, the Record keeps showing in the collection until a Retry returns the result.
+   */
+  private lostSales = new Map<string, { result: SellResult; owned: OwnedRecord }>();
 
   constructor(options: MockAdapterOptions = {}) {
     this.latencyMs = options.latencyMs ?? 800;
@@ -208,7 +211,8 @@ export class MockAdapter implements MisoAdapter {
 
   async listOwnedRecords(): Promise<OwnedRecord[]> {
     await this.simulate("read");
-    return this.owned.map((r) => ({ ...r }));
+    const pending = [...this.lostSales.values()].map((s) => s.owned);
+    return [...this.owned, ...pending].sort((a, b) => b.acquiredAt - a.acquiredAt).map((r) => ({ ...r }));
   }
 
   async collectorAddress(): Promise<string> {
@@ -221,17 +225,17 @@ export class MockAdapter implements MisoAdapter {
     const earlier = this.lostSales.get(recordId);
     if (earlier) {
       this.lostSales.delete(recordId);
-      return earlier;
+      return earlier.result;
     }
     this.injectFailure("sell");
     const index = this.owned.findIndex((r) => r.recordId === recordId);
     if (index < 0) throw new Error("You don't own that any more.");
-    this.owned.splice(index, 1);
+    const [sold] = this.owned.splice(index, 1);
     this.fakeUsd += npc.offer;
     this.sui -= 2_000_000n;
     const result = { digest: this.fakeDigest(), paid: npc.offer };
-    if (this.takeLost("sell")) {
-      this.lostSales.set(recordId, result);
+    if (this.takeLost("sell") && sold) {
+      this.lostSales.set(recordId, { result, owned: sold });
       throw new Error(TIMEOUT_MESSAGE);
     }
     return result;

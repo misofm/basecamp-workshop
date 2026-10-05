@@ -1,0 +1,96 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "blue-hours",
+  "tracks": [
+    {
+      "track": "after-hours",
+      "title": "After Hours",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "G3yHfN3nT6Ae2ObaH4i4",
+      "requestedSeconds": 140,
+      "seconds": 140.016,
+      "instrumental": true,
+      "prompt": "Acoustic jazz piano trio, medium swing at 120 BPM, walking upright bass, brushed drums, bluesy piano improvisation in B-flat, smoky late-night club atmosphere, live recording feel",
+      "mastering": {
+        "gainDb": -1.2,
+        "sourceTruePeakDbtp": -0.8,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "velvet-rope",
+      "title": "Velvet Rope",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "iGhoqcFD4RbgzQuXHr7d",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": true,
+      "prompt": "Slow jazz ballad, solo piano intro then trio, tender melody, lush extended chords in D-flat major, soft brushes, arco bass, intimate and romantic",
+      "mastering": {
+        "gainDb": -1.2,
+        "sourceTruePeakDbtp": -0.8,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "uptown-transfer",
+      "title": "Uptown Transfer",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "CWjqB8UVhtahR9SXDqZv",
+      "requestedSeconds": 125,
+      "seconds": 125.016,
+      "instrumental": true,
+      "prompt": "Up-tempo bebop jazz trio, 168 BPM, fast swinging ride cymbal, virtuosic piano runs, driving walking bass, exciting and playful, F major",
+      "mastering": {
+        "gainDb": -1.3,
+        "sourceTruePeakDbtp": -0.7,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "rain-check",
+      "title": "Rain Check",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "xvdlzRRWJE4qMPXXcO88",
+      "requestedSeconds": 135,
+      "seconds": 135.001,
+      "instrumental": false,
+      "prompt": "Vocal jazz song, sultry female crooner singing about a cancelled date on a rainy night, piano trio with muted trumpet, gentle bossa-swing at 92 BPM, G minor",
+      "mastering": {
+        "gainDb": -1.7,
+        "sourceTruePeakDbtp": -0.3,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "last-call",
+      "title": "Last Call",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "9bqcGmOaSLGRLpyaKxrp",
+      "requestedSeconds": 145,
+      "seconds": 145.032,
+      "instrumental": true,
+      "prompt": "Modal jazz trio closer, 100 BPM, hypnotic piano vamp in C minor, melodic bass solo, cymbal swells, gradually fading as the club empties",
+      "mastering": {
+        "gainDb": -1.0,
+        "sourceTruePeakDbtp": -1.0,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

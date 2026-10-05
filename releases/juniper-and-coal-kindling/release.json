@@ -1,0 +1,177 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Woodsmoke",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "River Names",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Stove Light",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Northbound Train",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Embers",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "2d208a442eb85e150cd39408a755523ff3eb40f3cf615d5b90b19112400ded57"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "072bc085f05eba3d54547ab8d5744e4c2e3b7ceddd21e7f9d59e2d38c0b690a2"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "1:50",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4851712",
+        "pcmDigest": "9f70ba9bff6ae0a3e71026b42d1c777278e32370ab34b3b89b0769e1229d9d86"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "d7fd5d989a62f001ddd1a8773042901a7d3395faa3c7eaf69765ce70da4ca8df"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:25",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6395904",
+        "pcmDigest": "454297d9c9aad961652daa3d393fbf26e7205269d6286c397dbbec3ee5a126ba"
+      }
+    }
+  ],
+  "release": {
+    "title": "Kindling",
+    "kind": "ExtendedPlay",
+    "description": "A duo's cabin record: two voices, two guitars, one woodstove.",
+    "genres": {
+      "primary": "ALTERNATIVE",
+      "secondary": [
+        "COUNTRY"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

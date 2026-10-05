@@ -1,0 +1,61 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "low-tide-tapes",
+  "tracks": [
+    {
+      "track": "ferry-at-dawn",
+      "title": "Ferry at Dawn",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "7Td27Ke0Y8ddys6e9Vhn",
+      "requestedSeconds": 120,
+      "seconds": 120.047,
+      "instrumental": true,
+      "prompt": "Lo-fi hip hop instrumental, 82 BPM, dusty boom-bap drums with soft swing, warm Rhodes chords in F major, mellow upright bass, distant seagulls and harbor ambience, gentle tape wow and vinyl crackle, relaxed early-morning mood"
+    },
+    {
+      "track": "salt-on-the-window",
+      "title": "Salt on the Window",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "hByV3c8qIqG9irafbZD3",
+      "requestedSeconds": 110,
+      "seconds": 109.97,
+      "instrumental": true,
+      "prompt": "Lo-fi chillhop instrumental, 76 BPM, rain on glass texture, muted jazz guitar licks, lazy kick and snare, detuned felt piano melody in D minor, cozy and introspective"
+    },
+    {
+      "track": "pier-lamps",
+      "title": "Pier Lamps",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "k3X3uQmWR50KZ4W8LHog",
+      "requestedSeconds": 125,
+      "seconds": 124.97,
+      "instrumental": true,
+      "prompt": "Jazzy lo-fi hip hop beat, 88 BPM, sampled-sounding saxophone phrases, crunchy snare, round sub bass, chopped vocal ahh pad, nighttime boardwalk vibe, A minor"
+    },
+    {
+      "track": "slow-current",
+      "title": "Slow Current",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "gPCT9vosYeIg2Ng4G10n",
+      "requestedSeconds": 115,
+      "seconds": 115.032,
+      "instrumental": true,
+      "prompt": "Downtempo lo-fi instrumental, 72 BPM, wobbly cassette synth lead, brushed drums, warm bass guitar, lush chords in E-flat major, floating and sleepy, ocean wave swells"
+    },
+    {
+      "track": "last-ferry-home",
+      "title": "Last Ferry Home",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "sznH2WrhQmlZTjEJhGao",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": true,
+      "prompt": "Nostalgic lo-fi hip hop closer, 80 BPM, music box melody over Rhodes, soft vinyl hiss, lazy swung drums, gentle bass, ends with a slow fade into harbor ambience, G major"
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Riptide Rendezvous",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Boardwalk Heat",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Tiki Lounge",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Wipeout Weather",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Salt in the Amp",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:00",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "5ccb4ff85fb1ecd3deabbce9c624608cd8b3d34f6b64f07997e7653abe03b68b"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:05",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "8d56c7a06fff0a82c9d5afccc25d9b5146162970b25052a5416ad2b3c02c6f71"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "1:55",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5070848",
+        "pcmDigest": "6f5aeccf085f0be98716f5ff01032449145aeb4212e4e8100636be8e88a590e5"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:00",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "f2602c857c9c1732fa3563d636b6802e0ee52a3691a98c06ebde521949b1adf3"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "79054ada673f4a58d69d9695352fcbfa7faaa2365166888fcfaaedd996e83337"
+      }
+    }
+  ],
+  "release": {
+    "title": "Sun Bleached",
+    "kind": "ExtendedPlay",
+    "description": "Reverb-tank garage surf from a band that has never surfed.",
+    "genres": {
+      "primary": "ROCK",
+      "secondary": [
+        "ALTERNATIVE"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

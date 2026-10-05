@@ -1,0 +1,171 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Platform Nine",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Mind the Gap",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Signal Failure",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Night Bus",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "End of the Line",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "05000fe60f21192e3f7c996375c07c31d0ba42bcc0cd9ae0b1069ffef3a3fa34"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5734400",
+        "pcmDigest": "88348c5bc071001f5a8c1aba24262958bfc96fe3476adc52de94a0d0be2e940d"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "27c831e95e7f0aac6c6f43a28882e8dd32779bbe8982b7189aef88f05cd93e06"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "d9ad46d6b37b4b306a848f4a0fca0e7bcdd00c42f6a4ca30ce7c3fa3ee388c41"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "e26bd0f0606b763ff100c2362da22ea657297ebd150d8c6b832275f1e69b5741"
+      }
+    }
+  ],
+  "release": {
+    "title": "Third Rail",
+    "kind": "ExtendedPlay",
+    "description": "Liquid and jump-up drum & bass recorded under the city.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "DANCE"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

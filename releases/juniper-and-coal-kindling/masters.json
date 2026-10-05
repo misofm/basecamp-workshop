@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "hrNfVq40dDSA-LCX-8TwuABzFXQ8SDgb8HmxM6pUfvQ",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-woodsmoke": {
+      "master": {
+        "blobId": "8njo2iZctmtvU1ObZR6dP2qqoLE_yr0VdNblUaibhpo",
+        "bytes": 13619005,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "2d208a442eb85e150cd39408a755523ff3eb40f3cf615d5b90b19112400ded57"
+      },
+      "masterStored": true,
+      "streamingTranscode": "je_ch6ns3_xc44nLIQKpMf8RYQ4fNc_wkHS-aRdofu4",
+      "transcodeDigest": "d12f23bd541e34356afd77f59098230f0301b08ba7085ad298c0e786bdb21974"
+    },
+    "02-river-names": {
+      "master": {
+        "blobId": "5RofvnLGn4fWnLBqUgQMotXrbuQrCZ8MGA4y41VgkmI",
+        "bytes": 13106704,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "072bc085f05eba3d54547ab8d5744e4c2e3b7ceddd21e7f9d59e2d38c0b690a2"
+      },
+      "masterStored": true,
+      "streamingTranscode": "-pyR9qIWQ4hom-HBPbh2HGO9mANLDm2rO8SAIHU92UY",
+      "transcodeDigest": "0033d98df68951d35f3942502628552b6572d593a0f7842817be765c24efbf14"
+    },
+    "03-stove-light": {
+      "master": {
+        "blobId": "2thZZL8-RUTrvF73spYE_vyD9GWyHmv8TDhMYFRiIHQ",
+        "bytes": 10286172,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4851712",
+        "pcmDigest": "9f70ba9bff6ae0a3e71026b42d1c777278e32370ab34b3b89b0769e1229d9d86"
+      },
+      "masterStored": true,
+      "streamingTranscode": "ww-rxkTZGw8hZ14G1CQuX9oDre6LUaoDNLyViTEQIJE",
+      "transcodeDigest": "f3af0ef49153d285251f6a11d21886bf549e97311afe740f69dced9e187b1519"
+    },
+    "04-northbound-train": {
+      "master": {
+        "blobId": "gBQKueOcCWa-aYbp715ejGkIojfXbvPkUJpWn54vSt0",
+        "bytes": 14895684,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "d7fd5d989a62f001ddd1a8773042901a7d3395faa3c7eaf69765ce70da4ca8df"
+      },
+      "masterStored": true,
+      "streamingTranscode": "MVQwEmV3Y5dIOcP3QirJaKVzBOSAnwu7O8VP193-HyA",
+      "transcodeDigest": "c6364ab8c5f73f15e0fa374c58757661fc729fd936c80cacff811a6f46f46544"
+    },
+    "05-embers": {
+      "master": {
+        "blobId": "ieOKt8eIiqGHBO4ziR4eXXPUTkR2_Pk3p6dZ-_BeFQ8",
+        "bytes": 12307463,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6395904",
+        "pcmDigest": "454297d9c9aad961652daa3d393fbf26e7205269d6286c397dbbec3ee5a126ba"
+      },
+      "masterStored": true,
+      "streamingTranscode": "zXkqNPFdn3-srSKarm51lz2DlmVG4BrBVDEWPHeGq_c",
+      "transcodeDigest": "309fdc9727c2929e3399517f3cd98361f7533cc70068eabb329e68453193d844"
+    }
+  }
+}

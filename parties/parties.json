@@ -1,0 +1,235 @@
+{
+  "$comment": "Fictional parties credited across the workshop catalog. group=true parties are PartyOS group parties (bands, solo projects, labels) whose members are individual parties; group=false parties are individuals. On-chain ids per network live in parties.<network>.json.",
+  "parties": [
+    {
+      "slug": "harbor-lights",
+      "kind": "artist",
+      "name": "Harbor Lights",
+      "bio": "Beatmaker recording on a four-track between ferry shifts.",
+      "members": [
+        "mara-quinlan"
+      ],
+      "group": true
+    },
+    {
+      "slug": "neon-cartography",
+      "kind": "artist",
+      "name": "Neon Cartography",
+      "bio": "Synth duo mapping imaginary highways.",
+      "members": [
+        "dex-moreau",
+        "ines-varga"
+      ],
+      "group": true
+    },
+    {
+      "slug": "juniper-and-coal",
+      "kind": "artist",
+      "name": "Juniper & Coal",
+      "bio": "Folk duo writing from a cabin with no cell signal.",
+      "members": [
+        "june-holloway",
+        "callum-coal"
+      ],
+      "group": true
+    },
+    {
+      "slug": "selene-okafor",
+      "kind": "artist",
+      "name": "Selene Okafor",
+      "bio": "Singer-songwriter blending Afrobeats, highlife, and house.",
+      "group": false
+    },
+    {
+      "slug": "the-velvet-index",
+      "kind": "artist",
+      "name": "The Velvet Index",
+      "bio": "Piano trio that only plays after midnight.",
+      "members": [
+        "theo-bramwell",
+        "rosa-lind",
+        "august-pike"
+      ],
+      "group": true
+    },
+    {
+      "slug": "moss-protocol",
+      "kind": "artist",
+      "name": "Moss Protocol",
+      "bio": "Ambient project built from field recordings and modular synths.",
+      "members": [
+        "wren-alder"
+      ],
+      "group": true
+    },
+    {
+      "slug": "kiko-arai",
+      "kind": "artist",
+      "name": "Kiko Arai",
+      "bio": "City pop vocalist with a cassette-deck heart.",
+      "group": false
+    },
+    {
+      "slug": "subway-prophet",
+      "kind": "artist",
+      "name": "Subway Prophet",
+      "bio": "Drum & bass producer recording under the city.",
+      "members": [
+        "omar-reyes"
+      ],
+      "group": true
+    },
+    {
+      "slug": "palomino-static",
+      "kind": "artist",
+      "name": "Palomino Static",
+      "bio": "Garage surf quartet that has never surfed.",
+      "members": [
+        "billy-sands",
+        "lou-tremont"
+      ],
+      "group": true
+    },
+    {
+      "slug": "basement-choir",
+      "kind": "artist",
+      "name": "Basement Choir",
+      "bio": "Gospel-house collective for 5am warehouses.",
+      "members": [
+        "grace-adeyemi",
+        "marcus-hale"
+      ],
+      "group": true
+    },
+    {
+      "slug": "mara-quinlan",
+      "kind": "person",
+      "name": "Mara Quinlan",
+      "group": false
+    },
+    {
+      "slug": "dex-moreau",
+      "kind": "person",
+      "name": "Dex Moreau",
+      "group": false
+    },
+    {
+      "slug": "ines-varga",
+      "kind": "person",
+      "name": "Ines Varga",
+      "group": false
+    },
+    {
+      "slug": "june-holloway",
+      "kind": "person",
+      "name": "June Holloway",
+      "group": false
+    },
+    {
+      "slug": "callum-coal",
+      "kind": "person",
+      "name": "Callum Coal",
+      "group": false
+    },
+    {
+      "slug": "theo-bramwell",
+      "kind": "person",
+      "name": "Theo Bramwell",
+      "group": false
+    },
+    {
+      "slug": "rosa-lind",
+      "kind": "person",
+      "name": "Rosa Lind",
+      "group": false
+    },
+    {
+      "slug": "august-pike",
+      "kind": "person",
+      "name": "August Pike",
+      "group": false
+    },
+    {
+      "slug": "wren-alder",
+      "kind": "person",
+      "name": "Wren Alder",
+      "group": false
+    },
+    {
+      "slug": "omar-reyes",
+      "kind": "person",
+      "name": "Omar Reyes",
+      "group": false
+    },
+    {
+      "slug": "billy-sands",
+      "kind": "person",
+      "name": "Billy Sands",
+      "group": false
+    },
+    {
+      "slug": "lou-tremont",
+      "kind": "person",
+      "name": "Lou Tremont",
+      "group": false
+    },
+    {
+      "slug": "grace-adeyemi",
+      "kind": "person",
+      "name": "Grace Adeyemi",
+      "group": false
+    },
+    {
+      "slug": "marcus-hale",
+      "kind": "person",
+      "name": "Marcus Hale",
+      "group": false
+    },
+    {
+      "slug": "nadia-flint",
+      "kind": "person",
+      "name": "Nadia Flint",
+      "bio": "Producer and mix engineer.",
+      "group": false
+    },
+    {
+      "slug": "kofi-mensah",
+      "kind": "person",
+      "name": "Kofi Mensah",
+      "bio": "Producer.",
+      "group": false
+    },
+    {
+      "slug": "elsa-brandt",
+      "kind": "person",
+      "name": "Elsa Brandt",
+      "bio": "Mastering engineer.",
+      "group": false
+    },
+    {
+      "slug": "rio-takeda",
+      "kind": "person",
+      "name": "Rio Takeda",
+      "bio": "Songwriter and arranger.",
+      "group": false
+    },
+    {
+      "slug": "tidepool-records",
+      "kind": "label",
+      "name": "Tidepool Records",
+      "group": true
+    },
+    {
+      "slug": "chromefield",
+      "kind": "label",
+      "name": "Chromefield",
+      "group": true
+    },
+    {
+      "slug": "goldline-music",
+      "kind": "label",
+      "name": "Goldline Music",
+      "group": true
+    }
+  ]
+}

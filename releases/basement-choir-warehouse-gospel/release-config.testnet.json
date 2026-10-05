@@ -1,0 +1,709 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "Ygfk1zOBRNWcxxbQCUyrkYlZHNYfvSemvIQrAK53sZk"
+      },
+      "streamingTranscode": "kA6dWnnZVZwRwIyYnfPr6-55knrY3OJYnz7Xbldvsko",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+          },
+          "displayName": "Basement Choir",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Featured"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "Vhn5h_nRFeoP8uL0xepuM5IktdlNaFVDhfXhhC_oixU"
+      },
+      "streamingTranscode": "9pcmDwrh2Cvz3LilbAHwQ5b7CwZEbMMliLqedy7M6AM",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+          },
+          "displayName": "Basement Choir",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "AiDNvsTaraeXtkvLtDkgZHNXFvYHvz8N2-IvR6SWUZo"
+      },
+      "streamingTranscode": "hll0b_pe8ejr5OXXzfG43WZ8za77ptYPz9iFe4-iyXM",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+          },
+          "displayName": "Basement Choir",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "sBDDGWRh-Vl08Ru7yPI0r9KQrGxJcuY-NGwGmQpgJ5I"
+      },
+      "streamingTranscode": "GFH_El2mtNMWV6a1tJcIgEuR9G7UfFHJCje5V7VBSWs",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+          },
+          "displayName": "Basement Choir",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "7ZpnbnxbzLdcOiFOp84GUBb4GhKCEN6ZBj-wJkx358s"
+      },
+      "streamingTranscode": "2DyGObWY4K4gNxLAjdrdWjgiupf2Z_hbKClCxARjDMM",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+          },
+          "displayName": "Basement Choir",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b"
+          },
+          "displayName": "Grace Adeyemi",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+          },
+          "displayName": "Marcus Hale",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "GAAz3MXLpxO4j7USOA9O6H20UO8q3VPlpeNgnY4zGts"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975"
+        },
+        "displayName": "Basement Choir",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "18000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

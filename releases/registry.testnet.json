@@ -1,0 +1,172 @@
+{
+  "harbor-lights-low-tide-tapes": {
+    "title": "Low Tide Tapes",
+    "artist": "harbor-lights",
+    "genre": "Lo-fi Hip Hop",
+    "releaseId": "0xc74e8761bbe01b3263a030951a00eac16d928820c25c1e022e2c7a5de871b566",
+    "pressingId": "0xbfc067f7bedd851e55b51a5fb66343db42a97d1ea39c6ed334c95d2cee95431b",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0xa84a752e536eea2b946654772a21868dc3496bb9e731b88c925aad0d208d8fd6",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "12000000"
+    },
+    "digest": "GuSMdDgHufwfREA1zYEvDyxGN2dGUxiiJhNDSX52vCjj",
+    "gasUsedMist": "474024244",
+    "publishedAt": "2026-10-04T07:50:00Z"
+  },
+  "basement-choir-warehouse-gospel": {
+    "title": "Warehouse Gospel",
+    "artist": "basement-choir",
+    "genre": "House",
+    "releaseId": "0x9c5c92e800e12dba04f1688a854f81314d6fbf08027cf2f59a20063bc18c38a3",
+    "pressingId": "0x93aa430b7be3f8b51d38d15a4a624dc1cd92fc9acb029636eb95354096812319",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0xa5414831f1644e5181cdfda66a5e3f801152a2dbdf9b9844cab5910e97ee3735",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "18000000"
+    },
+    "digest": "252vTeibU5Y95K5GBsLbRvaoUMj8LjdR2cFMmJU5US1h",
+    "gasUsedMist": "503607880",
+    "publishedAt": "2026-10-04T07:48:27.451Z"
+  },
+  "moss-protocol-field-notes": {
+    "title": "Field Notes",
+    "artist": "moss-protocol",
+    "genre": "Ambient",
+    "releaseId": "0xf9c8ab0d8ef194d37080508528701731b9d599dc23c7780a9399ba88149f6b8c",
+    "pressingId": "0x9ad42acb7d8c67011543025d9d039c6248091af2feddc24c276b851fbc99f8a1",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x4dc425573e68d62c10e1c9a52975be48efa1c8615a679f04f697f7548de56193",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "8000000"
+    },
+    "digest": "BRbJF9hD6EGXMLhP3FNcR4wAMLFew5MgQnM7uLETaDvm",
+    "gasUsedMist": "473269564",
+    "publishedAt": "2026-10-04T07:48:43.802Z"
+  },
+  "neon-cartography-night-drive-atlas": {
+    "title": "Night Drive Atlas",
+    "artist": "neon-cartography",
+    "genre": "Synthwave",
+    "releaseId": "0x01944c988249c7d74c4096d45614e8fe468cb97e0307f517b6c61fd1e4b08223",
+    "pressingId": "0x313a00649928d8df9fe7c668ba611fcab77ce3b0158eead6dd609492bca0b855",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0xb71ba5a37780ea5d51b700eb4b819c61671925194e1231c685f469c5d04ae68f",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "15000000"
+    },
+    "digest": "5Txix2BtwGXNtcwT1pZSSdWMTPRarm2FuZnen9RJrFBW",
+    "gasUsedMist": "494199044",
+    "publishedAt": "2026-10-04T07:48:54.363Z"
+  },
+  "palomino-static-sun-bleached": {
+    "title": "Sun Bleached",
+    "artist": "palomino-static",
+    "genre": "Surf Rock",
+    "releaseId": "0xb5a1ab704a82ff220720aa2ffa9bfb804f1a78e3913f686af05075c9ef0298dd",
+    "pressingId": "0x81c08242d14b7c446aaaafc6f27dddc409b9ec41e847395cadcb808627d70413",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x33b60d879ecf4f88d0be2a4e9f82130736152bb5b071ca18243d20ae8a6650e9",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "10000000"
+    },
+    "digest": "5rp9qef3s4vqUCaTSb9MdYZYnP3JxcVxdNvBTQf1PsQX",
+    "gasUsedMist": "494433424",
+    "publishedAt": "2026-10-04T07:56:55.306Z"
+  },
+  "juniper-and-coal-kindling": {
+    "title": "Kindling",
+    "artist": "juniper-and-coal",
+    "genre": "Indie Folk",
+    "releaseId": "0xdada5dc7899f2702cc0d963cc38d55364fd2a3eac374bbee06ce64aadc956b82",
+    "pressingId": "0x9569afc47b5b2ae2db08f4416a4284db4f90e720a0b914d4cc653a7947d97d62",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x354bbbd684370f3161b67ce79c2dbb42e310c03f37afdb171d502830af610ef5",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "10000000"
+    },
+    "digest": "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t",
+    "gasUsedMist": "501933104",
+    "publishedAt": "2026-10-04T07:59:34.873Z"
+  },
+  "kiko-arai-summer-static": {
+    "title": "Summer Static",
+    "artist": "kiko-arai",
+    "genre": "City Pop",
+    "releaseId": "0xf58df0fee6048f922ad8da5a28c8ccd64a29bfd952203199742fa7d0af1730ed",
+    "pressingId": "0xc9e77e1847077529837c0bf555dd00d954764030f8fd67e9ef33b635060d9066",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x740ace6b506ed3d931decddf01a584a3f1e501a310a2ed76a3ed0ce217ecb3a5",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "15000000"
+    },
+    "digest": "3oSAxpeLAsVpnfEAdXq9UTKcVaUYuioVJoaQmPtEUdpM",
+    "gasUsedMist": "489715348",
+    "publishedAt": "2026-10-04T08:10:50.766Z"
+  },
+  "selene-okafor-lagos-after-dark": {
+    "title": "Lagos After Dark",
+    "artist": "selene-okafor",
+    "genre": "Afrobeats",
+    "releaseId": "0x4fb0f31f199435625ea5663a7d527fa32fb11796d588d28269cf907ec5358477",
+    "pressingId": "0x4b2126cf302dc84acd06d49b26565f55f3b6fcb4d861f91708888c51c0f2b96c",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x6767becfca430b822bfbf3f4a8d02ecccd201edd7008ab2a6d4ade594f84839e",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "18000000"
+    },
+    "digest": "1tS6DNQeu8GvnsMHFVJKLtnzhqdyhUzNfVqxXWuNHMN",
+    "gasUsedMist": "488091484",
+    "publishedAt": "2026-10-04T08:25:26.428Z"
+  },
+  "the-velvet-index-blue-hours": {
+    "title": "Blue Hours",
+    "artist": "the-velvet-index",
+    "genre": "Jazz",
+    "releaseId": "0x3fbd5ce8906a20efbe68a4e5c71b869e6bd00b06fe44c9b6f91eda3ba70e1e54",
+    "pressingId": "0x830cdf3e385f8263955e9d622dddd1b973efd3c76249e241aa52b9517cb3eebc",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x8f2768f0c080bc68936c29e980afb9f20885a5bc838a31092375e2a6677f6361",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "20000000"
+    },
+    "digest": "EKmX3Wfrpfc5vZBLq2wHPuY4QYdtWGzw1kY8u6nikvxg",
+    "gasUsedMist": "499878532",
+    "publishedAt": "2026-10-04T08:45:04.999Z"
+  },
+  "subway-prophet-third-rail": {
+    "title": "Third Rail",
+    "artist": "subway-prophet",
+    "genre": "Drum & Bass",
+    "releaseId": "0xb3996c5ae088ad90080922496011603af3b3d495c363dac93c4733d9cf548aa7",
+    "pressingId": "0xdfc3c21476c6d68c3bc315d111ba475c34f549a5f7de299f6f559108fe03e6cb",
+    "edition": 1,
+    "maxSupply": 250,
+    "listingId": "0x856666031d21719f85cdba954bb0209dd901d41e1b9bbb4ec1f20827a242bd84",
+    "pricing": {
+      "kind": "fixed",
+      "amount": "12000000"
+    },
+    "digest": "BmTu4PZzbLHN1jYNmzXGSMFnj9KA5KdzhzSYXBoBe3gW",
+    "gasUsedMist": "469228664",
+    "publishedAt": "2026-10-04T08:47:03.805Z"
+  }
+}

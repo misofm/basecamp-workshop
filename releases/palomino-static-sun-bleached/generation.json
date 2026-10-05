@@ -1,0 +1,75 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "sun-bleached",
+  "tracks": [
+    {
+      "track": "riptide-rendezvous",
+      "title": "Riptide Rendezvous",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "l8laxKufw8PgLieTO9uo",
+      "requestedSeconds": 120,
+      "seconds": 120.001,
+      "instrumental": true,
+      "prompt": "Instrumental surf rock, 160 BPM, heavily reverbed twangy lead guitar with tremolo picking, driving drums, rumbling bass, 1960s garage energy, E minor"
+    },
+    {
+      "track": "boardwalk-heat",
+      "title": "Boardwalk Heat",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "9kG3UGvSg98acBfGfPvC",
+      "requestedSeconds": 125,
+      "seconds": 125.016,
+      "instrumental": false,
+      "prompt": "Garage surf rock song, fuzzy male vocals and oohs backing vocals about a hot day on the boardwalk, 140 BPM, jangly guitars, tambourine, A major, lo-fi and fun"
+    },
+    {
+      "track": "tiki-lounge",
+      "title": "Tiki Lounge",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "IZbJv0nRBaWdjwom1NB6",
+      "requestedSeconds": 115,
+      "seconds": 114.985,
+      "instrumental": true,
+      "prompt": "Exotica surf instrumental, 110 BPM, spring reverb guitar melody, bongos, vibraphone, organ, mysterious tiki bar mood, D minor"
+    },
+    {
+      "track": "wipeout-weather",
+      "title": "Wipeout Weather",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Sp1yTZuPFV32Mj3oLqM6",
+      "requestedSeconds": 120,
+      "seconds": 120.001,
+      "instrumental": true,
+      "prompt": "Frantic surf punk instrumental, 170 BPM, fast pounding drums with tom fills, wild reverb guitar runs, saxophone honks, G major",
+      "mastering": {
+        "gainDb": -1.8,
+        "sourceTruePeakDbtp": -0.2,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "salt-in-the-amp",
+      "title": "Salt in the Amp",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "ByLlQwh6b3wfiEZfmv6j",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": false,
+      "prompt": "Mellow surf pop closer, dreamy male vocals about the end of summer, 100 BPM, clean reverb guitar, soft drums, organ, ocean waves, C major",
+      "mastering": {
+        "gainDb": -1.6,
+        "sourceTruePeakDbtp": -0.4,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

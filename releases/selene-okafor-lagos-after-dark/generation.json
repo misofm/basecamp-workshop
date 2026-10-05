@@ -1,0 +1,96 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "lagos-after-dark",
+  "tracks": [
+    {
+      "track": "rooftop-signal",
+      "title": "Rooftop Signal",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "RRj2lmlAxkQFAufORbEL",
+      "requestedSeconds": 140,
+      "seconds": 139.97,
+      "instrumental": false,
+      "prompt": "Afrobeats song with smooth female vocals about dancing on a rooftop at night, 104 BPM, bouncy log drum and shaker groove, highlife-style guitar riffs, warm synth pads, catchy chorus, B-flat minor",
+      "mastering": {
+        "gainDb": -2.0,
+        "sourceTruePeakDbtp": -0.0,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "danfo-ride",
+      "title": "Danfo Ride",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "VTxzkrz9h4mpxzNZe7NQ",
+      "requestedSeconds": 125,
+      "seconds": 125.016,
+      "instrumental": true,
+      "prompt": "Energetic Afrobeats instrumental, 110 BPM, talking drum, syncopated percussion, punchy bass, brass stabs, city traffic energy, G minor",
+      "mastering": {
+        "gainDb": -1.8,
+        "sourceTruePeakDbtp": -0.2,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "golden-hour-lekki",
+      "title": "Golden Hour",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "1nflYxr1JyLQOh4JwHZR",
+      "requestedSeconds": 135,
+      "seconds": 134.954,
+      "instrumental": false,
+      "prompt": "Mid-tempo Afro-pop love song, sweet female vocals with call-and-response backing vocals, 100 BPM, clean palm-muted guitar, soft percussion, warm sunset feeling, E-flat major",
+      "mastering": {
+        "gainDb": -1.6,
+        "sourceTruePeakDbtp": -0.4,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "third-mainland",
+      "title": "Third Mainland",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "TpyZWUpXlVzFmyTGGWJJ",
+      "requestedSeconds": 145,
+      "seconds": 144.985,
+      "instrumental": true,
+      "prompt": "Afro-house instrumental, 122 BPM, four-on-the-floor kick, layered hand percussion, hypnotic marimba riff, deep rolling bassline, soulful vocal chops, A minor",
+      "mastering": {
+        "gainDb": -1.4,
+        "sourceTruePeakDbtp": -0.6,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "taxi-home",
+      "title": "Taxi Home",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "8m15tBoOTGfLLIbFDFSi",
+      "requestedSeconds": 120,
+      "seconds": 120.047,
+      "instrumental": false,
+      "prompt": "Laid-back Afro-R&B closer, intimate female vocals about the ride home at 4am, 92 BPM, soft log drum, Rhodes keys, airy pads, F minor",
+      "mastering": {
+        "gainDb": -2.8,
+        "sourceTruePeakDbtp": 0.8,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

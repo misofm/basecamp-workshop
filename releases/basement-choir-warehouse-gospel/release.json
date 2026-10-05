@@ -1,0 +1,176 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Lift Me Higher",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Concrete Cathedral",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Sunday at Sunrise",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Strobe Psalm",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Doors Close at Six",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:30",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6612992",
+        "pcmDigest": "af2c957b685825d1ed29689aed4443bcd2bc35b33e37818a382f4043906b28be"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:25",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "63025c79f14b00a94f7653da5024a9f919ed8d9990fbcba58ce18c83c01f7fa6"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "d6aca406ac608d651d2c2b167cf0c76c6decc6a71d064441b6897080616ec273"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5955584",
+        "pcmDigest": "70303b5bc5e8f67408ef2820ff6d051060219fc0a4b2eb1276fab377862ccaf1"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:30",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6615040",
+        "pcmDigest": "027feb02b44cd46afc8d07283039508ba5feff8112cf455af9c0b155b8f87b3e"
+      }
+    }
+  ],
+  "release": {
+    "title": "Warehouse Gospel",
+    "kind": "ExtendedPlay",
+    "description": "Gospel-house for 5am warehouses, with a choir that never sleeps.",
+    "genres": {
+      "primary": "DANCE",
+      "secondary": [
+        "GOSPEL",
+        "ELECTRONIC"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

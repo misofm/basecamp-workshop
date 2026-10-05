@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #111; color: #eee; padding-bottom: 4rem; }
+header { padding: 1.5rem 1rem 0.5rem; }
+h1 { margin: 0; font-size: 1.6rem; }
+#status { color: #999; margin: 0.25rem 0 0; }
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; }
+.card { background: #1c1c1c; border-radius: 10px; overflow: hidden; }
+.card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: #333; }
+.card h2 { font-size: 1rem; margin: 0.6rem 0.75rem 0; }
+.artist { color: #aaa; margin: 0.1rem 0.75rem 0.4rem; font-size: 0.9rem; }
+ol { margin: 0 0 0.75rem; padding: 0 0.75rem 0 2rem; font-size: 0.85rem; }
+.track { background: none; border: 0; color: #ddd; cursor: pointer; padding: 0.15rem 0; text-align: left; font: inherit; }
+.track:hover { color: #6cf; }
+#player { position: fixed; inset: auto 0 0 0; display: flex; justify-content: space-between; align-items: center;
+  padding: 0.75rem 1rem; background: #222; border-top: 1px solid #333; }
+#player[hidden] { display: none; }
+#player button { background: #6cf; border: 0; border-radius: 6px; padding: 0.4rem 0.9rem; cursor: pointer; }

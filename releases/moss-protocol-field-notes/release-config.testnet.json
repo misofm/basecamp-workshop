@@ -1,0 +1,540 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "WKaftx0kpzRpXn1LzXYYFTdccN09CJR_7P5HrYWtTlY"
+      },
+      "streamingTranscode": "-A4YyeYqxf5O-IIbu8HofJbaYJIAI1giHRdbPrp6m8g",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+          },
+          "displayName": "Moss Protocol",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "oyjTqsYrnZ4Xj4zzMh5dwNSMkE1E2wB2MtiDWzL0kac"
+      },
+      "streamingTranscode": "Z0RD3bYZBt8pix7Y_S9A9wp118TspKvsVs1c5chRJYA",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+          },
+          "displayName": "Moss Protocol",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "9pyDl245jjSXlCGzk1UxFGPJBI6k6xduCFRT4p-oYtc"
+      },
+      "streamingTranscode": "Ei-yTfB93DbOKSpa7ttShG2SellBcfxtz4tmXFx8So4",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+          },
+          "displayName": "Moss Protocol",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "iS_spdB8FcXiQzm59XgcIsJbZn4jaCVOcON7C4fY4Gg"
+      },
+      "streamingTranscode": "-0CfGjKlC9XxCm37sICxwY0M7V2eP0-wszFjKaWCr_o",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+          },
+          "displayName": "Moss Protocol",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "ryvn0-4hDfU54apJF6oFGUrn6XogGTw5ig3D019vX4k"
+      },
+      "streamingTranscode": "iyfJDXx5D--93B9_Hvqks-19vhjV_5SIjw1NTR71x2Q",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+          },
+          "displayName": "Moss Protocol",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+          },
+          "displayName": "Wren Alder",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "iJdIFik2yxA0Z4oeGL27wpqRrje0ul7ZGqptG_v0g1Y"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d"
+        },
+        "displayName": "Moss Protocol",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "8000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

@@ -1,0 +1,204 @@
+diff --git a/apps/game/src/game/controller.ts b/apps/game/src/game/controller.ts
+index 2568202..0b45701 100644
+--- a/apps/game/src/game/controller.ts
++++ b/apps/game/src/game/controller.ts
+@@ -208,6 +208,9 @@ export class GameController {
+         this.world.setShopRecords(
+           records.map((r) => ({ id: r.id, title: r.title, artist: r.artist, section: r.section, coverUrl: r.coverUrl, palette: r.palette })),
+         );
++        // Billboard: the most recently published release in the shop (mock: the first record).
++        const newest = records.reduce<ShopRecord | null>((a, r) => (!a || (r.publishedAtMs ?? 0) > (a.publishedAtMs ?? 0) ? r : a), null);
++        this.world.setBillboard(newest);
+         this.dispatch({ type: "catalogLoaded" });
+         intro.setStatus("catalog", `${records.length} records in the crates`, "ok");
+       })
+diff --git a/apps/game/src/miso/testnet/catalog.ts b/apps/game/src/miso/testnet/catalog.ts
+index 61332e2..1ebb3c1 100644
+--- a/apps/game/src/miso/testnet/catalog.ts
++++ b/apps/game/src/miso/testnet/catalog.ts
+@@ -162,6 +162,7 @@ async function hydrate(entry: ShopEntry): Promise<{ record: ShopRecord; terms: S
+     genre: release.genres?.[0] ?? entry.section,
+     section: entry.section,
+     year: release.publishedAtMs ? new Date(release.publishedAtMs).getUTCFullYear() : new Date().getUTCFullYear(),
++    publishedAtMs: release.publishedAtMs ?? undefined,
+     label: labelOf(release),
+     description: truncate(release.description ?? ""),
+     coverUrl: releaseCoverUrl(release),
+diff --git a/apps/game/src/miso/types.ts b/apps/game/src/miso/types.ts
+index c455f73..6857996 100644
+--- a/apps/game/src/miso/types.ts
++++ b/apps/game/src/miso/types.ts
+@@ -38,6 +38,8 @@ export interface ShopRecord {
+   /** Short shelf label for the in-world genre section, e.g. "HIP HOP". */
+   section: string;
+   year: number;
++  /** When the release was published on chain (testnet only; mock leaves it unset). */
++  publishedAtMs?: number;
+   label: string;
+   description: string;
+   /** Absolute or app-relative image URL (mock: /covers/<slug>.png, testnet: cdn.miso.fm blob url). */
+diff --git a/apps/game/src/world/api.ts b/apps/game/src/world/api.ts
+index 45de882..1ca61df 100644
+--- a/apps/game/src/world/api.ts
++++ b/apps/game/src/world/api.ts
+@@ -70,6 +70,8 @@ export interface Rect {
+ export interface WorldApi {
+   /** Place the shop's featured records into their genre sections (call once after catalog loads). */
+   setShopRecords(records: WorldRecord[]): void;
++  /** Show a release on the street billboard (null = placeholder). */
++  setBillboard(release: Pick<WorldRecord, "title" | "artist" | "coverUrl"> | null): void;
+   /** Move a record's single physical object (one object per record; never duplicated). */
+   setRecordPlace(recordId: string, place: RecordPlace, npcId?: string): void;
+   /** Spin the platter / animate the tonearm. */
+diff --git a/apps/game/src/world/billboard.ts b/apps/game/src/world/billboard.ts
+new file mode 100644
+index 0000000..bac5bbf
+--- /dev/null
++++ b/apps/game/src/world/billboard.ts
+@@ -0,0 +1,107 @@
++/**
++ * The "NEW ON MISO" billboard on the sidewalk outside the shop: cover art + title + artist.
++ *
++ * Owns: the billboard mesh (a lit panel on two legs), its footprint in Collision, and
++ * redrawing the panel when the game passes a release. Shows a placeholder until then
++ * (and for good if the catalog fails); a cover that fails to load leaves a dark square.
++ * Must not: fetch catalog data or know about chains; the controller passes the release.
++ */
++import * as THREE from "three";
++import { Collision } from "./collision";
++import { CURB_HEIGHT } from "./layout";
++import { box, surfaces } from "./materials";
++import { canvasTexture, fitText, FONT_STACK } from "./labels";
++
++export interface BillboardRelease {
++  title: string;
++  artist: string;
++  coverUrl: string;
++}
++
++/** Sidewalk west of the door, against the shop window: in the spawn camera's view, clear of the z = 2.9 walking line. */
++const SPOT = { x: -4.4, z: 0.9, yaw: 0.25 };
++const PANEL = { w: 3.3, h: 1.6, bottom: 0.7 };
++const loader = new THREE.TextureLoader();
++
++export class Billboard {
++  readonly root = new THREE.Group();
++  private release: BillboardRelease | null = null;
++  private text: THREE.CanvasTexture;
++  private cover = new THREE.MeshBasicMaterial({ color: "#1b2226" });
++
++  constructor(scene: THREE.Scene, collision: Collision) {
++    this.root.name = "billboard";
++    this.root.position.set(SPOT.x, CURB_HEIGHT, SPOT.z);
++    this.root.rotation.y = SPOT.yaw;
++    scene.add(this.root);
++    const { w, h, bottom } = PANEL;
++    const mid = bottom + h / 2;
++    for (const x of [-w / 2 + 0.3, w / 2 - 0.3]) box(this.root, 0.12, bottom, 0.12, x, bottom / 2, -0.08, surfaces.metal);
++    const c = Math.cos(SPOT.yaw), s = Math.sin(SPOT.yaw);
++    collision.add({ x: SPOT.x, z: SPOT.z, w: w * c + 0.3, d: w * s + 0.3, h: 0 });
++    box(this.root, w + 0.16, h + 0.16, 0.12, 0, mid, -0.08, new THREE.MeshStandardMaterial({ color: "#14181a", roughness: 0.5 }));
++    // Cover: a square on the left. Text: the rest of the panel, one canvas.
++    const side = h - 0.16;
++    const coverMesh = new THREE.Mesh(new THREE.PlaneGeometry(side, side), this.cover);
++    coverMesh.position.set(-w / 2 + 0.08 + side / 2, mid, 0);
++    const textW = w - side - 0.24;
++    this.text = canvasTexture(1024, Math.round((1024 * side) / textW), (c, cw, ch) => this.draw(c, cw, ch));
++    const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(textW, side), new THREE.MeshBasicMaterial({ map: this.text, toneMapped: false }));
++    textMesh.position.set(w / 2 - 0.08 - textW / 2, mid, 0);
++    this.root.add(coverMesh, textMesh);
++  }
++
++  /** Show a release (null = placeholder). Never blocks: the cover streams in when it loads. */
++  show(release: BillboardRelease | null) {
++    this.release = release;
++    this.repaint();
++    if (!release?.coverUrl) return;
++    loader.load(
++      release.coverUrl,
++      (map) => {
++        if (this.release !== release) return map.dispose();
++        map.colorSpace = THREE.SRGBColorSpace;
++        map.anisotropy = 8;
++        this.cover.map?.dispose();
++        this.cover.map = map;
++        this.cover.color.set("#ffffff");
++        this.cover.needsUpdate = true;
++      },
++      undefined,
++      () => console.warn("[billboard] cover failed to load:", release.coverUrl),
++    );
++  }
++
++  private repaint() {
++    const canvas = this.text.image as HTMLCanvasElement;
++    const c = canvas.getContext("2d")!;
++    c.clearRect(0, 0, canvas.width, canvas.height);
++    this.draw(c, canvas.width, canvas.height);
++    this.text.needsUpdate = true;
++  }
++
++  private draw(c: CanvasRenderingContext2D, w: number, h: number) {
++    c.fillStyle = "#101418";
++    c.fillRect(0, 0, w, h);
++    c.fillStyle = "#ffb35c";
++    c.fillRect(0, 0, w, 190);
++    c.fillStyle = "#101418";
++    fitText(c, "NEW ON MISO", w - 96, 140);
++    c.fillText("NEW ON MISO", 48, 145);
++    const r = this.release;
++    const title = r?.title ?? "Fresh wax";
++    const max = w - 96;
++    // Big title; long titles wrap onto two lines instead of shrinking to nothing.
++    const words = title.split(" ");
++    const half = Math.ceil(words.length / 2);
++    const lines = words.length > 1 && fitText(c, title, max, 190) < 150 ? [words.slice(0, half).join(" "), words.slice(half).join(" ")] : [title];
++    const size = Math.min(...lines.map((l) => fitText(c, l, max, 190)));
++    c.font = `700 ${size}px ${FONT_STACK}`;
++    c.fillStyle = "#fff8e8";
++    lines.forEach((l, i) => c.fillText(l, 48, 220 + size * (i + 1.05)));
++    c.fillStyle = "#ffd08a";
++    const artist = r?.artist ?? "miso records";
++    fitText(c, artist, max, 130);
++    c.fillText(artist, 48, h - 70);
++  }
++}
+diff --git a/apps/game/src/world/world.ts b/apps/game/src/world/world.ts
+index 85849bd..d90e9bd 100644
+--- a/apps/game/src/world/world.ts
++++ b/apps/game/src/world/world.ts
+@@ -22,6 +22,7 @@ import type { Interactable, MapSnapshot, RecordPlace, WorldAnchors, WorldApi, Wo
+ import { Collision } from "./collision";
+ import { Interactables } from "./interactables";
+ import { City } from "./city";
++import { Billboard, type BillboardRelease } from "./billboard";
+ import { Shop } from "./shop";
+ import { Traffic } from "./traffic";
+ import { ParkedCars } from "./cars";
+@@ -62,6 +63,7 @@ export class GameWorld implements WorldApi {
+   private collision = new Collision();
+   private interactables: Interactables;
+   private city: City;
++  private billboard: Billboard;
+   private shop: Shop;
+   private traffic: Traffic;
+   private cars: ParkedCars;
+@@ -113,6 +115,7 @@ export class GameWorld implements WorldApi {
+ 
+     this.interactables = new Interactables(this.scene);
+     this.city = new City(this.scene, this.collision);
++    this.billboard = new Billboard(this.scene, this.collision);
+     this.shop = new Shop(this.scene, this.collision, this.interactables);
+     this.shop.registerStations();
+     this.traffic = new Traffic(this.scene, 6);
+@@ -155,6 +158,10 @@ export class GameWorld implements WorldApi {
+     this.shop.setRecords(records, this.records);
+   }
+ 
++  setBillboard(release: BillboardRelease | null) {
++    this.billboard.show(release);
++  }
++
+   setRecordPlace(recordId: string, place: RecordPlace, npcId?: string) {
+     const item = this.records.get(recordId);
+     if (!item) return;

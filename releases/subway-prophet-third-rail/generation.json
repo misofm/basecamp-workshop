@@ -1,0 +1,96 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "third-rail",
+  "tracks": [
+    {
+      "track": "platform-nine",
+      "title": "Platform Nine",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "sfKHBWZfI0upwCtYo17d",
+      "requestedSeconds": 140,
+      "seconds": 140.016,
+      "instrumental": true,
+      "prompt": "Liquid drum and bass instrumental, 174 BPM, rolling breakbeats, deep warm reese bass, soulful piano chords, airy pads, F minor, uplifting and smooth",
+      "mastering": {
+        "gainDb": -2.1,
+        "sourceTruePeakDbtp": 0.1,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "mind-the-gap",
+      "title": "Mind the Gap",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "6SMzpmmYxQEKAWwBSrBM",
+      "requestedSeconds": 130,
+      "seconds": 130.032,
+      "instrumental": true,
+      "prompt": "Jump-up drum and bass, 174 BPM, aggressive wobbling bass, punchy snares, subway announcement style vocal chops, high energy dancefloor, G minor",
+      "mastering": {
+        "gainDb": -2.1,
+        "sourceTruePeakDbtp": 0.1,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "signal-failure",
+      "title": "Signal Failure",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "URx8g3gjFmGP26nHgUmE",
+      "requestedSeconds": 135,
+      "seconds": 135.001,
+      "instrumental": true,
+      "prompt": "Neurofunk drum and bass, 172 BPM, tight complex drum programming, metallic growling bass, dark cinematic atmosphere, glitch effects, D minor",
+      "mastering": {
+        "gainDb": -2.2,
+        "sourceTruePeakDbtp": 0.2,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "night-bus",
+      "title": "Night Bus",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Emhd9mnjR3fmtclPU5xa",
+      "requestedSeconds": 140,
+      "seconds": 140.016,
+      "instrumental": false,
+      "prompt": "Soulful drum and bass with emotive female vocals about the night bus home, 170 BPM, atmospheric pads, rolling breaks, warm sub bass, A-flat major",
+      "mastering": {
+        "gainDb": -2.5,
+        "sourceTruePeakDbtp": 0.5,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "end-of-the-line",
+      "title": "End of the Line",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "KOUfrWBDaoSqKxl9GDa4",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": true,
+      "prompt": "Atmospheric half-time drum and bass closer, 174 BPM feel, sparse heavy drums, huge sub bass, haunting synth melody, distant train sounds, E minor",
+      "mastering": {
+        "gainDb": -4.3,
+        "sourceTruePeakDbtp": 0.3,
+        "targetTruePeakDbtp": -4.0,
+        "reason": "miso transcoder true-peak ceiling (failed at -2 dBTP; dense sub bass)",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "Uh0ZuunQI4_xkp-wavw_YjC7CBp3bPNX3tP8N-uc87Q",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-coastline-fm": {
+      "master": {
+        "blobId": "ml0QK4nBAcYTlQtoRExCmKUmU7EvKCmvsLzn7qmNdc4",
+        "bytes": 16048915,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "9b81530c756d69de892eddbd9a365e514acc8c0df75da810c961781d327958ed"
+      },
+      "masterStored": true,
+      "streamingTranscode": "hfDSoLeInUbbLQT9F-nBcfSgEVsj7dsfRRFW2B4DVCg",
+      "transcodeDigest": "c1ba0855708a28bf9b4db7a4594858149f408905cf300102d5522721184857bd"
+    },
+    "02-late-train": {
+      "master": {
+        "blobId": "XstUzsTjOm1K7mhNon4b6_I4W5zUmXym3Hj81MVJMmQ",
+        "bytes": 11937492,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "8ce20976a3b8f60ed1108353348b6001c4af8448bb1ef7e2b5a0948afdf65495"
+      },
+      "masterStored": true,
+      "streamingTranscode": "6JJsibaCk_3IjwXGJ6vXTRhrpNLNn9pH3JY77vxevGo",
+      "transcodeDigest": "ad084236469e73a701e53bc9088df3805cf74e6c255913489c003dbfc16b03a9"
+    },
+    "03-polaroid-sunset": {
+      "master": {
+        "blobId": "cURD9PFjaylMQluy-UWBK5tkRjD5vnIDqMdWsWTIf5I",
+        "bytes": 12841990,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "d2d311c127ef5b367351dfe64ea3538ced5a990b20397753d0bfab768261a3cf"
+      },
+      "masterStored": true,
+      "streamingTranscode": "NV-EG_rEKyYobTlGEeXI5ei9od15Dbil68kYXiElGDI",
+      "transcodeDigest": "fc265def9be0083bfd63ed41762fa974de5a2716276ebd3abc1e85fdd037fdff"
+    },
+    "04-vending-machine-love": {
+      "master": {
+        "blobId": "cAYycSNmTYdk5A3UBI3TLvGZJE_ol05NB1Cgrp6TX_k",
+        "bytes": 15129630,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "b071a6560cd799d823816293508dc790a8b9c6bc0353ec5548010f4a3ad6c8bf"
+      },
+      "masterStored": true,
+      "streamingTranscode": "Y3TxEOUySIxbPSOQW09Sk51Q-jMr0Rbuzxe5yX63-0g",
+      "transcodeDigest": "576aa4582af4ae8d9af6668b88d72b6b5560d159ee00ea3d987620e653b5b12a"
+    },
+    "05-cassette-rewind": {
+      "master": {
+        "blobId": "vvS1ax2lEzQs7xbeTwRmFJEw_trjhSJ0D2kOz6PtrTs",
+        "bytes": 14251412,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "4fc1fd8a73ed3bd848dc72cc024c80fc5033280523fb8076f5fef3743f8c3cf7"
+      },
+      "masterStored": true,
+      "streamingTranscode": "FNMfxJyBOKN5dWS9wIRSau25Q3viA8EMUNa9EvR1JSs",
+      "transcodeDigest": "c9c0e678a914795f47554f33021e5f116efe087996c359bc1517319b3dd3f2fe"
+    }
+  }
+}

@@ -1,0 +1,215 @@
+/**
+ * The full game loop in mock mode, driven like a player: keyboard for menus and
+ * interactions (E / Enter / arrows), a real W-walk through the shop door, and
+ * __game.teleportTo for the long walks. Screenshots of every step go to SHOTS.
+ */
+import { expect, test } from "@playwright/test";
+import { chooseAction, goTo, pageErrors, shot, startGame, state, teleport, until } from "./helpers";
+
+const RECORD = "low-tide-tapes"; // 12.00 FUSD in the mock catalog → collector pays 18.00
+const CAR = "car:2";
+
+test("full loop: shop → deck → buy → smash → sell → collection", async ({ page }) => {
+  await startGame(page, "?chain=mock&latency=400", "01-intro");
+
+  // 1. Spawn on the street.
+  let s = await state(page);
+  expect(s.zone).toBe("street");
+  expect(s.balance).toBe("100000000");
+  await expect(page.locator(".mission-text")).toHaveText(/record shop/i);
+  await expect(page.locator(".money-value")).toHaveText("100.00");
+  await page.waitForTimeout(600);
+  await shot(page, "02-street-spawn");
+
+  // 2. Real keyboard walk through the door (spawn faces the door).
+  await page.keyboard.down("KeyW");
+  await until(page, (x) => x.zone === "shop", "walked into the shop", 40_000);
+  await page.waitForTimeout(700);
+  await page.keyboard.up("KeyW");
+  await shot(page, "03-shop-entrance");
+
+  // 3. Record menu → Pick up.
+  await goTo(page, `record:${RECORD}`);
+  await expect(page.locator(".prompt-label")).toHaveText(/Low Tide Tapes/);
+  await page.keyboard.press("KeyE");
+  const dialog = page.locator("dialog.dlg[open]");
+  await expect(dialog.locator(".dlg-title")).toHaveText("Low Tide Tapes");
+  await expect(dialog.locator(".rec-edition-row")).toContainText("105 / 250 minted");
+  await expect(dialog.locator(".rec-price")).toHaveText("12.00 FUSD");
+  await shot(page, "04-record-menu");
+  await page.keyboard.press("Enter"); // "Pick up" is focused
+  s = await until(page, (x) => x.hand?.shopRecordId === RECORD, "picked up");
+  expect(s.hand?.recordId).toBeNull();
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator(".held-status")).toHaveText(/UNPAID/);
+  await page.waitForTimeout(400);
+  await shot(page, "05-holding");
+
+  // 4. Exit is blocked while unpaid: walk into the doorway from inside.
+  await teleport(page, { x: 0, z: -1.6, heading: 0 });
+  await page.keyboard.down("KeyW");
+  await expect(page.locator(".toast", { hasText: "Pay for that first" })).toBeVisible({ timeout: 20_000 });
+  await page.keyboard.up("KeyW");
+  s = await state(page);
+  expect(s.zone).toBe("shop");
+  await shot(page, "09-exit-blocked");
+
+  // 5. Deck: place → drop the needle → next track → take back.
+  await goTo(page, "deck");
+  await page.keyboard.press("KeyE");
+  await expect(dialog.locator(".dlg-title")).toHaveText("The listening deck.");
+  await page.keyboard.press("Enter"); // place
+  await until(page, (x) => x.deck?.shopRecordId === RECORD && x.hand === null, "on deck");
+  await expect(dialog.locator(".dlg-action:focus")).toHaveText(/Drop the needle/);
+  await shot(page, "06a-deck-menu");
+  await page.keyboard.press("Enter"); // play
+  s = await until(page, (x) => x.playing !== null, "playing");
+  expect(s.playing?.trackIndex).toBe(0);
+  await expect(page.locator(".np-badge")).toHaveText(/SYNTH|HLS/, { timeout: 20_000 });
+  await page.waitForTimeout(1200);
+  await shot(page, "06-deck-playing");
+  await page.keyboard.press("KeyN");
+  await until(page, (x) => x.playing?.trackIndex === 1, "next track");
+  await page.keyboard.press("KeyE");
+  await chooseAction(page, /Take it back/);
+  s = await until(page, (x) => x.hand?.shopRecordId === RECORD && x.playing === null, "took it back");
+  expect(s.deck).toBeNull();
+
+  // 6. Cashier: summary → pending → receipt.
+  await goTo(page, "cashier");
+  await page.keyboard.press("KeyE");
+  await expect(dialog.locator(".dlg-title")).toHaveText("Ring it up?");
+  await page.keyboard.press("Enter"); // Pay
+  await expect(dialog.locator(".pending")).toBeVisible();
+  s = await state(page);
+  expect(s.op).toMatchObject({ kind: "purchase", status: "pending" });
+  await expect(page.locator(".money-pending")).toBeVisible();
+  await shot(page, "07-purchase-pending");
+  await expect(dialog.locator("[data-receipt-link]").first()).toBeVisible({ timeout: 20_000 });
+  s = await state(page);
+  expect(s.op).toBeNull();
+  expect(s.hand?.recordId).toMatch(/^0x[0-9a-f]{64}$/);
+  expect(s.owned[0]?.recordId).toBe(s.hand?.recordId);
+  expect(s.balance).toBe("88000000");
+  await expect(dialog.locator('[data-receipt-link="Record"]')).toHaveAttribute("href", new RegExp(`/object/${s.hand!.recordId}$`));
+  await expect(dialog.locator('[data-receipt-link="Tx"]')).toHaveAttribute("href", /suiscan\.xyz\/testnet\/tx\//);
+  await expect(dialog.locator('[data-receipt-link="Record"]')).toHaveAttribute("target", "_blank");
+  await page.waitForTimeout(1100); // money counter finishes counting down
+  await shot(page, "08-receipt");
+  const recordId = s.hand!.recordId!;
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(page.locator(".held-status")).toHaveText(/OWNED · #106\/250/);
+
+  // Collection lists the owned Record (read back from the adapter).
+  await page.keyboard.press("KeyC");
+  await expect(dialog.locator(`.coll-item[data-record-id="${recordId}"]`)).toBeVisible();
+  await shot(page, "08b-collection-owned");
+  await page.keyboard.press("Escape");
+
+  // 7. Outside: the door is open now that it's paid for.
+  await teleport(page, { x: 0, z: -1.6, heading: 0 });
+  await page.keyboard.down("KeyW");
+  await until(page, (x) => x.zone === "street", "walked out", 30_000);
+  await page.keyboard.up("KeyW");
+  await goTo(page, CAR);
+  await expect(page.locator(".prompt-label")).toHaveText("Smash");
+  await shot(page, "10-outside-holding");
+
+  // 8. Smash.
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(450);
+  await shot(page, "11-smash");
+  await expect(page.locator(".big-toast")).toContainText("RECORD CONDITION: STILL MINT", { timeout: 15_000 });
+  await shot(page, "12-mint-toast");
+  s = await state(page);
+  expect(s.smashedCars).toContain(CAR);
+  expect(await page.evaluate((id) => (window as any).__game.world.getInteractable(id).enabled, CAR)).toBe(false);
+
+  // 9. Sell to the collector.
+  await goTo(page, "buyer:collector");
+  await page.keyboard.press("KeyE");
+  await expect(dialog.locator(".dlg-title")).toHaveText("Sell Low Tide Tapes for 18.00 FUSD?");
+  await shot(page, "13-buyer-offer");
+  await page.keyboard.press("Enter");
+  await expect(dialog.locator(".pending")).toBeVisible();
+  expect((await state(page)).op).toMatchObject({ kind: "sell", status: "pending" });
+  await shot(page, "14-sell-pending");
+  await expect(page.locator(".big-toast")).toContainText("SOLD", { timeout: 20_000 });
+  await expect(page.locator(".toast", { hasText: "Sold Low Tide Tapes" }).locator("a")).toHaveAttribute("href", /\/tx\//);
+  await shot(page, "15-sold-cash");
+  s = await until(page, (x) => x.sold.length === 1 && x.op === null, "sold");
+  expect(s.balance).toBe("106000000");
+  expect(s.hand).toBeNull();
+  expect(s.owned.find((o) => o.recordId === recordId)).toBeUndefined();
+  await expect(page.locator(".money-value")).toHaveText("106.00");
+
+  // 10. Collection: the sale shows in history, the Record is gone from the wallet.
+  await page.keyboard.press("KeyC");
+  await expect(dialog.locator(".coll-sold-row")).toContainText("Low Tide Tapes");
+  await expect(dialog.locator(`.coll-item[data-record-id="${recordId}"]`)).toHaveCount(0);
+  await shot(page, "16-collection");
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".mission-text")).toHaveText(/Job done/);
+  await page.keyboard.press("KeyH");
+  await expect(dialog.locator(".help")).toBeVisible();
+  await expect(dialog.locator(".dlg-action", { hasText: /Reset demo/ })).toBeEnabled();
+  await shot(page, "17-help");
+  await page.keyboard.press("Escape");
+
+  // 11. Repeatable demo: ~20 s after the sale the collector walks back to the spot and
+  // the sold release is back on the shelf (no reload needed for a second run).
+  await page.waitForFunction(() => (window as any).__game.state().buyerAway === null, null, { timeout: 60_000 });
+  await page.waitForFunction(() => (window as any).__game.world.getInteractable("buyer:collector").enabled, null, { timeout: 300_000 });
+  await goTo(page, "buyer:collector");
+  await expect(page.locator(".prompt-label")).toHaveText("Talk to the collector");
+  await page.waitForTimeout(800);
+  await shot(page, "18-collector-returned");
+
+  expect(pageErrors(page)).toEqual([]);
+});
+
+test("purchase failure shows Retry; retry succeeds once the chain recovers; sell retry too", async ({ page }) => {
+  await startGame(page, "?chain=mock&latency=300&fail=purchase");
+  await teleport(page, { x: 0, z: -2, heading: Math.PI });
+  await goTo(page, `record:${RECORD}`);
+  await page.keyboard.press("KeyE");
+  await page.keyboard.press("Enter");
+  await until(page, (x) => x.hand?.shopRecordId === RECORD, "picked");
+
+  await goTo(page, "cashier");
+  await page.keyboard.press("KeyE");
+  await page.keyboard.press("Enter"); // Pay
+  const dialog = page.locator("dialog.dlg[open]");
+  await expect(dialog.locator(".err-msg")).toContainText("Transaction rejected", { timeout: 15_000 });
+  let s = await state(page);
+  expect(s.op).toMatchObject({ kind: "purchase", status: "error" });
+  expect(s.hand?.recordId).toBeNull();
+  expect(s.balance).toBe("100000000");
+  await expect(dialog.locator(".dlg-action:focus")).toHaveText(/Retry/);
+  await shot(page, "err-01-purchase-failed");
+
+  await page.evaluate(() => (window as any).__game.setFailureMode("none"));
+  await page.keyboard.press("Enter"); // Retry
+  await expect(dialog.locator("[data-receipt-link]").first()).toBeVisible({ timeout: 15_000 });
+  s = await state(page);
+  expect(s.hand?.recordId).toMatch(/^0x/);
+  await shot(page, "err-02-retry-receipt");
+  await page.keyboard.press("Escape");
+
+  // Sell: fail once, then Retry succeeds.
+  await teleport(page, { x: 3, z: 3.2, heading: 0 });
+  await until(page, (x) => x.zone === "street", "outside");
+  await goTo(page, "buyer:collector");
+  await page.evaluate(() => (window as any).__game.failNext("sell"));
+  await page.keyboard.press("KeyE");
+  await page.keyboard.press("Enter");
+  await expect(dialog.locator(".err-msg")).toContainText("You still own the record", { timeout: 15_000 });
+  expect((await state(page)).op).toMatchObject({ kind: "sell", status: "error" });
+  await shot(page, "err-03-sell-failed");
+  await page.keyboard.press("Enter"); // Retry
+  s = await until(page, (x) => x.sold.length === 1, "sold after retry");
+  expect(s.balance).toBe("106000000");
+  await shot(page, "err-04-sell-retry-sold");
+  expect(pageErrors(page)).toEqual([]);
+});

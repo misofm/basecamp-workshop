@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "yEToVBRQRRhv09KLwNw5St-86TEpNGexbA_QQuQ-PeQ",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-ferry-at-dawn": {
+      "master": {
+        "blobId": "sGqxGuhG2Pzo0YJ5aoyHDjB9_1VwT_kBsf7wjV9d7i0",
+        "bytes": 8011725,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "223f7bd7496a7209b52fe46467faef7276b1d980dfec742b7463ee47eee3dae2"
+      },
+      "masterStored": true,
+      "streamingTranscode": "_ztCnysWm9fTEfE-SmLRaOVqSTqFjtEyKMuDAYh-3ps",
+      "transcodeDigest": "61007e410e7b630134cfd5dfc5efb8962db145647791d8601b7229b0edceb9b6"
+    },
+    "02-salt-on-the-window": {
+      "master": {
+        "blobId": "CLhjH6G8SAj45mWn1fTRkOYRbYdQzPtpB8pQWIn-Jts",
+        "bytes": 5811388,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4849664",
+        "pcmDigest": "b547416f086484a4acf167d1f0edbf2c2e3453eac4f57ab91a48ef646b4e1d72"
+      },
+      "masterStored": true,
+      "streamingTranscode": "mEEk68EmfQZX8t6ye749fmg3WBeTen18J0qkfBh0QL4",
+      "transcodeDigest": "990f61fe56a4f31e8e29d10ec557a1139c40aa8e9a596fa216252c2d3eba2205"
+    },
+    "03-pier-lamps": {
+      "master": {
+        "blobId": "Vb24jF3Qzs37veGDy-jYKC5Sv0J7BtdcgsJGWWXEnEA",
+        "bytes": 9789620,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5511168",
+        "pcmDigest": "e4e88950d146ed5931cb50f40fdb29b690d6a579f21d77a5794e2cd73479adc4"
+      },
+      "masterStored": true,
+      "streamingTranscode": "8D7ykn2IS1puoWBJ7NCJPolvlB2Ymu4G9c2YqE-1sbI",
+      "transcodeDigest": "b5affe8cae3dd23e030c5e8170e0cee90050090ce2246188178ce351dc4b8c25"
+    },
+    "04-slow-current": {
+      "master": {
+        "blobId": "Ht30vpD-B66va-X2FRb3ERpBsyET1FMk0UhcHbWh1MM",
+        "bytes": 7927697,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5072896",
+        "pcmDigest": "4d7831d228237eb0834a3584106ba356a7b7ee2332e008c72162e1a44b37c9c3"
+      },
+      "masterStored": true,
+      "streamingTranscode": "gn83-AYKtp9wdYeOVYR0JBskTWqyg7-lq8lEkDygWAo",
+      "transcodeDigest": "06a1abdb12421702b593f8fe291f5b2f3db692cfa998a786583ad8bac2041e1c"
+    },
+    "05-last-ferry-home": {
+      "master": {
+        "blobId": "ClGdUBBMEXpoF3afg0NT9NVJefXYvQU3qQ4DyM_QmKs",
+        "bytes": 10254831,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "02e99c48ef2a57bedab3f0e3df373b37e13da314728f9c10fbfefecc78dbe70a"
+      },
+      "masterStored": true,
+      "streamingTranscode": "oWdRTzhm3RmgMy7a549XPdffsnpybFzZ4-7_Z51HPPQ",
+      "transcodeDigest": "3f18245acf6f8c34f4579e7abfaa109501bc6c8e837305cae3c97ad35e4eddca"
+    }
+  }
+}

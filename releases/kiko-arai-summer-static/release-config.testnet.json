@@ -1,0 +1,576 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "ml0QK4nBAcYTlQtoRExCmKUmU7EvKCmvsLzn7qmNdc4"
+      },
+      "streamingTranscode": "hfDSoLeInUbbLQT9F-nBcfSgEVsj7dsfRRFW2B4DVCg",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "XstUzsTjOm1K7mhNon4b6_I4W5zUmXym3Hj81MVJMmQ"
+      },
+      "streamingTranscode": "6JJsibaCk_3IjwXGJ6vXTRhrpNLNn9pH3JY77vxevGo",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "cURD9PFjaylMQluy-UWBK5tkRjD5vnIDqMdWsWTIf5I"
+      },
+      "streamingTranscode": "NV-EG_rEKyYobTlGEeXI5ei9od15Dbil68kYXiElGDI",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "cAYycSNmTYdk5A3UBI3TLvGZJE_ol05NB1Cgrp6TX_k"
+      },
+      "streamingTranscode": "Y3TxEOUySIxbPSOQW09Sk51Q-jMr0Rbuzxe5yX63-0g",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "vvS1ax2lEzQs7xbeTwRmFJEw_trjhSJ0D2kOz6PtrTs"
+      },
+      "streamingTranscode": "FNMfxJyBOKN5dWS9wIRSau25Q3viA8EMUNa9EvR1JSs",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+          },
+          "displayName": "Kiko Arai",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "Uh0ZuunQI4_xkp-wavw_YjC7CBp3bPNX3tP8N-uc87Q"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce"
+        },
+        "displayName": "Kiko Arai",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "15000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

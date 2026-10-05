@@ -1,0 +1,466 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "UYsrGgTtnFPP6_tRk98CJhtqUSpzoLO_-tYsjvcuajU"
+      },
+      "streamingTranscode": "fSyCbrzgJxyFBJujXP1NQtrxzF7AGE6lS1Kg-eDA6mk",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+          },
+          "displayName": "Subway Prophet",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "NpP5LwNF6DW7gtrxpzRbtiiLymYNdipgufsAvzZr9-4"
+      },
+      "streamingTranscode": "iaMVtxSS1RC1P8zk4dbXndD49Yt-5-2qdhnvpb3lp2s",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+          },
+          "displayName": "Subway Prophet",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "vL9Js24yh3Fw9H14efFDslo1DvbBe7JUgmyIEG7rQUc"
+      },
+      "streamingTranscode": "AT3vFX7N9YxuZqFfMXxImdZlFrV7HnBiRLrSXSHWxts",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+          },
+          "displayName": "Subway Prophet",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "a1gbqTCND9LL9Mg9ytJwjol3RfNX9_fWFapQfa3Wtp0"
+      },
+      "streamingTranscode": "4RA-shDKl_l0X6FvM3EaYGCx4iAQleDGD25XPyj0Mrk",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+          },
+          "displayName": "Subway Prophet",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "D2akRzVGFFZ7nA2qmqWCGzJHfOperCmt12lsLLKm7GM"
+      },
+      "streamingTranscode": "PX78R2FA7AFncKhdmHEYO44rxQ9w8LDoLBibiTuO5wI",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+          },
+          "displayName": "Subway Prophet",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+          },
+          "displayName": "Omar Reyes",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a"
+          },
+          "displayName": "Chromefield",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "YCsWvOiq1Bo1mY6Tk1573eRqMFS1ukmorPnRHkxooyE"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb"
+        },
+        "displayName": "Subway Prophet",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "12000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

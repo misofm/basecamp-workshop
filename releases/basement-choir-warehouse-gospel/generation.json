@@ -1,0 +1,61 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "warehouse-gospel",
+  "tracks": [
+    {
+      "track": "lift-me-higher",
+      "title": "Lift Me Higher",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "RbwnkPxPvKjHKdmPDlzN",
+      "requestedSeconds": 150,
+      "seconds": 149.954,
+      "instrumental": false,
+      "prompt": "Gospel house track, powerful soulful female lead and choir vocals singing lift me higher, 124 BPM, four-on-the-floor kick, organ stabs, piano house chords, uplifting, A-flat major"
+    },
+    {
+      "track": "concrete-cathedral",
+      "title": "Concrete Cathedral",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "mGG1cETMDcSvBQIWq69t",
+      "requestedSeconds": 145,
+      "seconds": 144.985,
+      "instrumental": true,
+      "prompt": "Deep house instrumental, 122 BPM, warm round bassline, crisp shuffled hi-hats, dubby chord stabs, distant choir pads, warehouse reverb, F minor"
+    },
+    {
+      "track": "sunday-at-sunrise",
+      "title": "Sunday at Sunrise",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "qnMBGTgzvljdrlhJrfT2",
+      "requestedSeconds": 140,
+      "seconds": 139.97,
+      "instrumental": false,
+      "prompt": "Soulful house song, male gospel vocal about Sunday morning after the party, 120 BPM, Rhodes chords, live bass, claps, joyful and warm, D-flat major"
+    },
+    {
+      "track": "strobe-psalm",
+      "title": "Strobe Psalm",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "HM4jWt8psgHeUmbXt0CA",
+      "requestedSeconds": 135,
+      "seconds": 135.047,
+      "instrumental": true,
+      "prompt": "Driving tech house instrumental, 126 BPM, punchy kick, rolling percussive bass, chopped gospel vocal samples, tension-building risers, G minor"
+    },
+    {
+      "track": "doors-close-at-six",
+      "title": "Doors Close at Six",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "1WoWdFVnNrJsXkuSViuo",
+      "requestedSeconds": 150,
+      "seconds": 150.001,
+      "instrumental": false,
+      "prompt": "Emotional piano house closer, choir singing softly over grand piano, 118 BPM, warm pads, gentle kick, cathartic end-of-night feeling, E-flat major"
+    }
+  ]
+}

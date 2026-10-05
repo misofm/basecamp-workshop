@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "sUMINvbxSZwrsb5p7_jmhCfi1oSNLxVwoFJGElmKrQU",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-rooftop-signal": {
+      "master": {
+        "blobId": "6CZWy1BPdFd8mFXYV5IyWzcvQKeVc1_fijbSQjwSvUo",
+        "bytes": 13623605,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "a430186dedb73126824dd01fa17e004ca66b9201565dcccfe899f9802c70b24a"
+      },
+      "masterStored": true,
+      "streamingTranscode": "ax3e2RELQHm_bIQuSgJK8_GqEp9glTb_ig5EGISXRkY",
+      "transcodeDigest": "2fc8c01913af6c246609d8bc5fc2b75a747efb1c259b301723272c83a0400e46"
+    },
+    "02-danfo-ride": {
+      "master": {
+        "blobId": "1hR3B61QigXVpAcjd9KtTgiNVChl2sy5GdjMj8L7WZ8",
+        "bytes": 12806647,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "20edaaaf8817558418fef031b269cf5b0ae0f7666d4c0a9c21df37005ab2222b"
+      },
+      "masterStored": true,
+      "streamingTranscode": "g5DHBMQc7MsVLpUcCp6w51ShG71r5yb6ZzmfPj62Jpo",
+      "transcodeDigest": "503b9fa71874e78ff730872a36b569d3218cec24264fd8176fbd43c0e06b6e9d"
+    },
+    "03-golden-hour-lekki": {
+      "master": {
+        "blobId": "9uCOAWewUPnWv0OnvDpboZu0CHqeKFPPFkB7SI_Kgl8",
+        "bytes": 13407405,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "f5e6138b027126b2472169941d820cc9e7f311dca824671868a74f98881f6577"
+      },
+      "masterStored": true,
+      "streamingTranscode": "G86htVhviVMScYeNjcgbw_3s94b2RMc2u4m2ZNczzEA",
+      "transcodeDigest": "1cf90db7a8b7fa488ac04a633ee88209c8ce1fcf5e5511d4b6ffb1898fd53744"
+    },
+    "04-third-mainland": {
+      "master": {
+        "blobId": "0Q5CgnKCRQ_1TaLDfaHTODAz9QqwFWFpcyhHJ4x_CLE",
+        "bytes": 13147173,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "33bc2a398bee954d341bc86babd9073be7608ca25c454aed61bdd7ccbff5175e"
+      },
+      "masterStored": true,
+      "streamingTranscode": "gjo-iSfH1rEX1xbqpS-X8I17wJ4p8BiaYlg7QYKeL3I",
+      "transcodeDigest": "bec20591485371cb06233dfa4408b3650db62efff10e8466d6675d7a75fabe8b"
+    },
+    "05-taxi-home": {
+      "master": {
+        "blobId": "1tijA2tx8LXfiJgrgrVZC6PqlmUWbVYxS8w7OGGiz84",
+        "bytes": 10719226,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "ba0990767cbc0339d263d7e1e0c0df78c6bc86d8916185cce6c71f4ee44a6258"
+      },
+      "masterStored": true,
+      "streamingTranscode": "lWMcg-w-ryzW1MCUDU2ZkcEp1Hx-hWrjdclXUN1Fz3s",
+      "transcodeDigest": "8cc30554001000fccf1e398481b47b69cb969183fd7e578c9215c8f8888d4857"
+    }
+  }
+}

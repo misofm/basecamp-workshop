@@ -1,0 +1,169 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Lichen",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Canopy",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Understory",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Mycelium",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Clearing",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:30",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6615040",
+        "pcmDigest": "afb0cd427a63a41252f9de30a1221e13848acdf0cfa971d379224339081d26d6"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "9426c37626f5d360d24ee38962fcf4dd7e17155c109f1ec117dd6a2ab84f9a8b"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "fc546d7516bd1327752f53bd582293a7632faaf249e0db27678ab2904eae4c63"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:25",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "df80d2900291a81ea36e9009bb4ca64ad287c9e41bf0718465f2d2e1a68fbfda"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:30",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6612992",
+        "pcmDigest": "ee7408e92dce1a8469c1ab41e1b673ac7a130bb02750b892bb47fec77ea9841c"
+      }
+    }
+  ],
+  "release": {
+    "title": "Field Notes",
+    "kind": "ExtendedPlay",
+    "description": "Generative ambience built from forest recordings and modular synths.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "SOUNDTRACK"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

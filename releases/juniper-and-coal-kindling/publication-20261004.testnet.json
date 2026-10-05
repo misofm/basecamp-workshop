@@ -1,0 +1,253 @@
+{
+  "ok": true,
+  "result": {
+    "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+    "parties": {
+      "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c": {
+        "id": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c",
+        "adminCap": "0x16b9bdb569d4c0a8d1be3e3da91b145ff262ff0663d431d56dcb71aa2770bbd9",
+        "created": false
+      },
+      "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531": {
+        "id": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531",
+        "adminCap": "0x92337541db839569efcdc2914f03e82adb0b0a2d501bc712c8c29c724b5fd9dd",
+        "created": false
+      },
+      "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e": {
+        "id": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e",
+        "adminCap": "0x5b3214ba207a5f415a3523501fa68f4e82387f1242ec3fa07e9b13490b07c800",
+        "created": false
+      },
+      "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba": {
+        "id": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba",
+        "adminCap": "0xe9fc0ae3a1337f5d156d6141e846bf0656b23d96288570f843e24c212137b017",
+        "created": false
+      },
+      "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1": {
+        "id": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1",
+        "adminCap": "0x2c3f99967316244ad87b3449b7ced8ee05af2f83cade6ac0f79fbfbe0a0bda67",
+        "created": false
+      },
+      "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5": {
+        "id": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5",
+        "adminCap": "0xa02f803c8657b7c81f19635abee7ed29e4d25f0944307a2b8cd1f2f3622c7dbd",
+        "created": false
+      }
+    },
+    "compositions": {
+      "c1": {
+        "compositionId": "0x87cc941b381101f6d4deba2ebfb34e940577993bc43ee30711f41e30007bc48a",
+        "shareType": "0x541ece744a2ad4ef7567434749067caa8c1fc0fa253317d4f2915a78a5996c00::share::Share",
+        "compositionAdminCapId": "0xf256b4c31a0efcb9d50758538ba43c457dd73b0b1686c284b15341d79b52d28a",
+        "royaltyRateBps": 2000,
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x0f6c2da8b10345d09f8739be5a6202d84197ec483e6466d86bc0b9d5608cffbd",
+          "vaultAdminCapId": "0x98307524e3c57a095112d422ad02b777aafdabbafcecdefed0a5142e9cfbc58c",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::composition::CompositionAdminCap<0x541ece744a2ad4ef7567434749067caa8c1fc0fa253317d4f2915a78a5996c00::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "c2": {
+        "compositionId": "0x29c807caf0834c582cb7ce22036782df3176e6216fdffd7faa9a96393b0c8d56",
+        "shareType": "0x62217f47f73006a6df70ff0ad2a8b57b6bf17caef7d66feb4d07a0840656c87f::share::Share",
+        "compositionAdminCapId": "0x543ac63ed5e4aab62742f389b4098ddde16d3f487dabe1d406840cb96b48b1bd",
+        "royaltyRateBps": 2000,
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0xe6f1454910b2bd2ff377f9832ccc80784fe1ee75c59fcdce9de29e810c0dc3b6",
+          "vaultAdminCapId": "0xfe43acb8d5f166a694d12573db580613ea4463ea5edeecfef944c051c4684881",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::composition::CompositionAdminCap<0x62217f47f73006a6df70ff0ad2a8b57b6bf17caef7d66feb4d07a0840656c87f::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "c3": {
+        "compositionId": "0xcaf02f275e77b5666de16b1b03cf5cc256d4fe828b9abeb93e3073edd017891a",
+        "shareType": "0x71d463505bb45928ab865a4203aa37f3847d1c198833517d444efb88fab811b8::share::Share",
+        "compositionAdminCapId": "0x3fd2157a86008f59a881935d13e861b40937684fe1de2d716e92677e72cbab80",
+        "royaltyRateBps": 2000,
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0xd4ccce6eaf4d78c1a03f8a1843185c1dcb6fb1cb0ebacb97750aa5deb1bb1dc8",
+          "vaultAdminCapId": "0x84837eafddcffeb4a32f3dc71f94069f2ec961a43c1f63eb8410b6a52fcc8f75",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::composition::CompositionAdminCap<0x71d463505bb45928ab865a4203aa37f3847d1c198833517d444efb88fab811b8::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "c4": {
+        "compositionId": "0x66d3c9bd91cdd7c92ea75f4df2dc1228ab677b323eb00b969bc87891a18d8da4",
+        "shareType": "0x8c2a1f91c6dc943a907abb1655de01d25e65428e27dea12faa19c2b762970c13::share::Share",
+        "compositionAdminCapId": "0xc1c7d25350e1383186a3e2542d8c5203d24bb4d84e0e570b0c2f33b79fdd3c2b",
+        "royaltyRateBps": 2000,
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x5f3531b0e8225b4e45aeda1bd22d1da6c9b06a3f5c27e3afa824591627ed3926",
+          "vaultAdminCapId": "0x8fdf2e9aa11c0d9ce3cec8200d890cecc26fa49145a69640842c1abb06877660",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::composition::CompositionAdminCap<0x8c2a1f91c6dc943a907abb1655de01d25e65428e27dea12faa19c2b762970c13::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "c5": {
+        "compositionId": "0x5bf3f0e9f5a73cfe92b8705dabb5082df42d31bd2981f8e78289935c02fa75a5",
+        "shareType": "0xccd004cccaa2223a78542de816754759b407cbabe629c9f986620c14926950db::share::Share",
+        "compositionAdminCapId": "0x4fd0ad804f169e499ee07183cab10faaaa416b5ba6928e6d3e8ee5d3a218ac04",
+        "royaltyRateBps": 2000,
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x83466ba153941eee149c298e456eda357caa9689ca545461c16704ac9b30d7fc",
+          "vaultAdminCapId": "0xad6089ce884a887052c8d9db3a5d95ed4b94ac5f5297fec286c5abb29fd2181a",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::composition::CompositionAdminCap<0xccd004cccaa2223a78542de816754759b407cbabe629c9f986620c14926950db::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      }
+    },
+    "recordings": {
+      "r1": {
+        "recordingId": "0x75f81daafdd285be0f9b679aa5d1dd832d6769d2739e5b269d799ea964ea5e19",
+        "shareType": "0x32c42f45083d1dde5c6efc1f0c45b7fd11d2c2239fe47a7fa472250c56352fc6::share::Share",
+        "compositionShareType": "0x541ece744a2ad4ef7567434749067caa8c1fc0fa253317d4f2915a78a5996c00::share::Share",
+        "recordingAdminCapId": "0xe1e1242e3449b47e869e41d5e463951418bd202de7fb3fb101d2daedf1039127",
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0xd92ac259e244e0238356be01d5fe6c4131a4c9507482f27534905ae21a39fa9d",
+          "vaultAdminCapId": "0x5aaed7b39022388e758fa2528bd377978681263e0fc026d23446be4c5cf183c6",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::recording::RecordingAdminCap<0x32c42f45083d1dde5c6efc1f0c45b7fd11d2c2239fe47a7fa472250c56352fc6::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "r2": {
+        "recordingId": "0xcf9fa6699910507c5824225908d4d114f60fafff575fd3f3a8e77c3ccf713b63",
+        "shareType": "0x3711cf0ebb1d9a4e9b5c465acfebcebdc6b8e7c8e22eb21841aa1fc035370b6e::share::Share",
+        "compositionShareType": "0x62217f47f73006a6df70ff0ad2a8b57b6bf17caef7d66feb4d07a0840656c87f::share::Share",
+        "recordingAdminCapId": "0x7aa637399a99f274fd1132348d141e4c38798f593a308717b7e19521d0f9d57f",
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0xf3bb4d0643886489bbe5ac671adf45c270242330c92870f987666e8d7a83045d",
+          "vaultAdminCapId": "0xcf2574d4053cef4530fd438a4d5c0aec3d85b384fd45af255f12512601bcf6ab",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::recording::RecordingAdminCap<0x3711cf0ebb1d9a4e9b5c465acfebcebdc6b8e7c8e22eb21841aa1fc035370b6e::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "r3": {
+        "recordingId": "0xc935cf94b124bb6564396609db07201deb7fa2bd3147232bd14adf78fb6b3de8",
+        "shareType": "0x4ee74d6b4c4cc1a7ffa7ad393bbe581e760dc07656f73ec6fb0ec40c22faf9ec::share::Share",
+        "compositionShareType": "0x71d463505bb45928ab865a4203aa37f3847d1c198833517d444efb88fab811b8::share::Share",
+        "recordingAdminCapId": "0x4e6594e260d6fb34d5d4cbb82cc3fb5b8590f58e02da17e825b73a55df1d4f91",
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x9a11d3faff2312a653b3880ce308aab786921d617ff1a553863b1705befd1af2",
+          "vaultAdminCapId": "0x859b5cd18b92ebf163808969425a83936cf38b27521fe658b4ba6107d79e3370",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::recording::RecordingAdminCap<0x4ee74d6b4c4cc1a7ffa7ad393bbe581e760dc07656f73ec6fb0ec40c22faf9ec::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "r4": {
+        "recordingId": "0x6f4ec69675d496e93466f5110df578109ca7f2fc1fddf843ebff6ac8eb58f764",
+        "shareType": "0xd602251a4f295be2e0d7c541664802ac82fc3d00ce573180a4d4c57ab0f47386::share::Share",
+        "compositionShareType": "0x8c2a1f91c6dc943a907abb1655de01d25e65428e27dea12faa19c2b762970c13::share::Share",
+        "recordingAdminCapId": "0x21b46910d6a73f3c3af04439af55cfb24decfaf0b28963c99dd6eaff45c23137",
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x7ada140bfd5a9a8e38311bee98faa35388e384a614f69c8e2538c3f0bcd561ec",
+          "vaultAdminCapId": "0x0dee79a010019885805a2a0dc29bba11dec0e151a01e924e8c6979e7a86f8408",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::recording::RecordingAdminCap<0xd602251a4f295be2e0d7c541664802ac82fc3d00ce573180a4d4c57ab0f47386::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "r5": {
+        "recordingId": "0xf6be0a92d476f408724c81985134daf91a977a27d75601308abdbbe814ec6b83",
+        "shareType": "0xf0abea04dba4d9406084d0f8c7cb925360add39bc05d5a94473977949f7bfb27::share::Share",
+        "compositionShareType": "0xccd004cccaa2223a78542de816754759b407cbabe629c9f986620c14926950db::share::Share",
+        "recordingAdminCapId": "0xb93052b431d4c18e36e3aff165d8510902539cb3edfe9ed0d672b1851c7d54a6",
+        "owner": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x65f19b970fa52703c1364041f470885deba94dd8976e9c834286367ee721d461",
+          "vaultAdminCapId": "0xec4b13d8d7d229cdb120b51b76d0bb3f8b506fc289cd5b4a3e69dff177ae2f13",
+          "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::recording::RecordingAdminCap<0xf0abea04dba4d9406084d0f8c7cb925360add39bc05d5a94473977949f7bfb27::share::Share>",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      }
+    },
+    "release": {
+      "releaseId": "0xdada5dc7899f2702cc0d963cc38d55364fd2a3eac374bbee06ce64aadc956b82",
+      "releaseAdminCapId": "0x302f75464fead5dffd1aa30ebb36133a803358b8d5340757e6ed8d469ff1b516",
+      "adminAddress": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59",
+      "authority": {
+        "kind": "vault",
+        "vaultId": "0x03ac84c44db09d35109e45b246040b7b450c5145046c898cac0875bffbe51305",
+        "vaultAdminCapId": "0x5f3e03f4f63df45dec3b70ef07fba9f2309a51bcc7d2c7c4a5f60ef612694193",
+        "capType": "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::release::ReleaseAdminCap",
+        "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+      }
+    },
+    "creditDigests": {
+      "compositions": [
+        "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t"
+      ],
+      "recordings": [
+        "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t"
+      ]
+    },
+    "releaseExtensions": {
+      "digest": "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t",
+      "cover": {
+        "stillBlobId": "hrNfVq40dDSA-LCX-8TwuABzFXQ8SDgb8HmxM6pUfvQ",
+        "trackCovers": 0
+      },
+      "pressing": {
+        "pressingId": "0x9569afc47b5b2ae2db08f4416a4284db4f90e720a0b914d4cc653a7947d97d62",
+        "edition": 1,
+        "maxSupply": 250,
+        "listing": {
+          "listingId": "0x354bbbd684370f3161b67ce79c2dbb42e310c03f37afdb171d502830af610ef5",
+          "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd",
+          "pricing": {
+            "kind": "fixed",
+            "amount": "10000000"
+          },
+          "state": "enabled"
+        },
+        "authority": {
+          "kind": "vault",
+          "vaultId": "0x401bce5e3e0dd8fbd790be94aa13a33c0e1a72980a9c96a9e9eef5b5238dda2a",
+          "vaultAdminCapId": "0x9537426c06c3af00fcad41f33e87a1390a7d79b7caf00455f084aff8615f5622",
+          "capType": "0xf51af0e4a29d764a6880db65d99aaa7d1802774f7be18e7220a05a2d673b4743::pressing::PressingAdminCap",
+          "vaultPackageId": "0x9909927b5fc7d02a8b4eaf26170bcb08760d8ae67c58998650460900185f15ff"
+        }
+      },
+      "releaseCredits": 1,
+      "kind": "ExtendedPlay",
+      "description": true,
+      "genres": {
+        "primary": "ALTERNATIVE",
+        "secondary": [
+          "COUNTRY"
+        ],
+        "trackOverrides": 0
+      }
+    },
+    "capTransfersDigest": "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t",
+    "digest": "2pJSkb9mLRN8mhPLrwptHuhPyhNybBuWrb3r2VebSW4t",
+    "totalGasUsed": "501933104"
+  }
+}

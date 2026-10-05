@@ -1,0 +1,552 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3"
+          },
+          "displayName": "Rio Takeda",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "6CZWy1BPdFd8mFXYV5IyWzcvQKeVc1_fijbSQjwSvUo"
+      },
+      "streamingTranscode": "ax3e2RELQHm_bIQuSgJK8_GqEp9glTb_ig5EGISXRkY",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "1hR3B61QigXVpAcjd9KtTgiNVChl2sy5GdjMj8L7WZ8"
+      },
+      "streamingTranscode": "g5DHBMQc7MsVLpUcCp6w51ShG71r5yb6ZzmfPj62Jpo",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "9uCOAWewUPnWv0OnvDpboZu0CHqeKFPPFkB7SI_Kgl8"
+      },
+      "streamingTranscode": "G86htVhviVMScYeNjcgbw_3s94b2RMc2u4m2ZNczzEA",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "0Q5CgnKCRQ_1TaLDfaHTODAz9QqwFWFpcyhHJ4x_CLE"
+      },
+      "streamingTranscode": "gjo-iSfH1rEX1xbqpS-X8I17wJ4p8BiaYlg7QYKeL3I",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "1tijA2tx8LXfiJgrgrVZC6PqlmUWbVYxS8w7OGGiz84"
+      },
+      "streamingTranscode": "lWMcg-w-ryzW1MCUDU2ZkcEp1Hx-hWrjdclXUN1Fz3s",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+          },
+          "displayName": "Selene Okafor",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "sUMINvbxSZwrsb5p7_jmhCfi1oSNLxVwoFJGElmKrQU"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e"
+        },
+        "displayName": "Selene Okafor",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "18000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

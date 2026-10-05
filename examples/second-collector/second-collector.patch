@@ -1,0 +1,801 @@
+diff --git a/apps/game/README.md b/apps/game/README.md
+index 8b5949c..7a7f31e 100644
+--- a/apps/game/README.md
++++ b/apps/game/README.md
+@@ -68,6 +68,8 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
+ 5. Outside, **E** on a parked car while holding the record → smash → **RECORD CONDITION: STILL MINT**.
+ 6. **E** on the collector → "Sell *title* for N FUSD" (1.5× shop price) → the Record moves to
+    their wallet, FakeUSD comes to yours, the cash counter counts up and they walk off with it.
++   Holding a HOUSE record? The **house digger** across the street (purple ring) pays 2×,
++   and politely turns down anything else.
+ 7. **C** → your collection and sales history, read back via `listOwnedRecords()`.
+ 8. ~20 s later the collector is back on the spot: pick another record and go again.
+ 
+@@ -87,7 +89,7 @@ src/
+       context.ts         FlowContext: exactly what a flow may touch
+     state.ts         PURE state machine (where each record is, ownership cache, pending op)
+     objectives.ts    PURE mission text + waypoint target from state
+-    npc-buyers.ts    the collector: fake address + offer (1.5× price)
++    npc-buyers.ts    street buyers: collector (1.5×), house digger (2×, HOUSE only)
+   miso/              ALL chain access. Nothing outside this folder knows about Sui.
+     adapter.ts       interface MisoAdapter
+     types.ts         ShopRecord, OwnedRecord, Wallet, NpcBuyer, …
+@@ -165,7 +167,7 @@ Bank endpoints (all JSON, errors are `{ error }` with a player-safe message):
+ - `GET /api/health`: addresses and operator SUI balance.
+ - `GET /api/collector`: the collector's real address and offer (3/2). The sell dialog shows this address (via `MisoAdapter.collectorAddress()`), and the adapter sends the Record to it.
+ - `POST /api/fund { address }`: if the player has under 0.05 SUI, sends 0.2 SUI, and if they have under 25 FUSD, mints 100 FUSD from the FakeUSD faucet. Both happen in one operator-signed PTB. The adapter calls it on first load when balances are low. Rate limited.
+-- `POST /api/collector/buy { recordId, digest }`: the player has already signed a transfer of the Record to the collector. The server checks on chain that the tx succeeded, was sent by the seller, moved that existing `record::Record` from the seller to the collector, and that it was bought in FakeUSD. It then pays 1.5× the Record's stored `purchase_price` (capped), with a faucet mint signed by the collector. Idempotent per digest and per record (`server/data/paid.json`).
++- `POST /api/collector/buy { recordId, digest }`: the player has already signed a transfer of the Record to the collector. The server checks on chain that the tx succeeded, was sent by the seller, moved that existing `record::Record` from the seller to the collector, and that it was bought in FakeUSD. It then pays 1.5× the Record's stored `purchase_price` (capped; 2× with `npcId: "buyer:house"`, only if the Record's release is a HOUSE entry in `public/shop.testnet.json`), with a faucet mint signed by the collector. Idempotent per digest and per record (`server/data/paid.json`).
+ 
+ ### Trust model (honest version)
+ 
+diff --git a/apps/game/server/collector.ts b/apps/game/server/collector.ts
+index fef0a02..17f8060 100644
+--- a/apps/game/server/collector.ts
++++ b/apps/game/server/collector.ts
+@@ -1,5 +1,7 @@
+ // POST /api/collector/buy: verify a player's Record transfer to the collector on chain, then pay
+ // purchase_price * 3/2 FakeUsd (capped) back to the seller. Idempotent per digest and per recordId.
++// With npcId "buyer:house" (the house digger) it pays 2x instead (same cap), but only for releases
++// that public/shop.testnet.json files under HOUSE (the release is read from the Record on chain).
+ import { TransactionError } from "@mysten/sui/client";
+ import { normalizeSuiAddress } from "@mysten/sui/utils";
+ import { chain, config, policy } from "./config";
+@@ -7,6 +9,7 @@ import { client, getBalance, networkError, normalizeType, signExecuteAndWait } f
+ import { HttpError } from "./errors";
+ import { buildPayoutTx, buildSuiTransferTx } from "./ptb";
+ import { PaidStore } from "./store";
++import shop from "../public/shop.testnet.json";
+ import { collector, collectorAddress, collectorQueue, operator, operatorAddress, operatorQueue } from "./wallets";
+ 
+ export interface BuyResponse {
+@@ -27,13 +30,21 @@ export function collectorInfo() {
+   };
+ }
+ 
+-/** Pure payout rule: floor(price * 3 / 2), capped at maxPayout. */
+-export function computePayout(purchasePrice: bigint, maxPayout: bigint = config.maxPayout): bigint {
+-  const offer = (purchasePrice * policy.offerNumerator) / policy.offerDenominator;
++export const HOUSE_NPC_ID = "buyer:house";
++export const HOUSE_OFFER = { numerator: 2n, denominator: 1n };
++const HOUSE_RELEASES = new Set(shop.filter((e) => e.section === "HOUSE").map((e) => normalizeSuiAddress(e.releaseId)));
++
++/** Pure payout rule: floor(price * 3 / 2) (or the given offer), capped at maxPayout. */
++export function computePayout(
++  purchasePrice: bigint,
++  maxPayout: bigint = config.maxPayout,
++  ratio: { numerator: bigint; denominator: bigint } = { numerator: policy.offerNumerator, denominator: policy.offerDenominator },
++): bigint {
++  const offer = (purchasePrice * ratio.numerator) / ratio.denominator;
+   return offer > maxPayout ? maxPayout : offer;
+ }
+ 
+-export function buy(recordId: string, digest: string): Promise<BuyResponse> {
++export function buy(recordId: string, digest: string, npcId?: string): Promise<BuyResponse> {
+   const done = paidStore.getByDigest(digest);
+   if (done) {
+     if (done.recordId !== recordId) throw new HttpError(409, "That transaction was already paid out for a different record.");
+@@ -47,7 +58,7 @@ export function buy(recordId: string, digest: string): Promise<BuyResponse> {
+   if (busy) throw new HttpError(409, "The collector is already processing this record.");
+ 
+   inFlightByRecord.set(recordId, digest);
+-  const p = doBuy(recordId, digest).finally(() => {
++  const p = doBuy(recordId, digest, npcId).finally(() => {
+     inFlightByDigest.delete(digest);
+     inFlightByRecord.delete(recordId);
+   });
+@@ -76,7 +87,7 @@ async function fetchTransferTx(digest: string) {
+   }
+ }
+ 
+-async function doBuy(recordId: string, digest: string): Promise<BuyResponse> {
++async function doBuy(recordId: string, digest: string, npcId?: string): Promise<BuyResponse> {
+   const res = await fetchTransferTx(digest);
+   const tx = res.$kind === "Transaction" ? res.Transaction : res.FailedTransaction;
+   if (!tx || res.$kind !== "Transaction" || !tx.status.success) {
+@@ -131,7 +142,11 @@ async function doBuy(recordId: string, digest: string): Promise<BuyResponse> {
+     throw new HttpError(502, "The collector couldn't read this record's price. Try again.");
+   }
+   const price = BigInt(priceRaw);
+-  const paid = computePayout(price);
++  // The record has already moved by now, so a non-HOUSE record sold to the house digger
++  // (the game refuses those) is paid at the normal rate rather than left unpaid.
++  const releaseId = typeof json.release_id === "string" ? normalizeSuiAddress(json.release_id) : "";
++  const house = npcId === HOUSE_NPC_ID && HOUSE_RELEASES.has(releaseId);
++  const paid = house ? computePayout(price, config.maxPayout, HOUSE_OFFER) : computePayout(price);
+   if (paid <= 0n) throw new HttpError(400, "This record has no purchase price, so the collector can't make an offer.");
+ 
+   await ensureCollectorGas();
+diff --git a/apps/game/server/index.ts b/apps/game/server/index.ts
+index ae5f34a..0dfb0b7 100644
+--- a/apps/game/server/index.ts
++++ b/apps/game/server/index.ts
+@@ -52,7 +52,8 @@ async function route(req: Request, path: string): Promise<Response> {
+       const body = await readBody(req);
+       const recordId = parseAddress(body.recordId, "recordId");
+       const digest = parseDigest(body.digest, "digest");
+-      return json(await buy(recordId, digest));
++      const npcId = typeof body.npcId === "string" ? body.npcId : undefined;
++      return json(await buy(recordId, digest, npcId));
+     }
+   }
+   if (path.startsWith("/api/")) {
+diff --git a/apps/game/src/debug.ts b/apps/game/src/debug.ts
+index b0aa672..b11e035 100644
+--- a/apps/game/src/debug.ts
++++ b/apps/game/src/debug.ts
+@@ -8,7 +8,7 @@
+  *
+  *   __game.state()                    current GameState (pure data)
+  *   __game.teleportTo("deck")         stand at an interactable ("record:<id>", "cashier",
+- *   __game.teleportTo({x, z, heading})  "car:0", "buyer:collector"…) or a point
++ *   __game.teleportTo({x, z, heading})  "car:0", "buyer:collector", "buyer:house"…) or a point
+  *   __game.interact()                 same as pressing E where you stand
+  *   __game.press("KeyN")              dispatch a key (code or single letter) on window
+  *   __game.failNext("purchase")       mock: next purchase/sell/any fails once
+@@ -43,7 +43,7 @@ export function installDebugHooks(world: GameWorld, adapter: MisoAdapter, contro
+       if (!i) return false;
+       // Face the thing you're interacting with (heading 0 = +z).
+       const heading =
+-        i.kind === "car" ? 0 : i.kind === "record" ? Math.atan2(i.x - SHOP_CENTRE.x, i.z - SHOP_CENTRE.z) : Math.PI;
++        i.kind === "car" || i.id === "buyer:house" ? 0 : i.kind === "record" ? Math.atan2(i.x - SHOP_CENTRE.x, i.z - SHOP_CENTRE.z) : Math.PI;
+       world.teleport(i.x, i.z, heading);
+       return true;
+     },
+diff --git a/apps/game/src/game/controller.ts b/apps/game/src/game/controller.ts
+index 2568202..65a559a 100644
+--- a/apps/game/src/game/controller.ts
++++ b/apps/game/src/game/controller.ts
+@@ -49,7 +49,7 @@ import type { Minimap } from "../ui/minimap";
+ import type { Intro } from "../ui/intro";
+ import type { Dialogs } from "../ui/dialogs";
+ import { objective } from "./objectives";
+-import { COLLECTOR } from "./npc-buyers";
++import { COLLECTOR, buyerProfile } from "./npc-buyers";
+ import {
+   canLeaveShop,
+   heldIsOwned,
+@@ -350,7 +350,7 @@ export class GameController {
+       case "car":
+         return s.hand ? "Smash" : "Nice car";
+       case "buyer":
+-        return heldIsOwned(s) ? "Sell to the collector" : "Talk to the collector";
++        return `${heldIsOwned(s) ? "Sell to" : "Talk to"} ${buyerProfile(t.id).name.toLowerCase()}`;
+     }
+   }
+ 
+@@ -436,7 +436,7 @@ export class GameController {
+         void this.street.smashCar(target.id);
+         break;
+       case "buyer":
+-        this.street.openBuyer();
++        this.street.openBuyer(target.id);
+         break;
+     }
+   }
+diff --git a/apps/game/src/game/flows/street-flow.ts b/apps/game/src/game/flows/street-flow.ts
+index a600fe5..5ef6b23 100644
+--- a/apps/game/src/game/flows/street-flow.ts
++++ b/apps/game/src/game/flows/street-flow.ts
+@@ -3,6 +3,7 @@
+  *
+  *   E on a car (holding a record) → dispatch smash → world.smashCar() → "STILL MINT"
+  *   E on the collector → offer (1.5× shop price, npc-buyers.ts) → Sell
++ *   (or on the house digger across the street: 2×, HOUSE records only)
+  *     → dispatch sellStart → await adapter.sellToNpc() → sellSuccess (render() makes
+  *       the collector walk off with the record) | sellFail → message + Retry
+  *   ~20 s after a sale the collector comes back (buyerReturned) so a presenter can
+@@ -15,7 +16,7 @@
+ import { shortId } from "../../miso/format";
+ import * as sfx from "../../audio/sfx";
+ import { errorBody, lineItems, paragraph, pendingBody, recordStrip } from "../../ui/dialogs";
+-import { COLLECTOR, buyerFor } from "../npc-buyers";
++import { COLLECTOR, buyerFor, buyerProfile, buysSection, type BuyerProfile } from "../npc-buyers";
+ import { heldOwnedRecord } from "../state";
+ import { message, type FlowContext } from "./context";
+ 
+@@ -29,6 +30,8 @@ export class StreetFlow {
+ 
+   /** The real collector address from the adapter (the bank server on testnet), once known. */
+   private collectorAddress: string | null = null;
++  /** The buyer whose sell dialog is open (Retry sells to the same one). */
++  private buyer: BuyerProfile = COLLECTOR;
+ 
+   constructor(private readonly ctx: FlowContext) {
+     ctx.adapter.collectorAddress().then((a) => (this.collectorAddress = a), () => {});
+@@ -62,34 +65,48 @@ export class StreetFlow {
+ 
+   // ─────────────────────────────── sell ───────────────────────────────
+ 
+-  /** E on the collector. */
+-  openBuyer(): void {
++  /** E on a street buyer ("buyer:collector" or "buyer:house"). */
++  openBuyer(npcId: string = COLLECTOR.id): void {
+     const { ctx } = this;
+     const s = ctx.state();
++    const buyer = buyerProfile(npcId);
+     if (s.op?.kind === "sell" && s.op.status === "pending") return this.showSellPending();
+     if (s.op?.kind === "sell" && s.op.status === "error") return this.showSellError(s.op.error ?? "Something went wrong.");
+     const owned = heldOwnedRecord(s);
+     const r = owned ? ctx.catalog.get(owned.shopRecordId) : undefined;
+     if (!owned || !r) {
+-      const line = s.owned.length
+-        ? "Got any wax? Get one of your records out (press C) and I'll make you an offer."
+-        : "Got any wax? Come back with a record, I pay above shop price.";
+-      ctx.hud.toast(line, { tone: "speech", speaker: COLLECTOR.name });
++      const line =
++        buyer.section
++          ? `Only ${buyer.section} records for me, and I pay double for them.`
++          : s.owned.length
++            ? "Got any wax? Get one of your records out (press C) and I'll make you an offer."
++            : "Got any wax? Come back with a record, I pay above shop price.";
++      ctx.hud.toast(line, { tone: "speech", speaker: buyer.name });
+       return;
+     }
+-    const npc = buyerFor(COLLECTOR, r.price.amount);
++    if (!buysSection(buyer, r.section)) {
++      ctx.hud.toast(`${r.section}? Nice, but I only dig ${buyer.section}. The collector across the street might bite.`, {
++        tone: "speech",
++        speaker: buyer.name,
++      });
++      return;
++    }
++    this.buyer = buyer;
++    const npc = buyerFor(buyer, r.price.amount);
++    // The Record goes to npc.address in mock mode, to the bank server's collector on testnet.
++    const to = ctx.adapter.network === "mock" ? npc.address : (this.collectorAddress ?? npc.address);
+     ctx.dialogs.show({
+       key: "sell",
+-      eyebrow: COLLECTOR.name.toUpperCase(),
++      eyebrow: buyer.name.toUpperCase(),
+       title: `Sell ${r.title} for ${ctx.money(npc.offer)}?`,
+       body: [
+         recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, "Condition: still mint"),
+         lineItems([
+           ["You paid", ctx.money(r.price.amount)],
+-          ["Collector offers", ctx.money(npc.offer)],
++          [`Offer (${Number(buyer.offerNumerator) / Number(buyer.offerDenominator)}× shop price)`, ctx.money(npc.offer)],
+           ["Profit", `+${ctx.money(npc.offer - r.price.amount)}`],
+         ]),
+-        paragraph(`The Record moves to the collector's wallet (${shortId(this.collectorAddress ?? npc.address)}) and they pay you in FakeUSD.`),
++        paragraph(`The Record moves to the buyer's wallet (${shortId(to)}) and they pay you in FakeUSD.`),
+       ],
+       actions: [
+         { id: "sell", kind: "primary", label: `Sell for ${ctx.money(npc.offer)}`, run: () => void this.sell() },
+@@ -104,7 +121,10 @@ export class StreetFlow {
+     const owned = heldOwnedRecord(ctx.state());
+     const record = owned ? ctx.catalog.get(owned.shopRecordId) : undefined;
+     if (!owned || !record) return;
+-    const npc = buyerFor(COLLECTOR, record.price.amount);
++    const npc = buyerFor(this.buyer, record.price.amount);
++    // Only one buyer can be away at a time (state.buyerAway): call the other one back first.
++    const away = ctx.state().buyerAway;
++    if (away && away.npcId !== npc.id) this.buyerReturn(away.npcId);
+     if (!ctx.dispatch({ type: "sellStart", npcId: npc.id })) return;
+     ctx.world.setBuyerStatus(npc.id, "thinking");
+     this.showSellPending();
+@@ -163,8 +183,8 @@ export class StreetFlow {
+     ctx.dialogs.show({
+       key: "sell",
+       tone: "pending",
+-      eyebrow: COLLECTOR.name.toUpperCase(),
+-      title: "The collector inspects the grooves…",
++      eyebrow: this.buyer.name.toUpperCase(),
++      title: `${this.buyer.name} inspects the grooves…`,
+       body: [
+         owned ? recordStrip(owned.coverUrl, owned.title, owned.artist, `#${owned.serial}/${owned.maxSupply}`) : null,
+         pendingBody("Settling on Sui", "Record goes to the collector, FakeUSD comes to you, in one transaction."),
+@@ -186,7 +206,7 @@ export class StreetFlow {
+         { id: "keep", label: "Keep it", run: () => ctx.dialogs.close() },
+       ],
+       onClose: () => {
+-        if (ctx.dispatch({ type: "dismissError" })) ctx.world.setBuyerStatus(COLLECTOR.id, "idle");
++        if (ctx.dispatch({ type: "dismissError" })) ctx.world.setBuyerStatus(this.buyer.id, "idle");
+       },
+     });
+   }
+diff --git a/apps/game/src/game/npc-buyers.ts b/apps/game/src/game/npc-buyers.ts
+index 2bdc4e9..4f7f8ba 100644
+--- a/apps/game/src/game/npc-buyers.ts
++++ b/apps/game/src/game/npc-buyers.ts
+@@ -1,8 +1,9 @@
+ /**
+  * Street NPCs who buy Records from the player. PURE data + arithmetic.
+  *
+- * Owns: who the collector is (name, id, a deterministic FAKE Sui address) and
+- * what they pay (1.5x the shop price: "I pay above shop price").
++ * Owns: who the street buyers are (name, id, a deterministic FAKE Sui address) and
++ * what they pay: the collector 1.5x the shop price ("I pay above shop price"), the
++ * house digger across the street 2x, but only for records from the HOUSE section.
+  * Must not: talk to the chain, render, or hold state. The controller builds an
+  * NpcBuyer with `buyerFor()` and hands it to `adapter.sellToNpc()`.
+  */
+@@ -17,6 +18,8 @@ export interface BuyerProfile {
+   /** Offer = price * offerNumerator / offerDenominator (exact bigint math). */
+   offerNumerator: bigint;
+   offerDenominator: bigint;
++  /** Only buys records from this shop section (ShopRecord.section); any section if unset. */
++  section?: string;
+ }
+ 
+ export const COLLECTOR: BuyerProfile = {
+@@ -27,6 +30,27 @@ export const COLLECTOR: BuyerProfile = {
+   offerDenominator: 2n,
+ };
+ 
++export const HOUSE_DIGGER: BuyerProfile = {
++  id: "buyer:house",
++  name: "The House Digger",
++  address: "0x4005ed1663e00000000000000000000000000000000000000000000000000b12",
++  offerNumerator: 2n,
++  offerDenominator: 1n,
++  section: "HOUSE",
++};
++
++export const BUYERS: BuyerProfile[] = [COLLECTOR, HOUSE_DIGGER];
++
++/** The profile behind a "buyer:*" interactable id (the collector if unknown). */
++export function buyerProfile(id: string): BuyerProfile {
++  return BUYERS.find((b) => b.id === id) ?? COLLECTOR;
++}
++
++/** Whether `profile` buys records from shop section `section`. */
++export function buysSection(profile: BuyerProfile, section: string): boolean {
++  return !profile.section || profile.section === section;
++}
++
+ /** What `profile` pays for a record that cost `shopPrice` (base units). */
+ export function offerFor(profile: BuyerProfile, shopPrice: bigint): bigint {
+   return (shopPrice * profile.offerNumerator) / profile.offerDenominator;
+diff --git a/apps/game/src/miso/testnet-adapter.ts b/apps/game/src/miso/testnet-adapter.ts
+index d40bbea..d99c546 100644
+--- a/apps/game/src/miso/testnet-adapter.ts
++++ b/apps/game/src/miso/testnet-adapter.ts
+@@ -28,7 +28,8 @@
+  *   merged with recent local purchases / minus recent sales until the index agrees.
+  * - Sell: the player transfers the Record to the bank server's collector address
+  *   (GET /api/collector; npc.address is display only), then POST /api/collector/buy
+- *   { recordId, digest } makes the collector pay 1.5× the purchase price in FakeUSD.
++ *   { recordId, digest, npcId } makes the collector pay 1.5× the purchase price in FakeUSD
++ *   (2× for the house digger, HOUSE releases only).
+  *   The transfer digest is kept in localStorage until paid, so Retry only re-asks.
+  * - Errors / timeouts: Move aborts (sold out, listing disabled, price changed, wrong
+  *   payment), FakeUSD / gas shortfalls, not-owned, timeouts (10 s reads, 30 s txs) and a
+diff --git a/apps/game/src/miso/testnet/backend.ts b/apps/game/src/miso/testnet/backend.ts
+index e26a78d..a760966 100644
+--- a/apps/game/src/miso/testnet/backend.ts
++++ b/apps/game/src/miso/testnet/backend.ts
+@@ -36,6 +36,8 @@ import { sleep } from "./net";
+ interface PendingSale {
+   digest: string;
+   owned: OwnedRecord;
++  /** Which street NPC the sale was to (the bank server pays per NPC). */
++  npcId?: string;
+ }
+ 
+ const sameAddress = (a: string | null | undefined, b: string) => !!a && a.toLowerCase() === b.toLowerCase();
+@@ -222,8 +224,8 @@ export class TestnetBackend {
+ 
+   // ───────────────────────────── sell ─────────────────────────────
+ 
+-  async sellToNpc(recordId: string, _npc: NpcBuyer): Promise<SellResult> {
+-    // npc.address is the game's display-only collector; the real one comes from the bank server.
++  async sellToNpc(recordId: string, npc: NpcBuyer): Promise<SellResult> {
++    // npc.address is display only; every NPC sells to the bank server's collector, which pays per npc.id.
+     const signer = getBurner();
+     const seller = signer.toSuiAddress();
+     let pending: PendingSale | undefined = this.loadPendingSales()[recordId];
+@@ -250,7 +252,7 @@ export class TestnetBackend {
+         try {
+           // Persist the digest before submitting so a Retry never transfers twice.
+           await signAndRun(transferTransaction(recordId, seller, collector.address), signer, (digest) => {
+-            pending = { digest, owned };
++            pending = { digest, owned, npcId: npc.id };
+             this.savePendingSale(recordId, pending);
+           });
+         } catch (error) {
+@@ -264,7 +266,7 @@ export class TestnetBackend {
+       throw this.fail(error, "sell");
+     }
+     try {
+-      const paid = await this.collectPayment(recordId, pending!.digest);
++      const paid = await this.collectPayment(recordId, pending!.digest, pending!.npcId ?? npc.id);
+       this.savePendingSale(recordId, null);
+       this.recentPurchases.delete(recordId);
+       this.recentSales.set(recordId, Date.now());
+@@ -296,11 +298,11 @@ export class TestnetBackend {
+   }
+ 
+   /** POST /api/collector/buy, retried with backoff while the server or chain catches up. */
+-  private async collectPayment(recordId: string, digest: string): Promise<CollectorBuyResponse> {
++  private async collectPayment(recordId: string, digest: string, npcId: string): Promise<CollectorBuyResponse> {
+     const delays = [1500, 3000];
+     for (let attempt = 0; ; attempt++) {
+       try {
+-        return await collectorBuy(recordId, digest);
++        return await collectorBuy(recordId, digest, npcId);
+       } catch (error) {
+         const retryable = (error as { retryable?: boolean }).retryable === true;
+         if (!retryable || attempt >= delays.length) throw error;
+diff --git a/apps/game/src/miso/testnet/bank.ts b/apps/game/src/miso/testnet/bank.ts
+index 2c4741a..d45c609 100644
+--- a/apps/game/src/miso/testnet/bank.ts
++++ b/apps/game/src/miso/testnet/bank.ts
+@@ -81,5 +81,5 @@ export function getCollector(): Promise<CollectorInfo> {
+   return collector;
+ }
+ 
+-export const collectorBuy = (recordId: string, digest: string) =>
+-  call<CollectorBuyResponse>("/api/collector/buy", { ...post({ recordId, digest }), timeoutMs: 45_000 });
++export const collectorBuy = (recordId: string, digest: string, npcId?: string) =>
++  call<CollectorBuyResponse>("/api/collector/buy", { ...post({ recordId, digest, npcId }), timeoutMs: 45_000 });
+diff --git a/apps/game/src/world/layout.ts b/apps/game/src/world/layout.ts
+index dd07cff..547b9ed 100644
+--- a/apps/game/src/world/layout.ts
++++ b/apps/game/src/world/layout.ts
+@@ -90,6 +90,9 @@ export const BUYER_EXIT = [
+   { x: -30, z: 2.9 },
+ ];
+ 
++/** The house digger stands across Main Street on the south sidewalk, facing the shop. */
++export const HOUSE_BUYER_SPOT = { x: 2, z: 17.1, heading: Math.PI };
++
+ /** Pedestrian routes (closed loops or ping-pong lines), all on sidewalks/crosswalks. */
+ export const PED_ROUTES: { points: { x: number; z: number }[]; loop: boolean }[] = [
+   // Big loop: shop sidewalk → west crosswalk → south sidewalk → mid-block crosswalk.
+diff --git a/apps/game/src/world/npcs.ts b/apps/game/src/world/npcs.ts
+index 21c5147..719cb93 100644
+--- a/apps/game/src/world/npcs.ts
++++ b/apps/game/src/world/npcs.ts
+@@ -8,6 +8,8 @@
+  * chain and a tote full of records, head-nodding to the beat and waving the player
+  * over), the gold ground ring and "Got any wax?" bubble, the collector's walk-off
+  * after a sale, and the walk back to the spot when the game asks for a rerun.
++ * Also the house digger ("buyer:house") across the street: teal jacket, black cap and
++ * shades, purple ring; stays on the spot holding what they bought until called back.
+  * Must not: decide sale or purchase outcomes; world.ts relays the game layer's statuses.
+  */
+ import * as THREE from "three";
+@@ -15,11 +17,12 @@ import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+ import { Collision, type Obstacle } from "./collision";
+ import { loadCharacter, makeCharacter, rotateBoneAboutWorldAxis, type Character, type CharacterKind } from "./characters";
+ import { Interactables } from "./interactables";
+-import { BUYER_EXIT, BUYER_SPOT, COUNTER, groundHeight, PED_ROUTES, SHOP_FLOOR_Y } from "./layout";
++import { BUYER_EXIT, BUYER_SPOT, COUNTER, groundHeight, HOUSE_BUYER_SPOT, PED_ROUTES, SHOP_FLOOR_Y } from "./layout";
+ import { SpeechBubble } from "./labels";
+ import { DISPLAY_SCALE, type Holder } from "./record-item";
+ 
+ export const BUYER_ID = "buyer:collector";
++export const HOUSE_BUYER_ID = "buyer:house";
+ 
+ const BUYER_LINES = {
+   idle: "Got any wax?",
+@@ -27,6 +30,14 @@ const BUYER_LINES = {
+   happy: "Mint condition! Pleasure doing business.",
+   error: "Maybe some other time.",
+ } as const;
++const HOUSE_LINES = {
++  idle: "Got any HOUSE? I pay 2×!",
++  thinking: "Let me feel that four-to-the-floor…",
++  happy: "Proper house music! Cheers.",
++  error: "Not today, friend.",
++} as const;
++const HOUSE_ACCENT = "#b388ff";
++type BuyerStatus = keyof typeof BUYER_LINES;
+ const CASHIER_LINES = {
+   processing: "Processing…",
+   success: "Paid ✓ Enjoy!",
+@@ -80,6 +91,13 @@ export class Npcs {
+   private buyerObstacle: Obstacle;
+   private buyerStatusTimer = 0;
+   private buyerStatus: "idle" | "thinking" | "happy" | "error" = "idle";
++  /** The house digger: stationary, holds the record they bought until buyerReturn. */
++  private house?: { character: Character; active?: THREE.AnimationAction; heading: number };
++  readonly houseBubble = new SpeechBubble(2.8, 6);
++  private houseRing: THREE.Mesh;
++  private houseStatus: BuyerStatus = "idle";
++  private houseStatusTimer = 0;
++  private houseHolding = false;
+   private time = 0;
+   private player = new THREE.Vector3();
+ 
+@@ -88,8 +106,8 @@ export class Npcs {
+     collision: Collision,
+     private interactables: Interactables,
+   ) {
+-    scene.add(this.clerkBubble.sprite, this.buyerBubble.sprite);
+-    this.clerkBubble.occluders = this.buyerBubble.occluders = () => collision.occluders();
++    scene.add(this.clerkBubble.sprite, this.buyerBubble.sprite, this.houseBubble.sprite);
++    this.clerkBubble.occluders = this.buyerBubble.occluders = this.houseBubble.occluders = () => collision.occluders();
+     this.clerkBubble.sprite.position.set(COUNTER.x, SHOP_FLOOR_Y + 2.15, COUNTER.clerkZ + 0.3);
+     // Gold ring marks the collector from across the street.
+     this.buyerRing = new THREE.Mesh(
+@@ -103,6 +121,16 @@ export class Npcs {
+     this.buyerBubble.set(BUYER_LINES.idle, { accent: "#ffc93c" });
+     this.buyerObstacle = collision.add({ x: BUYER_SPOT.x, z: BUYER_SPOT.z, w: 0.6, d: 0.6, h: 0, tag: "buyer" });
+     interactables.register({ id: BUYER_ID, kind: "buyer", x: BUYER_SPOT.x, z: BUYER_SPOT.z + 0.9, radius: 2.0 });
++    // The house digger across the street, with a purple ring.
++    this.houseRing = new THREE.Mesh(this.buyerRing.geometry, new THREE.MeshBasicMaterial({ color: HOUSE_ACCENT, transparent: true, opacity: 0.9, depthWrite: false, toneMapped: false, side: THREE.DoubleSide }));
++    this.houseRing.rotation.x = -Math.PI / 2;
++    this.houseRing.position.set(HOUSE_BUYER_SPOT.x, SHOP_FLOOR_Y + 0.02, HOUSE_BUYER_SPOT.z);
++    this.houseRing.renderOrder = 2;
++    scene.add(this.houseRing);
++    this.houseBubble.set(HOUSE_LINES.idle, { accent: HOUSE_ACCENT });
++    this.houseBubble.sprite.position.set(HOUSE_BUYER_SPOT.x, SHOP_FLOOR_Y + 2.25, HOUSE_BUYER_SPOT.z);
++    collision.add({ x: HOUSE_BUYER_SPOT.x, z: HOUSE_BUYER_SPOT.z, w: 0.6, d: 0.6, h: 0, tag: "buyer" });
++    interactables.register({ id: HOUSE_BUYER_ID, kind: "buyer", x: HOUSE_BUYER_SPOT.x, z: HOUSE_BUYER_SPOT.z - 0.9, radius: 2.0 });
+     void Promise.all([loadCharacter("male"), loadCharacter("female")]).then(([male, female]) => {
+       const templates = { male, female };
+       // Pedestrians.
+@@ -174,6 +202,14 @@ export class Npcs {
+         returnTarget: 0,
+       };
+       play(this.buyer, "Idle");
++      // The house digger: same rig as the collector, teal jacket, black cap and shades.
++      const house = makeCharacter("female", female, "#2ec4b6");
++      house.root.position.set(HOUSE_BUYER_SPOT.x, SHOP_FLOOR_Y, HOUSE_BUYER_SPOT.z);
++      house.root.rotation.y = HOUSE_BUYER_SPOT.heading;
++      addHouseGear(house);
++      scene.add(house.root);
++      this.house = { character: house, heading: HOUSE_BUYER_SPOT.heading };
++      play(this.house, "Idle");
+     });
+   }
+ 
+@@ -186,7 +222,14 @@ export class Npcs {
+       });
+   }
+ 
+-  setBuyerStatus(npcId: string, status: "idle" | "thinking" | "happy" | "error") {
++  setBuyerStatus(npcId: string, status: BuyerStatus) {
++    if (npcId === HOUSE_BUYER_ID) {
++      const accent = status === "happy" ? "#3ccf7a" : status === "error" ? "#ff5c5c" : HOUSE_ACCENT;
++      this.houseBubble.set(HOUSE_LINES[status], { accent, busy: status === "thinking" });
++      this.houseStatus = status;
++      this.houseStatusTimer = status === "error" ? 4 : 0;
++      return;
++    }
+     if (npcId !== BUYER_ID || this.buyer?.gone) return;
+     const accent = status === "happy" ? "#3ccf7a" : status === "error" ? "#ff5c5c" : "#ffc93c";
+     this.buyerBubble.set(BUYER_LINES[status], { accent, busy: status === "thinking" });
+@@ -197,6 +240,18 @@ export class Npcs {
+ 
+   /** Holder that keeps a record in an NPC's right hand. */
+   holderFor(npcId: string): Holder | null {
++    if (npcId === HOUSE_BUYER_ID) {
++      return (out) => {
++        const hand = this.house?.character.bones.rightHand;
++        if (!this.house || !hand || !this.houseHolding) return false;
++        hand.getWorldPosition(HAND);
++        const q = Q.copy(this.house.character.root.quaternion);
++        OFFSET.set(-0.04, -0.2, 0.03).applyQuaternion(q);
++        q.multiply(Q2.setFromEuler(E.set(0.1, -2.0, 0)));
++        out.compose(HAND.add(OFFSET), q, S.setScalar(DISPLAY_SCALE));
++        return true;
++      };
++    }
+     if (npcId !== BUYER_ID) return null;
+     return (out) => {
+       const b = this.buyer;
+@@ -213,6 +268,14 @@ export class Npcs {
+ 
+   /** The collector takes the record and strolls off down the sidewalk, then despawns. */
+   buyerLeave(npcId: string) {
++    if (npcId === HOUSE_BUYER_ID) {
++      // The house digger doesn't walk off: they keep the record in hand until called back.
++      this.houseHolding = true;
++      this.interactables.setEnabled(HOUSE_BUYER_ID, false);
++      this.houseRing.visible = false;
++      this.houseBubble.set(HOUSE_LINES.happy, { accent: "#3ccf7a" });
++      return;
++    }
+     if (npcId !== BUYER_ID || !this.buyer || this.buyer.leaving) return;
+     this.buyer.leaving = true;
+     this.buyer.leftAt = this.time;
+@@ -230,6 +293,12 @@ export class Npcs {
+    * the interactable is the caller's call.
+    */
+   buyerReturn(npcId: string): Promise<void> {
++    if (npcId === HOUSE_BUYER_ID) {
++      this.houseHolding = false;
++      this.houseRing.visible = true;
++      this.setBuyerStatus(HOUSE_BUYER_ID, "idle");
++      return Promise.resolve();
++    }
+     const b = this.buyer;
+     if (npcId !== BUYER_ID || !b || (!b.leaving && !b.gone && !b.returning)) return Promise.resolve();
+     if (b.gone) {
+@@ -264,10 +333,13 @@ export class Npcs {
+       this.clerk.character.mixer.update(dt);
+     }
+     this.updateBuyer(dt);
++    this.updateHouse(dt);
+     this.clerkBubble.update(dt, camera);
+     this.buyerBubble.update(dt, camera);
++    this.houseBubble.update(dt, camera);
+     const pulse = 1 + Math.sin(this.time * 3) * 0.08;
+     this.buyerRing.scale.set(pulse, pulse, pulse);
++    this.houseRing.scale.set(pulse, pulse, pulse);
+   }
+ 
+   private walk(w: Walker, dt: number) {
+@@ -409,17 +481,35 @@ export class Npcs {
+     this.buyerBubble.sprite.position.set(head.x, head.y + 2.25, head.z);
+   }
+ 
++  /** The house digger: faces the player when close, otherwise looks across at the shop. */
++  private updateHouse(dt: number) {
++    const h = this.house;
++    if (!h) return;
++    if (this.houseStatusTimer > 0) {
++      this.houseStatusTimer -= dt;
++      if (this.houseStatusTimer <= 0) this.setBuyerStatus(HOUSE_BUYER_ID, "idle");
++    }
++    const root = h.character.root;
++    const px = this.player.x - root.position.x,
++      pz = this.player.z - root.position.z;
++    const distance = Math.hypot(px, pz);
++    const want = distance < 6 ? Math.atan2(px, pz) : HOUSE_BUYER_SPOT.heading;
++    h.heading += angleDelta(h.heading, want) * Math.min(1, dt * 3);
++    root.rotation.y = h.heading;
++    h.character.mixer.update(dt);
++    this.collectorBodyLanguage(h.character, distance, this.houseStatus);
++  }
++
+   /**
+    * Procedural layer over the idle clip so the collector reads as an NPC who wants
+    * something: nods to the music in the headphones, and every few seconds waves the
+    * player over when they are in view. Thinking = head tilted; happy = big nod.
+    */
+-  private collectorBodyLanguage(c: Character, playerDistance: number) {
++  private collectorBodyLanguage(c: Character, playerDistance: number, status: BuyerStatus = this.buyerStatus) {
+     const t = this.time;
+     c.model.updateMatrixWorld(true);
+     const forward = AXIS_F.set(0, 0, 1).applyQuaternion(c.root.quaternion);
+     const right = AXIS_R.set(1, 0, 0).applyQuaternion(c.root.quaternion);
+-    const status = this.buyerStatus;
+     // Head: nod on the beat (≈ 96 bpm), or a thoughtful tilt.
+     const nod = status === "thinking" ? 0.06 : status === "happy" ? 0.22 : 0.12;
+     rotateBoneAboutWorldAxis(c.bones.neck, right, Math.max(0, Math.sin(t * 5.0)) * nod);
+@@ -443,6 +533,7 @@ export class Npcs {
+       return { x: p.x + o.x, z: p.z + o.z };
+     });
+     if (this.buyer && !this.buyer.gone) list.push(this.buyerPosition);
++    list.push({ x: HOUSE_BUYER_SPOT.x, z: HOUSE_BUYER_SPOT.z });
+     return list;
+   }
+ }
+@@ -541,6 +632,31 @@ function addCollectorGear(c: Character) {
+   attachToBone(c, chest ?? head, bag, GEAR_MATERIAL);
+ }
+ 
++/** The house digger's look: black cap with a brim, dark shades, and a purple record pendant. */
++function addHouseGear(c: Character) {
++  const { head, chest } = c.bones;
++  if (!head) return;
++  attachToBone(
++    c,
++    head,
++    [
++      painted(new THREE.SphereGeometry(0.145, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 0.9, 1.08).translate(0, 0.17, -0.01), "#16161c"),
++      painted(new THREE.BoxGeometry(0.2, 0.016, 0.15).translate(0, 0.175, 0.17), "#16161c"),
++      painted(new THREE.BoxGeometry(0.19, 0.045, 0.02).translate(0, 0.095, 0.135), "#0b0b10"),
++    ],
++    GEAR_MATERIAL,
++  );
++  attachToBone(
++    c,
++    chest ?? head,
++    [
++      painted(new THREE.TorusGeometry(0.1, 0.014, 6, 24).rotateX(Math.PI / 2 - 0.55).scale(1.05, 1, 1.15).translate(0, 0.02, 0.04), HOUSE_ACCENT),
++      painted(new THREE.CylinderGeometry(0.06, 0.06, 0.014, 20).rotateX(Math.PI / 2 - 0.35).translate(0, -0.08, 0.12), "#7c5cff"),
++    ],
++    GEAR_MATERIAL,
++  );
++}
++
+ /** Where a despawned collector reappears, and the way back to the spot. */
+ const BUYER_RETURN_START = { x: -16, z: BUYER_EXIT[0].z };
+ const BUYER_RETURN_PATH = [BUYER_EXIT[0], { x: BUYER_SPOT.x, z: BUYER_SPOT.z }];
+diff --git a/apps/game/tests/e2e/house-digger.spec.ts b/apps/game/tests/e2e/house-digger.spec.ts
+new file mode 100644
+index 0000000..dd798e9
+--- /dev/null
++++ b/apps/game/tests/e2e/house-digger.spec.ts
+@@ -0,0 +1,70 @@
++/**
++ * The second street buyer: the house digger across Main Street pays 2× for HOUSE
++ * records and turns everything else down (mock mode).
++ */
++import { expect, test, type Page } from "@playwright/test";
++import { goTo, pageErrors, shot, startGame, teleport, until } from "./helpers";
++
++/** Pick up `id` in the shop, pay for it and close the receipt. */
++async function buy(page: Page, id: string): Promise<void> {
++  const dialog = page.locator("dialog.dlg[open]");
++  await teleport(page, { x: 0, z: -2, heading: Math.PI });
++  await goTo(page, `record:${id}`);
++  await page.keyboard.press("KeyE");
++  await page.keyboard.press("Enter"); // Pick up
++  await until(page, (x) => x.hand?.shopRecordId === id, `picked up ${id}`);
++  await goTo(page, "cashier");
++  await page.keyboard.press("KeyE");
++  await page.keyboard.press("Enter"); // Pay
++  await expect(dialog.locator("[data-receipt-link]").first()).toBeVisible({ timeout: 20_000 });
++  await page.keyboard.press("Escape");
++  await expect(dialog).toHaveCount(0);
++}
++
++test("house digger: refuses non-HOUSE, pays 2× for HOUSE", async ({ page }) => {
++  await startGame(page, "?chain=mock&latency=300");
++  const dialog = page.locator("dialog.dlg[open]");
++
++  // A HIP HOP record: politely refused.
++  await buy(page, "low-tide-tapes"); // 12.00 FUSD
++  await goTo(page, "buyer:house");
++  await expect(page.locator(".prompt-label")).toHaveText("Sell to the house digger");
++  await page.keyboard.press("KeyE");
++  await expect(page.locator(".toast", { hasText: "I only dig HOUSE" })).toBeVisible();
++  await expect(dialog).toHaveCount(0);
++  await page.waitForTimeout(600);
++  await shot(page, "rehearsal-s3-1-refusal");
++
++  // Sell that one to the collector (1.5×) so the hands are free.
++  await goTo(page, "buyer:collector");
++  await page.keyboard.press("KeyE");
++  await expect(dialog.locator(".dlg-title")).toHaveText("Sell Low Tide Tapes for 18.00 FUSD?");
++  await page.keyboard.press("Enter");
++  await until(page, (x) => x.sold.length === 1 && x.op === null, "sold to the collector");
++
++  // A HOUSE record: 25.00 → 50.00 FUSD.
++  await buy(page, "warehouse-gospel");
++  // Stand off to one side so the camera sees the digger past the player.
++  await teleport(page, { x: 0.3, z: 15.6, heading: 0 });
++  await page.waitForFunction(() => (window as any).__game.controller.near?.id === "buyer:house");
++  await expect(page.locator(".big-toast")).toBeHidden({ timeout: 15_000 });
++  await page.waitForTimeout(1500);
++  await shot(page, "rehearsal-s3-2-house-digger");
++  await page.keyboard.press("KeyE");
++  await expect(dialog.locator(".dlg-title")).toHaveText("Sell Warehouse Gospel for 50.00 FUSD?");
++  await expect(dialog.locator(".dlg-eyebrow")).toContainText("THE HOUSE DIGGER");
++  await expect(dialog).toContainText("2× shop price");
++  await shot(page, "rehearsal-s3-3-offer");
++  await page.keyboard.press("Enter"); // Sell
++  await expect(page.locator(".big-toast")).toContainText("SOLD", { timeout: 20_000 });
++  const s = await until(page, (x) => x.sold.length === 2 && x.op === null, "sold to the house digger");
++  expect(s.sold[1]?.paid).toBe("50000000");
++  // 100 - 12 + 18 - 25 + 50
++  expect(s.balance).toBe("131000000");
++  // Only one buyer can be away: the collector was called back for this sale.
++  expect(await page.evaluate(() => (window as any).__game.state().buyerAway?.npcId)).toBe("buyer:house");
++  await page.waitForTimeout(800);
++  await shot(page, "rehearsal-s3-4-sold");
++
++  expect(pageErrors(page)).toEqual([]);
++});
+diff --git a/apps/game/tests/unit/npc-buyers.spec.ts b/apps/game/tests/unit/npc-buyers.spec.ts
+new file mode 100644
+index 0000000..4cf834f
+--- /dev/null
++++ b/apps/game/tests/unit/npc-buyers.spec.ts
+@@ -0,0 +1,20 @@
++import { expect, test } from "@playwright/test";
++import { BUYERS, COLLECTOR, HOUSE_DIGGER, buyerFor, buyerProfile, buysSection } from "../../src/game/npc-buyers";
++
++test("the house digger pays 2x, the collector 1.5x", () => {
++  expect(buyerFor(HOUSE_DIGGER, 12_000_000n).offer).toBe(24_000_000n);
++  expect(buyerFor(COLLECTOR, 12_000_000n).offer).toBe(18_000_000n);
++});
++
++test("the house digger only buys HOUSE; the collector buys anything", () => {
++  expect(buysSection(HOUSE_DIGGER, "HOUSE")).toBe(true);
++  expect(buysSection(HOUSE_DIGGER, "JAZZ")).toBe(false);
++  expect(buysSection(COLLECTOR, "JAZZ")).toBe(true);
++});
++
++test("buyer ids map to profiles with distinct valid addresses", () => {
++  expect(buyerProfile("buyer:house")).toBe(HOUSE_DIGGER);
++  expect(buyerProfile("buyer:collector")).toBe(COLLECTOR);
++  for (const b of BUYERS) expect(b.address).toMatch(/^0x[0-9a-f]{64}$/);
++  expect(new Set(BUYERS.map((b) => b.address)).size).toBe(BUYERS.length);
++});

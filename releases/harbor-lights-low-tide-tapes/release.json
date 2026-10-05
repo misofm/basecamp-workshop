@@ -1,0 +1,169 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Ferry at Dawn",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Salt on the Window",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Pier Lamps",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Slow Current",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Last Ferry Home",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:00",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "223f7bd7496a7209b52fe46467faef7276b1d980dfec742b7463ee47eee3dae2"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "1:50",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4849664",
+        "pcmDigest": "b547416f086484a4acf167d1f0edbf2c2e3453eac4f57ab91a48ef646b4e1d72"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:05",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5511168",
+        "pcmDigest": "e4e88950d146ed5931cb50f40fdb29b690d6a579f21d77a5794e2cd73479adc4"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "1:55",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5072896",
+        "pcmDigest": "4d7831d228237eb0834a3584106ba356a7b7ee2332e008c72162e1a44b37c9c3"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "02e99c48ef2a57bedab3f0e3df373b37e13da314728f9c10fbfefecc78dbe70a"
+      }
+    }
+  ],
+  "release": {
+    "title": "Low Tide Tapes",
+    "kind": "ExtendedPlay",
+    "description": "Five tape-saturated beats recorded between ferry crossings.",
+    "genres": {
+      "primary": "HIP_HOP",
+      "secondary": [
+        "ELECTRONIC"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

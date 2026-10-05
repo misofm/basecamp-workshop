@@ -1,0 +1,172 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Interstate Zero",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Chrome Horizon",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Grid Runner",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Motel Pool Glow",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Dawn Off-Ramp",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "4fc6958d8f1a6792d78f809ea7f934efdd975fe39f721b0e7b33c4325b9ca387"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "095e942510c8cab3ae145bdedcfb82c3822919ac2090dd8a0d862a72bae72dea"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5734400",
+        "pcmDigest": "2b9eca945bc42612b4a229caa95df8d2f84c717290cca69b497cc72eaa5cdfe9"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:05",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "ceb5b359fd034c37583beef4e110b2816e37d0b8bc6a96aeeadf3e9ae0d47bb2"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:25",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "4bcb6b18c5a470b8c2349d82541bf5a544503afc53f3932753e7e3408c4b3c83"
+      }
+    }
+  ],
+  "release": {
+    "title": "Night Drive Atlas",
+    "kind": "ExtendedPlay",
+    "description": "A retro-futurist road map drawn in analog synths and gated reverb.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "SOUNDTRACK",
+        "POP"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

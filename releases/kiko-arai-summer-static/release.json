@@ -1,0 +1,177 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Coastline FM",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Late Train",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Polaroid Sunset",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Vending Machine Love",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Cassette Rewind",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "9b81530c756d69de892eddbd9a365e514acc8c0df75da810c961781d327958ed"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:10",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "8ce20976a3b8f60ed1108353348b6001c4af8448bb1ef7e2b5a0948afdf65495"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:00",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "d2d311c127ef5b367351dfe64ea3538ced5a990b20397753d0bfab768261a3cf"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:05",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "b071a6560cd799d823816293508dc790a8b9c6bc0353ec5548010f4a3ad6c8bf"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "4fc1fd8a73ed3bd848dc72cc024c80fc5033280523fb8076f5fef3743f8c3cf7"
+      }
+    }
+  ],
+  "release": {
+    "title": "Summer Static",
+    "kind": "ExtendedPlay",
+    "description": "Glossy city pop about coastlines, cassette decks, and late trains.",
+    "genres": {
+      "primary": "POP",
+      "secondary": [
+        "DANCE"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

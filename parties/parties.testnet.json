@@ -1,0 +1,807 @@
+{
+  "harbor-lights": {
+    "partyId": "0xba15a0489b7c9f1182862fae2db0e0c5a91a9a391589cfdf37514c47009bf9d4",
+    "name": "Harbor Lights",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xba15a0489b7c9f1182862fae2db0e0c5a91a9a391589cfdf37514c47009bf9d4",
+      "adminCap": "0x7f39e7739c60d998f51a408bb3565c4ea0465e2756a2c3870401e829fdb01439",
+      "kind": "group",
+      "name": "Harbor Lights",
+      "digest": "KkGbHBb8uufb4jcxxbpRkAW3j3Cm6MWVqv54kjyfxAo"
+    },
+    "profile": {
+      "partyId": "0xba15a0489b7c9f1182862fae2db0e0c5a91a9a391589cfdf37514c47009bf9d4",
+      "profile": {
+        "bioShort": "Beatmaker recording on a four-track between ferry shifts.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "mara-quinlan": "0x4c1a12f7944edb919036d3d0862a5b66763de4539f3bac62411071e7bfa57e5f"
+    }
+  },
+  "neon-cartography": {
+    "partyId": "0x4401bdb02eec8bafd69b8c85694c84555ece02bbc2293af6ffaa8c3dceee421b",
+    "name": "Neon Cartography",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0x4401bdb02eec8bafd69b8c85694c84555ece02bbc2293af6ffaa8c3dceee421b",
+      "adminCap": "0x280a459dd86661fc911e10425d934103aa585390e9488960db08769fd22c0608",
+      "kind": "group",
+      "name": "Neon Cartography",
+      "digest": "VXMfEB6QDaNoBRKiDPWEyyhKRUQcJ7VToH6BxXD8dkn"
+    },
+    "profile": {
+      "partyId": "0x4401bdb02eec8bafd69b8c85694c84555ece02bbc2293af6ffaa8c3dceee421b",
+      "profile": {
+        "bioShort": "Synth duo mapping imaginary highways.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "dex-moreau": "0x610937a74de116696461697116a98494b6eadf8e91eae6e249316e39746c08f5",
+      "ines-varga": "0xaa6fabbf485bbed60cd657004a0d8880120bd0441117592f45ee244bc0ca51d3"
+    }
+  },
+  "juniper-and-coal": {
+    "partyId": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e",
+    "name": "Juniper & Coal",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e",
+      "adminCap": "0x5b3214ba207a5f415a3523501fa68f4e82387f1242ec3fa07e9b13490b07c800",
+      "kind": "group",
+      "name": "Juniper & Coal",
+      "digest": "6ZEjXVQ1jfYnyRTK8oAM5nuM1Yn7QaH5k6RhPKjq6gfd"
+    },
+    "profile": {
+      "partyId": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e",
+      "profile": {
+        "bioShort": "Folk duo writing from a cabin with no cell signal.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "june-holloway": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c",
+      "callum-coal": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+    }
+  },
+  "selene-okafor": {
+    "partyId": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e",
+    "name": "Selene Okafor",
+    "group": false,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e",
+      "adminCap": "0xe31c1d6c8ba1e5416baafa9cfd9ad31c6f84b0c183448a2380b58cd51b3c9fdd",
+      "kind": "individual",
+      "name": "Selene Okafor",
+      "digest": "4zwzjmv178ewAQZaeGN2Yw38fQ1R8ddwZ6gcyeRYWutK"
+    },
+    "profile": {
+      "partyId": "0xfc36684d205b6b6cb1102de8db89bf0e9c837f8865d947b1ef4125719f755c9e",
+      "profile": {
+        "bioShort": "Singer-songwriter blending Afrobeats, highlife, and house.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "the-velvet-index": {
+    "partyId": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9",
+    "name": "The Velvet Index",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9",
+      "adminCap": "0x2e14180f3142aa7832d65010815ce6e71180e82b2a6e4637ee9eafae97d48f86",
+      "kind": "group",
+      "name": "The Velvet Index",
+      "digest": "Boppx8WPwkaAHubVb6CjjELPQatKHNaHHRFS1m6dyMQA"
+    },
+    "profile": {
+      "partyId": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9",
+      "profile": {
+        "bioShort": "Piano trio that only plays after midnight.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "theo-bramwell": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff",
+      "rosa-lind": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb",
+      "august-pike": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+    }
+  },
+  "moss-protocol": {
+    "partyId": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d",
+    "name": "Moss Protocol",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d",
+      "adminCap": "0x65fb93ae47e9e1afc76a5d36799f369a14f7c17eff2a6737f32770a29cdccb32",
+      "kind": "group",
+      "name": "Moss Protocol",
+      "digest": "G9JeESEWPwXT4Skd5Sjgaegqmrk3mr7Erf6enWWMyJdj"
+    },
+    "profile": {
+      "partyId": "0xaed6f9bf86ae26e72105c6d60c5d8dbff40d56170c8dc35350303cdaa24a3d8d",
+      "profile": {
+        "bioShort": "Ambient project built from field recordings and modular synths.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "wren-alder": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53"
+    }
+  },
+  "kiko-arai": {
+    "partyId": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce",
+    "name": "Kiko Arai",
+    "group": false,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce",
+      "adminCap": "0x84faa1a6fb38c3e699150c8152a9dac69e622554fa1db75366e78b6a739ba5a1",
+      "kind": "individual",
+      "name": "Kiko Arai",
+      "digest": "HCwBNnECLnjWoqVhQDYCDTXVvehdWGwHKwvMXUQBZM4C"
+    },
+    "profile": {
+      "partyId": "0xb29dde95c491c2969064bdb9bdc8f21946d3eab2ff8c161aff26169f5a05f0ce",
+      "profile": {
+        "bioShort": "City pop vocalist with a cassette-deck heart.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "subway-prophet": {
+    "partyId": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb",
+    "name": "Subway Prophet",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb",
+      "adminCap": "0xdb561ca3337d33c706f8f6ff89deef41dcb6b27b407309a5841aaa13b3c7c6da",
+      "kind": "group",
+      "name": "Subway Prophet",
+      "digest": "9XLibbLUecexdGMjgE1mU1swQp61fMTPS9CcZFYFgzis"
+    },
+    "profile": {
+      "partyId": "0x1a0b418d960f837d080e6a93710e22b304a4a04f8110f6d72292d6ee7b03bceb",
+      "profile": {
+        "bioShort": "Drum & bass producer recording under the city.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "omar-reyes": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d"
+    }
+  },
+  "palomino-static": {
+    "partyId": "0xd99017d5452addc172ebb5a26e07e827a4b8fab9f3387349ef0655a1e5c77630",
+    "name": "Palomino Static",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xd99017d5452addc172ebb5a26e07e827a4b8fab9f3387349ef0655a1e5c77630",
+      "adminCap": "0xb85f960abbb89c14a33ae0ab4e0b447801c67b94c91359b71a780f745405ede3",
+      "kind": "group",
+      "name": "Palomino Static",
+      "digest": "2WCjop3oiaBMay1HGD3r8i1rA98ELaYLGoBaFuXqGY91"
+    },
+    "profile": {
+      "partyId": "0xd99017d5452addc172ebb5a26e07e827a4b8fab9f3387349ef0655a1e5c77630",
+      "profile": {
+        "bioShort": "Garage surf quartet that has never surfed.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "billy-sands": "0x865da212ef24d5806deb77acc9fb32426832c1aa97f14573c3a498182fb59081",
+      "lou-tremont": "0x2406a0a2dfade67cb60a77192277d6a10e6d7fd07119de7f6841eb8ee9439561"
+    }
+  },
+  "basement-choir": {
+    "partyId": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975",
+    "name": "Basement Choir",
+    "group": true,
+    "kind": "artist",
+    "create": {
+      "partyId": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975",
+      "adminCap": "0xc889d75050883c98338bba55e39fc4ee83592553e055e049f41b701dabb06550",
+      "kind": "group",
+      "name": "Basement Choir",
+      "digest": "5RZx56hrbZQqGs2Y7UhDQ5nAUkoWWgfjTyirZ7xy93SV"
+    },
+    "profile": {
+      "partyId": "0xa1d27707b5a7616ce4f33f48543fe82b3d1b9bf7e7bce5d5e1e33df5840c5975",
+      "profile": {
+        "bioShort": "Gospel-house collective for 5am warehouses.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    },
+    "members": {
+      "grace-adeyemi": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b",
+      "marcus-hale": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6"
+    }
+  },
+  "mara-quinlan": {
+    "partyId": "0x4c1a12f7944edb919036d3d0862a5b66763de4539f3bac62411071e7bfa57e5f",
+    "name": "Mara Quinlan",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x4c1a12f7944edb919036d3d0862a5b66763de4539f3bac62411071e7bfa57e5f",
+      "adminCap": "0x8e6615d67961a592f3613cb1f2e7273816480f79af8f37bbcf72e8dc455c7d12",
+      "kind": "individual",
+      "name": "Mara Quinlan",
+      "digest": "G3hH2nEtQZnbXARWATzuL2daCjwkFwT5ZGhP5zSpbKHi"
+    },
+    "profile": {
+      "partyId": "0x4c1a12f7944edb919036d3d0862a5b66763de4539f3bac62411071e7bfa57e5f",
+      "profile": {
+        "bioShort": "Mara Quinlan, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "dex-moreau": {
+    "partyId": "0x610937a74de116696461697116a98494b6eadf8e91eae6e249316e39746c08f5",
+    "name": "Dex Moreau",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x610937a74de116696461697116a98494b6eadf8e91eae6e249316e39746c08f5",
+      "adminCap": "0xfbcba394cca220f792184b83f47ac4576059c1b2dc9d7554456c8bd5309c23f7",
+      "kind": "individual",
+      "name": "Dex Moreau",
+      "digest": "77ZKTNXFAVMnWJk9DNVofhGqBxstQUYGh3LedDyUTeE2"
+    },
+    "profile": {
+      "partyId": "0x610937a74de116696461697116a98494b6eadf8e91eae6e249316e39746c08f5",
+      "profile": {
+        "bioShort": "Dex Moreau, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "ines-varga": {
+    "partyId": "0xaa6fabbf485bbed60cd657004a0d8880120bd0441117592f45ee244bc0ca51d3",
+    "name": "Ines Varga",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xaa6fabbf485bbed60cd657004a0d8880120bd0441117592f45ee244bc0ca51d3",
+      "adminCap": "0x767b5aea8bcebeb16a9c216f9fd96bfacb826d59dfb58632d005a96c49c276bb",
+      "kind": "individual",
+      "name": "Ines Varga",
+      "digest": "BsG7UqSczPFZnJ1c6ZdWoEE2W4chj7sYBqp8Zrue4dYp"
+    },
+    "profile": {
+      "partyId": "0xaa6fabbf485bbed60cd657004a0d8880120bd0441117592f45ee244bc0ca51d3",
+      "profile": {
+        "bioShort": "Ines Varga, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "june-holloway": {
+    "partyId": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c",
+    "name": "June Holloway",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c",
+      "adminCap": "0x16b9bdb569d4c0a8d1be3e3da91b145ff262ff0663d431d56dcb71aa2770bbd9",
+      "kind": "individual",
+      "name": "June Holloway",
+      "digest": "8hGzEhVzzSWzK4b5CVKBZ6XgcQb4gx1vJ5ovhPzU2VH7"
+    },
+    "profile": {
+      "partyId": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c",
+      "profile": {
+        "bioShort": "June Holloway, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "callum-coal": {
+    "partyId": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531",
+    "name": "Callum Coal",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531",
+      "adminCap": "0x92337541db839569efcdc2914f03e82adb0b0a2d501bc712c8c29c724b5fd9dd",
+      "kind": "individual",
+      "name": "Callum Coal",
+      "digest": "Cc1MZni2q68ybdcHKorL53mBwfW7xC2spfRn9wyqzYLc"
+    },
+    "profile": {
+      "partyId": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531",
+      "profile": {
+        "bioShort": "Callum Coal, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "theo-bramwell": {
+    "partyId": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff",
+    "name": "Theo Bramwell",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff",
+      "adminCap": "0x7077806a5bc64812e895823a60619cff6ebe87c4c100712831539e279dd6dc6b",
+      "kind": "individual",
+      "name": "Theo Bramwell",
+      "digest": "4H35aDBQxTnQz5xhtEUjcdLHF9Czc1x9w5XrDthEGHsi"
+    },
+    "profile": {
+      "partyId": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff",
+      "profile": {
+        "bioShort": "Theo Bramwell, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "rosa-lind": {
+    "partyId": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb",
+    "name": "Rosa Lind",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb",
+      "adminCap": "0x3cf82e271882f83c6e95ffee45d9e90aea16db7aa4ba96da79c3c001a3cfbabc",
+      "kind": "individual",
+      "name": "Rosa Lind",
+      "digest": "GVxokrdWfuaeARQfJfri4YxB6bWbi4KvNJnQPoW7SGLM"
+    },
+    "profile": {
+      "partyId": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb",
+      "profile": {
+        "bioShort": "Rosa Lind, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "august-pike": {
+    "partyId": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2",
+    "name": "August Pike",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2",
+      "adminCap": "0x3d07c8ccc9a00f7623cfa53774f2a9fbeb1d7ba201e91f867c8a8c718bd49532",
+      "kind": "individual",
+      "name": "August Pike",
+      "digest": "6fX7PZPU2R8b6gT16J9y4Ei3ZDq721KBdLwATkK6ukRA"
+    },
+    "profile": {
+      "partyId": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2",
+      "profile": {
+        "bioShort": "August Pike, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "wren-alder": {
+    "partyId": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53",
+    "name": "Wren Alder",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53",
+      "adminCap": "0x665db67315ceb25c98c893063bfd8140394d668ef23fa31143b363bfbeb32ace",
+      "kind": "individual",
+      "name": "Wren Alder",
+      "digest": "3euQM8SyNMikrDzooLDDKGPpxpVcBCe68pcEUssbZE8W"
+    },
+    "profile": {
+      "partyId": "0xb3e893938ab923673ce8d3f6e76de554a1c334cdef6c83c667901e97e9bf8f53",
+      "profile": {
+        "bioShort": "Wren Alder, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "omar-reyes": {
+    "partyId": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d",
+    "name": "Omar Reyes",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d",
+      "adminCap": "0xf14cedd87c52060064f6b9d8a3de96ba4af46f2e59c28b9a106091d4540a4015",
+      "kind": "individual",
+      "name": "Omar Reyes",
+      "digest": "EwM27G1LVVirB67gZojxhrYPoiAjxKm1mwjnrRMJVcNA"
+    },
+    "profile": {
+      "partyId": "0x23455528e6298b270192301aa11018d7aa8e93002098c203d240f06293af980d",
+      "profile": {
+        "bioShort": "Omar Reyes, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "billy-sands": {
+    "partyId": "0x865da212ef24d5806deb77acc9fb32426832c1aa97f14573c3a498182fb59081",
+    "name": "Billy Sands",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x865da212ef24d5806deb77acc9fb32426832c1aa97f14573c3a498182fb59081",
+      "adminCap": "0xfd1d17334adfe62aa9dd3c7e2f55eba181fde1a5481ab51dd7938a810aed34cd",
+      "kind": "individual",
+      "name": "Billy Sands",
+      "digest": "2idH3A5Qy63JrLybakVWvzYb1k98vMzYgqe7XmBHfcfn"
+    },
+    "profile": {
+      "partyId": "0x865da212ef24d5806deb77acc9fb32426832c1aa97f14573c3a498182fb59081",
+      "profile": {
+        "bioShort": "Billy Sands, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "lou-tremont": {
+    "partyId": "0x2406a0a2dfade67cb60a77192277d6a10e6d7fd07119de7f6841eb8ee9439561",
+    "name": "Lou Tremont",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x2406a0a2dfade67cb60a77192277d6a10e6d7fd07119de7f6841eb8ee9439561",
+      "adminCap": "0xb9e9808efcf6c0b058c9a960de05dcf77972d2753838c86d1f5296538f7ed024",
+      "kind": "individual",
+      "name": "Lou Tremont",
+      "digest": "ChC1CmUA9vA28LgRxJrW6662fuBEw1rg7gtBc2zgEas3"
+    },
+    "profile": {
+      "partyId": "0x2406a0a2dfade67cb60a77192277d6a10e6d7fd07119de7f6841eb8ee9439561",
+      "profile": {
+        "bioShort": "Lou Tremont, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "grace-adeyemi": {
+    "partyId": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b",
+    "name": "Grace Adeyemi",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b",
+      "adminCap": "0x03b8f02274fa18c50f725a01e0e4ed804f75d8304cf0b30a09f1b3f3a28e218d",
+      "kind": "individual",
+      "name": "Grace Adeyemi",
+      "digest": "EBpbMurSSgXtgkzTGhemBAr6nCBnRMZtEzJz4fvd25Ef"
+    },
+    "profile": {
+      "partyId": "0xcf8b7fa1308061e9cf8e51c01eeb152e1adb0e021f62002524112dba75a0b62b",
+      "profile": {
+        "bioShort": "Grace Adeyemi, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "marcus-hale": {
+    "partyId": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6",
+    "name": "Marcus Hale",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6",
+      "adminCap": "0xcc101b4de5987f9e8858ab2e134166b92332390291576daaeff7cbaa999b0d25",
+      "kind": "individual",
+      "name": "Marcus Hale",
+      "digest": "Fg6JkbTNxzzR6iqx2hZwFbAbzvHKWQWhuHFMXZchUmmu"
+    },
+    "profile": {
+      "partyId": "0x11d5a3dc71165bad53a92db67e5fe8a90cb430a9a6da312db582b8defd75cda6",
+      "profile": {
+        "bioShort": "Marcus Hale, credited on the Miso Basecamp workshop catalog.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "nadia-flint": {
+    "partyId": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba",
+    "name": "Nadia Flint",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba",
+      "adminCap": "0xe9fc0ae3a1337f5d156d6141e846bf0656b23d96288570f843e24c212137b017",
+      "kind": "individual",
+      "name": "Nadia Flint",
+      "digest": "CaxzUc8HmvstDqkAzGA7My5DTSMY2rtG8tyZnPX6ipLC"
+    },
+    "profile": {
+      "partyId": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba",
+      "profile": {
+        "bioShort": "Producer and mix engineer.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "kofi-mensah": {
+    "partyId": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61",
+    "name": "Kofi Mensah",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61",
+      "adminCap": "0x72fb41e004873184886fdb12012111bd4cd405943742f1314a5d4201bf0368ee",
+      "kind": "individual",
+      "name": "Kofi Mensah",
+      "digest": "J7R8q5GzcihBc1KBKLmCg1jU1kjd7KL21ke4tNDYNxbT"
+    },
+    "profile": {
+      "partyId": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61",
+      "profile": {
+        "bioShort": "Producer.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "elsa-brandt": {
+    "partyId": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1",
+    "name": "Elsa Brandt",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1",
+      "adminCap": "0x2c3f99967316244ad87b3449b7ced8ee05af2f83cade6ac0f79fbfbe0a0bda67",
+      "kind": "individual",
+      "name": "Elsa Brandt",
+      "digest": "DJYmjFCC3vTk1uj8kq3NWWc1QXFnWSZ73vGKwJWb3ae"
+    },
+    "profile": {
+      "partyId": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1",
+      "profile": {
+        "bioShort": "Mastering engineer.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "rio-takeda": {
+    "partyId": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3",
+    "name": "Rio Takeda",
+    "group": false,
+    "kind": "person",
+    "create": {
+      "partyId": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3",
+      "adminCap": "0xe1708ce1bf4b5f93ad8e18c822fed6b4c3ef82b28a68b15f27b3150875f332c6",
+      "kind": "individual",
+      "name": "Rio Takeda",
+      "digest": "GJxMu6yYpFHBohLSVzyh4M2GoAFddoZ4dyLUfRLEUAJZ"
+    },
+    "profile": {
+      "partyId": "0xbdecb291cacb16f452366cb623cd86360a409c50d91c5beebf3fa5d1f88e68f3",
+      "profile": {
+        "bioShort": "Songwriter and arranger.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "tidepool-records": {
+    "partyId": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5",
+    "name": "Tidepool Records",
+    "group": true,
+    "kind": "label",
+    "create": {
+      "partyId": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5",
+      "adminCap": "0xa02f803c8657b7c81f19635abee7ed29e4d25f0944307a2b8cd1f2f3622c7dbd",
+      "kind": "group",
+      "name": "Tidepool Records",
+      "digest": "96v7TArkoXuLwKxRSy7U2TZo52fhB4Fz1TyEM45LUnb5"
+    },
+    "profile": {
+      "partyId": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5",
+      "profile": {
+        "bioShort": "Tidepool Records is an independent record label.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "chromefield": {
+    "partyId": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a",
+    "name": "Chromefield",
+    "group": true,
+    "kind": "label",
+    "create": {
+      "partyId": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a",
+      "adminCap": "0xda46cab75f412b82a6f79e3cf8da6e37e0aa2bb6691775cadae7f79d8d2ef79c",
+      "kind": "group",
+      "name": "Chromefield",
+      "digest": "G56qDnmj7vUNKez9DL9M5mfMoWeXjm3Vuvvq5vQyG15X"
+    },
+    "profile": {
+      "partyId": "0x373f6afe32690b179b35e4fb6164c7686c7b33c667d63eea72d0847e8544967a",
+      "profile": {
+        "bioShort": "Chromefield is an independent record label.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  },
+  "goldline-music": {
+    "partyId": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0",
+    "name": "Goldline Music",
+    "group": true,
+    "kind": "label",
+    "create": {
+      "partyId": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0",
+      "adminCap": "0xd941e6243075d5080e2684e830f8e095aa37008a93ab3be7db4a061ff55c1d99",
+      "kind": "group",
+      "name": "Goldline Music",
+      "digest": "Beqo7pqunydWsDLAM5e2gdZAVHnxct5Bzd1TtvEcRzH8"
+    },
+    "profile": {
+      "partyId": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0",
+      "profile": {
+        "bioShort": "Goldline Music is an independent record label.",
+        "bioLong": null,
+        "country": null,
+        "languages": [
+          "en"
+        ]
+      },
+      "verifiedVia": "api.testnet.miso.fm"
+    }
+  }
+}

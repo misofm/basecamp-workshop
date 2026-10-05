@@ -1,0 +1,61 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "night-drive-atlas",
+  "tracks": [
+    {
+      "track": "interstate-zero",
+      "title": "Interstate Zero",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "2FvATIu9uwcH1ff80xGj",
+      "requestedSeconds": 140,
+      "seconds": 140.016,
+      "instrumental": true,
+      "prompt": "Synthwave instrumental, 108 BPM, driving arpeggiated analog bass, gated reverb snare, soaring sawtooth lead melody, neon night highway energy, A minor, 1980s retro-futurist"
+    },
+    {
+      "track": "chrome-horizon",
+      "title": "Chrome Horizon",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "g7DXV5t5IAey9H5BCxnJ",
+      "requestedSeconds": 135,
+      "seconds": 135.001,
+      "instrumental": false,
+      "prompt": "Synthwave pop song with dreamy female vocals about chasing a horizon at night, 100 BPM, lush polysynth pads, punchy LinnDrum-style drums, shimmering chorus, F-sharp minor, 1980s soundtrack feel"
+    },
+    {
+      "track": "grid-runner",
+      "title": "Grid Runner",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "3MVRfkXJWjqbmiPbyRlm",
+      "requestedSeconds": 130,
+      "seconds": 130.032,
+      "instrumental": true,
+      "prompt": "Darksynth instrumental, 118 BPM, aggressive distorted synth bass, fast hi-hats, cinematic brass-like synth stabs, tense chase atmosphere, E minor"
+    },
+    {
+      "track": "motel-pool-glow",
+      "title": "Motel Pool Glow",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "ptr2CHy4p9QqX7p1DqBf",
+      "requestedSeconds": 125,
+      "seconds": 125.016,
+      "instrumental": true,
+      "prompt": "Chillwave instrumental, 92 BPM, warm detuned synths, slow funky bassline, chorus-drenched guitar, palm trees and pink neon mood, relaxed, D major"
+    },
+    {
+      "track": "dawn-off-ramp",
+      "title": "Dawn Off-Ramp",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "FZwHquYwmCmUagu07iCx",
+      "requestedSeconds": 145,
+      "seconds": 144.985,
+      "instrumental": true,
+      "prompt": "Emotional synthwave closer, 96 BPM, slow build from soft pads to a big anthemic lead, triumphant chord progression in C major, sunrise after an all-night drive"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+node_modules/
+.env
+*.state.json
+catalog/out/
+dist/
+.wrangler/
+keys/
+
+# Raw assets: staged to Walrus, never committed (same rule as misofm/releases)
+**/assets/
+*.flac
+*.wav
+*.pcm
+.claude/scheduled_tasks.lock
+.claude/worktrees/

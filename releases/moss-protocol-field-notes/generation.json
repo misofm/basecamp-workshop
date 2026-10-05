@@ -1,0 +1,61 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "field-notes",
+  "tracks": [
+    {
+      "track": "lichen",
+      "title": "Lichen",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Jh67CcuvU8opgTOe8aKU",
+      "requestedSeconds": 150,
+      "seconds": 150.001,
+      "instrumental": true,
+      "prompt": "Ambient instrumental, slow evolving modular synth pads in D major, soft forest birdsong field recording, gentle granular textures, no drums, meditative and spacious"
+    },
+    {
+      "track": "canopy",
+      "title": "Canopy",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "nH3zTQiDKkhd2PSWyJoJ",
+      "requestedSeconds": 140,
+      "seconds": 140.016,
+      "instrumental": true,
+      "prompt": "Ambient electronica, 70 BPM, delicate glitchy percussion, warm sub bass, shimmering bell-like synth arpeggios, sunlight through trees mood, A major"
+    },
+    {
+      "track": "understory",
+      "title": "Understory",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "DzabppwAfvxgv7D3uEe0",
+      "requestedSeconds": 135,
+      "seconds": 135.001,
+      "instrumental": true,
+      "prompt": "Dark ambient drone, deep evolving low frequencies, distant rain and creaking wood, bowed metal textures, mysterious and calm, E minor, no drums"
+    },
+    {
+      "track": "mycelium",
+      "title": "Mycelium",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "L5PhDr5PMlH42CkZadIi",
+      "requestedSeconds": 145,
+      "seconds": 144.985,
+      "instrumental": true,
+      "prompt": "Downtempo ambient, 84 BPM, organic hand percussion, pulsing Moog-style bass, interlocking marimba patterns, slow and hypnotic, F-sharp minor"
+    },
+    {
+      "track": "clearing",
+      "title": "Clearing",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "qvGv9nuQU39u1hksZo8O",
+      "requestedSeconds": 150,
+      "seconds": 149.954,
+      "instrumental": true,
+      "prompt": "Hopeful ambient closer, piano notes drenched in reverb, swelling string-like pads, light wind and birds, slow crescendo then fade, C major, no drums"
+    }
+  ]
+}

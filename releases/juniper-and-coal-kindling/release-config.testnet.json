@@ -1,0 +1,708 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "8njo2iZctmtvU1ObZR6dP2qqoLE_yr0VdNblUaibhpo"
+      },
+      "streamingTranscode": "je_ch6ns3_xc44nLIQKpMf8RYQ4fNc_wkHS-aRdofu4",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+          },
+          "displayName": "Juniper & Coal",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5"
+          },
+          "displayName": "Tidepool Records",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "5RofvnLGn4fWnLBqUgQMotXrbuQrCZ8MGA4y41VgkmI"
+      },
+      "streamingTranscode": "-pyR9qIWQ4hom-HBPbh2HGO9mANLDm2rO8SAIHU92UY",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+          },
+          "displayName": "Juniper & Coal",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5"
+          },
+          "displayName": "Tidepool Records",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "2thZZL8-RUTrvF73spYE_vyD9GWyHmv8TDhMYFRiIHQ"
+      },
+      "streamingTranscode": "ww-rxkTZGw8hZ14G1CQuX9oDre6LUaoDNLyViTEQIJE",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+          },
+          "displayName": "Juniper & Coal",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5"
+          },
+          "displayName": "Tidepool Records",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "gBQKueOcCWa-aYbp715ejGkIojfXbvPkUJpWn54vSt0"
+      },
+      "streamingTranscode": "MVQwEmV3Y5dIOcP3QirJaKVzBOSAnwu7O8VP193-HyA",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+          },
+          "displayName": "Juniper & Coal",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5"
+          },
+          "displayName": "Tidepool Records",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "ieOKt8eIiqGHBO4ziR4eXXPUTkR2_Pk3p6dZ-_BeFQ8"
+      },
+      "streamingTranscode": "zXkqNPFdn3-srSKarm51lz2DlmVG4BrBVDEWPHeGq_c",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+          },
+          "displayName": "Juniper & Coal",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xab6ad0e5aadf1b538444561f273b9b0d47ffe85bfd783c28f5529dec57b1e36c"
+          },
+          "displayName": "June Holloway",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xe08baf5c456892f25229b8051cd844047ae104e9eee6167cdddadbe61fbd2531"
+          },
+          "displayName": "Callum Coal",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc76dcc72d0136fd180ca8704146ca4220895c95345fe58b0c03480c0143cf0ba"
+          },
+          "displayName": "Nadia Flint",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6645be03a9aabf10ccfdf495f557180af7a00b243ed3ca89863a724ba9a0f8d5"
+          },
+          "displayName": "Tidepool Records",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "hrNfVq40dDSA-LCX-8TwuABzFXQ8SDgb8HmxM6pUfvQ"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0x39e6ab0c4daae8f47e3f7429398e169227dec05612a387a3e0343a94ce64339e"
+        },
+        "displayName": "Juniper & Coal",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "10000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

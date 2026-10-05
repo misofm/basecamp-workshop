@@ -1,0 +1,10 @@
+Endpoint: https://fullnode.testnet.sui.io:443 (gRPC)
+Signer:   0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59 (software keypair)
+Gas:      self-paid address balance
+Owner:    0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59
+  Execution: self-paid address balance
+  Atomic publication preflight: 370 commands, 169 inputs
+  Publishing 10 share packages (≤5 per PTB)
+  Initializing 10 share currencies
+  Publishing atomic catalog (370 commands, 169 inputs): 5 existing Party identities, 5 composition(s), 5 recording(s), 1 release, 1 pressing
+  Published the complete catalog atomically in 1tS6DNQeu8GvnsMHFVJKLtnzhqdyhUzNfVqxXWuNHMN

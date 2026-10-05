@@ -1,0 +1,798 @@
+{
+  "network": "testnet",
+  "owner": {
+    "kind": "address",
+    "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+  },
+  "defaults": {
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "royaltyCurrency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+  },
+  "compositions": {
+    "c1": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c2": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c3": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    },
+    "c4": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Composer"
+            },
+            {
+              "type": "Songwriter"
+            },
+            {
+              "type": "Lyricist"
+            }
+          ]
+        }
+      ]
+    },
+    "c5": {
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Composer"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "recordings": {
+    "r1": {
+      "master": {
+        "blobId": "9jmijLd0TY5Ss2h451YK3P3d69SjPRswYca9wvYPpHQ"
+      },
+      "streamingTranscode": "g-32K-_oL_I595x6RvsFsR-M-dtHHLPlY4B95hfChtY",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+          },
+          "displayName": "The Velvet Index",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r2": {
+      "master": {
+        "blobId": "1i-ig9BH8hCH9ds3xvcO57o6A456Yz4UrbvBgTk3MHc"
+      },
+      "streamingTranscode": "2KHnYx3W3mSvrnLbwgLj3kTHUPIqZKlwSvCWmZJrb-A",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+          },
+          "displayName": "The Velvet Index",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r3": {
+      "master": {
+        "blobId": "ZTVxqPbWvPmk6ySg7uZ8ukI4DLC45I0TNO0DJB3vzsw"
+      },
+      "streamingTranscode": "WA99a1EDvguEHEm08sZCAIdG0j6C1fRDnUpudUZSvuU",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+          },
+          "displayName": "The Velvet Index",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r4": {
+      "master": {
+        "blobId": "i7Meh4pjoXjhSHMd9noKNcsVFl-v7ehcuG-J9FGrZKQ"
+      },
+      "streamingTranscode": "dNd3iY-VE5ZMBksftMlvXL4XJMkrwwxQ0kQLEdd42vc",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+          },
+          "displayName": "The Velvet Index",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Vocalist",
+              "level": "Lead"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    },
+    "r5": {
+      "master": {
+        "blobId": "taYMifq6WZ0MtlJOo2XOveYvp9fC-3T39lR6oTKOVLo"
+      },
+      "streamingTranscode": "53hUK9WQ6VVReHpYLDcgrlXYqbtO5MjHNKypvlN5_wE",
+      "adminAddress": {
+        "kind": "address",
+        "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+      },
+      "credits": [
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+          },
+          "displayName": "The Velvet Index",
+          "primaryArtist": true,
+          "roles": [
+            {
+              "type": "Performer",
+              "level": "Primary"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x6272eb0a91f2a0d2beb064bae0d8f3444e2f286e99ab049a86ed2b9953aec5ff"
+          },
+          "displayName": "Theo Bramwell",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x0b5f23018023a05ece75d27471befa4b33b44ac12c9e00a90d8a1c94b76d0cfb"
+          },
+          "displayName": "Rosa Lind",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x52fcfe5c423e9da3884641d7bab4992b8d72390209b5d37db6d4e0e2ea8985a2"
+          },
+          "displayName": "August Pike",
+          "roles": [
+            {
+              "type": "Performer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0xc007ded564ea0ad5ccf023d022da102775517f19fe1e6be4c6f4ed3e84089c61"
+          },
+          "displayName": "Kofi Mensah",
+          "roles": [
+            {
+              "type": "Producer",
+              "level": "Principal"
+            },
+            {
+              "type": "MixingEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x747f0b00dcf31a87d4b5b7034c8911de60dbedc3c319df57bb28afb2e1d9d5b1"
+          },
+          "displayName": "Elsa Brandt",
+          "roles": [
+            {
+              "type": "MasteringEngineer"
+            }
+          ]
+        },
+        {
+          "identity": {
+            "kind": "party",
+            "value": "0x632500b6ea27c8a7a7aecd4a8159135d37f572239172dbb75ab3003e784087e0"
+          },
+          "displayName": "Goldline Music",
+          "roles": [
+            {
+              "type": "Custom",
+              "name": "Label"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "release": {
+    "cover": {
+      "still": "mhlnPtpxT-UliT7ggiq7M0TJcy3Dh2E5MIiV6pnbexA"
+    },
+    "adminAddress": {
+      "kind": "address",
+      "value": "0x455b4324db2800fb1f6b1fe420dce946187c7d01a72c890d8c8ca6e83e557e59"
+    },
+    "credits": [
+      {
+        "identity": {
+          "kind": "party",
+          "value": "0xbb4e07c45bcdd530899c35ad3a2cc2fbbfe311c29f301054069e1decf90bb7b9"
+        },
+        "displayName": "The Velvet Index",
+        "role": "Primary"
+      }
+    ]
+  },
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "20000000",
+      "currency": "0x77774cb7b8cb5622b4ef2658101bf5f1e965418297fe874b683df8f760b6e749::fakeusd::FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

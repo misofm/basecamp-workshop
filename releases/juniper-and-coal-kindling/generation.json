@@ -1,0 +1,68 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "kindling",
+  "tracks": [
+    {
+      "track": "woodsmoke",
+      "title": "Woodsmoke",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "zuQ8Ff4c2KFCWtwmlizG",
+      "requestedSeconds": 140,
+      "seconds": 139.97,
+      "instrumental": false,
+      "prompt": "Indie folk song with warm male and female harmony vocals about a cabin in winter, fingerpicked acoustic guitar, soft kick drum stomps, banjo accents, intimate and earthy, G major, 96 BPM"
+    },
+    {
+      "track": "river-names",
+      "title": "River Names",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "ANyc1pilX3sg6no4xcD0",
+      "requestedSeconds": 135,
+      "seconds": 134.954,
+      "instrumental": false,
+      "prompt": "Gentle indie folk ballad, female lead vocal about remembering the names of rivers from childhood, nylon guitar, cello, light brushed snare, nostalgic, D major, 84 BPM"
+    },
+    {
+      "track": "stove-light",
+      "title": "Stove Light",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "8FvHuyW0buIY31X1NnUI",
+      "requestedSeconds": 110,
+      "seconds": 110.016,
+      "instrumental": true,
+      "prompt": "Instrumental acoustic folk interlude, two intertwined fingerstyle guitars, crackling fire ambience, soft harmonium drone, peaceful and slow, C major"
+    },
+    {
+      "track": "northbound-train",
+      "title": "Northbound Train",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "WdzZa03uvuCJXtWAInS8",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": false,
+      "prompt": "Upbeat indie folk stomper, group vocals and handclaps, driving strummed acoustic guitar, mandolin, kick drum on every beat, song about leaving town on a northbound train, A major, 120 BPM"
+    },
+    {
+      "track": "embers",
+      "title": "Embers",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Q0PBtVGI90Vulw5DzGLf",
+      "requestedSeconds": 145,
+      "seconds": 145.032,
+      "instrumental": false,
+      "prompt": "Slow-building indie folk closer, hushed male vocal grows into a full harmony chorus, piano and acoustic guitar, swelling strings, about the last embers of a fire, E major, 76 BPM",
+      "mastering": {
+        "gainDb": -1.3,
+        "sourceTruePeakDbtp": -0.7,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

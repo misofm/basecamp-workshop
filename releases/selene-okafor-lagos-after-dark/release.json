@@ -1,0 +1,176 @@
+{
+  "compositions": [
+    {
+      "ref": "c1",
+      "title": "Rooftop Signal",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c2",
+      "title": "Danfo Ride",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c3",
+      "title": "Golden Hour",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c4",
+      "title": "Third Mainland",
+      "royaltyRateBps": 2000
+    },
+    {
+      "ref": "c5",
+      "title": "Taxi Home",
+      "royaltyRateBps": 2000
+    }
+  ],
+  "recordings": [
+    {
+      "ref": "r1",
+      "composition": {
+        "ref": "c1"
+      },
+      "durationDisplay": "2:20",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "a430186dedb73126824dd01fa17e004ca66b9201565dcccfe899f9802c70b24a"
+      }
+    },
+    {
+      "ref": "r2",
+      "composition": {
+        "ref": "c2"
+      },
+      "durationDisplay": "2:05",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "20edaaaf8817558418fef031b269cf5b0ae0f7666d4c0a9c21df37005ab2222b"
+      }
+    },
+    {
+      "ref": "r3",
+      "composition": {
+        "ref": "c3"
+      },
+      "durationDisplay": "2:15",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "f5e6138b027126b2472169941d820cc9e7f311dca824671868a74f98881f6577"
+      }
+    },
+    {
+      "ref": "r4",
+      "composition": {
+        "ref": "c4"
+      },
+      "durationDisplay": "2:25",
+      "advisory": "NotExplicit",
+      "languages": {
+        "instrumental": true
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "33bc2a398bee954d341bc86babd9073be7608ca25c454aed61bdd7ccbff5175e"
+      }
+    },
+    {
+      "ref": "r5",
+      "composition": {
+        "ref": "c5"
+      },
+      "durationDisplay": "2:00",
+      "advisory": "NotExplicit",
+      "languages": {
+        "codes": [
+          "en"
+        ]
+      },
+      "master": {
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "ba0990767cbc0339d263d7e1e0c0df78c6bc86d8916185cce6c71f4ee44a6258"
+      }
+    }
+  ],
+  "release": {
+    "title": "Lagos After Dark",
+    "kind": "ExtendedPlay",
+    "description": "Late-night Afrobeats and Afro-house for rooftops and taxis home.",
+    "genres": {
+      "primary": "POP",
+      "secondary": [
+        "R_AND_B",
+        "DANCE"
+      ]
+    },
+    "tracks": [
+      {
+        "recording": {
+          "ref": "r1"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r2"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r3"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r4"
+        },
+        "splitBps": 2000
+      },
+      {
+        "recording": {
+          "ref": "r5"
+        },
+        "splitBps": 2000
+      }
+    ]
+  }
+}

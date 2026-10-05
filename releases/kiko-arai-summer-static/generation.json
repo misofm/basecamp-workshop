@@ -1,0 +1,96 @@
+{
+  "_comment": "Provenance for AI-generated workshop audio. Masters are 16-bit/44.1 kHz PCM from ElevenLabs Music, losslessly encoded to STREAMINFO-only FLAC.",
+  "release": "summer-static",
+  "tracks": [
+    {
+      "track": "coastline-fm",
+      "title": "Coastline FM",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Ud4KeQVLtN7jdIDLWyHt",
+      "requestedSeconds": 135,
+      "seconds": 134.954,
+      "instrumental": false,
+      "prompt": "Japanese-inspired city pop song, bright female vocals in English about a summer radio station, 112 BPM, slap bass, funky clean guitar, glossy electric piano, horn section, E major, 1980s production",
+      "mastering": {
+        "gainDb": -3.1,
+        "sourceTruePeakDbtp": 1.1,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "late-train",
+      "title": "Late Train",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "gRRDIHsk6Z3riASnx8Ru",
+      "requestedSeconds": 130,
+      "seconds": 129.985,
+      "instrumental": false,
+      "prompt": "Melancholic city pop ballad, wistful female vocal about missing the last train, 98 BPM, fretless bass, DX7 electric piano, soft drum machine, saxophone solo, C-sharp minor",
+      "mastering": {
+        "gainDb": -2.2,
+        "sourceTruePeakDbtp": 0.2,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "polaroid-sunset",
+      "title": "Polaroid Sunset",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "rrK1amKy9QwHXANccA7J",
+      "requestedSeconds": 120,
+      "seconds": 120.047,
+      "instrumental": true,
+      "prompt": "Instrumental city pop fusion, 106 BPM, catchy synth lead melody, funky slap bass, crisp drums, brass hits, sunset drive mood, A major",
+      "mastering": {
+        "gainDb": -2.0,
+        "sourceTruePeakDbtp": -0.0,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "vending-machine-love",
+      "title": "Vending Machine Love",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "Epz2taB4R7AXjeN5kYbI",
+      "requestedSeconds": 125,
+      "seconds": 125.016,
+      "instrumental": false,
+      "prompt": "Playful upbeat city pop song, cute female vocals about meeting someone at a vending machine, 118 BPM, disco hi-hats, funky guitar, sparkling synths, F major",
+      "mastering": {
+        "gainDb": -2.1,
+        "sourceTruePeakDbtp": 0.1,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    },
+    {
+      "track": "cassette-rewind",
+      "title": "Cassette Rewind",
+      "provider": "elevenlabs-music",
+      "outputFormat": "pcm_44100",
+      "songId": "jBXHOQ595o0XnMblFTiS",
+      "requestedSeconds": 140,
+      "seconds": 139.97,
+      "instrumental": false,
+      "prompt": "Dreamy city pop closer, soft female vocal about rewinding an old cassette, 94 BPM, lush chorus guitar, warm analog synths, gentle groove, D major, nostalgic",
+      "mastering": {
+        "gainDb": -1.9,
+        "sourceTruePeakDbtp": -0.1,
+        "targetTruePeakDbtp": -2.0,
+        "reason": "miso transcoder true-peak ceiling",
+        "dither": "triangular"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+
+.wrangler/
+dist-e2e
+
+# bank server ledger (testnet payouts)
+server/data/

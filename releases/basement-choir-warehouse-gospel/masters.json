@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "GAAz3MXLpxO4j7USOA9O6H20UO8q3VPlpeNgnY4zGts",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-lift-me-higher": {
+      "master": {
+        "blobId": "Ygfk1zOBRNWcxxbQCUyrkYlZHNYfvSemvIQrAK53sZk",
+        "bytes": 18255229,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6612992",
+        "pcmDigest": "af2c957b685825d1ed29689aed4443bcd2bc35b33e37818a382f4043906b28be"
+      },
+      "masterStored": true,
+      "streamingTranscode": "kA6dWnnZVZwRwIyYnfPr6-55knrY3OJYnz7Xbldvsko",
+      "transcodeDigest": "07e55041c426141911c140b0283cb857a23c19ef4e6d5bf26276da0b0684af97"
+    },
+    "02-concrete-cathedral": {
+      "master": {
+        "blobId": "Vhn5h_nRFeoP8uL0xepuM5IktdlNaFVDhfXhhC_oixU",
+        "bytes": 13772583,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "63025c79f14b00a94f7653da5024a9f919ed8d9990fbcba58ce18c83c01f7fa6"
+      },
+      "masterStored": true,
+      "streamingTranscode": "9pcmDwrh2Cvz3LilbAHwQ5b7CwZEbMMliLqedy7M6AM",
+      "transcodeDigest": "f2d5213623565c73067504edd3812c9d342ca01b957499485ebcfc412c6fdd17"
+    },
+    "03-sunday-at-sunrise": {
+      "master": {
+        "blobId": "AiDNvsTaraeXtkvLtDkgZHNXFvYHvz8N2-IvR6SWUZo",
+        "bytes": 15362400,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "d6aca406ac608d651d2c2b167cf0c76c6decc6a71d064441b6897080616ec273"
+      },
+      "masterStored": true,
+      "streamingTranscode": "hll0b_pe8ejr5OXXzfG43WZ8za77ptYPz9iFe4-iyXM",
+      "transcodeDigest": "96de9919d91de07b34f69584813eac513307494df57969f95d13d226afc2f597"
+    },
+    "04-strobe-psalm": {
+      "master": {
+        "blobId": "sBDDGWRh-Vl08Ru7yPI0r9KQrGxJcuY-NGwGmQpgJ5I",
+        "bytes": 14886628,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5955584",
+        "pcmDigest": "70303b5bc5e8f67408ef2820ff6d051060219fc0a4b2eb1276fab377862ccaf1"
+      },
+      "masterStored": true,
+      "streamingTranscode": "GFH_El2mtNMWV6a1tJcIgEuR9G7UfFHJCje5V7VBSWs",
+      "transcodeDigest": "782b953fd89f58299a360b566ca8bff97f6cca0053b16151326ec6f54a1b2649"
+    },
+    "05-doors-close-at-six": {
+      "master": {
+        "blobId": "7ZpnbnxbzLdcOiFOp84GUBb4GhKCEN6ZBj-wJkx358s",
+        "bytes": 15034079,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6615040",
+        "pcmDigest": "027feb02b44cd46afc8d07283039508ba5feff8112cf455af9c0b155b8f87b3e"
+      },
+      "masterStored": true,
+      "streamingTranscode": "2DyGObWY4K4gNxLAjdrdWjgiupf2Z_hbKClCxARjDMM",
+      "transcodeDigest": "9717ae0b779b28f1f179a9fa5cf45336e0ac2a73cad16500a1f0e6bef7086587"
+    }
+  }
+}

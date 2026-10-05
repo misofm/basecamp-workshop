@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "YCsWvOiq1Bo1mY6Tk1573eRqMFS1ukmorPnRHkxooyE",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-platform-nine": {
+      "master": {
+        "blobId": "UYsrGgTtnFPP6_tRk98CJhtqUSpzoLO_-tYsjvcuajU",
+        "bytes": 14599782,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "05000fe60f21192e3f7c996375c07c31d0ba42bcc0cd9ae0b1069ffef3a3fa34"
+      },
+      "masterStored": true,
+      "streamingTranscode": "fSyCbrzgJxyFBJujXP1NQtrxzF7AGE6lS1Kg-eDA6mk",
+      "transcodeDigest": "a3d7b3f8b0f06e40662d10ea275ee6852fed308c47ff5fd83095f78058a87829"
+    },
+    "02-mind-the-gap": {
+      "master": {
+        "blobId": "NpP5LwNF6DW7gtrxpzRbtiiLymYNdipgufsAvzZr9-4",
+        "bytes": 15832273,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5734400",
+        "pcmDigest": "88348c5bc071001f5a8c1aba24262958bfc96fe3476adc52de94a0d0be2e940d"
+      },
+      "masterStored": true,
+      "streamingTranscode": "iaMVtxSS1RC1P8zk4dbXndD49Yt-5-2qdhnvpb3lp2s",
+      "transcodeDigest": "3cfe2ba09a1611aa8d980fb3e7c3d7057b6dd8a0fe5c48c4cc5aa80e710cc250"
+    },
+    "03-signal-failure": {
+      "master": {
+        "blobId": "vL9Js24yh3Fw9H14efFDslo1DvbBe7JUgmyIEG7rQUc",
+        "bytes": 15244836,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "27c831e95e7f0aac6c6f43a28882e8dd32779bbe8982b7189aef88f05cd93e06"
+      },
+      "masterStored": true,
+      "streamingTranscode": "AT3vFX7N9YxuZqFfMXxImdZlFrV7HnBiRLrSXSHWxts",
+      "transcodeDigest": "1c1cecf6abf3b41586982b7728425451b4720b8913cbd3120ae4056e0254cde4"
+    },
+    "04-night-bus": {
+      "master": {
+        "blobId": "a1gbqTCND9LL9Mg9ytJwjol3RfNX9_fWFapQfa3Wtp0",
+        "bytes": 15037769,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "d9ad46d6b37b4b306a848f4a0fca0e7bcdd00c42f6a4ca30ce7c3fa3ee388c41"
+      },
+      "masterStored": true,
+      "streamingTranscode": "4RA-shDKl_l0X6FvM3EaYGCx4iAQleDGD25XPyj0Mrk",
+      "transcodeDigest": "5f8bff4910e978cb963b5c372f3bffec7855cbcb3325966a8f1d1c2e2b7c6b72"
+    },
+    "05-end-of-the-line": {
+      "master": {
+        "blobId": "D2akRzVGFFZ7nA2qmqWCGzJHfOperCmt12lsLLKm7GM",
+        "bytes": 13106500,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "e26bd0f0606b763ff100c2362da22ea657297ebd150d8c6b832275f1e69b5741"
+      },
+      "masterStored": true,
+      "streamingTranscode": "PX78R2FA7AFncKhdmHEYO44rxQ9w8LDoLBibiTuO5wI",
+      "transcodeDigest": "638c41fe4c4ad3bc07d01bf87ee87120b66fb7f39b1733a9c05e3bea567d9c2e"
+    }
+  }
+}

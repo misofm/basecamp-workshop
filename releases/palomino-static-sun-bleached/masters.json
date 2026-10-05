@@ -1,0 +1,89 @@
+{
+  "_comment": "Media for this release. Masters are STREAMINFO-only 16-bit/44.1 kHz FLAC; transcodes are miso.transcode-package/1 HLS quilts. All bytes are stored on Walrus testnet (see walrus.epochs); scripts/store-media.ts wrote this file and scripts/fetch-masters.ts downloads the masters by blob id.",
+  "walrus": {
+    "network": "testnet",
+    "epochs": 53
+  },
+  "cover": {
+    "blobId": "-w9exU8l0F20S5q0xL88MdoZhlnqBDZXFPbhmzd83nY",
+    "contentType": "image/webp",
+    "stored": true
+  },
+  "tracks": {
+    "01-riptide-rendezvous": {
+      "master": {
+        "blobId": "G7W-H_9gKdds-ITdQ-cL5DgEutpEWgbxg9mayQpw6n8",
+        "bytes": 13544124,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "5ccb4ff85fb1ecd3deabbce9c624608cd8b3d34f6b64f07997e7653abe03b68b"
+      },
+      "masterStored": true,
+      "streamingTranscode": "lXbtwz6EPurFsBrkmjeXKa0s57Y5gX9uaFYaJ3GggDI",
+      "transcodeDigest": "ea5712635b5be8081d2c5f129afdf2b69ce93ce34dadde87cb2019071130cd50"
+    },
+    "02-boardwalk-heat": {
+      "master": {
+        "blobId": "7liofn8AQJ-Yiqq5ylLEbDiH-HW6Nrr3T1EAXj410-U",
+        "bytes": 13417503,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "8d56c7a06fff0a82c9d5afccc25d9b5146162970b25052a5416ad2b3c02c6f71"
+      },
+      "masterStored": true,
+      "streamingTranscode": "JdU0E-tRE_NUNB8L3q-A3D2TqLf9Og5jR7oXs0uwewg",
+      "transcodeDigest": "456ca2a197fb422f146581494de075bafae6f368cd4856684b64924d416aebde"
+    },
+    "03-tiki-lounge": {
+      "master": {
+        "blobId": "GiNeyAuojc-poyXsTliA0-7BNoY9mTNY3jiJRTnrmnM",
+        "bytes": 8107590,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5070848",
+        "pcmDigest": "6f5aeccf085f0be98716f5ff01032449145aeb4212e4e8100636be8e88a590e5"
+      },
+      "masterStored": true,
+      "streamingTranscode": "9AunnErVkCrvxyt4IE7LU00a3k5OaCC6rFjyCPJzxR0",
+      "transcodeDigest": "d0baddec7c800fcda80267d64b6d2ac3bb47511a7e018cbadda873579d5e9fb8"
+    },
+    "04-wipeout-weather": {
+      "master": {
+        "blobId": "M0Hkfhv8XfrplpbMxnhgX9bTdpfZeYzLUC-mAg5X3MU",
+        "bytes": 15283913,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "f2602c857c9c1732fa3563d636b6802e0ee52a3691a98c06ebde521949b1adf3"
+      },
+      "masterStored": true,
+      "streamingTranscode": "sHHTtxG4EOzPqPeWSGzc3yRyzxIENkxZHNfiPMjuA3k",
+      "transcodeDigest": "8f27926a15cfbdc03970b82f3518a8528ab903677399a839b690a4675c115767"
+    },
+    "05-salt-in-the-amp": {
+      "master": {
+        "blobId": "yxz4R5ZCXAhWUKiO3z6RYn-y65JApF0FOLwEUvFAK_4",
+        "bytes": 11461336,
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "79054ada673f4a58d69d9695352fcbfa7faaa2365166888fcfaaedd996e83337"
+      },
+      "masterStored": true,
+      "streamingTranscode": "ZNnNENz4BF0bKsdU4o727L3oj0kNb7qZGXA1Bch2ntk",
+      "transcodeDigest": "e5ed7d43c7f80c1331ef03f52ae7b2c998ab32ad42eb168781ea561fbe33dfc6"
+    }
+  }
+}

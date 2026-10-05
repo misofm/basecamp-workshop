@@ -225,3 +225,28 @@ export function tube(points: THREE.Vector3[], radius: number, segs = 16, radial 
   const curve = new THREE.CatmullRomCurve3(points, false, "centripetal");
   return new THREE.TubeGeometry(curve, segs, radius, radial, false);
 }
+
+/**
+ * Smooth rounded torso piece: a superellipsoid (exponent `p`: 1 = ellipsoid, → 0 = box)
+ * whose width/depth taper from bottom (w0, d0) to top (w1, d1). No chamfer ridges.
+ */
+export function softBox(w0: number, w1: number, h: number, d0: number, d1: number, p = 0.4, ws = 12, hs = 8): THREE.BufferGeometry {
+  const g = new THREE.SphereGeometry(1, ws, hs);
+  const pos = g.getAttribute("position") as THREE.BufferAttribute;
+  const f = (v: number) => Math.sign(v) * Math.pow(Math.abs(v), p);
+  for (let i = 0; i < pos.count; i++) {
+    const sx = f(pos.getX(i));
+    const sy = f(pos.getY(i));
+    const sz = f(pos.getZ(i));
+    const t = (sy + 1) / 2;
+    pos.setXYZ(i, (sx * (w0 + (w1 - w0) * t)) / 2, (sy * h) / 2, (sz * (d0 + (d1 - d0) * t)) / 2);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+/** Front surface (z) of a softBox at normalised height sy ∈ [−1, 1], as a fraction of its half-depth. */
+export function softFront(sy: number, p = 0.4): number {
+  const a = Math.min(1, Math.abs(sy));
+  return Math.pow(Math.max(0, 1 - Math.pow(a, 2 / p)), p / 2);
+}

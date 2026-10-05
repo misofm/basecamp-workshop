@@ -203,9 +203,9 @@ function buildColumn(b: PartBuilder, t: TamashiTraits, d: TvDims, L: TvLook): vo
       const kc = i === 0 ? L.knob : L.knob2;
       if (hi) {
         // Dark ring behind, the notched knob, a raised bar across its face.
-        b.add(cyl(d.knobR * 1.14, d.knobR * 1.14, 0.004, 14), shade(L.front, 0.55), GLOSS, tr(colX, ky, zF + 0.002, Math.PI / 2));
-        b.add(notchedKnob(d.knobR, 0.02), (_p, n) => (n.y > 0.5 ? shade(kc, 1.12) : shade(kc, 0.82)), KNOB, tr(colX, ky, zF + 0.012, Math.PI / 2));
-        b.add(box(d.knobR * 1.55, d.knobR * 0.3, 0.012), shade(kc, 0.86), KNOB, tr(colX, ky, zF + 0.024, 0, 0, i === 0 ? -Math.PI / 4 : 0));
+        b.add(cyl(d.knobR * 1.16, d.knobR * 1.16, 0.006, 14), lum(L.front) > 0.45 ? col("#34343a") : shade(L.front, 0.55), GLOSS, tr(colX, ky, zF + 0.002, Math.PI / 2));
+        b.add(notchedKnob(d.knobR, 0.02), (_p, n) => (n.y > 0.5 ? shade(kc, 1.12) : shade(kc, lum(kc) > 0.6 ? 0.62 : 0.82)), KNOB, tr(colX, ky, zF + 0.012, Math.PI / 2));
+        b.add(box(d.knobR * 1.55, d.knobR * 0.3, 0.012), shade(kc, lum(kc) > 0.6 ? 0.6 : 0.86), KNOB, tr(colX, ky, zF + 0.024, 0, 0, i === 0 ? -Math.PI / 4 : 0));
       } else {
         b.add(cyl(d.knobR, d.knobR, 0.02, 6, true), kc, KNOB, tr(colX, ky, zF + 0.01, Math.PI / 2));
         b.add(quad(d.knobR * 1.6, d.knobR * 1.6), kc, KNOB, tr(colX, ky, zF + 0.02));
@@ -224,12 +224,13 @@ function buildColumn(b: PartBuilder, t: TamashiTraits, d: TvDims, L: TvLook): vo
           b.add(box(gw * 0.24, gh * 0.16, 0.008), col("#e8e8ea"), GLOSS, tr(colX + (c - 1) * gw * 0.3, gy0 + gh * (0.16 + r * 0.22), zF + 0.01));
     }
   } else if (grille) {
-    b.add(hi ? rbox(gw, gh, 0.012, 0.012) : box(gw, gh, 0.012), hi ? L.knob : mix(L.knob, dark, 0.45), KNOB, tr(colX, gy0 + gh / 2, zF + 0.004));
+    if (lum(L.front) > 0.45) b.add(hi ? rbox(gw + 0.01, gh + 0.01, 0.006, 0.014) : box(gw + 0.01, gh + 0.01, 0.006), col("#34343a"), GLOSS, tr(colX, gy0 + gh / 2, zF + 0.002));
+    b.add(hi ? rbox(gw, gh, 0.012, 0.012) : box(gw, gh, 0.012), hi ? L.knob : mix(L.knob, dark, 0.55), KNOB, tr(colX, gy0 + gh / 2, zF + 0.004));
     if (hi) {
       const slats = Math.max(5, Math.round(gh / 0.0165));
       const pitch = (gh * 0.86) / slats;
       for (let i = 0; i < slats; i++) {
-        b.add(quad(gw * 0.7, pitch * 0.48), dark, { r: 0.8, m: 0 }, tr(colX, gy0 + gh * 0.07 + pitch * (i + 0.5), zF + 0.0105));
+        b.add(quad(gw * 0.72, pitch * 0.56), dark, { r: 0.8, m: 0 }, tr(colX, gy0 + gh * 0.07 + pitch * (i + 0.5), zF + 0.0105));
       }
     }
   }

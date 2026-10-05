@@ -11,7 +11,7 @@
  */
 import * as THREE from "three";
 import { mentions, otherText, type TamashiTraits } from "./traits";
-import { box, cone, cyl, limb, PartBuilder, rbox, sphere, taperBox, torus, tr, tube, type Weights } from "./geometry";
+import { box, cone, cyl, limb, PartBuilder, rbox, softBox, softFront, sphere, taperBox, torus, tr, tube, type Weights } from "./geometry";
 import { CLOTH, col, colorWord, GOLD, lum, METAL, mix, PLASTIC, RUBBER, shade, SKIN, type Finish } from "./materials";
 import { J, type RigBone } from "./rig";
 import type { TvDims } from "./tv-head";
@@ -519,10 +519,11 @@ function sneak(L: Look): void {
 // ── Building ──
 
 /** Front surface z of the chest box at chest-local height y. */
-const CHEST = { y0: -0.14, h: 0.285, dB: 0.2, dT: 0.215, wB: 0.31, wT: 0.38 };
+const CHEST = { y0: -0.18, h: 0.33, dB: 0.195, dT: 0.215, wB: 0.3, wT: 0.375 };
 function chestFrontZ(y: number, k = 1): number {
   const t = THREE.MathUtils.clamp((y - CHEST.y0) / CHEST.h, 0, 1);
-  return ((CHEST.dB + (CHEST.dT - CHEST.dB) * t) / 2) * k;
+  const front = Math.max(0.55, softFront(t * 2 - 1));
+  return ((CHEST.dB + (CHEST.dT - CHEST.dB) * t) / 2) * k * front;
 }
 
 export function buildBody(b: PartBuilder, t: TamashiTraits, L: Look, d: TvDims): void {
@@ -537,15 +538,15 @@ export function buildBody(b: PartBuilder, t: TamashiTraits, L: Look, d: TvDims):
     b.on("spine").add(sphere(0.17, hi ? 10 : 5, hi ? 6 : 3), L.top, { r: 0.95, m: 0 }, tr(0, 0, 0, 0, 0, 0, 1, 0.8, 0.9));
     if (hi && L.buttons) for (const [bone, y, z] of [["chest", 0.05, 0.16], ["chest", -0.05, 0.16], ["spine", -0.02, 0.15], ["hips", -0.02, 0.17]] as const) b.on(bone).add(sphere(0.016, 6, 4), L.buttons, CLOTH, tr(0, y, z));
   } else {
-    b.on("hips").add(hi ? taperBox(0.3 * k, 0.3 * k, 0.19, 0.21 * k, 0.2 * k, 0.07, 1) : box(0.29 * k, 0.19, 0.2 * k), L.pants, CLOTH, tr(0, -0.045, 0));
+    b.on("hips").add(hi ? softBox(0.295 * k, 0.285 * k, 0.21, 0.198 * k, 0.19 * k, 0.4, 12, 6) : box(0.29 * k, 0.19, 0.2 * k), L.pants, CLOTH, tr(0, -0.045, 0));
     const spineLow = L.untucked ? -0.135 : -0.1;
     const spineH = 0.21 - spineLow;
-    b.on("spine").add(hi ? taperBox((L.untucked ? 0.305 : 0.275) * k, 0.29 * k, spineH, (L.untucked ? 0.212 : 0.19) * k, 0.19 * k, 0.075, 1) : box(0.3 * k, spineH, 0.2 * k), L.top, CLOTH, tr(0, spineLow + spineH / 2, 0));
-    b.on("chest").add(hi ? taperBox(CHEST.wB * k, CHEST.wT * k, CHEST.h, CHEST.dB * k, CHEST.dT * k, 0.08, 2) : box(CHEST.wT * k, CHEST.h, CHEST.dT * k), L.top, CLOTH, tr(0, CHEST.y0 + CHEST.h / 2, 0));
+    b.on("spine").add(hi ? softBox((L.untucked ? 0.305 : 0.282) * k, 0.28 * k, spineH, (L.untucked ? 0.205 : 0.19) * k, 0.185 * k, 0.4, 12, 6) : box(0.3 * k, spineH, 0.2 * k), L.top, CLOTH, tr(0, spineLow + spineH / 2, 0));
+    b.on("chest").add(hi ? softBox(CHEST.wB * k, CHEST.wT * k, CHEST.h, CHEST.dB * k, CHEST.dT * k, 0.4, 14, 10) : box(CHEST.wT * k, CHEST.h, CHEST.dT * k), L.top, CLOTH, tr(0, CHEST.y0 + CHEST.h / 2, 0));
   }
   const fz = (y: number) => chestFrontZ(y, k);
   // ── Neck ──
-  b.on("neck").add(cyl(0.06, 0.064, 0.14, hi ? 10 : 5, true), L.skin, SKIN, tr(0, 0.055, 0.0));
+  b.on("neck").add(cyl(0.078, 0.084, 0.13, hi ? 12 : 6, true), L.skin, SKIN, tr(0, 0.06, 0.0));
   // ── Collar ──
   if (hi) buildCollar(b, L, k, fz);
   // ── Arms ──
@@ -598,12 +599,12 @@ function buildArm(b: PartBuilder, L: Look, side: 1 | -1, k: number, hi: boolean,
   const sleeveFore = L.sleeves === "long" ? L.sleeve : L.skin;
   const fin = (c: THREE.Color) => (c === L.skin ? SKIN : CLOTH);
   const wide = L.collar === "cross" ? 1.12 : 1;
-  b.on(up).add(sphere(0.074 * k, rs, hi ? 6 : 3), sleeveUp, fin(sleeveUp), tr(0, -0.005, 0));
+  b.on(up).add(sphere(0.064 * k, rs, hi ? 6 : 3), sleeveUp, fin(sleeveUp), tr(-Math.sign(side) * 0.008, -0.012, 0, 0, 0, 0, 1, 0.9, 1));
   if (L.sleeves === "short") {
-    b.add(limb(0.072 * k, 0.068 * k, 0.13, rs), L.sleeve, CLOTH);
+    b.add(limb(0.066 * k, 0.064 * k, 0.13, rs), L.sleeve, CLOTH);
     b.add(limb(0.06 * k, 0.053 * k, upLen, rs), L.skin, SKIN);
   } else {
-    b.add(limb(0.068 * k * wide, 0.058 * k * wide, upLen, rs), sleeveUp, fin(sleeveUp));
+    b.add(limb(0.062 * k * wide, 0.056 * k * wide, upLen, rs), sleeveUp, fin(sleeveUp));
   }
   if (L.sleeves === "none" && L.collar !== "none" && hi) {
     // Tank-top strap edge.
@@ -615,10 +616,10 @@ function buildArm(b: PartBuilder, L: Look, side: 1 | -1, k: number, hi: boolean,
   if (hi && L.stripes && L.sleeves === "long") {
     // Two thin stripes down the outside of the sleeve and over the shoulder.
     for (const dz of [-0.008, 0.008]) {
-      b.on(up).add(box(0.006, upLen, 0.006), L.stripes, CLOTH, tr(side * 0.064 * k, -upLen / 2 + 0.005, dz, 0, 0, side * 0.035));
+      b.on(up).add(box(0.006, upLen, 0.006), L.stripes, CLOTH, tr(side * 0.06 * k, -upLen / 2 + 0.005, dz, 0, 0, side * 0.02));
       b.on(fore).add(box(0.006, foreLen, 0.006), L.stripes, CLOTH, tr(side * 0.054 * k, -foreLen / 2, dz, 0, 0, side * 0.02));
       b.on("chest").add(box(0.16, 0.006, 0.006), L.stripes, CLOTH, tr(side * 0.12, 0.147, dz, 0, 0, side * -0.2));
-      b.on(up).add(new THREE.TorusGeometry(0.074 * k, 0.003, 3, 8, Math.PI / 2), L.stripes, CLOTH, tr(0, -0.005, dz, 0, 0, side > 0 ? 0 : Math.PI / 2));
+      b.on(up).add(new THREE.TorusGeometry(0.064 * k, 0.003, 3, 8, Math.PI / 2), L.stripes, CLOTH, tr(-side * 0.008, -0.012, dz, 0, 0, side > 0 ? 0 : Math.PI / 2));
     }
   }
   // Mitten hand with a thumb.
@@ -659,19 +660,19 @@ function buildCollar(b: PartBuilder, L: Look, k: number, fz: (y: number) => numb
   b.on("chest");
   switch (L.collar) {
     case "crew":
-      b.add(torus(0.068, 0.017, 5, 14), cc, CLOTH, tr(0, top - 0.01, 0.005, Math.PI / 2 - 0.12));
+      b.add(torus(0.09, 0.018, 5, 16), cc, CLOTH, tr(0, top - 0.008, 0.004, Math.PI / 2 - 0.1));
       break;
     case "turtle":
-      b.add(cyl(0.066, 0.075, 0.08, 10), cc, CLOTH, tr(0, top + 0.02, 0));
+      b.add(cyl(0.09, 0.098, 0.08, 12), cc, CLOTH, tr(0, top + 0.02, 0));
       break;
     case "mandarin":
-      b.add(cyl(0.064, 0.072, 0.045, 10, true), cc, CLOTH, tr(0, top + 0.005, 0.005));
+      b.add(cyl(0.09, 0.096, 0.045, 12, true), cc, CLOTH, tr(0, top + 0.005, 0.005));
       break;
     case "ring":
-      b.add(torus(0.1, 0.032, 6, 14), cc, METAL, tr(0, top - 0.005, 0, Math.PI / 2));
+      b.add(torus(0.115, 0.032, 6, 14), cc, METAL, tr(0, top - 0.005, 0, Math.PI / 2));
       break;
     case "hood":
-      b.add(torus(0.085, 0.034, 5, 12), cc, CLOTH, tr(0, top - 0.005, -0.02, Math.PI / 2 - 0.25));
+      b.add(torus(0.1, 0.034, 5, 12), cc, CLOTH, tr(0, top - 0.005, -0.02, Math.PI / 2 - 0.25));
       b.add(sphere(0.1, 8, 5), shade(cc, 0.95), CLOTH, tr(0, top - 0.02, -0.13 * k, 0, 0, 0, 1.25, 0.9, 0.6));
       break;
     case "v":
@@ -701,7 +702,7 @@ function buildCollar(b: PartBuilder, L: Look, k: number, fz: (y: number) => numb
         b.add(box(w, len, 0.014), bandC, CLOTH, tr(x * (cross ? (s > 0 ? 1 : 0.6) : 1), yc, fz(yc) + (cross && s > 0 ? 0.011 : 0.007), 0, 0, -s * ang));
       }
       if (L.collar === "shirt") {
-        b.add(torus(0.064, 0.012, 4, 12, Math.PI * 1.4), cc, CLOTH, tr(0, top - 0.005, 0.0, Math.PI / 2 - 0.15, 0, -Math.PI * 0.2 + Math.PI / 2 + Math.PI));
+        b.add(torus(0.09, 0.012, 4, 12, Math.PI * 1.4), cc, CLOTH, tr(0, top - 0.005, 0.0, Math.PI / 2 - 0.15, 0, -Math.PI * 0.2 + Math.PI / 2 + Math.PI));
       }
       if (L.collar === "sailor") {
         b.add(box(0.3, 0.2, 0.01), cc, CLOTH, tr(0, top - 0.08, -0.108 * k, 0.08));
@@ -812,13 +813,13 @@ function buildAccessories(b: PartBuilder, t: TamashiTraits, L: Look, k: number, 
     for (const y of [top - 0.07, top - 0.12, top - 0.17]) b.add(sphere(0.008, 5, 4), L.buttons, PLASTIC, tr(0, y, fz(y) + 0.01));
   }
   if (hi && mentions(acc, "necklace", "pendant", "chain")) {
-    b.add(torus(0.085, 0.005, 3, 14), col("#e0b030"), GOLD, tr(0, top - 0.035, 0.03, Math.PI / 2 - 0.55));
+    b.add(torus(0.1, 0.005, 3, 14), col("#e0b030"), GOLD, tr(0, top - 0.035, 0.03, Math.PI / 2 - 0.55));
     const pc = mentions(acc, "jade", "green") ? col("#30a070") : col("#e0b030");
     b.add(rbox(0.026, 0.03, 0.01, 0.004), pc, GOLD, tr(0, top - 0.105, fz(top - 0.105) + 0.012));
   }
   if (mentions(acc, "scarf", "neckerchief")) {
     const sc = mentions(acc, "neckerchief") ? (L.collarColor === L.top ? col(t.outfit.secondary) : L.collarColor) : (col(t.outfit.accent ?? t.outfit.secondary));
-    b.add(torus(0.08, 0.03, hi ? 5 : 3, hi ? 12 : 6), sc, CLOTH, tr(0, top + 0.005, 0.0, Math.PI / 2 - 0.1));
+    b.add(torus(0.098, 0.03, hi ? 5 : 3, hi ? 12 : 6), sc, CLOTH, tr(0, top + 0.005, 0.0, Math.PI / 2 - 0.1));
     if (hi) b.add(box(0.06, mentions(acc, "neckerchief") ? 0.07 : 0.22, 0.02), sc, CLOTH, tr(0.06, top - (mentions(acc, "neckerchief") ? 0.04 : 0.12), fz(top - 0.1) + 0.02, 0, 0, 0.12));
   }
   if (mentions(acc, "backpack")) {

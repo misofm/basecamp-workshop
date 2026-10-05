@@ -1,9 +1,9 @@
 /**
- * Visual QA for the Tamashi: `?gallery=1` lays out all 100 in a 10×10 grid (bleachers, id
- * labels, lit like the game at night); `?gallery=<id>` shows one up close in a 3/4 front view
+ * Visual QA for the Tamashi: `?gallery=1` lays out all 100 head to toe on a 20×5 wall with id
+ * labels, lit like the game at night (`&heads`: 10×10 bleachers framing the TVs); `?gallery=<id>` shows one up close in a 3/4 front view
  * next to its artwork. Not part of the game.
  *
- * Params: `&anim=idle|stroll|walk|run|carry|swing|cheer|wave|nod|sit|crouch`, `&yaw=<rad>`
+ * Params: `&anim=idle|carrywalk|stroll|walk|run|carry|swing|cheer|wave|nod|sit|crouch`, `&yaw=<rad>`
  * (fixed turn; default slowly turning), `&t=<s>` (simulate to that time, then freeze),
  * `&one` (with `?gallery=1`: token #1 alone), `&focus=head`, `&lod=far` (force the low-detail mesh), `&dist=<m>` (single view camera distance).
  * Sets `document.documentElement.dataset.gallery = "ready"` once every screen texture and
@@ -17,7 +17,7 @@ import { createTamashi, tamashiStats, type TamashiCharacter } from "./character"
 import { screensReady } from "./screen";
 import { TAMASHI_COUNT } from "./traits";
 
-type Anim = "idle" | "stroll" | "walk" | "run" | "carry" | "swing" | "cheer" | "wave" | "nod" | "sit" | "crouch";
+type Anim = "idle" | "carrywalk" | "stroll" | "walk" | "run" | "carry" | "swing" | "cheer" | "wave" | "nod" | "sit" | "crouch";
 
 export function runGallery(host: HTMLElement, param: string): void {
   const q = new URLSearchParams(location.search);
@@ -87,7 +87,7 @@ export function runGallery(host: HTMLElement, param: string): void {
       persp.position.set(0, 1.45, dist);
       persp.lookAt(0, anim === "sit" || anim === "crouch" ? 0.8 : 1.02, 0);
     }
-    if (anim === "carry" || anim === "swing") {
+    if (anim === "carry" || anim === "carrywalk" || anim === "swing") {
       record = new THREE.Mesh(new THREE.BoxGeometry(0.31, 0.31, 0.008), new THREE.MeshStandardMaterial({ color: "#d4a24a", roughness: 0.7 }));
       record.matrixAutoUpdate = false;
       scene.add(record);
@@ -112,42 +112,77 @@ export function runGallery(host: HTMLElement, param: string): void {
     side.append(img, info);
     host.append(side);
   } else {
-    // Bleachers: rows step back and up so every TV and upper body is visible.
-    const cols = 10;
-    const dx = 1.05;
-    const dz = 1.25;
-    const dy = 0.36;
-    const stepMat = new THREE.MeshStandardMaterial({ color: "#2e3e4e", roughness: 0.9 });
-    for (let r = 0; r < 10; r++) {
-      const step = new THREE.Mesh(new THREE.BoxGeometry(cols * dx + 0.6, 0.12, dz), stepMat);
-      step.position.set(0, r * dy - 0.06, -r * dz);
-      scene.add(step);
-      for (let col = 0; col < cols; col++) {
-        const id = r * cols + col + 1;
-        const c = createTamashi(id);
-        c.root.position.set((col - (cols - 1) / 2) * dx, r * dy, -r * dz);
-        scene.add(c.root);
-        chars.push(c);
-        const el = document.createElement("div");
-        el.textContent = `${id}`;
-        el.style.cssText = "position:absolute;transform:translate(-100%,-50%);padding:0 4px;border-radius:3px;background:#0009;font-weight:700;font-size:11px;pointer-events:none";
-        view.append(el);
-        labels.push({ el, at: c.root.position.clone().add(new THREE.Vector3(-0.39, 1.56, 0.2)) });
+    const LABEL = "position:absolute;transform:translate(-50%,0);padding:0 4px;border-radius:3px;background:#0009;font-weight:700;font-size:11px;pointer-events:none";
+    if (q.has("heads")) {
+      // Bleachers: rows step back and up so every TV and upper body is visible.
+      const cols = 10;
+      const dx = 1.05;
+      const dz = 1.25;
+      const dy = 0.36;
+      const stepMat = new THREE.MeshStandardMaterial({ color: "#2e3e4e", roughness: 0.9 });
+      for (let r = 0; r < 10; r++) {
+        const step = new THREE.Mesh(new THREE.BoxGeometry(cols * dx + 0.6, 0.12, dz), stepMat);
+        step.position.set(0, r * dy - 0.06, -r * dz);
+        scene.add(step);
+        for (let col = 0; col < cols; col++) {
+          const id = r * cols + col + 1;
+          const c = createTamashi(id);
+          c.root.position.set((col - (cols - 1) / 2) * dx, r * dy, -r * dz);
+          scene.add(c.root);
+          chars.push(c);
+          const el = document.createElement("div");
+          el.textContent = `${id}`;
+          el.style.cssText = LABEL;
+          view.append(el);
+          el.style.transform = "translate(-100%,-50%)";
+          labels.push({ el, at: c.root.position.clone().add(new THREE.Vector3(-0.39, 1.56, 0.2)) });
+        }
       }
+      // Orthographic, pitched down ~10°: every row the same size, each a TV-and-shoulders bust.
+      const pitch = THREE.MathUtils.degToRad(10);
+      const centre = new THREE.Vector3(0, 1.25 + 4.5 * dy, -4.5 * dz);
+      const dir = new THREE.Vector3(0, -Math.sin(pitch), -Math.cos(pitch));
+      camera.position.copy(centre).addScaledVector(dir, -40);
+      camera.lookAt(centre);
+      camera.updateMatrixWorld();
+      // Vertical extent in view space: front row from mid-thigh, back row up to its antenna tips.
+      const lo = new THREE.Vector3(0, 0.75, 0).applyMatrix4(camera.matrixWorldInverse).y;
+      const hiY = new THREE.Vector3(0, 2.08 + 9 * dy, -9 * dz).applyMatrix4(camera.matrixWorldInverse).y;
+      orthoH = hiY - lo;
+      orthoW = cols * dx + 0.2;
+      camera.position.addScaledVector(new THREE.Vector3(0, Math.cos(pitch), -Math.sin(pitch)), (hiY + lo) / 2);
+    } else {
+      // Full-body wall: 20 columns × 5 shelves, every character head to toe with its id below.
+      const cols = 20;
+      const rows = 5;
+      const dx = 0.78;
+      const rowH = 2.22;
+      const shelfMat = new THREE.MeshStandardMaterial({ color: "#2e3e4e", roughness: 0.9 });
+      for (let r = 0; r < rows; r++) {
+        const y = (rows - 1 - r) * rowH;
+        const shelf = new THREE.Mesh(new THREE.BoxGeometry(cols * dx + 0.4, 0.06, 0.7), shelfMat);
+        shelf.position.set(0, y - 0.03, 0);
+        scene.add(shelf);
+        for (let col = 0; col < cols; col++) {
+          const id = r * cols + col + 1;
+          const c = createTamashi(id);
+          c.root.position.set((col - (cols - 1) / 2) * dx, y, 0);
+          scene.add(c.root);
+          chars.push(c);
+            const el = document.createElement("div");
+            el.textContent = `${id}`;
+            el.style.cssText = LABEL;
+            view.append(el);
+          labels.push({ el, at: c.root.position.clone().add(new THREE.Vector3(0, -0.04, 0.4)) });
+        }
+      }
+      const pitch = THREE.MathUtils.degToRad(4);
+      const centre = new THREE.Vector3(0, ((rows - 1) * rowH) / 2 + 0.88, 0);
+      camera.position.copy(centre).add(new THREE.Vector3(0, Math.sin(pitch), Math.cos(pitch)).multiplyScalar(40));
+      camera.lookAt(centre);
+      orthoH = rows * rowH + 0.35;
+      orthoW = cols * dx + 0.2;
     }
-    // Orthographic, pitched down ~10°: every row the same size, each a TV-and-shoulders bust.
-    const pitch = THREE.MathUtils.degToRad(10);
-    const centre = new THREE.Vector3(0, 1.25 + 4.5 * dy, -4.5 * dz);
-    const dir = new THREE.Vector3(0, -Math.sin(pitch), -Math.cos(pitch));
-    camera.position.copy(centre).addScaledVector(dir, -40);
-    camera.lookAt(centre);
-    camera.updateMatrixWorld();
-    // Vertical extent in view space: front row from mid-thigh, back row up to its antenna tips.
-    const lo = new THREE.Vector3(0, 0.75, 0).applyMatrix4(camera.matrixWorldInverse).y;
-    const hiY = new THREE.Vector3(0, 2.08 + 9 * dy, -9 * dz).applyMatrix4(camera.matrixWorldInverse).y;
-    orthoH = hiY - lo;
-    orthoW = cols * dx + 0.2;
-    camera.position.addScaledVector(new THREE.Vector3(0, Math.cos(pitch), -Math.sin(pitch)), (hiY + lo) / 2);
   }
   if (forceFar)
     for (const c of chars) {
@@ -186,8 +221,8 @@ export function runGallery(host: HTMLElement, param: string): void {
   const step = (dt: number) => {
     time += dt;
     for (const c of chars) {
-      c.speed = anim === "stroll" ? 1.3 : anim === "walk" ? 3.2 : anim === "run" ? 6 : 0;
-      c.carry = anim === "carry" ? 1 : 0;
+      c.speed = anim === "stroll" || anim === "carrywalk" ? 1.3 : anim === "walk" ? 3.2 : anim === "run" ? 6 : 0;
+      c.carry = anim === "carry" || anim === "carrywalk" ? 1 : 0;
       c.waving = anim === "wave";
       c.nod = anim === "nod" ? 0.22 : 0;
       c.pose = anim === "sit" ? "sit" : anim === "crouch" ? "crouch" : "stand";

@@ -22,7 +22,7 @@ export async function screensReady(): Promise<void> {
   while (pending.size) await Promise.all([...pending]);
 }
 
-const EMISSIVE = { none: 0.38, soft: 0.5, strong: 1.05 } as const;
+const EMISSIVE = { none: 0.36, soft: 0.44, strong: 1.0 } as const;
 
 /** The screen material for token `t`: `big` = player-size texture (512 px wide). Cached. */
 export function screenMaterial(t: TamashiTraits, aspect: number, big: boolean): THREE.MeshStandardMaterial {
@@ -45,7 +45,7 @@ export function screenMaterial(t: TamashiTraits, aspect: number, big: boolean): 
     emissiveMap: tex,
     emissive: new THREE.Color(1, 1, 1),
     emissiveIntensity: strength,
-    color: new THREE.Color(0.38, 0.38, 0.38),
+    color: new THREE.Color(0.3, 0.3, 0.3),
     roughness: 0.2,
     metalness: 0,
   });
@@ -114,7 +114,11 @@ function lumHex(hex: string): number {
 /** Edge (vignette) colour: from the notes ("#b090a0 edges") or the background, darker, toward the bezel. */
 function edgeColor(t: TamashiTraits): string {
   const m = /(#[0-9a-f]{6})\s*edges?/i.exec(t.notes ?? "");
-  if (m) return m[1];
+  if (m) {
+    const [r1, g1, b1] = hexToRgb(m[1]);
+    const [r2, g2, b2] = hexToRgb(t.tv.bezelColor);
+    return `#${[r1 + (r2 - r1) * 0.3, g1 + (g2 - g1) * 0.3, b1 + (b2 - b1) * 0.3].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")}`;
+  }
   const bg = t.screen.background;
   const [r1, g1, b1] = hexToRgb(tone(bg, lumHex(bg) > 0.25 ? 0.68 : 0.55));
   const [r2, g2, b2] = hexToRgb(t.tv.bezelColor);
@@ -123,18 +127,44 @@ function edgeColor(t: TamashiTraits): string {
 }
 
 /** Vignette + glare + scanlines on top of whatever is drawn. */
-function crtOverlay(c: CanvasRenderingContext2D, w: number, h: number, _bg: string, edge: string, strength: number): void {
+function crtOverlay(c: CanvasRenderingContext2D, w: number, h: number, _bg: string, edge: string, strength: number, part: "all" | "vignette" | "finish" = "all"): void {
+  if (part !== "finish") vignette(c, w, h, edge, strength);
+  if (part !== "vignette") finish(c, w, h);
+}
+
+function vignette(c: CanvasRenderingContext2D, w: number, h: number, edge: string, strength: number): void {
+  // Four edge falloffs (not a radial blob): the art's CRT glow is a rounded-rect frame of colour.
+  const deep = tone(edge, 0.5);
+  const side = (x0: number, y0: number, x1: number, y1: number) => {
+    const g = c.createLinearGradient(x0, y0, x1, y1);
+    g.addColorStop(0, rgba(deep, strength));
+    g.addColorStop(0.18, rgba(edge, 0.9 * strength));
+    g.addColorStop(0.55, rgba(edge, 0.28 * strength));
+    g.addColorStop(1, rgba(edge, 0));
+    c.fillStyle = g;
+    c.fillRect(0, 0, w, h);
+  };
+  // Keep the centre clear: the art's tint is a frame round a warm, untinted middle.
+  const dx = w * 0.27;
+  const dy = h * 0.27;
+  side(0, 0, dx, 0);
+  side(w, 0, w - dx, 0);
+  side(0, 0, 0, dy);
+  side(0, h, 0, h - dy);
+  // Soft dark inner shadow along the bezel.
+  const m = Math.min(w, h);
   c.save();
-  c.translate(w / 2, h / 2);
-  c.scale(w / 2, h / 2);
-  const v = c.createRadialGradient(0, 0, 0.2, 0, 0, 1.42);
-  v.addColorStop(0, rgba(edge, 0));
-  v.addColorStop(0.4, rgba(edge, 0.18 * strength));
-  v.addColorStop(0.72, rgba(edge, 0.85 * strength));
-  v.addColorStop(1, rgba(edge, 1 * strength));
-  c.fillStyle = v;
-  c.fillRect(-1, -1, 2, 2);
+  c.shadowColor = rgba(tone(edge, 0.35), 0.9 * strength);
+  c.shadowBlur = m * 0.06;
+  c.strokeStyle = rgba(tone(edge, 0.4), 0.85 * strength);
+  c.lineWidth = m * 0.03;
+  c.beginPath();
+  c.roundRect(0, 0, w, h, m * 0.08);
+  c.stroke();
   c.restore();
+}
+
+function finish(c: CanvasRenderingContext2D, w: number, h: number): void {
   // Soft glare top-left, as in the art.
   const g = c.createLinearGradient(0, 0, w * 0.55, h * 0.55);
   g.addColorStop(0, "rgba(255,255,255,0.16)");
@@ -157,7 +187,7 @@ function paintBackground(c: CanvasRenderingContext2D, w: number, h: number, t: T
   const glow = String(t.screen.glow);
   if (glow !== "none") {
     const g = c.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.max(w, h) * 0.6);
-    const lift = glow === "strong" ? 1.28 : 1.07;
+    const lift = glow === "strong" ? 1.25 : 1.0;
     g.addColorStop(0, rgba(tone(bg, lift), 0.9));
     g.addColorStop(1, rgba(tone(bg, lift), 0));
     c.fillStyle = g;
@@ -198,6 +228,7 @@ function heart(c: CanvasRenderingContext2D, x: number, y: number, s: number): vo
 
 function paintFace(c: CanvasRenderingContext2D, w: number, h: number, t: TamashiTraits): void {
   paintBackground(c, w, h, t);
+  vignette(c, w, h, edgeColor(t), 1);
   const S = t.screen;
   const eyes = String(S.eyes);
   const mouth = S.mouth ? String(S.mouth) : "";
@@ -209,7 +240,7 @@ function paintFace(c: CanvasRenderingContext2D, w: number, h: number, t: Tamashi
   const m = Math.min(w, h);
   // Layout (measured on #95): bars ≈ 3.5 % × 17 % of the screen, 58 % apart, a bit below centre.
   const ex = [0.5 - 0.29, 0.5 + 0.29];
-  const ey = 0.58;
+  const ey = 0.6;
   const bw = 0.04;
   const bh = 0.185;
   const glowy = String(S.glow) === "strong" || mentions(eyes, "neon", "glow");
@@ -491,7 +522,7 @@ function paintFace(c: CanvasRenderingContext2D, w: number, h: number, t: Tamashi
   }
   c.restore();
   paintMask(c, w, h, hw);
-  crtOverlay(c, w, h, S.background, edgeColor(t), 1);
+  finish(c, w, h);
 }
 
 /** Masks worn over the screen (kitsune, hyottoko): painted flat onto it. */

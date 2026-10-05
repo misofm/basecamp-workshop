@@ -278,7 +278,7 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   await goTo(page, "buyer:collector");
   await page.keyboard.press("KeyE");
   await expect(dialog.locator(".dlg-title")).toHaveText("Stonks wants it");
-  await chooseAction(page, /^Sell for/);
+  await chooseAction(page, /Sell/);
   await expect(dialog.locator(".pending")).toBeVisible();
   await shot(page, "tnl-07-sell-pending");
   const sold = await Promise.race([

@@ -13,7 +13,7 @@ subset font `public/fonts/nozomi-jp-signs.woff2` (Noto Sans JP Bold, SIL OFL 1.1
 adding Japanese characters, rebuild the subset with `scripts/subset-signage-font.sh`, then
 regenerate this page with `node scripts/gen-signage-doc.mjs`.
 
-47 entries.
+51 entries.
 
 | Key | Japanese | English | Where / note |
 | --- | --- | --- | --- |
@@ -63,6 +63,10 @@ regenerate this page with `node scripts/gen-signage-doc.mjs`.
 | `barberMinato` | 理容ミナト | BARBER MINATO | Vertical lightbox: barber shop (invented name). city.ts. |
 | `coinLaundry` | コインランドリー | COIN LAUNDRY | Vertical lightbox. city.ts. |
 | `kissaHotaru` | 喫茶ほたる | KISSA HOTARU | Vertical lightbox: old coffee house ('firefly'). city.ts. |
+| `uiPlayback` | 再生 | PLAYBACK | UI: intro card title ('NOZOMI · 再生'). Not a street sign. |
+| `uiDone` | 済 | DONE | UI: red hanko-style stamp on the cash-out and sold screens ('済 SOLD'). Not a street sign. |
+| `uiReceived` | 領収 | RECEIVED | UI: red stamp on the receipt ('領収 PAID'). Not a street sign. |
+| `uiNorth` | 北 | NORTH | UI: north marker on the minimap plate. Not a street sign. |
 | `mahjong` | 雀荘 | MAHJONG PARLOUR | Vertical lightbox (dead), in the dark west rows. city.ts. |
 
 ## Rules followed (world bible §8)

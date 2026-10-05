@@ -83,6 +83,10 @@ export const SIGNS = {
   barberMinato: { jp: "理容ミナト", en: "BARBER MINATO", note: "Vertical lightbox: barber shop (invented name). city.ts." },
   coinLaundry: { jp: "コインランドリー", en: "COIN LAUNDRY", note: "Vertical lightbox. city.ts." },
   kissaHotaru: { jp: "喫茶ほたる", en: "KISSA HOTARU", note: "Vertical lightbox: old coffee house ('firefly'). city.ts." },
+  uiPlayback: { jp: "再生", en: "PLAYBACK", note: "UI: intro card title ('NOZOMI · 再生'). Not a street sign." },
+  uiDone: { jp: "済", en: "DONE", note: "UI: red hanko-style stamp on the cash-out and sold screens ('済 SOLD'). Not a street sign." },
+  uiReceived: { jp: "領収", en: "RECEIVED", note: "UI: red stamp on the receipt ('領収 PAID'). Not a street sign." },
+  uiNorth: { jp: "北", en: "NORTH", note: "UI: north marker on the minimap plate. Not a street sign." },
   mahjong: { jp: "雀荘", en: "MAHJONG PARLOUR", note: "Vertical lightbox (dead), in the dark west rows. city.ts." },
 } as const satisfies Record<string, Bilingual>;
 

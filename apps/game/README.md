@@ -240,3 +240,10 @@ and cleared by Playwright at the start of each run; the testnet spec uses
 See [docs/ASSETS.md](docs/ASSETS.md). UX notes: [docs/UX.md](docs/UX.md).
 In mock mode all releases, artists and prices are fictional. Mock ids and digests are fake; their
 explorer links will not resolve.
+
+## Hosted build
+
+`wrangler.jsonc` deploys the static game to Cloudflare Workers (`npm run build && npx wrangler deploy`).
+The hosted build has no bank server, so it runs in mock mode by default; `?chain=testnet`
+reads the live catalog and plays real previews, but funding and selling need the bank
+server described above.

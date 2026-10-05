@@ -1,0 +1,11 @@
+{
+  // Static deploy of the game (no bank server). Mock mode by default; ?chain=testnet reads
+  // the live catalog, but funding and selling need the bank server (see README).
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "basecamp-workshop",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

@@ -40,6 +40,7 @@ npm run typecheck    # tsc --noEmit
 | `?quality=` | `high` \| `medium` \| `low` | `high` is the default on WebGPU (2K textures, full post-processing); `medium` is the WebGL2 fallback tier; `low` = 1K textures, tone mapping only, lowest render scale, low Tamashi detail, fewer particles (weak GPUs, projectors on battery). Automated browsers (`navigator.webdriver`, e.g. Playwright) start at `low` unless a tier is given. |
 | `?backend=` | `webgpu` \| `webgl` | Forces the renderer backend (default: WebGPU when available, else WebGL2). The game logic never depends on it. |
 | `?debug=1` | | Developer overlay (top centre): active backend, quality tier, FPS / frame time, draw calls. Never shown otherwise. |
+| `?exposure=` | `0.3`–`4` | Overrides the dusk exposure (default `2.1`, tuned on the WebGL2 fallback). Use it to match the look on the stage machine and projector, e.g. `?exposure=1.6`. |
 | `?adapt=0` | | Pins adaptive quality as started (no render-scale / bloom changes), for screenshots and perf runs. |
 | `?rain=1` | | Enables drizzle over the dusk street (off by default). |
 | `?gallery=` | `1` \| `<id>` (1–100) | Visual QA for the Tamashi characters instead of the game (`src/tamashi/gallery.ts`): `1` shows all 100 in a grid, an id shows that one up close next to its artwork. |

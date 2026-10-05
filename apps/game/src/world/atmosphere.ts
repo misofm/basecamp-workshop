@@ -120,8 +120,11 @@ export class Atmosphere {
   readonly festivalLight: THREE.PointLight;
   /** Toward the sun from the scene. */
   readonly sunDirection = sunDir(SUN_LIGHT_ELEV, 0);
-  /** Base exposure for ACES at dusk (world.ts scales it for the brown-out). */
-  readonly exposure = 2.1;
+  /**
+   * Base exposure for ACES at dusk (world.ts scales it for the brown-out). Tuned on the
+   * WebGL2 fallback; `?exposure=1.6` overrides it for live tuning on the stage machine.
+   */
+  readonly exposure = exposureFromUrl(2.1);
 
   private sky: THREE.Mesh;
   private skyBright: N;
@@ -248,4 +251,11 @@ function noise1(t: number) {
   };
   const u = f * f * (3 - 2 * f);
   return h(i) * (1 - u) + h(i + 1) * u;
+}
+
+/** `?exposure=<0.3–4>` from the URL, else the default. */
+function exposureFromUrl(fallback: number): number {
+  if (typeof location === "undefined") return fallback;
+  const value = Number(new URLSearchParams(location.search).get("exposure"));
+  return Number.isFinite(value) && value >= 0.3 && value <= 4 ? value : fallback;
 }

@@ -8,7 +8,7 @@
  */
 import * as sfx from "../../audio/sfx";
 import { collectionBody, helpBody, type CollectionItem, type DialogAction } from "../../ui/dialogs";
-import { handLocked, heldIsOwned } from "../state";
+import { handLocked, heldIsOwned, isBusy } from "../state";
 import { message, type FlowContext } from "./context";
 
 export class CollectionFlow {
@@ -79,6 +79,10 @@ export class CollectionFlow {
 
   openHelp(): void {
     const { ctx } = this;
+    const op = ctx.state().op;
+    // A reload mid-transaction would hide its outcome (on testnet it can still land):
+    // Reset waits until the purchase / sale / withdrawal has settled.
+    const txPending = isBusy(ctx.state()) && (op?.kind === "purchase" || op?.kind === "sell" || op?.kind === "withdraw");
     ctx.dialogs.show({
       key: "help",
       skin: "green",
@@ -90,6 +94,7 @@ export class CollectionFlow {
         {
           id: "reset",
           label: "Reset demo",
+          disabled: txPending,
           // Reload keeps the URL (and its ?chain=…&latency=… params). The mock chain
           // lives in memory, so a reload is a fresh wallet; testnet state is on chain.
           run: () => window.location.reload(),

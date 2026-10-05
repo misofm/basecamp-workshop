@@ -66,8 +66,10 @@ import {
   heldIsUnpaid,
   heldOwnedRecord,
   initialState,
+  invariantViolations,
+  isBusy,
   recordPlace,
-  transition,
+  step,
   type GameAction,
   type GameState,
 } from "./state";
@@ -77,6 +79,9 @@ import { CheckoutFlow } from "./flows/checkout-flow";
 import { StreetFlow } from "./flows/street-flow";
 import { CollectionFlow } from "./flows/collection-flow";
 import { AtmFlow } from "./flows/atm-flow";
+
+/** Dev builds log refused transitions and broken invariants (never in production). */
+const DEV = Boolean(import.meta.env?.DEV);
 
 /** Hide the waypoint once the player is this close to it (metres). */
 const WAYPOINT_HIDE_DISTANCE = 2.5;
@@ -97,6 +102,11 @@ type SoundLevels = { fire: number; diner: number; band: number; vending: number;
  * Audio calls that the audio layer is adding concurrently (sfx.boom, sfx.ironFootsteps,
  * ShopAmbience.setSources). Called through optional guards so this compiles either way.
  */
+
+/** A purchase, sale or ATM withdrawal is in flight (catalog / wallet / collection reads don't count). */
+function txInFlight(s: GameState): boolean {
+  return isBusy(s) && (s.op?.kind === "purchase" || s.op?.kind === "sell" || s.op?.kind === "withdraw");
+}
 
 function falloff(distance: number, far: number): number {
   const t = Math.min(1, Math.max(0, (far - distance) / (far - SOUND_NEAR)));
@@ -150,6 +160,8 @@ export class GameController {
   /** True from the boom until the title card is dismissed (input frozen, no prompt). */
   private homeBeatRunning = false;
   private soundLevels: SoundLevels = { fire: 0, diner: 0, band: 0, vending: 0, street: 1 };
+  /** Whether help was last drawn with a transaction in flight (Reset demo disabled). */
+  private helpBusy = false;
 
   // Per-station flows (./flows/*), sharing one FlowContext.
   private readonly shop: ShopFlow;
@@ -288,11 +300,22 @@ export class GameController {
 
   // ═══════════════════════════════ state ═══════════════════════════════
 
-  /** Apply an action. Returns false if the state machine refused it. */
+  /**
+   * Apply an action. Returns false if the state machine refused it (or it changed nothing).
+   * An illegal action is a no-op plus a dev-console warning, never a crash.
+   */
   dispatch(action: GameAction): boolean {
-    const next = transition(this.state, action);
+    const { state: next, rejected } = step(this.state, action);
+    if (rejected !== null) {
+      if (DEV) console.warn(`[game] ${action.type} refused: ${rejected}`);
+      return false;
+    }
     if (next === this.state) return false;
     this.state = next;
+    if (DEV) {
+      const broken = invariantViolations(next);
+      if (broken.length) console.warn(`[game] invariant broken after ${action.type}: ${broken.join("; ")}`);
+    }
     this.render();
     return true;
   }
@@ -330,9 +353,19 @@ export class GameController {
     this.hud.setMoney(s.balance, this.wallet?.fakeUsdDecimals ?? 6, FUSD_SYMBOL);
     const op = s.op?.status === "pending" ? s.op.kind : null;
     this.world.setJumpAllowed(op === null); // no jumping while a purchase, sale or ATM withdrawal is pending
-    this.hud.setPending(
-      op === "purchase" || op === "sell" || op === "withdraw" ? "Processing" : null,
-    );
+    const txPending = op === "purchase" || op === "sell" || op === "withdraw";
+    this.hud.setPending(txPending ? "Processing" : null);
+    // A transaction in flight always shows the overlay (spinner now, the result toast later):
+    // U-hidden UI would leave the player with no sign of it. U is ignored until it settles.
+    if (txPending && this.started && !this.uiVisibility.visible) {
+      this.uiVisibility.visible = true;
+      this.applyUiVisibility();
+    }
+    // Help's "Reset demo" is disabled while a transaction is in flight: keep it current.
+    if (txPending !== this.helpBusy) {
+      this.helpBusy = txPending;
+      if (this.dialogs.openKey === "help") this.collection.openHelp();
+    }
     this.hud.setMission(objective(s).text);
     const held = s.hand ? this.catalog.get(s.hand.shopRecordId) : undefined;
     if (s.hand && held) {
@@ -518,7 +551,7 @@ export class GameController {
 
   /** E / Enter at an interactable (from the world, or __game.interact()). */
   interact(target: Interactable | null): void {
-    if (!this.started || !target || this.dialogs.openKey || this.street.smashing) return;
+    if (!this.started || !target || this.dialogs.openKey || this.street.smashing || this.homeBeatRunning || this.titleCard.isOpen) return;
     switch (target.kind) {
       case "record":
         if (target.recordId) this.shop.openRecord(target.recordId);
@@ -604,20 +637,26 @@ export class GameController {
     if (!this.started || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
     const open = this.dialogs.openKey;
+    // No menu may open over a scripted moment: the smash swing (the record is mid-air) or
+    // the exit beat (boom → title card, which owns the keyboard once it is up).
+    const scripted = this.street.smashing || this.homeBeatRunning || this.titleCard.isOpen;
     switch (e.code) {
       case "KeyC":
         if (open === "collection") this.dialogs.close();
-        else if (!open) this.collection.openCollection();
+        else if (!open && !scripted) this.collection.openCollection();
         break;
       case "KeyH":
         if (open === "help") this.dialogs.close();
-        else if (!open) this.collection.openHelp();
+        else if (!open && !scripted) this.collection.openHelp();
         break;
       case "KeyI":
-        if (!open && this.state.hand) this.shop.openInspect();
+        // Toggles like C and H.
+        if (open === "inspect") this.dialogs.close();
+        else if (!open && !scripted && this.state.hand) this.shop.openInspect();
         break;
       case "KeyU":
         if (open) return; // dialogs keep the overlay as it is
+        if (txInFlight(this.state)) return; // the overlay stays up while a transaction is pending (see render)
         this.uiVisibility.toggle();
         this.applyUiVisibility();
         break;

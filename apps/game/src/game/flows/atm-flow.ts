@@ -44,7 +44,7 @@ export class AtmFlow {
     const { ctx } = this;
     const s = ctx.state();
     if (s.op?.kind === "withdraw" && s.op.status === "pending") return this.showPending();
-    if (s.op?.kind === "withdraw" && s.op.status === "error") return this.showError(s.op.error ?? "Card reader jammed. Try again.");
+    if (s.op?.kind === "withdraw" && s.op.status === "error") return this.showError(s.op.error);
     if (s.op?.status === "pending") {
       ctx.hud.toast("One thing at a time.", { tone: "bad" });
       return;
@@ -75,7 +75,8 @@ export class AtmFlow {
       const result = await ctx.adapter.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT);
       // Re-read chain truth for the new balance.
       const wallet = await ctx.refreshWallet(false).catch(() => null);
-      const balance = wallet?.fakeUsd ?? (ctx.state().balance ?? 0n) + result.amount;
+      const known = ctx.state().balance;
+      const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.amount);
       // withdrawSuccess sets the balance → render() → the HUD counter counts up green.
       ctx.dispatch({ type: "withdrawSuccess", digest: result.digest, amount: result.amount, balance });
       sfx.cashRegister();
@@ -88,6 +89,8 @@ export class AtmFlow {
       }
     } catch (error) {
       ctx.dispatch({ type: "withdrawFail", error: message(error) });
+      // The cash may have come out even though the answer didn't: re-read the balance.
+      void ctx.refreshWallet().catch(() => {});
       sfx.error();
       if (ctx.dialogs.openKey === "atm") this.showError(message(error));
       else ctx.hud.toast(message(error), { tone: "bad" });

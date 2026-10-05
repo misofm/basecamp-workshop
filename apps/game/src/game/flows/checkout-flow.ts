@@ -31,7 +31,12 @@ export class CheckoutFlow {
     const { ctx } = this;
     const s = ctx.state();
     if (s.op?.kind === "purchase" && s.op.status === "pending") return this.showPurchasePending();
-    if (s.op?.kind === "purchase" && s.op.status === "error") return this.showPurchaseError(s.op.error ?? "Register jammed. Try again.");
+    if (s.op?.kind === "purchase" && s.op.status === "error") return this.showPurchaseError(s.op.error);
+    if (s.op?.status === "pending") {
+      // A sale or ATM withdrawal is in flight: Pay would be refused, so don't offer it.
+      ctx.hud.toast("One thing at a time.", { tone: "bad" });
+      return;
+    }
     if (!s.hand) {
       const line = s.deck
         ? "Your record's still on the deck. Grab it and bring it here."
@@ -98,7 +103,9 @@ export class CheckoutFlow {
         acquiredAt: Date.now(),
       };
       record.minted = Math.max(record.minted, mine.serial);
-      const balance = wallet?.fakeUsd ?? (ctx.state().balance ?? 0n) - record.price.amount;
+      // Wallet re-read failed: estimate from the known balance; unknown stays unknown (never negative).
+      const known = ctx.state().balance;
+      const balance = wallet?.fakeUsd ?? (known === null ? null : known - record.price.amount);
       ctx.dispatch({ type: "purchaseSuccess", owned: mine, digest: result.digest, balance, amount: record.price.amount });
       if (owned) ctx.dispatch({ type: "collectionLoaded", owned });
       sfx.cashRegister();
@@ -115,6 +122,11 @@ export class CheckoutFlow {
     } catch (error) {
       const text = message(error);
       ctx.dispatch({ type: "purchaseFail", error: text });
+      // The purchase may have landed even though the answer didn't (timeout): re-read chain
+      // truth so the balance and the collection are never stale. (Retry is still safe: the
+      // adapter returns the earlier purchase instead of buying twice.)
+      void ctx.refreshWallet().catch(() => {});
+      void ctx.refreshCollection().catch(() => {});
       sfx.error();
       ctx.world.setCashierStatus("error");
       if (ctx.dialogs.openKey === "purchase") this.showPurchaseError(text);

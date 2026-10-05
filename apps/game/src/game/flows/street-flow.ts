@@ -16,7 +16,7 @@
 import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink } from "../../ui/dialogs";
 import { COLLECTOR, buyerFor } from "../npc-buyers";
-import { heldOwnedRecord } from "../state";
+import { handLocked, heldOwnedRecord } from "../state";
 import { message, type FlowContext } from "./context";
 
 /** How long after a sale the collector walks back to their spot. */
@@ -39,7 +39,13 @@ export class StreetFlow {
       ctx.hud.toast("Need something heavy.");
       return;
     }
-    if (this.smashing || !ctx.dispatch({ type: "smash", carId })) return;
+    if (this.smashing) return;
+    if (handLocked(ctx.state())) {
+      // The record is mid-sale: Stonks is looking at it. No swinging it at a car now.
+      ctx.hud.toast("One thing at a time.", { tone: "bad" });
+      return;
+    }
+    if (!ctx.dispatch({ type: "smash", carId })) return;
     this.smashing = true;
     ctx.renderPrompt();
     try {
@@ -62,7 +68,12 @@ export class StreetFlow {
     const { ctx } = this;
     const s = ctx.state();
     if (s.op?.kind === "sell" && s.op.status === "pending") return this.showSellPending();
-    if (s.op?.kind === "sell" && s.op.status === "error") return this.showSellError(s.op.error ?? "Deal fell through. You still own it.");
+    if (s.op?.kind === "sell" && s.op.status === "error") return this.showSellError(s.op.error);
+    if (s.op?.status === "pending") {
+      // A purchase or ATM withdrawal is in flight: Sell would be refused, so don't offer it.
+      ctx.hud.toast("One thing at a time.", { tone: "bad" });
+      return;
+    }
     const owned = heldOwnedRecord(s);
     const r = owned ? ctx.catalog.get(owned.shopRecordId) : undefined;
     if (!owned || !r) {
@@ -98,7 +109,8 @@ export class StreetFlow {
     try {
       const result = await ctx.adapter.sellToNpc(owned.recordId, npc);
       const wallet = await ctx.refreshWallet(false).catch(() => null);
-      const balance = wallet?.fakeUsd ?? (ctx.state().balance ?? 0n) + result.paid;
+      const known = ctx.state().balance;
+      const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.paid);
       // sellSuccess moves the record to "npc" → render() calls world.buyerLeave().
       ctx.dispatch({ type: "sellSuccess", paid: result.paid, digest: result.digest, balance });
       ctx.world.setBuyerStatus(npc.id, "happy");
@@ -124,6 +136,10 @@ export class StreetFlow {
       void ctx.refreshCollection().catch(() => {});
     } catch (error) {
       ctx.dispatch({ type: "sellFail", error: message(error) });
+      // Half a sale may have landed (record transferred, payout not): re-read chain truth.
+      // state.ts keeps the held record in hand so Retry can finish it.
+      void ctx.refreshWallet().catch(() => {});
+      void ctx.refreshCollection().catch(() => {});
       sfx.error();
       ctx.world.setBuyerStatus(npc.id, "error");
       if (ctx.dialogs.openKey === "sell") this.showSellError(message(error));

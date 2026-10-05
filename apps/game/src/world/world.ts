@@ -521,7 +521,8 @@ export class GameWorld implements WorldApi {
 
   private onKey(e: KeyboardEvent) {
     if (e.code !== "KeyE" && e.code !== "Enter" && e.code !== "NumpadEnter") return;
-    if (e.repeat || this.blocked) return;
+    // Edge-triggered (no auto-repeat) and never a browser chord (Ctrl/Cmd/Alt+Enter).
+    if (e.repeat || this.blocked || e.ctrlKey || e.metaKey || e.altKey) return;
     const t = e.target as HTMLElement | null;
     if (t && (t instanceof HTMLButtonElement || t instanceof HTMLInputElement || t instanceof HTMLTextAreaElement || t instanceof HTMLSelectElement || t.isContentEditable)) return;
     e.preventDefault();

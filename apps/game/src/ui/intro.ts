@@ -12,7 +12,7 @@
  * (exponential, so it never freezes and never reaches 100 % early); when it settles it jumps
  * to its full weight.
  */
-import { h } from "./dom";
+import { h, isBrowserShortcut } from "./dom";
 
 interface Task {
   weight: number;
@@ -56,8 +56,10 @@ export class Intro {
       (e) => {
         if (this.started) return;
         // Swallow every key while the screen is up so nothing reaches the game; only Enter starts.
-        e.preventDefault();
+        // Browser shortcuts (F5, F11, Ctrl/Cmd+R…) keep working: a stuck load must stay reloadable.
         e.stopImmediatePropagation();
+        if (isBrowserShortcut(e)) return;
+        e.preventDefault();
         if (e.repeat) return;
         if (this.ready && (e.code === "Enter" || e.code === "NumpadEnter")) this.start();
       },

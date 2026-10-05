@@ -8,7 +8,7 @@
  * Must not: play audio, touch the world or change game state. The controller awaits
  * show() and carries on (the player is free to walk again afterwards).
  */
-import { h } from "./dom";
+import { h, isBrowserShortcut } from "./dom";
 
 export class TitleCard {
   private root: HTMLElement | null = null;
@@ -44,9 +44,11 @@ export class TitleCard {
 
   private onKey = (e: KeyboardEvent): void => {
     if (!this.root) return;
-    // Swallow every key while the card is up; only these dismiss it.
-    e.preventDefault();
+    // Swallow every key while the card is up; only these dismiss it. Browser shortcuts
+    // (F5, F11, Ctrl/Cmd+R…) keep their default.
     e.stopImmediatePropagation();
+    if (isBrowserShortcut(e)) return;
+    e.preventDefault();
     if (e.repeat) return;
     if (e.code === "Enter" || e.code === "NumpadEnter" || e.code === "Escape" || e.code === "Space") this.dismiss();
   };

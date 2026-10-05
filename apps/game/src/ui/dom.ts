@@ -40,3 +40,11 @@ export async function copyText(text: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * A key the browser owns (reload, fullscreen, dev tools, zoom, tab switching): overlays
+ * that swallow the keyboard still let these through to the browser.
+ */
+export function isBrowserShortcut(e: KeyboardEvent): boolean {
+  return e.ctrlKey || e.metaKey || e.altKey || /^F\d{1,2}$/.test(e.code);
+}

@@ -396,7 +396,10 @@ export class Player {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if (this.blocked) return;
       if (MOVE_KEYS.includes(e.code)) {
-        e.preventDefault();
+        e.preventDefault(); // also keeps Alt/Cmd+Arrow from navigating the page away mid-demo
+        // A Ctrl / Cmd chord is a shortcut, not movement. On macOS a letter released while Cmd
+        // is held never sends keyup, so registering it would leave the player walking forever.
+        if (e.metaKey || e.ctrlKey) return;
         this.keys.add(e.code);
       }
       if (e.code === "Home") {
@@ -410,7 +413,11 @@ export class Player {
       }
       if (e.code === "KeyL" && !e.repeat) this.toggleMouseLook();
     });
-    window.addEventListener("keyup", (e) => this.keys.delete(e.code));
+    window.addEventListener("keyup", (e) => {
+      this.keys.delete(e.code);
+      // macOS: keys pressed while Cmd was down get no keyup of their own. Drop everything held.
+      if (e.code === "MetaLeft" || e.code === "MetaRight") this.keys.clear();
+    });
     window.addEventListener("blur", () => {
       this.keys.clear();
       this.dragging = false;

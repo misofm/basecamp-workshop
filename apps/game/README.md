@@ -1,13 +1,17 @@
-# Miso Records · After Hours
+# Nozomi · Playback
 
-**Buy a record on Sui. Smash a car with it. Sell it on.**
+**Buy a record. Smash a car with it. Sell it on.** (On Sui, under the hood.)
 
-A small third-person Three.js game for the Miso Basecamp workshop. You walk into a
-record shop at night, dig through ten fictional releases, spin one on the listening
-deck (30-second previews), buy it at the counter (a Record object minted to your
-wallet), carry it outside, smash a parked car with it (heavyweight 180g vinyl: still
-mint) and sell it to a collector on the street for more than you paid. A GTA-style HUD
-tracks your FakeUSD, mission, minimap and the record in your hands.
+A small third-person Three.js game for the Miso Basecamp workshop, set in **Nozomi**, the
+dystopian city of Studio Mirai's Tamashi story, at dusk on the afternoon of Book 3
+"As The World Shook". You are **Gamer** (Tamashi #95). You leave the old hotel at the west
+end of a grungy, retrofuturist back street (only three blocks still have power), walk east
+to **Saisei Records**, dig through ten releases, spin one on the listening deck (30-second
+previews) next to Inicio, pay **Jazz** at the counter (a Record object minted to your
+wallet), smash the **dead Triangle self-driving sedan** across the street with it
+(heavyweight 180g vinyl: still mint) and sell it to **Stonks** at his BUYING table for more
+than you paid. Then you head home with Inicio, and the ground starts shaking. A GTA-style
+HUD tracks your FakeUSD, mission, minimap and the record in your hands.
 
 All chain access goes through one interface, `MisoAdapter`. `npm run dev` runs on
 `MockAdapter` (in-memory, fake ids, no network); `npm run stage` builds and serves the game on
@@ -33,17 +37,21 @@ npm run typecheck    # tsc --noEmit
 | `?latency=` | ms (default 800) | Mock only: simulated latency for every adapter call. |
 | `?fail=` | `purchase` \| `sell` \| `withdraw` \| `all` | Mock only: those transactions fail, to show the error + Retry UI. |
 | `?mockhls=1` | | Mock only: every track streams a real testnet HLS quilt from `cdn.miso.fm` instead of the synth loop. |
-| `?quality=` | `low` \| `high` | `low` starts at the lowest render scale (0.6) with bloom off and low Tamashi detail, for weak GPUs and projectors on battery. Automated browsers (`navigator.webdriver`, e.g. Playwright) get `low` automatically; `high` opts out. Without it, quality adapts to the frame rate. |
-
+| `?quality=` | `high` \| `medium` \| `low` | `high` is the default on WebGPU (2K textures, full post-processing); `medium` is the WebGL2 fallback tier; `low` = 1K textures, tone mapping only, lowest render scale, low Tamashi detail, fewer particles (weak GPUs, projectors on battery). Automated browsers (`navigator.webdriver`, e.g. Playwright) start at `low` unless a tier is given. |
+| `?backend=` | `webgpu` \| `webgl` | Forces the renderer backend (default: WebGPU when available, else WebGL2). The game logic never depends on it. |
+| `?debug=1` | | Developer overlay (top centre): active backend, quality tier, FPS / frame time, draw calls. Never shown otherwise. |
+| `?adapt=0` | | Pins adaptive quality as started (no render-scale / bloom changes), for screenshots and perf runs. |
+| `?rain=1` | | Enables drizzle over the dusk street (off by default). |
 | `?gallery=` | `1` \| `<id>` (1–100) | Visual QA for the Tamashi characters instead of the game (`src/tamashi/gallery.ts`): `1` shows all 100 in a grid, an id shows that one up close next to its artwork. |
 
 Example: `/?chain=mock&latency=1500&fail=purchase`.
 
 ### Rerunning the demo
 
-- The collector comes back about 20 s after buying from you (walks back to the bench,
-  "Got any wax?"), and the sold release is back on the shelf, so you can run the whole
-  loop again without reloading.
+- Stonks comes back about 20 s after buying from you (walks back out to his BUYING
+  table), and the sold release is back on the shelf, so you can run the whole loop again
+  without reloading. The exit beat (heading home) happens once per session; the loop
+  keeps working afterwards.
 - **H → Reset demo (reload page)** reloads with the same URL parameters. The mock chain
   lives in memory, so that is a fresh wallet with 100 FUSD. On testnet the wallet is the
   baked-in player key, so a reload keeps its balance and collection.
@@ -54,35 +62,50 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 | --- | --- |
 | W A S D (or arrows) | Walk · **Shift** sprint |
 | Space | Jump |
-| E / Enter | Interact (record, deck, counter, car, collector, ATM) |
+| E / Enter | Interact (record, deck, counter, the sedan, Stonks, ATM, the hotel door) |
 | N | Next track on the deck (while playing, or standing at the deck) |
 | I | Inspect the record in your hands |
 | C | Your collection, read from the chain (`listOwnedRecords()`) |
 | M | Mute / unmute |
 | H | Help (and **Reset demo**) |
-| Esc | Close a menu |
+| Esc | Close a menu (Enter / Esc / click also dismiss the chapter title card) |
 | ↑ ↓ / W S, Enter / E / Space | Select and confirm in menus |
 | L or drag, + / −, Home | Mouse look, zoom, reset camera |
 
 ## The loop
 
-0. Short on FakeUSD? The mission points you to the **FakeUSD ATM** by the shop door:
-   **E** → *Withdraw 50 FUSD* (minted from the testnet faucet; on mock, from thin air) →
+The street (`src/world/layout.ts`), west to east: the old hotel (Order's HQ, Gamer's home;
+spawn at its side door), the shuttered Tamashi fitting center, **Saisei Records** (the shop,
+door at the origin), **TriMart** (looted; the ATM in its open vestibule), the poster wall
+with dead vending machines, and the back of the casino closing the east end (smoldering roof,
+the band on the curb by its fire exit). Across the street: the diner, **Stonks's walk-up** with
+his BUYING table, the scorched block and a rubble lot. The dead Triangle sedan sits at the south
+curb across from the shop.
+
+0. Short on FakeUSD? The mission points you to the **ATM in TriMart, next door**:
+   **E** → *Withdraw 50 FUSD* (its CRT greeting glitches on Gamer's real name, then reads
+   "ACCOUNT HOLDER: GAMER") (minted from the testnet faucet; on mock, from thin air) →
    receipt: "Receipt no." (short tx digest) + *View receipt ↗* (devxplorer). The balance
    counter counts up.
-1. Spawn on the sidewalk, walk through the shop door.
-2. **E** on a record → sleeve, liner notes, price, edition ("N / max sold" = minted / max supply) → *Pick up*.
+1. Spawn at the hotel side door, walk east and into Saisei Records.
+2. **E** on a record → sleeve, liner notes, price, edition ("N / max sold" = minted / max supply),
+   and a one-line note from Jazz on its section → *Pick up*.
 3. **E** on the deck → place it → *Drop the needle* (30 s from mid-track) → *Next track* → *Take it back*.
-4. **E** at the counter → *Pay* → "Ringing it up…" → receipt: *View record ↗* (the Record
+4. **E** at the counter (Jazz) → *Pay* → "Ringing it up…" → receipt: *View record ↗* (the Record
    object), "Receipt no." + *View receipt ↗* (the transaction), both on devxplorer. Fails?
-   Friendly message + *Retry* (not enough FakeUSD: "The ATM outside dispenses cash.").
-   Walking out with unpaid stock is blocked: "Oi! Pay for that first."
-5. Outside, **E** on a parked car while holding the record → smash → **RECORD CONDITION: STILL MINT**.
-6. **E** on the collector → "Sell *title* for N FUSD" (1.5× shop price, capped at 150) → the
-   Record moves to their wallet, FakeUSD comes to yours, the cash counter counts up and they
-   walk off with it.
+   Friendly message + *Retry* (not enough FakeUSD: "The ATM in TriMart next door dispenses
+   cash."). Walking out with unpaid stock is blocked: "Oi! Pay for that first."
+5. Outside, **E** on the dead Triangle sedan (`car:0`) while holding the record → smash →
+   **RECORD CONDITION: STILL MINT**.
+6. **E** on Stonks → "Sell *title* for N FUSD" (1.5× shop price, capped at 150) → the
+   Record moves to his wallet, FakeUSD comes to yours, the cash counter counts up and he
+   takes it inside.
 7. **C** → your collection and sales history, read back via `listOwnedRecords()`.
-8. ~20 s later the collector is back on the spot: pick another record and go again.
+8. **Exit beat**: "Job done. Head home with Inicio: hotel door, west end." **E** at the hotel
+   door → the boom from the facility (camera shake, brown-out), iron footsteps far away →
+   title card *Book 3 — Dawn of the Machin* → the mission reads "Home. Press H to reset
+   the demo." You can still walk around.
+9. ~20 s after the sale Stonks is back at his table: pick another record and go again.
 
 Everything the player sees reads like a normal game: no "Sui", "chain", "testnet", "wallet",
 "digest" or "object" in the HUD, dialogs, toasts or errors (developer detail goes to the
@@ -97,16 +120,18 @@ src/
   debug.ts           window.__game test hook (Playwright + console)
   game/
     controller.ts    THE glue: world events → state → render() → world/audio/UI.  Read this first.
+                     Also the exit beat (goHome) and the per-frame ambience mix (fire/diner/band/vending/street).
     flows/           the per-station screens + chain calls, each given a small FlowContext
       shop-flow.ts       record menu, inspect, listening deck
       checkout-flow.ts   cashier: pay → pending → receipt | error + Retry  (adapter.purchase)
       atm-flow.ts        the FakeUSD ATM: withdraw → pending → receipt | error + Retry  (adapter.withdrawFakeUsd)
-      street-flow.ts     smash a car, sell to the collector, collector returns  (adapter.sellToNpc)
+      street-flow.ts     smash the sedan, sell to Stonks, Stonks returns  (adapter.sellToNpc)
       collection-flow.ts C collection, H help + Reset demo
       context.ts         FlowContext: exactly what a flow may touch
-    state.ts         PURE state machine (where each record is, ownership cache, pending op)
+    state.ts         PURE state machine (where each record is, ownership cache, pending op, wentHome)
     objectives.ts    PURE mission text + waypoint target from state
-    npc-buyers.ts    the collector: display address + offer (1.5× price)
+    npc-buyers.ts    the collector (Stonks): display address + offer (1.5× price)
+    jazz-notes.ts    Jazz's one-line note per catalog section (record dialog)
   miso/              ALL chain access. Nothing outside this folder knows about Sui.
     adapter.ts       interface MisoAdapter
     types.ts         ShopRecord, OwnedRecord, Wallet, NpcBuyer, WithdrawResult, …
@@ -115,7 +140,12 @@ src/
     testnet-adapter.ts  TestnetAdapter (lazy-loads testnet/: keys, catalog, chain, sell)
     format.ts explorer.ts mock-catalog.ts
   world/             Three.js rendering + simulation behind WorldApi (api.ts); no money, no menus
-                     (the shop, street, cars, NPCs, the ATM)
+    layout.ts        every coordinate of the street (buildings, ATM, sedan, Stonks, hotel door, sound sources)
+    city.ts          street, sidewalks, buildings · street-props.ts  poles, wires, festival bulbs, vending, debris
+    atmosphere.ts    dusk sky, low western sun, fog, fire embers/smoke/ash, the brown-out dimming
+    signage.ts       ALL Japanese strings (SIGNS) + the bilingual sign atlas (docs/SIGNAGE.md)
+    environment-map.ts  HDRI image-based lighting · quality.ts  quality tiers (?quality=, ?backend=, adaptive, ?adapt=0)
+    shop.ts atm.ts cars.ts npcs.ts player.ts …  (there is no traffic any more: traffic.ts is gone)
   tamashi/           the procedural Tamashi characters (player, clerk, collector, street crowd)
     character.ts     createTamashi(id): TV head + screen + body, procedural rig (walk, carry, swing, cheer)
     tv-head.ts screen.ts body.ts …  the parts character.ts assembles
@@ -123,7 +153,7 @@ src/
     traits.ts/.json  per-token traits hand-read from the artwork (© Studio Mirai, see NOTICE.md)
     gallery.ts       ?gallery= visual QA page
   audio/             deck.ts (HLS/synth previews), sfx.ts, ambience.ts, context.ts (master bus/mute)
-  ui/                DOM only: hud.ts, minimap.ts, dialogs.ts, intro.ts, style.css
+  ui/                DOM only: hud.ts, minimap.ts, dialogs.ts, intro.ts, title-card.ts (exit beat), style.css
 ```
 
 Module boundaries (each file's header comment says what it owns and must not do):
@@ -309,7 +339,7 @@ npm test                          # e2e: tests/e2e/*.spec.ts (mock mode + read-o
 The e2e suite builds the app, serves it with `vite preview` on port 5287 and drives the
 whole loop with the keyboard at 1600×900 on SwiftShader (slow: several minutes; it runs
 at `quality=low` automatically). `loop.spec.ts` covers the full loop including the ATM,
-the collector's return and the failure/Retry paths; `hls.spec.ts` plays a real HLS preview
+the exit beat (title card), Stonks's return and the failure/Retry paths; `hls.spec.ts` plays a real HLS preview
 (`?mockhls=1`, needs network access to `cdn.miso.fm`) and checks the deck's `<audio>`
 time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (default:
 `test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run;
@@ -320,7 +350,7 @@ on screen now, distinct Tamashi ids shown so far, and the named cast with id, na
 
 ## Assets
 
-See [docs/ASSETS.md](docs/ASSETS.md). UX notes: [docs/UX.md](docs/UX.md).
+See [docs/ASSETS.md](docs/ASSETS.md). UX notes: [docs/UX.md](docs/UX.md). Every Japanese sign, with its English and where it hangs: [docs/SIGNAGE.md](docs/SIGNAGE.md) (`node scripts/gen-signage-doc.mjs` regenerates it; all Japanese is still awaiting native-speaker review). Tamashi and Nozomi © Studio Mirai.
 In mock mode all releases, artists and prices are fictional. Mock ids and digests are fake; their
 explorer (devxplorer) links will not resolve.
 

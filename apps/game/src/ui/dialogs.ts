@@ -2,9 +2,10 @@
  * Accessible modal menus (one native <dialog>), plus view builders for each screen.
  *
  * Owns: the dialog element, its keyboard handling (↑↓ / W S select, Enter / E /
- * Space confirm, Esc close), focus management, and the DOM for every screen:
- * record sleeve, deck, purchase (summary / pending / receipt / error), sell offer,
- * ATM withdrawal, collection and help.
+ * Space confirm, Esc close, per-action hotkeys), focus management, the skin (CRT
+ * terminal in amber / green, paper, enamel plate, price tag; see docs/UI-STYLE.md) and the
+ * DOM for every screen: record tag, deck, counter, pending, receipt, errors, ATM,
+ * collection and help.
  * Must not: decide what an action does. Screens take plain view data and a list of
  * actions (label + callback) chosen by the controller. Opening/closing reports
  * through `onOpenChange` so the controller can freeze player input; nothing here
@@ -16,19 +17,30 @@ import { copyText, h } from "./dom";
 export interface DialogAction {
   id: string;
   label: string;
-  /** Small right-aligned hint, e.g. a price or "[N]". */
+  /** Small right-aligned hint, e.g. a price. */
   detail?: string;
+  /** Keycap shown on the button ("E", "Esc", "N"). */
+  key?: string;
+  /** Extra KeyboardEvent.code that triggers this action while the dialog is open (e.g. "KeyN"). */
+  hotkey?: string;
   kind?: "primary" | "secondary" | "danger";
   disabled?: boolean;
   run: () => void;
 }
 
+/** CRT terminals (amber, green) for machines; paper / tag / enamel for people and things. */
+export type DialogSkin = "amber" | "green" | "paper" | "tag" | "enamel";
+
 export interface DialogSpec {
   /** Which screen this is ("record", "deck", "purchase", "sell", "collection", "help"…). */
   key: string;
   tone?: "default" | "pending" | "success" | "error";
-  eyebrow: string;
+  skin?: DialogSkin;
   title: string;
+  /** Render the title as a red hanko stamp: "領収 PAID" → { jp: "領収", en: "PAID" }. */
+  stamp?: { jp: string; en: string };
+  /** CRT only: a Japanese character boxed in front of the title ("済 CASH OUT"). */
+  titleJp?: string;
   body?: Node | (Node | null)[];
   actions?: DialogAction[];
   wide?: boolean;
@@ -38,6 +50,7 @@ export interface DialogSpec {
 }
 
 const NAV_KEYS = ["ArrowUp", "ArrowDown", "KeyW", "KeyS", "Enter", "NumpadEnter", "KeyE", "Space", "Escape"];
+const TILTS: Record<DialogSkin, string> = { amber: "0deg", green: "0deg", paper: "-1.2deg", tag: "1.2deg", enamel: "-0.8deg" };
 
 export class Dialogs {
   /** Called with true when a dialog opens and false when it closes. */
@@ -51,9 +64,7 @@ export class Dialogs {
 
   constructor(host: HTMLElement) {
     this.content = h("div", { class: "dlg-content" });
-    const closeButton = h("button", { class: "dlg-close", type: "button", "aria-label": "Close (Esc)" }, "×");
-    closeButton.addEventListener("click", () => this.requestClose());
-    this.el = h("dialog", { class: "dlg", "aria-labelledby": "dlg-title" }, closeButton, this.content);
+    this.el = h("dialog", { class: "dlg", "aria-labelledby": "dlg-title" }, this.content);
     this.el.addEventListener("cancel", (e) => {
       e.preventDefault();
       this.requestClose();
@@ -71,12 +82,15 @@ export class Dialogs {
   show(spec: DialogSpec): void {
     const previousFocus = this.el.open && this.spec?.key === spec.key ? (document.activeElement as HTMLElement | null)?.dataset.actionId : undefined;
     const wasOpen = this.el.open;
+    const skin = spec.skin ?? "paper";
     this.spec = spec;
-    this.el.className = `dlg tone-${spec.tone ?? "default"}${spec.wide ? " dlg-wide" : ""}`;
+    this.el.className = `dlg skin-${skin} tone-${spec.tone ?? "default"}${spec.wide ? " dlg-wide" : ""}${wasOpen ? " dlg-swap" : ""}`;
+    this.el.style.setProperty("--tilt", TILTS[skin]);
     const actions = (spec.actions ?? []).map((a) => {
       const button = h(
         "button",
         { class: `dlg-action dlg-nav ${a.kind ?? "secondary"}`, type: "button", "data-action-id": a.id, disabled: a.disabled ?? false },
+        a.key ? h("kbd", null, a.key) : null,
         h("span", { class: "dlg-action-label" }, a.label),
         a.detail ? h("span", { class: "dlg-action-detail" }, a.detail) : null,
       );
@@ -86,12 +100,17 @@ export class Dialogs {
       return button;
     });
     const body = spec.body === undefined ? [] : Array.isArray(spec.body) ? spec.body : [spec.body];
+    const title = h(
+      "h2",
+      { id: "dlg-title", class: `dlg-title${spec.stamp ? " is-stamp" : ""}` },
+      spec.stamp
+        ? [h("span", { class: "stamp-jp jp" }, spec.stamp.jp), " ", h("span", { class: "stamp-en" }, spec.stamp.en)]
+        : [spec.titleJp ? h("span", { class: "title-jp jp" }, spec.titleJp) : null, spec.titleJp ? " " : null, spec.title],
+    );
     const nodes: (Node | null)[] = [
-      h("div", { class: "dlg-eyebrow" }, spec.eyebrow),
-      h("h2", { id: "dlg-title", class: "dlg-title" }, spec.title),
+      title,
       ...body.filter((n): n is Node => n !== null),
       actions.length ? h("div", { class: "dlg-actions" }, ...actions) : null,
-      actions.length ? h("div", { class: "dlg-keys" }, "↑↓ select · Enter confirm · Esc close") : null,
     ];
     this.content.replaceChildren(...nodes.filter((n): n is Node => n !== null));
     if (!wasOpen) {
@@ -100,7 +119,8 @@ export class Dialogs {
     }
     const nav = this.navTargets();
     const keep = previousFocus ? nav.find((b) => b.dataset.actionId === previousFocus) : undefined;
-    (keep ?? actions.find((b) => !b.disabled) ?? nav[0] ?? this.el)?.focus({ preventScroll: true });
+    const primary = actions.find((b) => !b.disabled && b.classList.contains("primary"));
+    (keep ?? primary ?? actions.find((b) => !b.disabled) ?? nav[0] ?? this.el)?.focus({ preventScroll: true });
   }
 
   /** Update only if this screen is still the one showing (async results arriving late). */
@@ -132,10 +152,17 @@ export class Dialogs {
   }
 
   private onKey(e: KeyboardEvent): void {
-    if (!this.el.open || !NAV_KEYS.includes(e.code)) return;
+    if (!this.el.open) return;
+    const hotkey = this.spec?.actions?.find((a) => a.hotkey === e.code && !a.disabled);
+    if (!hotkey && !NAV_KEYS.includes(e.code)) return;
     e.preventDefault();
     e.stopImmediatePropagation();
     if (e.repeat) return;
+    if (hotkey) {
+      this.onNavigate();
+      hotkey.run();
+      return;
+    }
     if (e.code === "Escape") {
       this.requestClose();
       return;
@@ -161,136 +188,59 @@ export class Dialogs {
 // ═════════════════════════════════ view builders ═════════════════════════════════
 // Pure functions: plain data in, DOM out. No game rules.
 
+/** One quiet line under the title. */
+export function paragraph(text: string, className = "dlg-p"): HTMLElement {
+  return h("p", { class: className }, text);
+}
+
 export interface RecordView {
   title: string;
   artist: string;
-  genre: string;
-  year: number;
-  label: string;
-  description: string;
   coverUrl: string;
   palette: string[];
   priceText: string;
+  /** "#106/250" (the copy this pick-up would be) or "sold out". */
   edition: string;
-  minted: number;
-  maxSupply: number;
-  /** Optional status chip: "IN YOUR HANDS · UNPAID", "OWNED · #106/250". */
-  status?: string;
 }
 
-/** Big sleeve + liner notes + price + edition bar. */
+/** The price tag: small sleeve, "Artist · #106/250", price stamped on. */
 export function recordBody(r: RecordView): HTMLElement {
-  const pct = r.maxSupply > 0 ? Math.min(100, (r.minted / r.maxSupply) * 100) : 0;
   const accent = r.palette[1] ?? "#d5b776";
   return h(
     "div",
     { class: "rec", style: `--accent:${accent}` },
-    h(
-      "div",
-      { class: "rec-sleeve" },
-      h("img", { class: "rec-cover", src: r.coverUrl, alt: `${r.title} sleeve artwork`, onerror: coverFallback }),
-      h("div", { class: "rec-vinyl", "aria-hidden": "true" }),
-    ),
-    h(
-      "div",
-      { class: "rec-info" },
-      r.status ? h("div", { class: "rec-status" }, r.status) : null,
-      h("p", { class: "rec-artist" }, r.artist),
-      h("div", { class: "rec-tags" }, h("span", null, r.genre), h("span", null, String(r.year)), h("span", null, r.label)),
-      h("p", { class: "rec-desc" }, r.description),
-      h(
-        "div",
-        { class: "rec-buy" },
-        h("div", { class: "rec-price" }, r.priceText),
-        h(
-          "div",
-          { class: "rec-edition" },
-          h("div", { class: "rec-edition-row" }, h("span", null, r.edition), h("b", null, `${r.minted} / ${r.maxSupply} sold`)),
-          h("div", { class: "rec-bar" }, h("i", { style: `width:${pct.toFixed(1)}%` })),
-        ),
-      ),
-    ),
+    h("img", { class: "rec-cover", src: r.coverUrl, alt: `${r.title} sleeve artwork`, onerror: coverFallback }),
+    h("div", { class: "rec-info" }, h("p", { class: "rec-artist" }, `${r.artist} · ${r.edition}`), h("div", { class: "rec-price" }, r.priceText)),
   );
 }
 
-/** Small cover + title row used by purchase/sell/deck screens. */
-export function recordStrip(coverUrl: string, title: string, artist: string, right?: string, note?: string): HTMLElement {
+/** Small cover + one line, for the receipt and the offer. */
+export function recordLine(coverUrl: string, text: string): HTMLElement {
+  return h("div", { class: "strip" }, h("img", { src: coverUrl, alt: "", onerror: coverFallback }), h("p", { class: "strip-line" }, text));
+}
+
+/** Scrolling "PROCESSING ▮▮▮▯▯" bar (static in reduced motion). */
+export function pendingBody(): HTMLElement {
   return h(
     "div",
-    { class: "strip" },
-    h("img", { src: coverUrl, alt: "", onerror: coverFallback }),
-    h("div", { class: "strip-text" }, h("strong", null, title), h("span", null, artist), note ? h("small", null, note) : null),
-    right ? h("div", { class: "strip-right" }, right) : null,
+    { class: "pending", role: "status", "aria-label": "Processing" },
+    h("div", { class: "pending-bar", "aria-hidden": "true" }, ...[0, 1, 2, 3, 4].map((i) => h("i", { style: `--i:${i}` }, "▮"))),
   );
 }
 
-export function lineItems(rows: [string, string][]): HTMLElement {
-  return h("dl", { class: "lines" }, ...rows.flatMap(([k, v]) => [h("dt", null, k), h("dd", null, v)]));
+export function errorBody(message: string): HTMLElement {
+  return h("p", { class: "err-msg" }, message);
 }
 
-/** Animated "processing" block. */
-export function pendingBody(text: string, sub: string): HTMLElement {
-  return h(
-    "div",
-    { class: "pending" },
-    h("div", { class: "pending-disc", "aria-hidden": "true" }),
-    h("p", { class: "pending-text" }, text, h("span", { class: "dots", "aria-hidden": "true" }, h("i", null, "."), h("i", null, "."), h("i", null, "."))),
-    h("p", { class: "pending-sub" }, sub),
-  );
+export interface ReceiptLink {
+  href: string;
+  /** Stable hook for tests (data-receipt-link). */
+  id?: string;
 }
 
-export function errorBody(message: string, reassurance: string): HTMLElement {
-  return h("div", { class: "err" }, h("div", { class: "err-icon", "aria-hidden": "true" }, "!"), h("p", { class: "err-msg" }, message), h("p", { class: "err-sub" }, reassurance));
-}
-
-export interface ReceiptRow {
-  label: string;
-  value: string;
-  /** Full value copied by the copy button. */
-  copy?: string;
-  href?: string;
-  /** Link text, e.g. "View receipt ↗". */
-  linkLabel?: string;
-  /** Stable hook for tests (data-receipt-link), e.g. "tx" | "record". Defaults to the label. */
-  linkId?: string;
-}
-
-/** Receipt rows with optional copy buttons and "View … ↗" links (open in a new tab). */
-export function receiptBody(headline: string, rows: ReceiptRow[], footnote?: string): HTMLElement {
-  return h(
-    "div",
-    { class: "receipt" },
-    h("div", { class: "receipt-check", "aria-hidden": "true" }, "✓"),
-    h("p", { class: "receipt-headline" }, headline),
-    h(
-      "div",
-      { class: "receipt-rows" },
-      ...rows.map((row) => {
-        const copy = row.copy ? h("button", { class: "mini dlg-nav", type: "button", "aria-label": `Copy ${row.label}` }, "Copy") : null;
-        if (copy && row.copy) {
-          const value = row.copy;
-          copy.addEventListener("click", () => {
-            void copyText(value).then((ok) => (copy.textContent = ok ? "Copied ✓" : "Copy failed"));
-          });
-        }
-        return h(
-          "div",
-          { class: "receipt-row" },
-          h("span", { class: "receipt-label" }, row.label),
-          h("code", { class: `receipt-value${row.copy ? " mono" : ""}`, title: row.copy ?? row.value }, row.value),
-          copy,
-          row.href
-            ? h("a", { class: "mini link dlg-nav", href: row.href, target: "_blank", rel: "noopener noreferrer", "data-receipt-link": row.linkId ?? row.label }, row.linkLabel ?? "View ↗")
-            : null,
-        );
-      }),
-    ),
-    footnote ? h("p", { class: "receipt-foot" }, footnote) : null,
-  );
-}
-
-export function paragraph(text: string, className = "dlg-p"): HTMLElement {
-  return h("p", { class: className }, text);
+/** The single small "View receipt ↗" link. It is a menu stop (Tab / arrows), like a button. */
+export function receiptLink(link: ReceiptLink): HTMLElement {
+  return h("a", { class: "mini link dlg-nav", href: link.href, target: "_blank", rel: "noopener noreferrer", "data-receipt-link": link.id ?? "tx" }, "View receipt ↗");
 }
 
 export interface CollectionItem {
@@ -299,7 +249,6 @@ export interface CollectionItem {
   artist: string;
   coverUrl: string;
   serialText: string;
-  explorerUrl: string;
   /** Button label ("Hold", "Put away", "In hand"…); null = no button. */
   actionLabel: string | null;
   actionDisabled?: boolean;
@@ -314,10 +263,8 @@ export interface SoldItem {
 export function collectionBody(
   state: { kind: "loading" } | { kind: "error"; message: string } | { kind: "ready"; items: CollectionItem[]; sold: SoldItem[] },
 ): HTMLElement {
-  if (state.kind === "loading") {
-    return h("div", { class: "coll coll-loading", "aria-busy": "true" }, ...[0, 1, 2].map(() => h("div", { class: "coll-item skeleton" }, h("div", { class: "sk-cover" }), h("div", { class: "sk-lines" }, h("i"), h("i")))), h("p", { class: "dlg-p" }, "Flipping through your records…"));
-  }
-  if (state.kind === "error") return errorBody(state.message, "Your records are safe. Try again in a moment.");
+  if (state.kind === "loading") return h("div", { class: "coll coll-loading", "aria-busy": "true" }, pendingBody());
+  if (state.kind === "error") return errorBody(state.message);
   const items = state.items.map((item) => {
     const button = item.actionLabel
       ? h("button", { class: "mini dlg-nav coll-hold", type: "button", disabled: item.actionDisabled ?? false }, item.actionLabel)
@@ -327,25 +274,18 @@ export function collectionBody(
       "div",
       { class: "coll-item", "data-record-id": item.recordId },
       h("img", { src: item.coverUrl, alt: "", onerror: coverFallback }),
-      h(
-        "div",
-        { class: "coll-text" },
-        h("strong", null, item.title),
-        h("span", null, item.artist),
-        h("small", null, `${item.serialText} · `, h("a", { class: "dlg-nav", href: item.explorerUrl, target: "_blank", rel: "noopener noreferrer", title: item.recordId }, "View record ↗")),
-      ),
+      h("div", { class: "coll-text" }, h("strong", null, item.title), h("small", null, item.serialText)),
       button,
     );
   });
   return h(
     "div",
     { class: "coll" },
-    items.length ? h("div", { class: "coll-list" }, ...items) : paragraph(state.sold.length ? "No records on you right now. The shop restocks every release." : "No Records yet. Buy one at the counter in the shop."),
+    items.length ? h("div", { class: "coll-list" }, ...items) : paragraph("Nothing yet."),
     state.sold.length
       ? h(
           "div",
           { class: "coll-sold" },
-          h("div", { class: "coll-sold-title" }, "SOLD"),
           ...state.sold.map((s) => h("div", { class: "coll-sold-row" }, h("span", null, s.title), h("b", null, s.paidText))),
         )
       : null,
@@ -354,22 +294,21 @@ export function collectionBody(
 
 export function helpBody(): HTMLElement {
   const rows: [string, string][] = [
-    ["W A S D", "Walk (arrow keys too)"],
+    ["WASD", "Walk"],
     ["Shift", "Sprint"],
     ["Space", "Jump"],
-    ["E / Enter", "Interact with what's in front of you"],
-    ["N", "Next track on the deck"],
-    ["I", "Inspect the record in your hands"],
-    ["C", "Your record collection"],
-    ["M", "Mute / unmute"],
-    ["L or drag", "Mouse look · + − zoom · Home reset camera"],
-    ["↑↓ Enter Esc", "Menus: select, confirm, close"],
+    ["E", "Use"],
+    ["N", "Next track"],
+    ["I", "Look closer"],
+    ["C", "Records"],
+    ["M", "Mute"],
+    ["U", "Hide UI"],
+    ["L", "Mouse look"],
   ];
   return h(
     "div",
     { class: "help" },
-    h("ol", { class: "help-loop" }, ...["Pick a record from the crates at Saisei Records", "Spin it on the listening deck", "Pay Jazz at the counter", "Smash the dead Triangle sedan with it", "Sell it to Stonks across the street", "Head home with Inicio"].map((t) => h("li", null, t))),
-    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM in TriMart, next door, dispenses cash."),
     h("dl", { class: "help-keys" }, ...rows.flatMap(([k, v]) => [h("dt", null, h("kbd", null, k)), h("dd", null, v)])),
+    h("p", { class: "help-credit" }, "Tamashi and Nozomi © Studio Mirai"),
   );
 }

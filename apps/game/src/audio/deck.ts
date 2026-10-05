@@ -120,7 +120,7 @@ export class RecordDeck {
    */
   async play(record: ShopRecord, trackIndex = 0): Promise<void> {
     const track = record.tracks[trackIndex];
-    if (!track) throw new Error("This record has no track there.");
+    if (!track) throw new Error("No track there.");
     this.stopCurrent();
     const gen = ++this.gen;
     const ctx = audioContext();
@@ -249,7 +249,7 @@ export class RecordDeck {
         reject(superseded());
       };
       const timeout = setTimeout(
-        () => fail("The record won't spin up — the audio stream timed out."),
+        () => fail("The record won't spin up."),
         START_TIMEOUT_MS,
       );
       const begin = () => {
@@ -304,8 +304,8 @@ export class RecordDeck {
             hls.loadSource(fallback);
             return;
           }
-          if (!settled) fail("Couldn't load this track's audio. Check your connection.");
-          else if (this.session === session) this.die(session, "The stream dropped out.");
+          if (!settled) fail("Track won't load. Check your connection.");
+          else if (this.session === session) this.die(session, "The sound dropped out.");
         });
         el.addEventListener("canplay", begin, { once: true });
         hls.loadSource(url);
@@ -328,12 +328,12 @@ export class RecordDeck {
             el.src = fallback; // not on the CDN: retry once from the aggregator
             return;
           }
-          if (!settled) fail("Couldn't load this track's audio. Check your connection.");
-          else if (this.session === session) this.die(session, "The stream dropped out.");
+          if (!settled) fail("Track won't load. Check your connection.");
+          else if (this.session === session) this.die(session, "The sound dropped out.");
         });
         el.src = url;
       } else {
-        fail("This browser can't stream the record's audio.");
+        fail("This browser can't play the record.");
       }
     });
   }
@@ -412,7 +412,7 @@ function delay(ms: number): Promise<void> {
 }
 
 function superseded(): Error {
-  const error = new Error("Playback was interrupted.");
+  const error = new Error("Playback stopped.");
   error.name = "AbortError";
   return error;
 }

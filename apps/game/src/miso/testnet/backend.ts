@@ -92,7 +92,7 @@ export class TestnetBackend {
   /** Player-signed faucet mint of `amount` FakeUSD to the player (≤ MAX_WITHDRAW). */
   async withdrawFakeUsd(amount: bigint): Promise<WithdrawResult> {
     if (typeof amount !== "bigint" || amount <= 0n || amount > MAX_WITHDRAW) {
-      throw new PlayerError(`The ATM dispenses up to ${formatAmount(MAX_WITHDRAW, FUSD_DECIMALS, FUSD_SYMBOL)} at a time.`);
+      throw new PlayerError("That's too much for the ATM.");
     }
     const signer = getKeys().player;
     const address = signer.toSuiAddress();
@@ -129,7 +129,7 @@ export class TestnetBackend {
       this.pendingPurchases.delete(record.id);
       const recordId = executed.created.find((c) => isRecordType(c.type))?.objectId;
       if (!recordId) {
-        throw new PlayerError("The purchase went through but the record isn't in your bag yet. Check your collection (C).");
+        throw new PlayerError("Paid. Record's not in your bag yet. Press C.");
       }
       return await this.afterPurchase(record, recordId, executed.digest);
     } catch (error) {

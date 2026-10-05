@@ -4,7 +4,7 @@
  *   adapter  (src/miso)   chain access, chosen by ?chain=mock|testnet
  *   world    (src/world)  Three.js city + shop, behind WorldApi
  *   audio    (src/audio)  deck preview, sfx, ambience
- *   ui       (src/ui)     HUD, minimap, dialogs, intro (DOM only)
+ *   ui       (src/ui)     HUD, minimap, dialogs, boot cover (DOM only)
  *   controller (src/game/controller.ts) glues them; read it first.
  *
  * `?gallery=1` (all 100 Tamashi in a grid) or `?gallery=<id>` (one up close next to its
@@ -59,13 +59,18 @@ if (gallery) {
     titleCard: new TitleCard(app),
   });
   installDebugHooks(world, adapter, controller, deck);
-  // The street compiles its GPU pipelines while the intro shows; Enter waits for it (and
-  // for a second warm-up once the records are on the shelves) so play never hitches.
-  intro.setStatus("street", "Lighting up the street…", "loading");
-  const booted = controller.boot();
-  const streetReady = Promise.all([world.ready, booted])
-    .then(() => world.warmUp())
-    .then(() => intro.setStatus("street", "The street is lit", "ok"))
-    .catch(() => intro.setStatus("street", "The street is lit", "ok"));
-  intro.waitFor(streetReady);
+  // The street compiles its GPU pipelines behind the loading screen; Enter appears when
+  // everything is warm (and the records are on the shelves) so play never hitches.
+  const catalogStep = intro.track(2, 1500);
+  const assetsStep = intro.track(5, 6000);
+  const warmStep = intro.track(3, 3000, true);
+  const booted = controller.boot().finally(catalogStep.done);
+  const assets = world.ready.finally(assetsStep.done);
+  void Promise.all([assets, booted])
+    .then(() => {
+      warmStep.start();
+      return world.warmUp().finally(warmStep.done);
+    })
+    .catch(() => undefined)
+    .then(() => intro.setReady());
 }

@@ -52,8 +52,9 @@ import type { ShopAmbience } from "../audio/ambience";
 import { isMuted, toggleMuted, unlockAudio } from "../audio/context";
 import * as sfx from "../audio/sfx";
 import type { Hud } from "../ui/hud";
-import type { Minimap } from "../ui/minimap";
 import type { Intro } from "../ui/intro";
+import type { Minimap } from "../ui/minimap";
+import { UiVisibility, uiVisibleFromSearch } from "../ui/ui-visibility";
 import type { TitleCard } from "../ui/title-card";
 import type { Dialogs } from "../ui/dialogs";
 import { objective } from "./objectives";
@@ -109,8 +110,8 @@ export interface ControllerDeps {
   ambience: ShopAmbience;
   hud: Hud;
   minimap: Minimap;
-  dialogs: Dialogs;
   intro: Intro;
+  dialogs: Dialogs;
   titleCard: TitleCard;
 }
 
@@ -127,8 +128,9 @@ export class GameController {
   private readonly ambience: ShopAmbience;
   private readonly hud: Hud;
   private readonly minimap: Minimap;
-  private readonly dialogs: Dialogs;
   private readonly intro: Intro;
+  private readonly uiVisibility = new UiVisibility(uiVisibleFromSearch(location.search));
+  private readonly dialogs: Dialogs;
   private readonly titleCard: TitleCard;
 
   private catalog = new Map<string, ShopRecord>();
@@ -163,8 +165,8 @@ export class GameController {
     this.ambience = deps.ambience;
     this.hud = deps.hud;
     this.minimap = deps.minimap;
-    this.dialogs = deps.dialogs;
     this.intro = deps.intro;
+    this.dialogs = deps.dialogs;
     this.titleCard = deps.titleCard;
 
     // What the flows may touch (see flows/context.ts).
@@ -208,7 +210,7 @@ export class GameController {
     this.deck.onProgress = (elapsed, len) => this.hud.setProgress(elapsed, len);
     this.deck.onEnded = () => {
       this.dispatch({ type: "stop" });
-      this.hud.toast("Preview over. Like it? Take it to the counter.");
+      this.hud.toast("Like it? Take it to the counter.");
     };
     this.deck.onError = (error) => {
       this.dispatch({ type: "stop" });
@@ -221,10 +223,10 @@ export class GameController {
       this.renderPrompt();
     };
     this.dialogs.onNavigate = () => sfx.uiBlip();
-    this.intro.onStart = () => this.start();
     window.addEventListener("keydown", (e) => this.onKey(e));
 
-    this.world.setBlocked(true); // until the intro is dismissed
+    this.intro.onStart = () => this.start();
+    this.world.setBlocked(true); // until the loading screen is dismissed
     this.carIds = this.world
       .mapSnapshot()
       .points.filter((p) => p.kind === "car")
@@ -235,11 +237,8 @@ export class GameController {
 
   // ═══════════════════════════════ startup ═══════════════════════════════
 
-  /** Load catalog, wallet and collection (in parallel) while the intro is showing. */
+  /** Load catalog, wallet and collection (in parallel) while the boot cover is showing. */
   async boot(): Promise<void> {
-    const intro = this.intro;
-    intro.setStatus("catalog", "Loading the crates…", "loading");
-    intro.setStatus("wallet", "Counting your cash…", "loading");
     const catalog = this.adapter
       .loadShopCatalog()
       .then((records) => {
@@ -250,27 +249,41 @@ export class GameController {
           records.map((r) => ({ id: r.id, title: r.title, artist: r.artist, section: r.section, coverUrl: r.coverUrl, palette: r.palette })),
         );
         this.dispatch({ type: "catalogLoaded", prices });
-        intro.setStatus("catalog", `${records.length} records in the crates`, "ok");
       })
-      .catch((error: unknown) => intro.setStatus("catalog", `Catalog: ${message(error)}`, "error"));
+      .catch((error: unknown) => console.warn("catalog failed", error));
     const wallet = this.refreshWallet()
-      .then((w) => intro.setStatus("wallet", `Cash: ${this.money(w.fakeUsd)}`, "ok"))
-      .catch((error: unknown) => intro.setStatus("wallet", `Cash: ${message(error)}`, "error"));
+      .then(() => undefined)
+      .catch((error: unknown) => console.warn("wallet failed", error));
     const collection = this.refreshCollection().catch(() => {});
     await Promise.all([catalog, wallet, collection]);
     document.documentElement.dataset.gameReady = "true";
   }
 
-  /** Intro dismissed (a user gesture): unlock audio, start ambience, show the HUD. */
+  /**
+   * Enter on the loading screen (a user gesture): resume the audio context, start the
+   * ambience, show the HUD and hand over control. If audio could not start here, the first
+   * key press or pointer down later does it silently (no prompt).
+   */
   private start(): void {
     if (this.started) return;
     this.started = true;
-    void unlockAudio().catch(() => {});
-    void this.ambience.start().catch(() => {});
+    const unlock = () => {
+      void unlockAudio()
+        .then(() => this.ambience.start())
+        .then(() => {
+          window.removeEventListener("keydown", unlock, true);
+          window.removeEventListener("pointerdown", unlock, true);
+        })
+        .catch(() => {});
+    };
+    unlock();
+    window.addEventListener("keydown", unlock, true);
+    window.addEventListener("pointerdown", unlock, true);
+    window.focus();
     this.hud.setVisible(true);
+    this.applyUiVisibility();
     this.syncBlocked();
     this.render();
-    this.hud.missionToast("NOZOMI", "Book 3 — As The World Shook", "info", 2200);
   }
 
   // ═══════════════════════════════ state ═══════════════════════════════
@@ -318,7 +331,7 @@ export class GameController {
     const op = s.op?.status === "pending" ? s.op.kind : null;
     this.world.setJumpAllowed(op === null); // no jumping while a purchase, sale or ATM withdrawal is pending
     this.hud.setPending(
-      op === "purchase" ? "Ringing it up…" : op === "sell" ? "Closing the deal…" : op === "withdraw" ? "Withdrawing FakeUSD…" : null,
+      op === "purchase" || op === "sell" || op === "withdraw" ? "Processing" : null,
     );
     this.hud.setMission(objective(s).text);
     const held = s.hand ? this.catalog.get(s.hand.shopRecordId) : undefined;
@@ -389,20 +402,20 @@ export class GameController {
       case "record": {
         const r = t.recordId ? this.catalog.get(t.recordId) : undefined;
         if (r && s.hand?.shopRecordId === r.id) return `Inspect ${r.title}`;
-        return r ? `Browse · ${r.title}` : "Browse";
+        return r ? r.title : "Browse";
       }
       case "deck":
-        if (s.playing) return "Deck · next track / lift needle";
-        if (s.deck) return "Use the deck";
-        return s.hand ? "Put it on the deck" : "Listening deck";
+        if (s.playing) return "Turntable";
+        if (s.deck) return "Turntable";
+        return s.hand ? "Put it on" : "Turntable";
       case "cashier":
-        return heldIsUnpaid(s) ? "Pay Jazz at the counter" : "Talk to Jazz";
+        return heldIsUnpaid(s) ? "Pay Jazz" : "Talk to Jazz";
       case "car":
-        return s.hand ? "Smash" : "Dead Triangle sedan";
+        return s.hand ? "Smash" : "Dead sedan";
       case "buyer":
         return heldIsOwned(s) ? "Sell to Stonks" : "Talk to Stonks";
       case "atm":
-        return "Withdraw FakeUSD";
+        return "ATM";
       case "home":
         return "Head home with Inicio";
     }
@@ -535,7 +548,7 @@ export class GameController {
    * The exit beat (bible §7.4): Gamer heads home with Inicio. The boom from the
    * facility (sfx + world.homeBeat: camera shake, brown-out), iron footsteps a second
    * later, then the "Book 3 — Dawn of the Machin" title card. Afterwards the player is
-   * free to walk; the mission reads "Home. Press H to reset the demo."
+   * free to walk; the mission reads "Home. Press H to reset."
    * Refused (no-op) before a sale, while anything is pending, or when already home.
    */
   async goHome(): Promise<void> {
@@ -561,7 +574,7 @@ export class GameController {
     }
   }
 
-  /** Freeze player input while the intro, a dialog, or the exit beat / title card is up. */
+  /** Freeze player input while the loading screen, a dialog, or the exit beat / title card is up. */
   private syncBlocked(): void {
     this.world.setBlocked(this.intro.isOpen || this.dialogs.openKey !== null || this.homeBeatRunning || this.titleCard.isOpen);
   }
@@ -603,10 +616,15 @@ export class GameController {
       case "KeyI":
         if (!open && this.state.hand) this.shop.openInspect();
         break;
+      case "KeyU":
+        if (open) return; // dialogs keep the overlay as it is
+        this.uiVisibility.toggle();
+        this.applyUiVisibility();
+        break;
       case "KeyM": {
         const muted = toggleMuted();
         this.hud.setMuted(muted);
-        this.hud.toast(muted ? "Sound off" : "Sound on");
+        this.hud.toast(muted ? "Muted" : "Sound on");
         break;
       }
       case "KeyN":
@@ -617,6 +635,13 @@ export class GameController {
         return;
     }
     e.preventDefault();
+  }
+
+  /** HUD, minimap, prompts, toasts and the 3D helper markers follow the U toggle (no toast: it would be in the shot). */
+  private applyUiVisibility(): void {
+    const visible = this.uiVisibility.visible;
+    document.documentElement.dataset.ui = visible ? "on" : "off";
+    this.world.setHelpersVisible(visible);
   }
 
   private nextTrackShortcut(): void {

@@ -145,7 +145,7 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
       const sim = await page.evaluate((id) => (window as any).__game.adapter.debugSimulatePurchase(id), RELEASES[0]);
       console.log("simulate (player):", JSON.stringify(sim));
       expect(sim.built).toBe(false);
-      expect(sim.playerMessage).toMatch(/^Not enough FakeUSD — you have \d+\.\d{2} FUSD, this costs \d+\.\d{2} FUSD\. The ATM outside dispenses cash\.$/);
+      expect(sim.playerMessage).toMatch(/^Jazz frowns: short on cash\.$/);
     }
   }
 
@@ -154,7 +154,7 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   console.log("simulate (funded sender):", JSON.stringify(funded));
   // The sender may have spent its FakeUSD by now; either way the result must be explained.
   if (funded.built) expect(funded).toMatchObject({ success: true, createsRecord: true });
-  else expect(funded.playerMessage).toMatch(/Not enough FakeUSD|till is offline/);
+  else expect(funded.playerMessage).toMatch(/short on cash|till is offline/);
 
   // gRPC-web from the browser origin (CORS) worked.
   const grpc = requests.filter((r) => r.url.startsWith("https://fullnode.testnet.sui.io/"));
@@ -207,8 +207,8 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   const beforeAtm = BigInt(s.balance!);
   await goTo(page, "atm");
   await page.keyboard.press("KeyE");
-  await expect(dialog.locator(".dlg-title")).toHaveText("FakeUSD ATM");
-  await expect(dialog.locator(".dlg-action", { hasText: "Withdraw 50 FUSD" })).toBeVisible();
+  await expect(dialog.locator(".dlg-title")).toHaveText("ATM");
+  await expect(dialog.locator(".dlg-action", { hasText: "Withdraw 50" })).toBeVisible();
   await shot(page, "tnl-02-atm");
   await page.keyboard.press("Enter"); // Withdraw 50 FUSD
   await expect(dialog.locator(".pending")).toBeVisible();
@@ -238,7 +238,7 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
 
   await goTo(page, "cashier");
   await page.keyboard.press("KeyE");
-  await expect(dialog.locator(".dlg-title")).toHaveText("Ring it up?");
+  await expect(dialog.locator(".dlg-title")).toHaveText(TITLE);
   await page.keyboard.press("Enter"); // Pay
   await expect(dialog.locator(".pending")).toBeVisible();
   await shot(page, "tnl-04-purchase-pending");
@@ -276,7 +276,7 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   // 4. Sell: player transfer to the GAME, GAME payout.
   await goTo(page, "buyer:collector");
   await page.keyboard.press("KeyE");
-  await expect(dialog.locator(".dlg-title")).toHaveText(new RegExp(`^Sell ${TITLE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} for`));
+  await expect(dialog.locator(".dlg-title")).toHaveText("Stonks wants it");
   await chooseAction(page, /^Sell for/);
   await expect(dialog.locator(".pending")).toBeVisible();
   await shot(page, "tnl-07-sell-pending");

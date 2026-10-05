@@ -1,8 +1,7 @@
 /**
  * Shop flow: browsing the crates and the listening deck (steps 2-3 of the loop).
  *
- * Owns: the record menu (pick up / swap / sold out, plus Jazz's one-line note on the
- * section, jazz-notes.ts), the "in your hands" inspect
+ * Owns: the record price tag (pick up / swap / sold out), the "in your hands" inspect
  * screen (put back / put away) and the deck menu (place, drop the needle, next
  * track, lift, take back, swap). Each button dispatches one state action.
  * Must not: call the adapter or start audio directly. Playback follows
@@ -10,10 +9,8 @@
  */
 import type { ShopRecord } from "../../miso/types";
 import * as sfx from "../../audio/sfx";
-import { paragraph, recordBody, recordStrip, type DialogAction, type RecordView } from "../../ui/dialogs";
+import { paragraph, recordBody, type DialogAction, type RecordView } from "../../ui/dialogs";
 import { canPick, handLocked, heldIsOwned, heldOwnedRecord, recordPlace } from "../state";
-import { h } from "../../ui/dom";
-import { jazzNote } from "../jazz-notes";
 import type { FlowContext } from "./context";
 
 export class ShopFlow {
@@ -31,30 +28,29 @@ export class ShopFlow {
     const held = s.hand ? ctx.catalog.get(s.hand.shopRecordId) : undefined;
     const actions: DialogAction[] = [];
     if (place === "deck") {
-      actions.push({ id: "pick", label: "It's on the listening deck", disabled: true, run: () => {} });
+      actions.push({ id: "pick", label: "On the turntable", disabled: true, run: () => {} });
     } else if (heldIsOwned(s)) {
-      actions.push({ id: "pick", label: "Hands full", detail: `holding ${held?.title ?? "a record"}`, disabled: true, run: () => {} });
+      actions.push({ id: "pick", label: "Hands full", disabled: true, run: () => {} });
     } else if (soldOut) {
       actions.push({ id: "pick", label: "Sold out", disabled: true, run: () => {} });
     } else if (canPick(s, id)) {
       actions.push({
         id: "pick",
         kind: "primary",
-        label: held ? `Swap for this one` : "Pick up",
-        detail: held ? `${held.title} goes back` : "take it to the deck",
+        key: "E",
+        label: held ? "Swap" : "Pick up",
         run: () => {
           if (ctx.dispatch({ type: "pick", shopRecordId: id })) sfx.pickup();
           ctx.dialogs.close();
         },
       });
     }
-    actions.push({ id: "close", label: "Put back · keep digging", run: () => ctx.dialogs.close() });
+    actions.push({ id: "close", key: "Esc", label: "Put back", run: () => ctx.dialogs.close() });
     ctx.dialogs.show({
       key: "record",
-      wide: true,
-      eyebrow: `FROM THE CRATES · ${r.section}`,
+      skin: "tag",
       title: r.title,
-      body: [recordBody(this.recordView(r)), jazzLine(r.section)],
+      body: recordBody(this.recordView(r)),
       actions,
     });
   }
@@ -67,12 +63,11 @@ export class ShopFlow {
     const r = ctx.catalog.get(s.hand.shopRecordId);
     if (!r) return;
     const owned = heldOwnedRecord(s);
-    const actions: DialogAction[] = [];
+    const actions: DialogAction[] = [{ id: "close", kind: "primary", key: "E", label: "Keep it", run: () => ctx.dialogs.close() }];
     if (owned) {
       actions.push({
         id: "stow",
-        label: "Put it away",
-        detail: "back to your collection",
+        label: "Put away",
         disabled: handLocked(s),
         run: () => {
           ctx.dispatch({ type: "stowOwned" });
@@ -82,7 +77,7 @@ export class ShopFlow {
     } else {
       actions.push({
         id: "putback",
-        label: "Put it back on the shelf",
+        label: "Put back",
         disabled: handLocked(s),
         run: () => {
           ctx.dispatch({ type: "putBack" });
@@ -90,13 +85,11 @@ export class ShopFlow {
         },
       });
     }
-    actions.unshift({ id: "close", kind: "primary", label: "Keep holding it", run: () => ctx.dialogs.close() });
     ctx.dialogs.show({
       key: "inspect",
-      wide: true,
-      eyebrow: owned ? "IN YOUR HANDS · OWNED" : "IN YOUR HANDS · UNPAID",
+      skin: "tag",
       title: r.title,
-      body: recordBody(this.recordView(r, owned ? `OWNED · #${owned.serial}/${owned.maxSupply}` : "UNPAID · pay at the counter")),
+      body: recordBody(this.recordView(r, owned ? `#${owned.serial}/${owned.maxSupply}` : undefined)),
       actions,
     });
   }
@@ -107,27 +100,16 @@ export class ShopFlow {
     const s = ctx.state();
     const onDeck = s.deck ? ctx.catalog.get(s.deck.shopRecordId) : undefined;
     const held = s.hand ? ctx.catalog.get(s.hand.shopRecordId) : undefined;
-    const body: Node[] = [];
-    if (onDeck) {
-      const track = s.playing ? onDeck.tracks[s.playing.trackIndex] : undefined;
-      body.push(
-        recordStrip(
-          onDeck.coverUrl,
-          onDeck.title,
-          onDeck.artist,
-          s.playing ? "PLAYING" : "ON THE PLATTER",
-          track ? `Track ${s.playing!.trackIndex + 1}/${onDeck.tracks.length} · ${track.title}` : `${onDeck.tracks.length} tracks · 30-second previews`,
-        ),
-      );
-    } else body.push(paragraph(held ? "The platter's empty. Put your record on." : "The platter's empty. Bring a record over from the crates."));
-    if (held && onDeck) body.push(recordStrip(held.coverUrl, held.title, held.artist, "IN HAND"));
+    const track = onDeck && s.playing ? onDeck.tracks[s.playing.trackIndex] : undefined;
+    const line = onDeck ? (track ? track.title : onDeck.title) : held ? "Empty platter." : "Bring a record.";
 
     const actions: DialogAction[] = [];
     if (!onDeck && held) {
       actions.push({
         id: "place",
         kind: "primary",
-        label: `Put ${held.title} on the deck`,
+        key: "E",
+        label: "Put it on",
         run: () => {
           if (ctx.dispatch({ type: "placeOnDeck" })) sfx.recordThunk();
           this.openDeck();
@@ -138,8 +120,8 @@ export class ShopFlow {
       actions.push({
         id: "play",
         kind: "primary",
+        key: "E",
         label: "Drop the needle",
-        detail: "30 s preview",
         run: () => {
           ctx.dispatch({ type: "play" });
           ctx.dialogs.close();
@@ -149,9 +131,9 @@ export class ShopFlow {
     if (onDeck && s.playing) {
       actions.push({
         id: "next",
-        kind: "primary",
-        label: "Next track",
-        detail: "N",
+        key: "N",
+        hotkey: "KeyN",
+        label: "Next",
         run: () => {
           ctx.dispatch({ type: "nextTrack", trackCount: onDeck.tracks.length });
           this.openDeck();
@@ -159,7 +141,9 @@ export class ShopFlow {
       });
       actions.push({
         id: "stop",
-        label: "Lift the needle",
+        kind: "primary",
+        key: "E",
+        label: "Lift needle",
         run: () => {
           ctx.dispatch({ type: "stop" });
           this.openDeck();
@@ -170,7 +154,6 @@ export class ShopFlow {
       actions.push({
         id: "take",
         label: "Take it back",
-        detail: "stops the music",
         run: () => {
           if (ctx.dispatch({ type: "takeFromDeck" })) sfx.pickup();
           ctx.dialogs.close();
@@ -180,38 +163,32 @@ export class ShopFlow {
     if (onDeck && held) {
       actions.push({
         id: "swap",
-        label: `Swap with ${held.title}`,
+        label: "Swap",
         run: () => {
           if (ctx.dispatch({ type: "swapWithDeck" })) sfx.recordThunk();
           ctx.dialogs.close();
         },
       });
     }
-    actions.push({ id: "close", label: "Walk away", run: () => ctx.dialogs.close() });
-    ctx.dialogs.show({ key: "deck", eyebrow: "LISTENING STATION · DECK 01", title: onDeck ? (s.playing ? "Now spinning." : "Ready to spin.") : "The listening deck.", body, actions });
+    actions.push({ id: "close", key: "Esc", label: "Back", run: () => ctx.dialogs.close() });
+    ctx.dialogs.show({
+      key: "deck",
+      skin: "enamel",
+      title: s.playing ? "Now playing" : "Turntable",
+      body: paragraph(line),
+      actions,
+    });
   }
 
-  private recordView(r: ShopRecord, status?: string): RecordView {
+  private recordView(r: ShopRecord, owned?: string): RecordView {
+    const soldOut = r.minted >= r.maxSupply;
     return {
       title: r.title,
       artist: r.artist,
-      genre: r.genre,
-      year: r.year,
-      label: r.label,
-      description: r.description,
       coverUrl: r.coverUrl,
       palette: r.palette,
       priceText: this.ctx.money(r.price.amount),
-      edition: r.edition,
-      minted: r.minted,
-      maxSupply: r.maxSupply,
-      status,
+      edition: owned ?? (soldOut ? "sold out" : `#${r.minted + 1}/${r.maxSupply}`),
     };
   }
-}
-
-/** "JAZZ: “…”" under the record, or null for a section Jazz has no line for. */
-function jazzLine(section: string): HTMLElement | null {
-  const note = jazzNote(section);
-  return note ? h("p", { class: "dlg-p jazz-note" }, h("b", null, "JAZZ: "), `\u201c${note}\u201d`) : null;
 }

@@ -85,12 +85,12 @@ export const sameAddress = (a: string | null | undefined, b: string) => !!a && a
 
 /** Validate the on-chain Record and work out what the collector pays for it. */
 function payoutFor(record: ChainRecord | null): bigint {
-  if (!record) throw new PlayerError("The collector only buys Miso records.");
+  if (!record) throw new PlayerError("Stonks only buys records from here.");
   if (!record.purchaseCurrency || normalizeType(record.purchaseCurrency) !== normalizeType(FUSD_TYPE)) {
-    throw new PlayerError("The collector only buys records that were bought with FakeUSD.");
+    throw new PlayerError("Stonks only buys records you paid for.");
   }
   const paid = offerFor(record.purchasePrice);
-  if (paid <= 0n) throw new PlayerError("This record has no purchase price, so the collector can't make an offer.");
+  if (paid <= 0n) throw new PlayerError("No price on this one. No offer.");
   return paid;
 }
 
@@ -159,7 +159,7 @@ export async function sellRecord(recordId: string, deps: SellDeps): Promise<Sell
   } catch (error) {
     const mapped = toPlayerError(error, "payout");
     throw new PlayerError(
-      `The collector has your record but hasn't paid yet: ${mapped.message} Press Retry to ask again; the record won't be sent twice.`,
+      `Stonks hasn't paid yet. ${mapped.message}`,
       mapped.kind,
     );
   }

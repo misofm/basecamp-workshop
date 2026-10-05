@@ -1,10 +1,10 @@
 /**
  * The heads-up display: everything drawn over the 3D scene while playing.
  *
- * Owns: the DOM for the GTA-style money counter (count-up animation, green/red
- * flash, pending spinner), a tiny "online" / "offline demo" indicator, mission text, held-record card,
- * now-playing bar, the [E] interaction prompt, toasts (small + big centre
- * "mission" toasts), the mute badge and the controls footer.
+ * Owns: the DOM for the VFD money readout (count-up animation, green/red flash, pending
+ * dots), the "offline demo" sticker (mock only), the masking-tape mission note, the held-record
+ * tag, the now-playing chip, the [E] interaction prompt, toasts (paper strips, speech tags with
+ * a stamped name, big enamel banners), the mute badge and the keycap controls bar.
  * Must not: contain game logic, read game state or call the adapter/world. The
  * controller pushes plain view data in through the setters below.
  */
@@ -45,6 +45,7 @@ export class Hud {
   readonly root: HTMLElement;
   private moneyEl: HTMLElement;
   private moneyValue: HTMLElement;
+  private moneyPad: HTMLElement;
   private moneySymbol: HTMLElement;
   private moneyDelta: HTMLElement;
   private pendingEl: HTMLElement;
@@ -55,7 +56,6 @@ export class Hud {
   private heldEl: HTMLElement;
   private playingEl: HTMLElement;
   private progressFill: HTMLElement;
-  private progressTime: HTMLElement;
   private promptEl: HTMLElement;
   private promptLabel: HTMLElement;
   private toastsEl: HTMLElement;
@@ -75,22 +75,22 @@ export class Hud {
   constructor(host: HTMLElement) {
     this.moneySymbol = h("span", { class: "money-symbol" }, "FUSD");
     this.moneyValue = h("span", { class: "money-value" }, "—");
+    this.moneyPad = h("span", { class: "money-pad", "aria-hidden": "true" });
     this.moneyDelta = h("div", { class: "money-delta", "aria-hidden": "true" });
-    this.moneyEl = h("div", { class: "money", role: "status", "aria-label": "FakeUSD balance" }, this.moneySymbol, this.moneyValue);
-    this.pendingText = h("span", null, "Ringing it up…");
-    this.pendingEl = h("div", { class: "money-pending", hidden: true }, h("span", { class: "spinner" }), this.pendingText);
+    this.moneyEl = h("div", { class: "money", role: "status", "aria-label": "FakeUSD balance" }, this.moneySymbol, this.moneyPad, this.moneyValue);
+    this.pendingText = h("span", null, "Processing");
+    this.pendingEl = h("div", { class: "money-pending", hidden: true }, this.pendingText, h("span", { class: "dots", "aria-hidden": "true" }, h("i", null, "▮"), h("i", null, "▮"), h("i", null, "▮")));
     this.netEl = h("div", { class: "net-status", "aria-label": "Connection" });
     this.missionText = h("p", { class: "mission-text" });
-    this.missionEl = h("section", { class: "mission", "aria-live": "polite" }, h("div", { class: "mission-label" }, "MISSION"), this.missionText);
+    this.missionEl = h("section", { class: "mission", "aria-live": "polite" }, this.missionText);
     this.heldEl = h("section", { class: "held-card", hidden: true, "aria-live": "polite" });
     this.progressFill = h("div", { class: "np-fill" });
-    this.progressTime = h("span", { class: "np-time" }, "0:00 / 0:30");
     this.playingEl = h("section", { class: "now-playing", hidden: true, "aria-live": "polite" });
     this.promptLabel = h("span", { class: "prompt-label" });
     this.promptEl = h("div", { class: "prompt", hidden: true }, h("kbd", null, "E"), this.promptLabel);
     this.toastsEl = h("div", { class: "toasts", "aria-live": "polite" });
     this.bigToastEl = h("div", { class: "big-toast", hidden: true, role: "status" });
-    this.muteEl = h("div", { class: "mute-badge", hidden: true }, "SOUND OFF · M");
+    this.muteEl = h("div", { class: "mute-badge", hidden: true }, h("kbd", null, "M"), "Muted");
     const controls = h(
       "footer",
       { class: "controls" },
@@ -98,8 +98,8 @@ export class Hud {
         ["WASD", "move"],
         ["Shift", "sprint"],
         ["Space", "jump"],
-        ["E", "interact"],
-        ["C", "collection"],
+        ["E", "use"],
+        ["C", "records"],
         ["M", "mute"],
         ["H", "help"],
       ].map(([key, label]) => h("span", null, h("kbd", null, key), label)),
@@ -132,6 +132,7 @@ export class Hud {
     if (amount === null) {
       this.targetAmount = null;
       this.moneyValue.textContent = "—";
+      this.moneyPad.textContent = "";
       return;
     }
     if (this.targetAmount === amount) return;
@@ -140,7 +141,7 @@ export class Hud {
     const to = Number(amount) / 10 ** decimals;
     if (previous === null || this.shownAmount === null) {
       this.shownAmount = to;
-      this.moneyValue.textContent = formatAmount(amount, decimals);
+      this.showMoney(formatAmount(amount, decimals));
       return;
     }
     const diff = amount - previous;
@@ -152,11 +153,18 @@ export class Hud {
       const t = Math.min(1, (now - start) / MONEY_ANIM_MS);
       const eased = 1 - Math.pow(1 - t, 3);
       this.shownAmount = from + (to - from) * eased;
-      this.moneyValue.textContent =
-        t < 1 ? this.shownAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : formatAmount(amount, decimals);
+      this.showMoney(
+        t < 1 ? this.shownAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : formatAmount(amount, decimals),
+      );
       if (t < 1) this.anim = requestAnimationFrame(step);
     };
     this.anim = requestAnimationFrame(step);
+  }
+
+  /** The number, with dimmed leading zeros in front ("0100.00": a VFD that always lights 7 digits). */
+  private showMoney(text: string): void {
+    this.moneyValue.textContent = text;
+    this.moneyPad.textContent = "0".repeat(Math.max(0, 7 - text.length));
   }
 
   private flashMoney(direction: "up" | "down", diff: bigint): void {
@@ -183,7 +191,8 @@ export class Hud {
     this.netEl.dataset.network = network;
     if (address) this.netEl.dataset.address = address;
     else delete this.netEl.dataset.address;
-    this.netEl.replaceChildren(h("i", { class: "net-dot", "aria-hidden": "true" }), network === "mock" ? "offline demo" : "online");
+    this.netEl.hidden = network !== "mock";
+    this.netEl.replaceChildren(network === "mock" ? "offline demo" : "");
   }
 
   setMuted(muted: boolean): void {
@@ -214,11 +223,10 @@ export class Hud {
       h(
         "div",
         { class: "held-info" },
-        h("div", { class: "held-label" }, "IN HAND"),
         h("div", { class: "held-title" }, card.title),
         h("div", { class: "held-artist" }, card.artist),
         h("div", { class: `held-status ${card.owned ? "owned" : "unpaid"}` }, card.status),
-        h("div", { class: "held-hint" }, h("kbd", null, "I"), "inspect"),
+        h("div", { class: "held-hint" }, h("kbd", null, "I")),
       ),
     );
   }
@@ -232,29 +240,23 @@ export class Hud {
     this.playingEl.hidden = !np;
     if (!np) return;
     this.progressFill.style.width = "0%";
-    this.progressTime.textContent = "0:00 / 0:30";
-    const badge = np.source
-      ? h("span", { class: `np-badge np-${np.source}` }, np.source === "hls" ? "HLS" : "SYNTH")
-      : h("span", { class: "np-badge np-loading" }, "LOADING");
+    this.playingEl.dataset.source = np.source ?? "loading";
     this.playingEl.replaceChildren(
       h(
         "div",
         { class: "np-head" },
         h("span", { class: "np-eq", "aria-hidden": "true" }, h("i"), h("i"), h("i"), h("i")),
-        h("span", { class: "np-label" }, "NOW PLAYING"),
-        badge,
+        h("span", { class: "np-label" }, np.source ? "NOW PLAYING" : "LOADING"),
       ),
-      h("div", { class: "np-track" }, `${np.trackNumber}. ${np.trackTitle}`),
-      h("div", { class: "np-record" }, `${np.title} — ${np.artist}`),
+      h("div", { class: "np-track" }, np.trackTitle || np.title),
       h("div", { class: "np-bar" }, this.progressFill),
-      h("div", { class: "np-foot" }, this.progressTime, h("span", { class: "np-next" }, h("kbd", null, "N"), `next track (${np.trackNumber}/${np.trackCount})`)),
+      h("div", { class: "np-foot" }, h("span", { class: "np-next" }, h("kbd", null, "N"), "next")),
     );
   }
 
   setProgress(elapsedSec: number, windowSec: number): void {
     const pct = windowSec > 0 ? Math.min(100, (elapsedSec / windowSec) * 100) : 0;
     this.progressFill.style.width = `${pct.toFixed(1)}%`;
-    this.progressTime.textContent = `${clock(elapsedSec)} / ${clock(windowSec)}`;
   }
 
   // ---------------------------------------------------------------- prompt
@@ -293,9 +295,4 @@ export class Hud {
     this.bigToastEl.hidden = false;
     this.bigToastTimer = window.setTimeout(() => (this.bigToastEl.hidden = true), durationMs);
   }
-}
-
-function clock(seconds: number): string {
-  const s = Math.max(0, Math.floor(seconds));
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }

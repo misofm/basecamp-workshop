@@ -54,7 +54,7 @@ const SHOP_FILE = "/shop.testnet.json";
 const ID_RE = /^0x[0-9a-f]{64}$/;
 
 /** What the player sees when the shop file is missing or broken (details go to devDetail + console). */
-const SHELVES_EMPTY = "The shelves aren't stocked right now. Try reloading in a moment.";
+const SHELVES_EMPTY = "Shelves are empty. Reload in a moment.";
 
 /** Validate the parsed shop file. Throws a PlayerError whose devDetail names the first problem. */
 export function parseShopFile(raw: unknown): ShopEntry[] {
@@ -205,7 +205,7 @@ export async function loadCatalog(): Promise<{ records: ShopRecord[]; terms: Map
   });
   if (!records.length) {
     throw new PlayerError(
-      failures === entries.length ? "Couldn't reach the record shop. Check your internet and reload." : "None of the records are on sale right now.",
+      failures === entries.length ? "Can't reach the shop. Check your connection." : "Nothing's on sale right now.",
     );
   }
   return { records, terms };

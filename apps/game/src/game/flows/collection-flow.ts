@@ -16,8 +16,8 @@ export class CollectionFlow {
 
   openCollection(): void {
     const { ctx } = this;
-    const show = (body: HTMLElement, actions: DialogAction[] = [{ id: "close", label: "Close", run: () => ctx.dialogs.close() }]) =>
-      ctx.dialogs.show({ key: "collection", wide: true, eyebrow: "YOUR RECORDS", title: "Your collection.", body, actions });
+    const show = (body: HTMLElement, actions: DialogAction[] = [{ id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() }]) =>
+      ctx.dialogs.show({ key: "collection", skin: "green", wide: true, title: "MY RECORDS", body, actions });
     show(collectionBody({ kind: "loading" }));
     ctx
       .refreshCollection()
@@ -27,8 +27,8 @@ export class CollectionFlow {
       .catch((error: unknown) => {
         if (ctx.dialogs.openKey !== "collection") return;
         show(collectionBody({ kind: "error", message: message(error) }), [
-          { id: "retry", kind: "primary", label: "Retry", run: () => this.openCollection() },
-          { id: "close", label: "Close", run: () => ctx.dialogs.close() },
+          { id: "retry", kind: "primary", key: "E", label: "Retry", run: () => this.openCollection() },
+          { id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() },
         ]);
       });
   }
@@ -45,9 +45,8 @@ export class CollectionFlow {
         title: o.title,
         artist: o.artist,
         coverUrl: o.coverUrl,
-        serialText: `#${o.serial} / ${o.maxSupply}`,
-        explorerUrl: ctx.adapter.explorerObjectUrl(o.recordId),
-        actionLabel: inHand ? "Put away" : onDeck ? "On the deck" : "Hold",
+        serialText: `#${o.serial}`,
+        actionLabel: inHand ? "Put away" : onDeck ? "On deck" : "Hold",
         actionDisabled: handLocked(s) || (onDeck && !inHand),
         onAction: () => {
           if (inHand) {
@@ -59,7 +58,7 @@ export class CollectionFlow {
           if (ctx.dispatch({ type: "holdOwned", recordId: o.recordId })) {
             sfx.pickup();
             ctx.dialogs.close();
-            ctx.hud.toast(`Holding ${o.title} #${o.serial}`);
+            ctx.hud.toast(`${o.title} #${o.serial}`);
           }
         },
       };
@@ -70,31 +69,29 @@ export class CollectionFlow {
     }));
     ctx.dialogs.show({
       key: "collection",
+      skin: "green",
       wide: true,
-      eyebrow: "YOUR RECORDS",
-      title: items.length ? `Your collection · ${items.length}` : "Your collection.",
+      title: "MY RECORDS",
       body: collectionBody({ kind: "ready", items, sold }),
-      actions: [{ id: "close", label: "Close", run: () => ctx.dialogs.close() }],
+      actions: [{ id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() }],
     });
   }
 
   openHelp(): void {
     const { ctx } = this;
-    const mock = ctx.adapter.network === "mock";
     ctx.dialogs.show({
       key: "help",
+      skin: "green",
       wide: true,
-      eyebrow: "HOW TO PLAY",
-      title: "Buy it. Smash with it. Flip it.",
+      title: "CONTROLS",
       body: helpBody(),
       actions: [
-        { id: "ok", kind: "primary", label: "Let's dig", run: () => ctx.dialogs.close() },
+        { id: "ok", kind: "primary", key: "Esc", label: "Close", run: () => ctx.dialogs.close() },
         {
           id: "reset",
-          label: "Reset demo (reload page)",
+          label: "Reset demo",
           // Reload keeps the URL (and its ?chain=…&latency=… params). The mock chain
           // lives in memory, so a reload is a fresh wallet; testnet state is on chain.
-          detail: mock ? "starts over with 100 FUSD" : "restarts the game; your records stay yours",
           run: () => window.location.reload(),
         },
       ],

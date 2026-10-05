@@ -51,9 +51,7 @@ test("purchase deducts the price and returns ids", async () => {
 test("insufficient funds error is player friendly", async () => {
   const adapter = new MockAdapter({ latencyMs: 0, startFakeUsd: 5_000_000n });
   const [record] = await adapter.loadShopCatalog();
-  await expect(adapter.purchase(record)).rejects.toThrow(
-    "Not enough FakeUSD — you have 5.00 FUSD, this costs 12.00 FUSD.",
-  );
+  await expect(adapter.purchase(record)).rejects.toThrow("Jazz frowns: short on cash.");
   expect((await adapter.getWallet()).fakeUsd).toBe(5_000_000n);
 });
 
@@ -61,12 +59,12 @@ test("failNext fails exactly one transaction without spending", async () => {
   const adapter = new MockAdapter({ latencyMs: 0 });
   const [record] = await adapter.loadShopCatalog();
   adapter.failNext("purchase");
-  await expect(adapter.purchase(record)).rejects.toThrow(/Couldn't complete the purchase/);
+  await expect(adapter.purchase(record)).rejects.toThrow(/Register jammed/);
   expect((await adapter.getWallet()).fakeUsd).toBe(100_000_000n);
   await expect(adapter.purchase(record)).resolves.toBeTruthy();
 
   adapter.setFailureMode("all");
-  await expect(adapter.purchase(record)).rejects.toThrow(/Couldn't complete the purchase/);
+  await expect(adapter.purchase(record)).rejects.toThrow(/Register jammed/);
   adapter.setFailureMode("none");
 });
 
@@ -109,7 +107,7 @@ test("withdrawFakeUsd credits the balance and returns a digest", async () => {
   // A withdrawal tops up enough to buy what a short wallet couldn't.
   const poor = new MockAdapter({ latencyMs: 0, startFakeUsd: 5_000_000n });
   const [record] = await poor.loadShopCatalog();
-  await expect(poor.purchase(record)).rejects.toThrow(/Not enough FakeUSD/);
+  await expect(poor.purchase(record)).rejects.toThrow(/short on cash/);
   await poor.withdrawFakeUsd(50_000_000n);
   await expect(poor.purchase(record)).resolves.toBeTruthy();
   expect((await poor.getWallet()).fakeUsd).toBe(55_000_000n - record.price.amount);
@@ -120,14 +118,14 @@ test("withdrawFakeUsd failure injection and invalid amounts", async () => {
   await expect(adapter.withdrawFakeUsd(0n)).rejects.toThrow();
   await expect(adapter.withdrawFakeUsd(-1n)).rejects.toThrow();
   adapter.failNext("withdraw");
-  await expect(adapter.withdrawFakeUsd(50_000_000n)).rejects.toThrow(/Nothing was withdrawn/);
+  await expect(adapter.withdrawFakeUsd(50_000_000n)).rejects.toThrow(/Card reader jammed/);
   expect((await adapter.getWallet()).fakeUsd).toBe(100_000_000n);
   await expect(adapter.withdrawFakeUsd(50_000_000n)).resolves.toMatchObject({ amount: 50_000_000n });
   // failNext("purchase") does not hit withdrawals.
   adapter.failNext("purchase");
   await expect(adapter.withdrawFakeUsd(1n)).resolves.toBeTruthy();
   adapter.setFailureMode("withdraw");
-  await expect(adapter.withdrawFakeUsd(1n)).rejects.toThrow(/ATM/);
+  await expect(adapter.withdrawFakeUsd(1n)).rejects.toThrow(/Card reader/);
   adapter.setFailureMode("all");
   await expect(adapter.withdrawFakeUsd(1n)).rejects.toThrow();
   adapter.setFailureMode("none");

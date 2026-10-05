@@ -62,7 +62,7 @@ export class TestnetAdapter implements MisoAdapter {
       });
     }
     return this.backend.catch(() => {
-      throw new Error("Couldn't open the shop. Check your internet and reload.");
+      throw new Error("Shop won't open. Check your connection.");
     });
   }
 

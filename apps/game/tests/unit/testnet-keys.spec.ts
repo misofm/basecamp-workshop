@@ -27,7 +27,7 @@ test("both keys parse to the right addresses", () => {
 });
 
 test("missing keys: a plain player message plus one actionable developer hint", () => {
-  expect(MISSING_KEYS_MESSAGE).toBe("The shop's till is offline right now. Try again later.");
+  expect(MISSING_KEYS_MESSAGE).toBe("The till's offline. Try later.");
   expect(MISSING_KEYS_DEV_HINT).toBe(
     "Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and VITE_GAME_SUI_PRIVATE_KEY in apps/game/.env.local, then rebuild.",
   );

@@ -14,7 +14,7 @@
  * Must not: decide legality (state.ts) or touch the chain except via the adapter.
  */
 import * as sfx from "../../audio/sfx";
-import { errorBody, lineItems, paragraph, pendingBody, recordStrip } from "../../ui/dialogs";
+import { errorBody, paragraph, pendingBody, receiptLink } from "../../ui/dialogs";
 import { COLLECTOR, buyerFor } from "../npc-buyers";
 import { heldOwnedRecord } from "../state";
 import { message, type FlowContext } from "./context";
@@ -36,7 +36,7 @@ export class StreetFlow {
     const hand = ctx.state().hand;
     const held = hand ? ctx.catalog.get(hand.shopRecordId) : undefined;
     if (!held) {
-      ctx.hud.toast("You need something heavy… like a 180g record.");
+      ctx.hud.toast("Need something heavy.");
       return;
     }
     if (this.smashing || !ctx.dispatch({ type: "smash", carId })) return;
@@ -48,7 +48,7 @@ export class StreetFlow {
       sfx.recordThunk();
       sfx.carAlarm(6);
       ctx.world.setInteractableEnabled(carId, false);
-      setTimeout(() => ctx.hud.missionToast("RECORD CONDITION: STILL MINT", "heavyweight 180g vinyl", "good", 5500), 350);
+      setTimeout(() => ctx.hud.missionToast("RECORD CONDITION: STILL MINT", "", "good", 5500), 350);
     } finally {
       this.smashing = false;
       ctx.renderPrompt();
@@ -62,33 +62,25 @@ export class StreetFlow {
     const { ctx } = this;
     const s = ctx.state();
     if (s.op?.kind === "sell" && s.op.status === "pending") return this.showSellPending();
-    if (s.op?.kind === "sell" && s.op.status === "error") return this.showSellError(s.op.error ?? "Something went wrong.");
+    if (s.op?.kind === "sell" && s.op.status === "error") return this.showSellError(s.op.error ?? "Deal fell through. You still own it.");
     const owned = heldOwnedRecord(s);
     const r = owned ? ctx.catalog.get(owned.shopRecordId) : undefined;
     if (!owned || !r) {
       const line = s.owned.length
-        ? "Got wax on you? Get one of your records out (press C). I pay above shop price."
-        : "Records! It's limited. No one's going to make any more. Bring me one, I pay above shop price.";
+        ? "Got wax? Press C. Hold one up."
+        : "Records! No one's making more. Bring me one. I pay above shop price.";
       ctx.hud.toast(line, { tone: "speech", speaker: COLLECTOR.name });
       return;
     }
     const npc = buyerFor(COLLECTOR, r.price.amount);
     ctx.dialogs.show({
       key: "sell",
-      eyebrow: COLLECTOR.name.toUpperCase(),
-      title: `Sell ${r.title} for ${ctx.money(npc.offer)}?`,
-      body: [
-        recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, "Condition: still mint"),
-        lineItems([
-          ["You paid", ctx.money(r.price.amount)],
-          ["Stonks offers", ctx.money(npc.offer)],
-          ["Profit", `+${ctx.money(npc.offer - r.price.amount)}`],
-        ]),
-        paragraph("Hand the record over and Stonks pays you in FakeUSD on the spot. \"Limited supply. HODL is for amateurs.\""),
-      ],
+      skin: "paper",
+      title: "Stonks wants it",
+      body: paragraph(`${ctx.money(npc.offer)} for ${r.title}`),
       actions: [
-        { id: "sell", kind: "primary", label: `Sell for ${ctx.money(npc.offer)}`, run: () => void this.sell() },
-        { id: "keep", label: "Keep it", run: () => ctx.dialogs.close() },
+        { id: "sell", kind: "primary", key: "E", label: "Sell", run: () => void this.sell() },
+        { id: "keep", key: "Esc", label: "Keep", run: () => ctx.dialogs.close() },
       ],
     });
   }
@@ -111,21 +103,31 @@ export class StreetFlow {
       ctx.dispatch({ type: "sellSuccess", paid: result.paid, digest: result.digest, balance });
       ctx.world.setBuyerStatus(npc.id, "happy");
       this.scheduleBuyerReturn(npc.id);
-      if (ctx.dialogs.openKey === "sell") ctx.dialogs.close();
       sfx.cashRegister();
-      ctx.hud.missionToast("SOLD", `+${ctx.money(result.paid)} · ${record.title}`, "good", 5500);
-      ctx.hud.toast(`Sold ${record.title}`, {
-        tone: "good",
-        link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
-        durationMs: 12000,
-      });
+      if (ctx.dialogs.openKey === "sell") {
+        ctx.dialogs.show({
+          key: "sell",
+          skin: "paper",
+          tone: "success",
+          title: "SOLD",
+          stamp: { jp: "済", en: "SOLD" },
+          body: [paragraph(`+${ctx.money(result.paid)}`), receiptLink({ href: ctx.adapter.explorerTxUrl(result.digest) })],
+          actions: [{ id: "done", kind: "primary", key: "E", label: "OK", run: () => ctx.dialogs.close() }],
+        });
+      } else {
+        ctx.hud.toast(`Sold ${record.title}: +${ctx.money(result.paid)}`, {
+          tone: "good",
+          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
+          durationMs: 12000,
+        });
+      }
       void ctx.refreshCollection().catch(() => {});
     } catch (error) {
       ctx.dispatch({ type: "sellFail", error: message(error) });
       sfx.error();
       ctx.world.setBuyerStatus(npc.id, "error");
       if (ctx.dialogs.openKey === "sell") this.showSellError(message(error));
-      else ctx.hud.toast(`Sale failed: ${message(error)}`, { tone: "bad" });
+      else ctx.hud.toast(message(error), { tone: "bad" });
     }
   }
 
@@ -154,31 +156,20 @@ export class StreetFlow {
 
   private showSellPending(): void {
     const { ctx } = this;
-    const owned = heldOwnedRecord(ctx.state());
-    ctx.dialogs.show({
-      key: "sell",
-      tone: "pending",
-      eyebrow: COLLECTOR.name.toUpperCase(),
-      title: "Stonks inspects the grooves…",
-      body: [
-        owned ? recordStrip(owned.coverUrl, owned.title, owned.artist, `#${owned.serial}/${owned.maxSupply}`) : null,
-        pendingBody("Closing the deal", "The record goes to Stonks, the FakeUSD comes to you."),
-      ],
-      actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
-    });
+    ctx.dialogs.show({ key: "sell", skin: "paper", tone: "pending", title: "Stonks is looking", body: pendingBody() });
   }
 
   private showSellError(error: string): void {
     const { ctx } = this;
     ctx.dialogs.show({
       key: "sell",
+      skin: "paper",
       tone: "error",
-      eyebrow: "SALE FAILED",
-      title: "The deal fell through.",
-      body: errorBody(error, "Stonks is still keen. Give it another go."),
+      title: "No deal",
+      body: errorBody(error),
       actions: [
-        { id: "retry", kind: "primary", label: "Retry", run: () => void this.sell() },
-        { id: "keep", label: "Keep it", run: () => ctx.dialogs.close() },
+        { id: "retry", kind: "primary", key: "E", label: "Retry", run: () => void this.sell() },
+        { id: "keep", key: "Esc", label: "Keep", run: () => ctx.dialogs.close() },
       ],
       onClose: () => {
         if (ctx.dispatch({ type: "dismissError" })) ctx.world.setBuyerStatus(COLLECTOR.id, "idle");

@@ -1,31 +1,41 @@
 /**
- * Title card shown before play: "NOZOMI · Book 3 — As The World Shook", level
- * "Playback", a dusk card (orange-to-violet gradient, CRT scanlines) with the intro
- * text (world bible §7.11, ≤ 60 words) and the Studio Mirai credit.
+ * The loading screen: a small "NOZOMI · 再生" mark on a paper card, a loading bar that
+ * reflects real progress, and, once everything is ready, "[Enter] Press Enter" (a click
+ * works too). No story, no checklist, no controls list.
  *
- * Owns: the intro overlay DOM, its loading lines (crates / cash) and the
- * "Press Enter" start (Enter, Space or click).
- * Must not: start audio or the game itself; it calls `onStart` and the
- * controller does the rest (unlock audio, ambience, show the HUD).
+ * Owns: the overlay DOM, the progress model and the Enter / click start. Enter is swallowed
+ * (capture phase) so the same press never also triggers an in-game action.
+ * Must not: start audio or the game itself; it calls `onStart` from inside the key / click
+ * handler (a user gesture) and the controller unlocks audio there.
+ *
+ * Progress: each tracked task has a weight. While it runs, its share creeps towards ~90 %
+ * (exponential, so it never freezes and never reaches 100 % early); when it settles it jumps
+ * to its full weight.
  */
 import { h } from "./dom";
 
-/** The intro text (57 words; keep it ≤ 60). No blockchain terms. */
-export const INTRO_TEXT =
-  "Less than a month after ninety-eight sleepers unplugged from the Tamashi machines, only three city blocks have power. " +
-  "Chaos's fires still smolder; Order holds the old hotel. You are Gamer — a Takahashi nobody can know about. " +
-  "Spin a record at Saisei. Sell one to Stonks. Make a friend. Get home before the ground starts shaking.";
+interface Task {
+  weight: number;
+  tauMs: number;
+  startedAt: number | null;
+  done: boolean;
+}
 
 export class Intro {
   onStart: () => void = () => {};
   readonly root: HTMLElement;
-  private status: HTMLElement;
+  private bar: HTMLElement;
+  private fill: HTMLElement;
   private button: HTMLButtonElement;
+  private tasks: Task[] = [];
   private started = false;
+  private ready = false;
+  private timer: ReturnType<typeof setInterval>;
 
   constructor(host: HTMLElement, network: "mock" | "testnet") {
-    this.status = h("ul", { class: "intro-status" });
-    this.button = h("button", { class: "intro-start", type: "button" }, h("span", null, "Press"), h("kbd", null, "Enter"));
+    this.fill = h("i");
+    this.bar = h("div", { class: "intro-bar", role: "progressbar", "aria-label": "Loading", "aria-valuemin": 0, "aria-valuemax": 100 }, this.fill);
+    this.button = h("button", { class: "intro-start", type: "button", hidden: true }, h("kbd", null, "Enter"), h("span", null, "Press Enter"));
     this.button.addEventListener("click", () => this.start());
     this.root = h(
       "div",
@@ -33,19 +43,10 @@ export class Intro {
       h(
         "div",
         { class: "intro-card" },
-        h(
-          "div",
-          { class: "intro-top" },
-          h("span", { class: "intro-kicker" }, "A MISO BASECAMP DEMO"),
-          h("span", { class: "net-status", "data-network": network }, h("i", { class: "net-dot", "aria-hidden": "true" }), network === "mock" ? "offline demo" : "online"),
-        ),
-        h("span", { class: "intro-level" }, "Level · Playback"),
-        h("h1", { id: "intro-title", class: "intro-title" }, h("span", null, "NOZOMI"), h("em", null, "Book 3 — As The World Shook")),
-        h("p", { class: "intro-text" }, h("b", null, "Nozomi, 2042. "), INTRO_TEXT),
-        h("p", { class: "intro-pitch" }, "Buy a record. Smash a car with it. Sell it on."),
-        this.status,
+        network === "mock" ? h("span", { class: "net-status", "data-network": network }, "offline demo") : null,
+        h("h1", { id: "intro-title", class: "intro-title" }, h("span", null, "NOZOMI"), " · ", h("span", { class: "jp" }, "再生")),
+        this.bar,
         this.button,
-        h("p", { class: "intro-keys" }, "WASD move · Shift sprint · Space jump · E interact · C collection · M mute · H help"),
         h("p", { class: "intro-credit" }, "Tamashi and Nozomi © Studio Mirai"),
       ),
     );
@@ -53,56 +54,67 @@ export class Intro {
     window.addEventListener(
       "keydown",
       (e) => {
-        if (this.started || (e.code !== "Enter" && e.code !== "NumpadEnter" && e.code !== "Space")) return;
+        if (this.started) return;
+        // Swallow every key while the screen is up so nothing reaches the game; only Enter starts.
         e.preventDefault();
         e.stopImmediatePropagation();
-        this.start();
+        if (e.repeat) return;
+        if (this.ready && (e.code === "Enter" || e.code === "NumpadEnter")) this.start();
       },
       true,
     );
-    this.button.focus();
+    this.timer = setInterval(() => this.paint(), 80);
+    this.paint();
   }
 
   get isOpen(): boolean {
     return !this.started;
   }
 
-  /** One loading line, e.g. setStatus("catalog", "Catalog: 10 records", "ok"). */
-  setStatus(id: string, text: string, state: "loading" | "ok" | "error"): void {
-    let line = this.status.querySelector<HTMLElement>(`[data-id="${id}"]`);
-    if (!line) {
-      line = h("li", { "data-id": id });
-      this.status.append(line);
-    }
-    line.className = `st-${state}`;
-    line.textContent = text;
+  /**
+   * Register a load step. It starts creeping now unless `deferred`; call `start()` when a
+   * deferred step begins and `done()` when it settles (ok or not).
+   */
+  track(weight: number, tauMs: number, deferred = false): { start: () => void; done: () => void } {
+    const task: Task = { weight, tauMs, startedAt: deferred ? null : performance.now(), done: false };
+    this.tasks.push(task);
+    return {
+      start: () => (task.startedAt ??= performance.now()),
+      done: () => {
+        task.done = true;
+        this.paint();
+      },
+    };
   }
 
-  /**
-   * Hold the start until `ready` settles (the 3D street is compiled and lit), so the first
-   * seconds of play never hitch. A press while waiting starts the game as soon as it is ready.
-   */
-  waitFor(ready: Promise<unknown>): void {
-    this.gate = ready.then(
-      () => undefined,
-      () => undefined,
-    );
-    this.button.classList.add("waiting");
-    void this.gate.then(() => {
-      this.gate = null;
-      this.button.classList.remove("waiting");
-      if (this.pressed) this.start();
-    });
+  private fraction(): number {
+    const total = this.tasks.reduce((a, t) => a + t.weight, 0) || 1;
+    const now = performance.now();
+    const got = this.tasks.reduce((a, t) => a + t.weight * (t.done ? 1 : t.startedAt === null ? 0 : 0.9 * (1 - Math.exp(-(now - t.startedAt) / t.tauMs))), 0);
+    return Math.min(1, got / total);
   }
-  private gate: Promise<void> | null = null;
-  private pressed = false;
+
+  private paint(): void {
+    if (this.ready) return;
+    const f = this.fraction();
+    this.fill.style.width = `${(f * 100).toFixed(1)}%`;
+    this.bar.setAttribute("aria-valuenow", String(Math.round(f * 100)));
+  }
+
+  /** Everything is loaded: swap the bar for "Press Enter". */
+  setReady(): void {
+    if (this.ready || this.started) return;
+    this.ready = true;
+    clearInterval(this.timer);
+    this.fill.style.width = "100%";
+    this.bar.hidden = true;
+    this.button.hidden = false;
+    this.root.dataset.ready = "true";
+    this.button.focus();
+  }
 
   private start(): void {
-    if (this.started) return;
-    if (this.gate) {
-      this.pressed = true;
-      return;
-    }
+    if (this.started || !this.ready) return;
     this.started = true;
     this.root.classList.add("leaving");
     setTimeout(() => this.root.remove(), 600);

@@ -35,15 +35,15 @@ test("HLS preview streams from mid-track and advances", async ({ page }) => {
   await goTo(page, "deck");
   await page.keyboard.press("KeyE");
   const dialog = page.locator("dialog.dlg[open]");
-  await expect(dialog.locator(".dlg-title")).toHaveText("The listening deck.");
+  await expect(dialog.locator(".dlg-title")).toHaveText("Turntable");
   await page.keyboard.press("Enter"); // place
   await until(page, (s) => s.deck?.shopRecordId === RECORD, "on deck");
   await expect(dialog.locator(".dlg-action:focus")).toHaveText(/Drop the needle/);
   await page.keyboard.press("Enter"); // play
   await until(page, (s) => s.playing !== null, "playing");
 
-  // The HUD badge switches from LOADING to HLS once sound starts.
-  await expect(page.locator(".np-badge")).toHaveText("HLS", { timeout: 60_000 });
+  // The now-playing chip switches from loading to hls (data-source) once sound starts.
+  await expect(page.locator(".now-playing")).toHaveAttribute("data-source", "hls", { timeout: 60_000 });
 
   const first = await deckDebug(page);
   expect(first.kind).toBe("hls");

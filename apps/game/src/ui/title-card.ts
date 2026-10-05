@@ -23,7 +23,7 @@ export class TitleCard {
   /** Show the card; resolves when the player dismisses it. */
   show(): Promise<void> {
     if (this.root) return Promise.resolve();
-    const button = h("button", { class: "title-card-dismiss", type: "button" }, h("span", null, "Press"), h("kbd", null, "Enter"));
+    const button = h("button", { class: "title-card-dismiss", type: "button" }, h("kbd", null, "Enter"), h("span", null, "Continue"));
     this.root = h(
       "div",
       { class: "title-card", role: "dialog", "aria-modal": "true", "aria-labelledby": "title-card-title" },

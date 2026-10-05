@@ -24,55 +24,55 @@ export interface Objective {
 export function objective(state: GameState): Objective {
   const op = state.op;
   if (op?.status === "pending" && op.kind === "purchase")
-    return { text: "Hang tight. Jazz is ringing it up.", target: "cashier" };
+    return { text: "Wait. Jazz is ringing it up.", target: "cashier" };
   if (op?.status === "pending" && op.kind === "sell")
-    return { text: "Stonks is checking the wax…", target: "buyer" };
+    return { text: "Stonks is checking the wax.", target: "buyer" };
   if (op?.status === "pending" && op.kind === "withdraw")
-    return { text: "The ATM's counting out your FakeUSD…", target: "atm" };
+    return { text: "Wait for the ATM.", target: "atm" };
 
   if (shortOnFakeUsd(state)) {
     // Unpaid stock can't leave the shop (the doorway blocks it), so put it back first.
     if (heldIsUnpaid(state))
-      return { text: "Short on FakeUSD. Put it back (I), then hit the ATM in TriMart.", target: null };
-    return { text: "Short on FakeUSD. Hit the ATM in TriMart, next door.", target: "atm" };
+      return { text: "Put it back. Hit the ATM.", target: null };
+    return { text: "Get cash at the ATM.", target: "atm" };
   }
 
   // Empty-handed after a sale. (Pick up another record and the steps start over:
   // Stonks comes back for a rerun of the demo.) Then the exit beat: head home.
   if (state.sold.length > 0 && !state.hand && !state.deck) {
-    if (state.wentHome) return { text: "Home. Press H to reset the demo.", target: null };
+    if (state.wentHome) return { text: "Home. Press H to reset.", target: null };
     if (canGoHome(state))
-      return { text: "Job done. Head home with Inicio: hotel door, west end. (C: collection)", target: "home" };
-    return { text: "Job done. Press C to see your collection.", target: null };
+      return { text: "Head home with Inicio.", target: "home" };
+    return { text: "Job done. Check your records.", target: null };
   }
 
   // Holding a paid-for Record: take it outside, smash, sell.
   if (heldIsOwned(state)) {
-    if (state.zone === "shop") return { text: "It's yours. Take it outside.", target: "shop-door" };
+    if (state.zone === "shop") return { text: "Take it outside.", target: "shop-door" };
     if (state.smashedCars.length === 0)
-      return { text: "Smash the dead Triangle sedan across the street.", target: "car" };
-    return { text: "Still mint. Sell it to Stonks across the street.", target: "buyer" };
+      return { text: "Smash the dead sedan.", target: "car" };
+    return { text: "Sell to Stonks.", target: "buyer" };
   }
 
   // On the deck (paid or not).
   if (state.deck && !state.hand) {
-    if (state.playing) return { text: "Feeling it? Take it off the deck.", target: "deck" };
+    if (state.playing) return { text: "Like it? Take it off.", target: "deck" };
     if (!state.listened.includes(state.deck.shopRecordId))
-      return { text: "Drop the needle. Play the preview.", target: "deck" };
-    return { text: "Grab the record off the deck.", target: "deck" };
+      return { text: "Drop the needle.", target: "deck" };
+    return { text: "Grab the record.", target: "deck" };
   }
 
   if (heldIsUnpaid(state)) {
     if (!state.listened.includes(state.hand!.shopRecordId))
-      return { text: "Spin it on the listening deck.", target: "deck" };
-    return { text: "Pay Jazz at the counter. No freebies.", target: "cashier" };
+      return { text: "Spin it on the deck.", target: "deck" };
+    return { text: "Pay Jazz.", target: "cashier" };
   }
 
   // Empty hands.
   if (state.owned.length > 0)
-    return { text: "Press C and grab one of your records.", target: null };
-  if (state.zone === "street") return { text: "Get to Saisei Records, the record shop.", target: "shop-door" };
-  return { text: "Dig through the crates. Pick a record.", target: null };
+    return { text: "Hold one of your records.", target: null };
+  if (state.zone === "street") return { text: "Find a record.", target: "shop-door" };
+  return { text: "Pick a record.", target: null };
 }
 
 /**

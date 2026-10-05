@@ -55,8 +55,8 @@ export async function startGame(page: Page, query: string, introShot?: string): 
   await page.goto(`/${query}`);
   await page.waitForFunction(() => document.documentElement.dataset.gameReady === "true", null, { timeout: 60_000 });
   await expect(page.locator(".intro")).toBeVisible();
-  // catalog + cash + the street (GPU pipelines compiled; Enter waits for it).
-  await expect(page.locator(".intro-status .st-ok")).toHaveCount(3, { timeout: 120_000 });
+  // The loading bar fills (catalog + assets + GPU pipelines), then "Press Enter" appears.
+  await expect(page.locator(".intro[data-ready='true'] .intro-start")).toBeVisible({ timeout: 120_000 });
   // Let the character load and a few frames render (shader compiles are slow on SwiftShader).
   await page.waitForFunction(() => document.documentElement.dataset.character !== undefined, null, { timeout: 120_000 });
   await frames(page, 4);

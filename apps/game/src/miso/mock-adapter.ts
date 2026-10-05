@@ -54,12 +54,12 @@ export const MOCK_WALLET_ADDRESS =
 
 // Player-facing (shown in the error dialogs): plain game language, no chain terms.
 const TX_FAILED_MESSAGE =
-  "Couldn't complete the purchase — the shop's connection dropped. Your FakeUSD was not spent.";
+  "Register jammed. Try again.";
 const SELL_FAILED_MESSAGE =
-  "The sale didn't go through — the connection dropped. You still own the record.";
+  "Deal fell through. You still own it.";
 
 const WITHDRAW_FAILED_MESSAGE =
-  "The ATM couldn't reach the bank. Nothing was withdrawn.";
+  "Card reader jammed. Try again.";
 
 const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
@@ -145,13 +145,11 @@ export class MockAdapter implements MisoAdapter {
   async purchase(record: ShopRecord): Promise<PurchaseResult> {
     await this.simulate("purchase");
     const stock = this.catalog.find((r) => r.id === record.id);
-    if (!stock) throw new Error("That record isn't for sale here.");
-    if (stock.minted >= stock.maxSupply) throw new Error("Sold out — every copy has been sold.");
+    if (!stock) throw new Error("Not for sale here.");
+    if (stock.minted >= stock.maxSupply) throw new Error("Sold out. Every copy's gone.");
     const price = stock.price.amount;
     if (this.fakeUsd < price) {
-      throw new Error(
-        `Not enough FakeUSD — you have ${this.fusd(this.fakeUsd)}, this costs ${this.fusd(price)}.`,
-      );
+      throw new Error("Jazz frowns: short on cash.");
     }
     this.fakeUsd -= price;
     this.sui -= 2_000_000n; // pretend gas
@@ -171,7 +169,7 @@ export class MockAdapter implements MisoAdapter {
   }
 
   async withdrawFakeUsd(amount: bigint): Promise<WithdrawResult> {
-    if (amount <= 0n) throw new Error("The ATM can't dispense nothing.");
+    if (amount <= 0n) throw new Error("The ATM won't dispense nothing.");
     await this.simulate("withdraw");
     this.fakeUsd += amount;
     this.sui -= 1_000_000n; // pretend gas
@@ -190,7 +188,7 @@ export class MockAdapter implements MisoAdapter {
   async sellToNpc(recordId: string, npc: NpcBuyer): Promise<SellResult> {
     await this.simulate("sell");
     const index = this.owned.findIndex((r) => r.recordId === recordId);
-    if (index < 0) throw new Error("You don't own that record any more.");
+    if (index < 0) throw new Error("You don't own that any more.");
     this.owned.splice(index, 1);
     this.fakeUsd += npc.offer;
     this.sui -= 2_000_000n;

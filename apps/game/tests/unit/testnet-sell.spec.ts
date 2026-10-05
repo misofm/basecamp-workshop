@@ -108,7 +108,7 @@ test("pending entry holds the transfer digest before the payout is attempted", a
     seen.push(chain.store.get(RECORD_ID));
     return origPay(amount, onDigest);
   };
-  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/^The collector has your record but hasn't paid yet: .*Press Retry/);
+  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/^Stonks hasn't paid yet\./);
   expect(seen[0]).toMatchObject({ player: PLAYER, transferDigest: "transfer-1" });
   expect(seen[0]!.payoutDigest).toBeUndefined();
   expect(chain.store.get(RECORD_ID)).toMatchObject({ transferDigest: "transfer-1", payoutDigest: "payout-2" });
@@ -153,7 +153,7 @@ test("retry whose stored payout digest landed returns it without paying", async 
 test("GAME already owns the record and there is no pending sale: refuse", async () => {
   const chain = new FakeChain();
   chain.owner = GAME;
-  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("The collector already has this record.");
+  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("Stonks already has this one.");
   expect(chain.payouts).toEqual([]);
 });
 
@@ -162,21 +162,21 @@ test("a pending sale started by another player key is ignored", async () => {
   chain.owner = GAME;
   const owned = chain.deps().describe(RECORD_ID, chain.record!);
   chain.store.set(RECORD_ID, { player: STRANGER, transferDigest: "t", owned });
-  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("The collector already has this record.");
+  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("Stonks already has this one.");
 });
 
 test("not owned by the player: notOwned, nothing moves", async () => {
   const chain = new FakeChain();
   chain.owner = STRANGER;
   const error = await sellRecord(RECORD_ID, chain.deps()).catch((e: unknown) => e);
-  expect(error).toMatchObject({ kind: "notOwned", message: "You don't own that record any more." });
+  expect(error).toMatchObject({ kind: "notOwned", message: "You don't own that any more." });
   expect(chain.transfers).toBe(0);
 });
 
 test("record bought in another currency: refused before the transfer", async () => {
   const chain = new FakeChain();
   chain.record!.purchaseCurrency = "0000000000000000000000000000000000000000000000000000000000000002::sui::SUI";
-  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("The collector only buys records that were bought with FakeUSD.");
+  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("Stonks only buys records you paid for.");
   expect(chain.transfers).toBe(0);
   expect(chain.owner).toBe(PLAYER);
 });
@@ -184,7 +184,7 @@ test("record bought in another currency: refused before the transfer", async () 
 test("not a live Record type: refused before the transfer", async () => {
   const chain = new FakeChain();
   chain.record = null;
-  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("The collector only buys Miso records.");
+  await expect(sellRecord(RECORD_ID, chain.deps())).rejects.toThrow("Stonks only buys records from here.");
   expect(chain.transfers).toBe(0);
 });
 
@@ -205,7 +205,7 @@ test("a timed-out transfer keeps the pending entry so Retry re-checks it", async
     onDigest("transfer-slow");
     throw Object.assign(new Error("timed out"), { name: "TimeoutError" });
   };
-  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/took too long to answer/);
+  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/took too long/);
   expect(chain.store.get(RECORD_ID)?.transferDigest).toBe("transfer-slow");
   // It landed after all: Retry only pays.
   chain.owner = GAME;

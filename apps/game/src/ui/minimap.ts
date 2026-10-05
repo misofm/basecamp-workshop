@@ -46,7 +46,7 @@ export class Minimap {
   constructor(host: HTMLElement) {
     this.canvas = h("canvas", { class: "minimap-canvas", width: SIZE * this.dpr, height: SIZE * this.dpr, "aria-hidden": "true" });
     this.ctx = this.canvas.getContext("2d")!;
-    this.root = h("div", { class: "minimap", role: "img", "aria-label": "Minimap" }, this.canvas, h("span", { class: "minimap-north" }, "N"));
+    this.root = h("div", { class: "minimap", role: "img", "aria-label": "Map" }, this.canvas, h("span", { class: "minimap-north jp", title: "North" }, "北"));
     host.append(this.root);
   }
 

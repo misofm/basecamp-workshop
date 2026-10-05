@@ -11,8 +11,6 @@
  *                         4 EPriceChanged  5 EWrongPayment
  *   record::pressing      4 EMaxSupplyReached (sold out), 3 EDistributorNotAuthorized
  */
-import { formatAmount } from "../format";
-import { FUSD_DECIMALS, FUSD_SYMBOL } from "./config";
 import { TimeoutError } from "./net";
 
 /** An error whose message is already player-safe. */
@@ -45,28 +43,27 @@ export type Phase = "read" | "purchase" | "withdraw" | "sell" | "payout";
 
 // Everything below is PLAYER-VISIBLE: plain game language, no chain / wallet / gas terms.
 // Developer detail (which key, which faucet, the raw error) goes to console.warn instead.
-const ATM_HINT = "The ATM outside dispenses cash.";
-
 /** Shown for "the shop can't sign or pay for transactions" (no gas, missing / bad keys). */
-export const TILL_OFFLINE = "The shop's till is offline right now. Try again later.";
+export const TILL_OFFLINE = "The till's offline. Try later.";
 
 export const MESSAGES = {
   gas: TILL_OFFLINE,
-  gameGas: "The collector's till is offline right now.",
-  soldOut: "Sold out — every copy of this pressing has been sold.",
-  disabled: "This record isn't on sale right now.",
-  priceChanged: "The price just changed. Reload the page to see the new price.",
-  wrongPayment: "The payment didn't match the price. Reload the page and try again.",
-  notListed: "This record isn't for sale here any more.",
-  notOwned: "You don't own that record any more.",
-  timeout: "The shop took too long to answer. Try again.",
-  network: "The shop's connection dropped. Check your internet and try again.",
-  withdraw: "The ATM couldn't reach the bank. Try again.",
-  alreadyCollected: "The collector already has this record.",
-  purchase: "Couldn't complete the purchase — try again.",
-  sell: "Couldn't complete the sale — try again.",
-  read: "Couldn't reach the shop. Try again.",
-  payout: "The payment didn't go through.",
+  gameGas: "Stonks's till is offline.",
+  soldOut: "Sold out. Every copy's gone.",
+  disabled: "Not on sale right now.",
+  priceChanged: "Price changed. Reload the page.",
+  wrongPayment: "Payment didn't match. Reload and retry.",
+  notListed: "Not for sale here any more.",
+  notOwned: "You don't own that any more.",
+  timeout: "Shop took too long. Try again.",
+  network: "Connection dropped. Try again.",
+  shortOnCash: "Jazz frowns: short on cash.",
+  withdraw: "Card reader jammed. Try again.",
+  alreadyCollected: "Stonks already has this one.",
+  purchase: "Register jammed. Try again.",
+  sell: "Deal fell through. You still own it.",
+  read: "Can't reach the shop. Try again.",
+  payout: "Payment didn't go through.",
 } as const;
 
 /** Developer-only hints for a gas shortfall (console only, never shown to the player). */
@@ -107,8 +104,6 @@ function findAbort(error: unknown, text: string): AbortInfo | null {
   return null;
 }
 
-const fusd = (n: bigint) => formatAmount(n, FUSD_DECIMALS, FUSD_SYMBOL);
-
 function messageOf(error: unknown): string {
   if (error instanceof Error) return `${error.name}: ${error.message}`;
   try {
@@ -129,10 +124,10 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
     const table = abort.module === "listing" ? LISTING_ABORTS : abort.module === "pressing" ? PRESSING_ABORTS : {};
     const hit = table[abort.code];
     if (hit && phase === "purchase") return new PlayerError(hit[0], hit[1]);
-    if (phase === "sell") return new PlayerError("The sale didn't go through. You still own the record.");
+    if (phase === "sell") return new PlayerError(MESSAGES.sell);
     if (phase === "withdraw") return new PlayerError(MESSAGES.withdraw);
     if (phase === "payout") return new PlayerError(MESSAGES.payout);
-    return new PlayerError(`${MESSAGES.purchase} Nothing was charged.`);
+    return new PlayerError(MESSAGES.purchase);
   }
 
   const gas = () => {
@@ -145,15 +140,15 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
   if (insufficient) {
     if (/::sui::SUI$/i.test(insufficient[1])) return gas();
     return new PlayerError(
-      `Not enough FakeUSD — you have ${fusd(BigInt(insufficient[3]))}, this costs ${fusd(BigInt(insufficient[2]))}. ${ATM_HINT}`,
+      MESSAGES.shortOnCash,
       "fusd",
     );
   }
-  if (/InsufficientCoinBalance|insufficient.*fakeusd/i.test(text)) return new PlayerError(`Not enough FakeUSD for this record. ${ATM_HINT}`, "fusd");
+  if (/InsufficientCoinBalance|insufficient.*fakeusd/i.test(text)) return new PlayerError(MESSAGES.shortOnCash, "fusd");
   if (/No valid gas coins|InsufficientGas|GasBalanceTooLow|gas.*(balance|budget)|balance.*gas/i.test(text)) return gas();
   if (/not owned by|is not owned|is owned by account address|not signed by the correct sender|ObjectNotFound|InputObjectDeleted|object .*(deleted|not found|does not exist)|IncorrectUserSignature|ObjectVersionUnavailable/i.test(text)) {
     if (phase === "sell") return new PlayerError(MESSAGES.notOwned, "notOwned");
-    return new PlayerError("The shop lost track of this sale. Reload the page and try again.");
+    return new PlayerError("Shop lost the sale. Reload and retry.");
   }
   if (error instanceof TimeoutError || (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) || /DEADLINE_EXCEEDED|timed out/i.test(text)) {
     return new PlayerError(MESSAGES.timeout, "timeout");

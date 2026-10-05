@@ -100,7 +100,7 @@ test("full happy path: pick, deck, play, take, buy, smash, sell", () => {
   ]);
   expect(s.balance).toBe(108_000_000n);
   expect(recordPlace(s, "low-tide-tapes")).toBe("npc");
-  expect(objective(s).text).toMatch(/^Job done\..*C: collection/);
+  expect(objective(s).text).toMatch(/^Head home with Inicio/);
 });
 
 test("can't leave the shop holding unpaid stock", () => {
@@ -279,7 +279,7 @@ test("withdraw: start → pending → success sets balance and receipt; hand is 
   let s = run(initialState(), { type: "walletLoaded", balance: 100_000_000n }, { type: "pick", shopRecordId: "kindling" });
   s = transition(s, { type: "withdrawStart" });
   expect(s.op).toEqual({ kind: "withdraw", status: "pending" });
-  expect(objective(s)).toEqual({ text: "The ATM's counting out your FakeUSD…", target: "atm" });
+  expect(objective(s)).toEqual({ text: "Wait for the ATM.", target: "atm" });
   // Only one op at a time.
   expect(transition(s, { type: "purchaseStart" })).toBe(s);
   expect(transition(s, { type: "withdrawStart" })).toBe(s);
@@ -323,13 +323,13 @@ test("objective: short on FakeUSD points at the ATM", () => {
   expect(objective(base).target).toBe("shop-door");
   // Empty-handed and below the cheapest price (8.00).
   const broke = transition(base, { type: "walletLoaded", balance: 7_999_999n });
-  expect(objective(broke)).toEqual({ text: "Short on FakeUSD. Hit the ATM in TriMart, next door.", target: "atm" });
+  expect(objective(broke)).toEqual({ text: "Get cash at the ATM.", target: "atm" });
   // Exactly the cheapest price is enough.
   expect(objective(transition(base, { type: "walletLoaded", balance: 8_000_000n })).target).toBe("shop-door");
   // Holding an unpaid record: compared with that record's price.
   const holding = run(base, { type: "setZone", zone: "shop" }, { type: "walletLoaded", balance: 10_000_000n }, { type: "pick", shopRecordId: "big-one" });
   // Unpaid stock can't leave the shop, so the mission says to put it back first.
-  expect(objective(holding)).toEqual({ text: "Short on FakeUSD. Put it back (I), then hit the ATM in TriMart.", target: null });
+  expect(objective(holding)).toEqual({ text: "Put it back. Hit the ATM.", target: null });
   const affordable = transition(holding, { type: "pick", shopRecordId: "kindling" });
   expect(objective(affordable).target).toBe("deck");
   // After a withdrawal the normal loop resumes.
@@ -374,12 +374,12 @@ test("goHome: after a sale → wentHome, objective walks you home, then reads Ho
   const sold = soldState();
   expect(sold.wentHome).toBe(false);
   expect(canGoHome(sold)).toBe(true);
-  expect(objective(sold)).toEqual({ text: "Job done. Head home with Inicio: hotel door, west end. (C: collection)", target: "home" });
+  expect(objective(sold)).toEqual({ text: "Head home with Inicio.", target: "home" });
   const home = transition(sold, { type: "goHome" });
   expect(home).not.toBe(sold);
   expect(home.wentHome).toBe(true);
   expect(canGoHome(home)).toBe(false);
-  expect(objective(home)).toEqual({ text: "Home. Press H to reset the demo.", target: null });
+  expect(objective(home)).toEqual({ text: "Home. Press H to reset.", target: null });
   // Only once.
   expect(transition(home, { type: "goHome" })).toBe(home);
   // Reset starts over.

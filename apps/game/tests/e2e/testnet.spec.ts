@@ -221,7 +221,8 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   const atm = await page.evaluate(() => (window as any).__game.state().lastReceipt);
   expect(atm.kind).toBe("withdraw");
   console.log("ATM digest", atm.digest);
-  await expect(dialog).toContainText(atm.digest.slice(0, 6));
+  // The UI never shows digests; the receipt link carries the transaction.
+  await expect(dialog.locator("[data-receipt-link]")).toHaveAttribute("href", new RegExp(atm.digest));
   s = await until(page, (x) => x.balance !== null && BigInt(x.balance) >= beforeAtm + ATM_AMOUNT, "ATM balance", 60_000);
   expect(BigInt(s.balance!) - beforeAtm).toBe(ATM_AMOUNT);
   await page.keyboard.press("Escape");

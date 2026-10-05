@@ -10,6 +10,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "basecamp-workshop",
   "compatibility_date": "2026-10-01",
+  // Keyed builds sit behind Cloudflare Access on the workers.dev hostname; per-version
+  // preview URLs are separate hostnames, so keep them off.
+  "preview_urls": false,
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"

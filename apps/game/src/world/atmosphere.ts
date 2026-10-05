@@ -121,13 +121,13 @@ export class Atmosphere {
   /** Toward the sun from the scene. */
   readonly sunDirection = sunDir(SUN_LIGHT_ELEV, 0);
   /** Base exposure for ACES at dusk (world.ts scales it for the brown-out). */
-  readonly exposure = 1.35;
+  readonly exposure = 2.1;
 
   private sky: THREE.Mesh;
   private skyBright: N;
   private dim = 1;
   private envIntensity = 0.38;
-  private readonly base = { sun: 4.2, hemi: 1.7, fire: 680, diner: 10, festival: 70 };
+  private readonly base = { sun: 4.2, hemi: 3.4, fire: 680, diner: 10, festival: 70 };
 
   constructor(
     private scene: THREE.Scene,
@@ -185,7 +185,7 @@ export class Atmosphere {
   async initEnvironment(tier: QualityTier) {
     try {
       this.scene.environment = await loadDuskEnvironment(this.renderer, tier);
-      this.envIntensity = 0.6;
+      this.envIntensity = 0.9;
     } catch (e) {
       console.warn("dusk HDRI unavailable, using the sky as environment", e);
       const envScene = new THREE.Scene();

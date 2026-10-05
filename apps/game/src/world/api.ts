@@ -13,10 +13,11 @@ export type InteractableKind =
   | "cashier" // shop counter / clerk NPC
   | "car" // a parked, smashable car
   | "buyer" // the collector NPC on the street
-  | "atm"; // the FakeUSD ATM on the sidewalk outside the shop
+  | "atm" // the FakeUSD ATM in TriMart's vestibule, next door to the shop
+  | "home"; // the hotel's side door: "Head home with Inicio" (exit beat; enabled after a sale)
 
 export interface Interactable {
-  /** Unique id, e.g. "record:low-tide-tapes", "deck", "cashier", "car:2", "buyer:collector", "atm". */
+  /** Unique id, e.g. "record:low-tide-tapes", "deck", "cashier", "car:0", "buyer:collector", "atm", "home". */
   id: string;
   kind: InteractableKind;
   /** World position (x, z on the ground plane) used for proximity. */
@@ -101,6 +102,13 @@ export interface WorldApi {
    */
   buyerReturn(npcId: string): Promise<void>;
   /**
+   * The exit beat (bible §7.4): the boom from the facility. Camera shake, a two-second
+   * brown-out with the lights stuttering back, Inicio now standing by the hotel door
+   * beside Gamer. Resolves when the lights are back. Visual only: the caller plays the
+   * sound and shows the title card.
+   */
+  homeBeat(): Promise<void>;
+  /**
    * Heading convention (teleport, getPlayer, onMove, mapSnapshot): radians about +y,
    * 0 = facing +z (south, down on the minimap), π/2 = facing +x (east), π = facing north.
    * Forward vector = (sin heading, cos heading).
@@ -126,4 +134,8 @@ export interface WorldApi {
 export interface WorldAnchors {
   deck: { x: number; z: number };
   shopDoor: { x: number; z: number };
+  /** The hotel's side door (exit beat waypoint). */
+  homeDoor: { x: number; z: number };
+  /** Fixed ambience sources the audio layer mixes by distance (layout.ts SOUND_SOURCES). */
+  sounds: { fire: { x: number; z: number }; diner: { x: number; z: number }; band: { x: number; z: number }; vending: { x: number; z: number } };
 }

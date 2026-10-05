@@ -19,6 +19,7 @@ import { Fn, dot, float, max, mix, mx_noise_float, normalize, positionLocal, pow
 import { DINER_DOOR, ROOF_FIRE } from "./layout";
 import type { QualityTier } from "./quality";
 import { loadDuskEnvironment } from "./environment-map";
+import { urlConfig } from "../app/config";
 
 // TSL node handles: chained expression typings are too deep to spell out.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -256,6 +257,5 @@ function noise1(t: number) {
 /** `?exposure=<0.3–4>` from the URL, else the default. */
 function exposureFromUrl(fallback: number): number {
   if (typeof location === "undefined") return fallback;
-  const value = Number(new URLSearchParams(location.search).get("exposure"));
-  return Number.isFinite(value) && value >= 0.3 && value <= 4 ? value : fallback;
+  return urlConfig().exposure ?? fallback;
 }

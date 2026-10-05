@@ -4,6 +4,8 @@
  *
  * Owns: the pure toggle state. Must not: touch the DOM or the world (the controller applies it).
  */
+import { parseConfig } from "../app/config";
+
 export class UiVisibility {
   constructor(public visible = true) {}
 
@@ -16,6 +18,5 @@ export class UiVisibility {
 
 /** `?ui=0` (or `off` / `false`) starts hidden; anything else starts visible. */
 export function uiVisibleFromSearch(search: string): boolean {
-  const v = new URLSearchParams(search).get("ui");
-  return !(v === "0" || v === "off" || v === "false");
+  return parseConfig(search).uiVisible;
 }

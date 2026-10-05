@@ -37,6 +37,7 @@ import { RecordItems } from "./record-item";
 import { Waypoint } from "./waypoint";
 import { Atm } from "./atm";
 import { Cameo } from "./cameo";
+import { urlConfig } from "../app/config";
 import { setTamashiQuality } from "../tamashi/character";
 import { BOUNDS, BUILDINGS, COUNTER, DECK, DOOR, HOTEL_DOOR, ROADS, SHOP, SOUND_SOURCES, SPAWN, groundHeight, inShop } from "./layout";
 
@@ -137,7 +138,7 @@ export class GameWorld implements WorldApi {
     this.cars = new ParkedCars(this.scene, this.collision, this.interactables);
     this.npcs = new Npcs(this.scene, this.collision, this.interactables);
     new Atm(this.scene, this.collision, this.interactables);
-    this.cameo = new Cameo(this.scene, this.collision, { enabled: new URLSearchParams(location.search).get("cameo") !== "0" });
+    this.cameo = new Cameo(this.scene, this.collision, { enabled: urlConfig().cameo });
     this.interactables.register({
       id: "home",
       kind: "home",
@@ -193,17 +194,17 @@ export class GameWorld implements WorldApi {
     const stages = stagesFor(this.tier);
     if (stages) this.postfx = new PostFx(this.renderer, this.scene, this.camera, stages);
     this.publishQuality();
-    const params = new URLSearchParams(location.search);
+    const params = urlConfig();
     // `?particles=0`: no GPU particles (perf / GPU triage).
-    if (params.get("particles") !== "0")
-      this.particles = new GpuParticles(this.scene, this.renderer, { tier: this.tier, rain: params.get("rain") === "1" });
+    if (params.particles)
+      this.particles = new GpuParticles(this.scene, this.renderer, { tier: this.tier, rain: params.rain });
     this.resize();
     this.player.updateCamera(0);
     if (import.meta.env.DEV) {
       // Dev triage: `?hide=shop,city,…` hides top-level scene children by name; `?shadows=0`.
-      const hide = (params.get("hide") ?? "").split(",").filter(Boolean);
+      const hide = params.hide;
       for (const c of this.scene.children) if (hide.some((h) => (c.name || c.type).startsWith(h))) c.visible = false;
-      if (params.get("shadows") === "0") this.renderer.shadowMap.enabled = false;
+      if (!params.shadows) this.renderer.shadowMap.enabled = false;
     }
     // Pre-compile every pipeline (no hitch at the first purchase/receipt), time-boxed so a
     // slow machine never holds the intro: whatever isn't ready compiles on first use.

@@ -14,6 +14,7 @@ import { createCameo, type CameoCharacter } from "../tamashi/cameo";
 import type { Collision, Obstacle } from "./collision";
 import { groundHeight } from "./layout";
 import { SpeechBubble } from "./labels";
+import { urlConfig } from "../app/config";
 
 /** His spot: in front of Saisei's east window, facing the street (south-south-west). Local to this file. */
 const CAMEO_SPOT = { x: 5.0, z: 0.95, heading: -0.35 };
@@ -46,7 +47,7 @@ export class Cameo {
   private lineT = 0;
 
   constructor(scene: THREE.Scene, collision: Collision, opts?: { enabled: boolean }) {
-    this.enabled = opts ? opts.enabled : typeof location === "undefined" || new URLSearchParams(location.search).get("cameo") !== "0";
+    this.enabled = opts ? opts.enabled : urlConfig().cameo;
     if (!this.enabled) return;
     const c = createCameo();
     c.root.position.set(CAMEO_SPOT.x, groundHeight(CAMEO_SPOT.x, CAMEO_SPOT.z), CAMEO_SPOT.z);

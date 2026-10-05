@@ -12,13 +12,13 @@
  * Backend: WebGPU when the browser has it, else three's WebGL2 fallback; `?backend=webgl`
  * forces the fallback, `?backend=webgpu` asks for WebGPU (still falls back if unavailable).
  *
- * Owns: reading `?quality=` / `?backend=` / `?adapt=` and the resolved backend.
+ * Owns: the `?quality=` / `?backend=` / `?adapt=` decisions (params from app/config.ts) and the resolved backend.
  * Must not: touch the scene, the renderer or the DOM beyond `dataset` flags (world.ts sets them).
  */
+import { urlConfig } from "../app/config";
+
 export type QualityTier = "high" | "medium" | "low";
 export type Backend = "webgpu" | "webgl";
-
-const params = () => new URLSearchParams(typeof location === "undefined" ? "" : location.search);
 
 let resolvedBackend: Backend | null = null;
 
@@ -30,8 +30,7 @@ export function activeBackend(): Backend {
 
 /** What we will ask the renderer for (`?backend=` or feature detection). */
 export function requestedBackend(): Backend {
-  const b = params().get("backend");
-  if (b === "webgl") return "webgl";
+  if (urlConfig().backend === "webgl") return "webgl";
   return typeof navigator !== "undefined" && "gpu" in navigator && !!(navigator as Navigator & { gpu?: unknown }).gpu ? "webgpu" : "webgl";
 }
 
@@ -42,8 +41,7 @@ export function setActiveBackend(b: Backend) {
 
 /** The explicit `?quality=` tier, if any. */
 function explicitTier(): QualityTier | null {
-  const q = params().get("quality");
-  return q === "high" || q === "medium" || q === "low" ? q : null;
+  return urlConfig().quality;
 }
 
 /**
@@ -59,5 +57,5 @@ export function qualityTier(): QualityTier {
 
 /** `?adapt=0` pins quality (fixed render scale, passes as started) for screenshots and perf runs. */
 export function adaptiveQuality(): boolean {
-  return params().get("adapt") !== "0";
+  return urlConfig().adapt;
 }

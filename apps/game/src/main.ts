@@ -28,9 +28,10 @@ import { Intro } from "./ui/intro";
 import { TitleCard } from "./ui/title-card";
 import { GameController } from "./game/controller";
 import { installDebugHooks } from "./debug";
+import { urlConfig } from "./app/config";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-const gallery = new URLSearchParams(location.search).get("gallery");
+const gallery = urlConfig().gallery;
 
 if (gallery) {
   void import("./tamashi/gallery").then((m) => m.runGallery(app, gallery));

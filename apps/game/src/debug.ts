@@ -28,6 +28,7 @@ import type { GameWorld } from "./world/world";
 import type { RecordDeck } from "./audio/deck";
 import { BUYER_SPOT, HOTEL_DOOR, PARKED_CARS } from "./world/layout";
 import type { Interactable } from "./world/api";
+import { urlConfig } from "./app/config";
 
 /** Shop interior centre, used to face wall-mounted record sections. */
 const SHOP_CENTRE = { x: 0, z: -7 };
@@ -97,7 +98,7 @@ export function installDebugHooks(world: GameWorld, adapter: MisoAdapter, contro
     },
   };
   (window as unknown as { __game: typeof hooks }).__game = hooks;
-  if (new URLSearchParams(location.search).get("debug") === "1") installDebugOverlay(() => hooks.measure());
+  if (urlConfig().debug) installDebugOverlay(() => hooks.measure());
 }
 
 /** Draw calls are re-measured this often (measure() renders one extra frame). */

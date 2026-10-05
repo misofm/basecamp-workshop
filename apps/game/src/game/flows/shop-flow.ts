@@ -110,6 +110,8 @@ export class ShopFlow {
         kind: "primary",
         key: "E",
         label: "Put it on",
+        // The record being paid for stays in your hands until the till rings.
+        disabled: handLocked(s),
         run: () => {
           if (ctx.dispatch({ type: "placeOnDeck" })) sfx.recordThunk();
           this.openDeck();
@@ -164,6 +166,7 @@ export class ShopFlow {
       actions.push({
         id: "swap",
         label: "Swap",
+        disabled: handLocked(s),
         run: () => {
           if (ctx.dispatch({ type: "swapWithDeck" })) sfx.recordThunk();
           ctx.dialogs.close();

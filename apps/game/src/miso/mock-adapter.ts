@@ -167,7 +167,8 @@ export class MockAdapter implements MisoAdapter {
     const earlier = this.lostPurchases.get(record.id);
     if (earlier) {
       this.lostPurchases.delete(record.id);
-      return earlier;
+      // Only while that Record is still yours (sold meanwhile = this is a new purchase), as on testnet.
+      if (this.owned.some((r) => r.recordId === earlier.recordId)) return earlier;
     }
     this.injectFailure("purchase");
     const stock = this.catalog.find((r) => r.id === record.id);

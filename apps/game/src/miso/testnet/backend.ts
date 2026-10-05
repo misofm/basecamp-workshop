@@ -45,6 +45,8 @@ export class TestnetBackend {
   private recentPurchases = new Map<string, { owned: OwnedRecord; at: number }>();
   private recentSales = new Map<string, number>();
   private pendingPurchases = new Map<string, string>();
+  /** Records sold this session: never handed back as "the earlier purchase that landed". */
+  private soldThisSession = new Set<string>();
   private knownOwned = new Map<string, OwnedRecord>();
 
   /** Player address (throws the "keys missing" PlayerError). */
@@ -123,7 +125,9 @@ export class TestnetBackend {
         this.pendingPurchases.delete(record.id);
         const landed = await waitFor(earlier, 8_000).catch(() => null);
         const id = landed?.created.find((c) => isRecordType(c.type))?.objectId;
-        if (landed && id) return await this.afterPurchase(record, id, landed.digest);
+        // Only a genuine retry gets the earlier Record back; if it has been sold meanwhile this
+        // is a new purchase (handing back a sold Record would be a phantom, free copy).
+        if (landed && id && !this.soldThisSession.has(id)) return await this.afterPurchase(record, id, landed.digest);
       }
       const executed = await signAndRun(purchaseTransaction(terms, buyer), signer, (digest) => this.pendingPurchases.set(record.id, digest));
       this.pendingPurchases.delete(record.id);
@@ -236,6 +240,7 @@ export class TestnetBackend {
     });
     this.recentPurchases.delete(recordId);
     this.recentSales.set(recordId, Date.now());
+    this.soldThisSession.add(recordId);
     this.knownOwned.delete(recordId);
     return result;
   }

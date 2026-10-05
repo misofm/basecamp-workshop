@@ -58,6 +58,10 @@ export class TitleCard {
     if (!root) return;
     this.root = null;
     window.removeEventListener("keydown", this.onKey, true);
+    // Drop focus now: the fading card keeps its "Continue" button in the DOM for 500 ms, and
+    // a focused button makes the world ignore E / Enter (and a dialog opened meanwhile would
+    // hand focus back to it on close).
+    if (document.activeElement instanceof HTMLElement && root.contains(document.activeElement)) document.activeElement.blur();
     root.classList.add("leaving");
     setTimeout(() => root.remove(), 500);
     const resolve = this.resolve;

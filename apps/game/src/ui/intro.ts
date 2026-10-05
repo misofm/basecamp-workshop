@@ -118,6 +118,8 @@ export class Intro {
   private start(): void {
     if (this.started || !this.ready) return;
     this.started = true;
+    // Same as the title card: never leave focus on the fading "Press Enter" button.
+    this.button.blur();
     this.root.classList.add("leaving");
     setTimeout(() => this.root.remove(), 600);
     this.onStart();

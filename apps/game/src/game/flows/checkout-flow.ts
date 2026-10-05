@@ -106,7 +106,11 @@ export class CheckoutFlow {
       // Wallet re-read failed: estimate from the known balance; unknown stays unknown (never negative).
       const known = ctx.state().balance;
       const balance = wallet?.fakeUsd ?? (known === null ? null : known - record.price.amount);
-      ctx.dispatch({ type: "purchaseSuccess", owned: mine, digest: result.digest, balance, amount: record.price.amount });
+      if (!ctx.dispatch({ type: "purchaseSuccess", owned: mine, digest: result.digest, balance, amount: record.price.amount })) {
+        // The state machine refused the result (e.g. a Record already sold): never show a
+        // receipt for it. Fall through to the error + Retry path with chain truth re-read.
+        throw new Error("Register jammed. Try again.");
+      }
       if (owned) ctx.dispatch({ type: "collectionLoaded", owned });
       sfx.cashRegister();
       setTimeout(() => sfx.purchaseSuccess(), 450);

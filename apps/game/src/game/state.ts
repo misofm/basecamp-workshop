@@ -256,7 +256,7 @@ const no = (state: GameState, reason: string): StepResult => ({ state, rejected:
 
 /** A new balance from a chain result: null or negative (impossible) keeps the known one. */
 const nextBalance = (state: GameState, balance: bigint | null): bigint | null =>
-  balance !== null && balance >= 0n ? balance : state.balance;
+  typeof balance === "bigint" && balance >= 0n ? balance : state.balance;
 
 /**
  * Move the record(s) between hand and deck. A purchase / sell error describes the record
@@ -354,6 +354,7 @@ function stepUnsafe(state: GameState, action: GameAction): StepResult {
       if (!isPending(state, "purchase")) return no(state, "no purchase pending");
       if (!state.hand || state.hand.recordId !== null) return no(state, "not holding unpaid stock");
       if (state.hand.shopRecordId !== action.owned.shopRecordId) return no(state, "the Record bought is not the one in hand");
+      if (state.sold.some((r) => r.recordId === action.owned.recordId)) return no(state, "that Record was sold this session");
       return ok({
         ...state,
         hand: { shopRecordId: action.owned.shopRecordId, recordId: action.owned.recordId },
@@ -442,7 +443,8 @@ function stepUnsafe(state: GameState, action: GameAction): StepResult {
       // session, and never drop the one in your hand / on the deck (the HUD would read
       // UNPAID and the sale could not start). The read is truth for everything else.
       const sold = new Set(state.sold.map((r) => r.recordId));
-      const owned = action.owned.filter((r) => !sold.has(r.recordId));
+      const seen = new Set<string>();
+      const owned = action.owned.filter((r) => !sold.has(r.recordId) && !seen.has(r.recordId) && !!seen.add(r.recordId));
       for (const item of [state.deck, state.hand]) {
         if (!item?.recordId || owned.some((r) => r.recordId === item.recordId)) continue;
         const known = ownedRecord(state, item.recordId);
@@ -456,7 +458,7 @@ function stepUnsafe(state: GameState, action: GameAction): StepResult {
     }
 
     case "walletLoaded":
-      if (action.balance < 0n) return no(state, "negative balance");
+      if (typeof action.balance !== "bigint" || action.balance < 0n) return no(state, "not a balance");
       return ok({
         ...state,
         balance: action.balance,
@@ -471,6 +473,7 @@ function stepUnsafe(state: GameState, action: GameAction): StepResult {
       return ok({ ...state, smashedCars: [...state.smashedCars, action.carId] });
 
     case "setZone":
+      if (action.zone !== "street" && action.zone !== "shop") return no(state, "unknown zone");
       return ok(state.zone === action.zone ? state : { ...state, zone: action.zone });
 
     case "dismissError":

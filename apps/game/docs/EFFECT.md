@@ -14,18 +14,22 @@ used: `Context.Service`, `Layer`, `Effect.fn` / `Effect.gen`, `Schema`, `Data.Ta
 ```
 main.ts ── Effect.runFork(App) ── one top-level error boundary (log with context + toast)
    │
-   └─ AppLayer (built in a fixed order: same DOM / listener order as before)
+   └─ AppLayer: a linear Layer.provideMerge chain, built top to bottom (same DOM /
+      listener order as before the port)
         Config ─────────────► URL params, parsed once with Schema
         PendingSales ───────► localStorage pending-sale entries, Schema-validated
-        Chain (Config, PendingSales) ─► MisoAdapter wrapped: typed errors, timeouts, read retries
+        Shell ──────────────► #app, <main id="world"> appended
+        Chain ──────────────► MisoAdapter wrapped: typed errors, timeouts, read retries
         World (scoped) ─────► GameWorld via acquireRelease (dispose on scope close)
-        Ui ─────────────────► Hud, Minimap, Dialogs, Intro, TitleCard (DOM)
-        Audio (scoped) ─────► AudioContext lifetime, RecordDeck, ShopAmbience, gesture unlock
-        Input (scoped) ─────► window/document listeners via acquireRelease, guarded
-        ErrorBoundary ──────► report(context, cause): console.error + plain-language toast
+        UiParts ────────────► Hud, Minimap, Dialogs, Intro (DOM)
+        Audio (scoped) ─────► RecordDeck, ShopAmbience, gesture unlock, AudioContext close
         GameState ──────────► SubscriptionRef<GameState>; every change through step()
-        Loading (Ui) ───────► intro progress derived from the loading Effects themselves
-        Controller (all) ───► GameController + flows; flows run as fibers in a FiberSet
+        Ui ─────────────────► UiParts + TitleCard (constructed here, as before)
+        ErrorBoundary ──────► report(context, cause): console.error + plain-language toast
+        Input (scoped) ─────► guarded listeners via acquireRelease in the app scope
+        Loading ────────────► intro progress derived from the loading Effects themselves
+        Controller ─────────► GameController + flows; flows run as fibers in a FiberSet
+        DebugHooks (scoped) ► window.__game (deleted on scope close)
 ```
 
 ## Services and files (`src/app/`)
@@ -37,11 +41,12 @@ main.ts ── Effect.runFork(App) ── one top-level error boundary (log with
 | `PendingSales` | `app/pending-sales.ts` | Schema for `PendingSale`; localStorage with the in-memory fallback the testnet backend had. Corrupt JSON or an invalid entry is dropped and logged, never thrown. Exposes the synchronous `PendingStore` that `miso/testnet/sell.ts` needs (it saves the digest *before* submission, synchronously). Injected into `TestnetAdapter` → `TestnetBackend`. |
 | `GameState` | `app/game-state.ts` | `SubscriptionRef<GameState>`; `dispatch(action)` runs the pure `step()` (unchanged, still in `game/state.ts`), logs refusals and, in dev builds, `invariantViolations()` exactly as before. `changes` is a `Stream` for observers. |
 | `Flows` | `game/flows/*` | purchase / sell / withdraw / smash / exit beat are `Effect`s run in the controller's `FiberSet` (started synchronously, so the pending screen still swaps in within the same key press). |
-| `Audio` | `app/audio.ts` | Scoped AudioContext (closed on release), resume on the Enter gesture with the same "retry on next key / pointer" fallback, visibility suspend/resume. |
-| `World` | `app/world.ts` | `acquireRelease(new GameWorld(host), w => w.dispose())`. Scene code stays imperative. World callbacks (`onMove`, `onNear`, …) are wrapped by the error boundary so an app-layer throw can never kill the render loop. |
-| `Input` | `app/input.ts` | Scoped, guarded listener registration (see deviations). |
-| `Loading` | `app/loading.ts` | `track(effect, weight, tauMs)` drives `Intro.track` from the Effect's own start / exit. |
-| `ErrorBoundary` | `app/boundary.ts` | Defects: `console.error("[app] <context>", cause)` + one toast, rate-limited. |
+| `Audio` | `app/audio.ts` | `start()` (called by the controller on the Enter gesture) is the old unlock: resume + ambience now, capture-phase keydown / pointerdown retry listeners until it works. Release: drop those listeners, `closeAudio()` (audio/context.ts; also removes its visibility listener). Visibility suspend/resume unchanged. |
+| `World` | `app/world.ts` | `acquireRelease(make(host), w => w.dispose())`; `main.ts` passes `host => new GameWorld(host)` (`World.layerWith`), so unit tests can use the tag without loading Three.js. `dispose()` stops the loop, removes the world's own four listeners, disposes the renderer. Scene code stays imperative. World callbacks (`onMove`, `onNear`, …) are wrapped by the error boundary so an app-layer throw can never kill the render loop. |
+| `Shell`, `UiParts`, `Ui` | `app/ui.ts` | DOM pieces, split only so construction order stays exactly as before (TitleCard after the audio objects). |
+| `Input` | `app/input.ts` | `listen(target, type, handler, options?)`: `addEventListener` now, guarded (report context = event type), removed on scope close; `listenSync` for the controller constructor (see deviations). |
+| `Loading` | `app/loading.ts` | `step(weight, tauMs, deferred?)` registers an `Intro.track` task at once; `.run(effect)` starts a deferred step when the effect starts and marks it done on any exit. |
+| `ErrorBoundary` | `app/boundary.ts` | Defects: `console.error("[app] <context>", cause)` + one toast, rate-limited. One instance, shared by the controller's FiberSet, guarded callbacks, Input and the top-level `fatal` handler in main.ts (context `fatal`; console only if the Hud was never built). |
 
 ## Error types (`app/errors.ts`)
 

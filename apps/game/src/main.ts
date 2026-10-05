@@ -1,11 +1,15 @@
 /**
- * Bootstrap only: build the pieces and hand them to the GameController.
+ * Bootstrap only: one Layer graph (AppLayer) and one Effect.runFork (see docs/EFFECT.md).
  *
- *   adapter  (src/miso)   chain access, chosen by ?chain=mock|testnet
- *   world    (src/world)  Three.js city + shop, behind WorldApi
- *   audio    (src/audio)  deck preview, sfx, ambience
- *   ui       (src/ui)     HUD, minimap, dialogs, boot cover (DOM only)
- *   controller (src/game/controller.ts) glues them; read it first.
+ *   Chain      (src/app/chain.ts → src/miso)  chain access, chosen by ?chain=mock|testnet
+ *   World      (src/app/world.ts → src/world) Three.js city + shop, behind WorldApi
+ *   Audio      (src/app/audio.ts → src/audio) deck preview, sfx, ambience, unlock
+ *   Ui         (src/app/ui.ts → src/ui)       HUD, minimap, dialogs, boot cover (DOM only)
+ *   Controller (src/app/controller.ts → src/game/controller.ts) glues them; read it first.
+ *
+ * `program` loads (boot + assets, then warm-up) under the intro's progress bar and shows
+ * "Press Enter" whatever happened; `fatal` is the one top-level error boundary. The app
+ * scope never closes, so the world keeps rendering whatever an app-layer error does.
  *
  * `?gallery=1` (all 100 Tamashi in a grid) or `?gallery=<id>` (one up close next to its
  * artwork) runs the visual-QA gallery (src/tamashi/gallery.ts) instead of the game.

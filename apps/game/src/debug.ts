@@ -15,7 +15,7 @@
  *   __game.setFailureMode("none")     mock: purchase|sell|withdraw|all|none, sticky
  *   __game.setLatency(1500)           mock: simulated chain latency (ms)
  *   __game.measure()                  draw calls / triangles for one frame
- *   ?debug=1                          corner overlay: backend, quality tier, FPS / frame time, draw calls
+ *   ?debug=1                          corner overlay: backend, quality tier, render scale / AO / bloom, FPS / frame time, draw calls
  *   __game.deckDebug()                deck source, <audio> currentTime, preview window start
  *   __game.buyerReturnNow()           bring Stonks (the collector) back now (normally ~20 s after a sale)
  *   __game.crowdStats()               crowd on screen, distinct Tamashi ids shown so far, named cast (id, name, spot, onScreen)
@@ -156,6 +156,7 @@ function installDebugOverlay(measure: () => { calls: number; triangles: number }
       const d = document.documentElement.dataset;
       panel.textContent =
         `backend ${d.backend ?? "?"} · quality ${d.quality ?? "?"}\n` +
+        `scale ${d.renderScale ?? "?"} · AO ${d.ao ?? "?"} · bloom ${d.bloom ?? "?"}\n` +
         `${fps.toFixed(0)} fps · ${frameMs.toFixed(1)} ms (worst ${worst.toFixed(0)} ms)\n` +
         `${draw.calls} draws · ${(draw.triangles / 1000).toFixed(0)}k tris`;
       worst = 0;

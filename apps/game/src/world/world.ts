@@ -20,6 +20,7 @@
 import * as THREE from "three/webgpu";
 import type { Interactable, MapSnapshot, RecordPlace, WorldAnchors, WorldApi, WorldRecord, Zone } from "./api";
 import { Collision } from "./collision";
+import { AdaptiveQuality } from "./adaptive-quality";
 import { Interactables } from "./interactables";
 import { City } from "./city";
 import { Shop } from "./shop";
@@ -99,8 +100,7 @@ export class GameWorld implements WorldApi {
   private lastBump = -Infinity;
   private last = 0;
   private elapsed = 0;
-  private perfFrames = 0;
-  private perfMs = 0;
+  private quality = new AdaptiveQuality(Math.min(devicePixelRatio, START_SCALE[qualityTier()]), MIN_RENDER_SCALE);
   /** Smoothed frame time (ms), for diagnostics. */
   private frameMs = 16.7;
   private started = false;
@@ -175,6 +175,8 @@ export class GameWorld implements WorldApi {
     this.tier = qualityTier();
     this.renderScale = Math.min(devicePixelRatio, START_SCALE[this.tier]);
     this.renderer.setPixelRatio(this.renderScale);
+    this.quality = new AdaptiveQuality(this.renderScale, MIN_RENDER_SCALE);
+    this.watchVisibility();
     this.atmosphere.setShadowTier(this.tier);
     const html = document.documentElement.dataset;
     html.backend = activeBackend();
@@ -190,6 +192,7 @@ export class GameWorld implements WorldApi {
     await this.atmosphere.initEnvironment(this.tier);
     const stages = stagesFor(this.tier);
     if (stages) this.postfx = new PostFx(this.renderer, this.scene, this.camera, stages);
+    this.publishQuality();
     const params = new URLSearchParams(location.search);
     // `?particles=0`: no GPU particles (perf / GPU triage).
     if (params.get("particles") !== "0")
@@ -530,27 +533,42 @@ export class GameWorld implements WorldApi {
     this.camera.updateProjectionMatrix();
   }
 
-  /** Lower render scale, then drop GTAO, then bloom, if frames are slow. `?adapt=0` pins it. */
+  /**
+   * Away from the tab, requestAnimationFrame stops and the first frame back reports the whole
+   * time away: reset the measurement on every visibility / focus change so it never counts.
+   */
+  private watchVisibility() {
+    const reset = () => {
+      this.last = 0;
+      this.quality.reset();
+    };
+    document.addEventListener("visibilitychange", reset);
+    window.addEventListener("focus", reset);
+  }
+
+  /** Lower render scale, then drop GTAO, then bloom, if frames are slow; recover when fast. `?adapt=0` pins it. */
   private adaptQuality(rawDelta: number) {
-    this.frameMs += (rawDelta - this.frameMs) * 0.05;
+    if (rawDelta <= 250) this.frameMs += (rawDelta - this.frameMs) * 0.05;
     if (!this.adaptive) return;
-    this.perfFrames++;
-    this.perfMs += rawDelta;
-    if (this.perfFrames < 40) return;
-    const average = this.perfMs / this.perfFrames;
     const post = this.postfx;
-    if (average > 20 && this.renderScale > MIN_RENDER_SCALE) {
-      this.renderScale = Math.max(MIN_RENDER_SCALE, this.renderScale - 0.15);
+    const change = this.quality.frame(rawDelta, post ? { ao: post.stages.ao, bloom: post.stages.bloom } : null);
+    if (!change) return;
+    if (change.scale !== undefined) {
+      this.renderScale = change.scale;
       this.renderer.setPixelRatio(this.renderScale);
       this.resize();
-    } else if (average > 20 && post?.stages.ao) {
-      post.set({ ao: false });
-    } else if (average > 40 && post?.stages.bloom) {
-      post.set({ bloom: false });
     }
-    document.documentElement.dataset.renderScale = this.renderScale.toFixed(2);
-    this.perfFrames = 0;
-    this.perfMs = 0;
+    if (post && change.ao !== undefined) post.set({ ao: change.ao });
+    if (post && change.bloom !== undefined) post.set({ bloom: change.bloom });
+    this.publishQuality();
+  }
+
+  /** Current scale / AO / bloom for the ?debug=1 overlay and tests (<html data-*>). */
+  private publishQuality() {
+    const html = document.documentElement.dataset;
+    html.renderScale = this.renderScale.toFixed(2);
+    html.ao = this.postfx?.stages.ao ? "on" : "off";
+    html.bloom = this.postfx?.stages.bloom ? "on" : "off";
   }
 
   private frame(time: number) {

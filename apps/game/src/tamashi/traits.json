@@ -1,0 +1,4869 @@
+[
+ {
+  "id": 1,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e4e8ea",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#2a2a2a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8dcdc",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#c88a1e",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "spacesuit",
+   "primary": "#e6eaec",
+   "secondary": "#5cc8cc",
+   "accent": "#3a9aa0",
+   "details": "white ribbed spacesuit with teal trim, collar ring around neck, chest panel with teal circular logo"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "dark rocky alien landscape under starry teal sky with floating black rock debris",
+   "palette": [
+    "#0e2e38",
+    "#2a8a90",
+    "#1a1a1a"
+   ]
+  },
+  "vibe": "astronaut on alien planet",
+  "confidence": "high",
+  "notes": "Antennas mount on a silver dome on top of the TV. Screen is amber/gold glossy. Plug cable hangs from TV left side and another loops over the suit shoulder."
+ },
+ {
+  "id": 2,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8e8e8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#1a1a1a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#cfcfcf",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#6a6a6a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#1a1a1a",
+   "secondary": "#3a3a3a",
+   "accent": null,
+   "details": "plain black crew-neck top, possibly a sweater; no logos"
+  },
+  "skinTone": "#3a3a3a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "flat grey wall with diagonal-hatched shadow, minimal noir",
+   "palette": [
+    "#8a8a8a",
+    "#4a4a4a",
+    "#b0b0b0"
+   ]
+  },
+  "vibe": "monochrome noir minimalist",
+  "confidence": "medium",
+  "notes": "Entire image is greyscale. Four antenna rods are drawn (two dark, two light, likely a doubled/echo pair); a 3D model could use two pairs. Neck is dark grey, so skinTone is a greyscale guess. Plug cable over right shoulder."
+ },
+ {
+  "id": 3,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d8642a",
+   "bodyFinish": "patterned",
+   "pattern": "pumpkin rind with vertical ribs",
+   "bezelColor": "#f0a020",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e08a30",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d86a28",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#ffe060",
+   "mouth": "other: jack-o-lantern carved grin with triangle nose",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#5a3220",
+   "secondary": "#6a8a2a",
+   "accent": null,
+   "details": "bare torso wrapped in green pumpkin vines, large leaves and curly tendrils"
+  },
+  "skinTone": "#5a3220",
+  "accessories": [
+   "power-plug-cable",
+   "other: pumpkin vines and leaves"
+  ],
+  "background": {
+   "setting": "dark purple vignette, Halloween night",
+   "palette": [
+    "#2a0e38",
+    "#5a1a6a",
+    "#0e0612"
+   ]
+  },
+  "vibe": "jack-o-lantern Halloween spirit",
+  "confidence": "high",
+  "notes": "Whole TV is a pumpkin: orange ribbed body, brown stem-like dome on top. Eyes, nose, mouth and antenna tips glow yellow like candlelight. Shadow of extra antennas behind."
+ },
+ {
+  "id": 4,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#4a2048",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a1028",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#cfcfcf",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#7a3a40",
+   "glow": "soft",
+   "eyes": "other: cat eyes (orange, part of image)",
+   "eyeColor": "#ff6a1a",
+   "mouth": null,
+   "sceneDescription": "black cat sitting with curled tail in front of warm orange/purple glow"
+  },
+  "headwear": {
+   "type": "other: witch hat (crumpled, brown with buckle band)",
+   "color": "#3e2a1e"
+  },
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#1a1a1a",
+   "secondary": "#2a2a2a",
+   "accent": null,
+   "details": "plain black crew-neck top"
+  },
+  "skinTone": "#c08a6a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "haunted house interior with tall arched windows, full moon, cobwebs",
+   "palette": [
+    "#3a1a1a",
+    "#c0502a",
+    "#1a0e14"
+   ]
+  },
+  "vibe": "Halloween witch's familiar",
+  "confidence": "high",
+  "notes": "Witch hat is floppy/droopy (sorting-hat style) and sits between the antennas. Screen shows a black cat with glowing orange eyes rather than a face."
+ },
+ {
+  "id": 5,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#8ef0a0",
+   "bodyFinish": "transparent",
+   "pattern": "ghostly translucent slime-green glow",
+   "bezelColor": "#a8f0b0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#b8f8c0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#7ab890",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#8ad8a0",
+   "secondary": "#6ac088",
+   "accent": null,
+   "details": "entire body is a translucent glowing green ghost form, no clothing"
+  },
+  "skinTone": "#8ad8a0",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "night sky with large full moon, sparkles and small green ghosts floating around",
+   "palette": [
+    "#0e1e24",
+    "#e8e4c0",
+    "#5ae070"
+   ]
+  },
+  "vibe": "glowing ghost",
+  "confidence": "high",
+  "notes": "Whole character (TV and body) is translucent, emissive green; inner edges of the TV are visible through the shell. Three small cartoon ghosts accompany him."
+ },
+ {
+  "id": 6,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c8c8",
+   "bodyFinish": "matte",
+   "pattern": "red vein network spreading across the casing",
+   "bezelColor": "#4a4a4a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#d8d8d8",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "anatomical heart with branching arteries and veins in red"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#b8b8b8",
+   "secondary": "#e05050",
+   "accent": null,
+   "details": "bare grey torso with red veins branching from neck over shoulders"
+  },
+  "skinTone": "#b8b8b8",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "white to pink gradient with red ECG/heartbeat lines",
+   "palette": [
+    "#f4f4f4",
+    "#e8b0b0",
+    "#a01818"
+   ]
+  },
+  "vibe": "anatomical heartbeat",
+  "confidence": "high",
+  "notes": "Mostly greyscale art with red as the only color. Veins continue from the screen's heart down the neck into the body. Ghost antenna shadows behind."
+ },
+ {
+  "id": 7,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#111111",
+   "bodyFinish": "matte",
+   "pattern": "stark black-and-white ink style",
+   "bezelColor": "#ffffff",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#ffffff",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#ffffff",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "tuxedo",
+   "primary": "#111111",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "black tuxedo jacket, white dress shirt with black stud buttons, black bowtie, white pocket square"
+  },
+  "skinTone": "#111111",
+  "accessories": [
+   "bowtie",
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "spy-film gun-barrel iris spiral, black and white",
+   "palette": [
+    "#000000",
+    "#ffffff"
+   ]
+  },
+  "vibe": "secret agent spy",
+  "confidence": "high",
+  "notes": "Pure two-tone black/white graphic. TV body reads as black with white highlights; neck is solid black silhouette."
+ },
+ {
+  "id": 8,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#dce6fa",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#2a3aa0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a4ad8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#1a2050",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "dark tunnel of nested diamond frames with tiny colorful TVs flying through, leaving a trail"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#c8d8f4",
+   "secondary": "#2a3ad0",
+   "accent": null,
+   "details": "pale blue crew-neck top with blue linework, no logos"
+  },
+  "skinTone": "#c8d8f4",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "synthwave/vaporwave: neon magenta grid over green ground, big peach sun, purple clouds, distant mountains",
+   "palette": [
+    "#b08af0",
+    "#f0c080",
+    "#e040e0",
+    "#2a8a50"
+   ]
+  },
+  "vibe": "vaporwave dreamer",
+  "confidence": "medium",
+  "notes": "Linework is cobalt blue rather than black; body and neck share the pale blue-white of the TV. Screen content is ambiguous (looks like stacked mini TVs spiraling into an infinite tunnel)."
+ },
+ {
+  "id": 9,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f2f2f2",
+   "bodyFinish": "glossy",
+   "pattern": "red trim lines",
+   "bezelColor": "#d01020",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "other: hidden behind mask",
+   "knobColor": "#e0b040",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0f0f0",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: kitsune fox mask (white with red markings, gold bells and red tassels) worn over screen",
+   "color": "#ffffff"
+  },
+  "outfit": {
+   "type": "kimono",
+   "primary": "#f4f4f4",
+   "secondary": "#d01020",
+   "accent": null,
+   "details": "white kimono with red inner collar (shrine-maiden style)"
+  },
+  "skinTone": "#d8a888",
+  "accessories": [
+   "power-plug-cable",
+   "other: kitsune mask with bells and tassels"
+  ],
+  "background": {
+   "setting": "dark crimson night with glowing spirit orbs and faint smoke",
+   "palette": [
+    "#2a0a14",
+    "#6a1428",
+    "#ffd0e0"
+   ]
+  },
+  "vibe": "kitsune shrine spirit",
+  "confidence": "high",
+  "notes": "Gold antennas, gold antenna dome and gold plug/cable. Fox mask covers most of the screen, only one vertical-line eye visible. Mask has red ear insides and swirling red brow markings."
+ },
+ {
+  "id": 10,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a8ac8c",
+   "bodyFinish": "transparent",
+   "pattern": "birdcage: TV casing is an open frame of vertical white bars with a straw nest floor",
+   "bezelColor": "#7a7a60",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#b8b8a0",
+   "damage": "weathered, moss-tinted"
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#a8a880",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "empty birdcage interior with straw nest bedding; cage door open"
+  },
+  "headwear": {
+   "type": "other: blue bird perched on top-right of TV",
+   "color": "#3a7ad8"
+  },
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#8a9070",
+   "secondary": "#6a7058",
+   "accent": null,
+   "details": "bare greenish-grey stone-like torso with faint cracks"
+  },
+  "skinTone": "#8a9070",
+  "accessories": [
+   "power-plug-cable",
+   "other: bluebird"
+  ],
+  "background": {
+   "setting": "watercolor forest clearing with large trees, grass and a stream",
+   "palette": [
+    "#5a8a2a",
+    "#9ab84a",
+    "#4aa0b0",
+    "#3a3a20"
+   ]
+  },
+  "vibe": "freed songbird, nature",
+  "confidence": "medium",
+  "notes": "screen.kind does not fit the schema: the screen area is replaced by cage bars and an open cage door. Body looks like weathered stone/statue. Watercolor style."
+ },
+ {
+  "id": 11,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8e0f8",
+   "bodyFinish": "transparent",
+   "pattern": "semi-transparent, clouds drift through and around it",
+   "bezelColor": "#a8c8f0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8e8f8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#9ad0f0",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#1a5ad8",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sweater",
+   "primary": "#2a6ad0",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "blue crew-neck sweater with white cloud print"
+  },
+  "skinTone": "#6a9ae0",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "deep blue sky full of fluffy white clouds",
+   "palette": [
+    "#1a40c8",
+    "#6ab0f0",
+    "#ffffff"
+   ]
+  },
+  "vibe": "head in the clouds daydreamer",
+  "confidence": "high",
+  "notes": "Entire palette is blue/white. TV is ghostly/translucent and partially obscured by clouds. Eyes are blue with lighter highlight rather than black. Neck/skin is blue."
+ },
+ {
+  "id": 12,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f2c012",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#1a1a1a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a2a2a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#2e2e2e",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#f2c012",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "tank-top",
+   "primary": "#111111",
+   "secondary": "#f2c012",
+   "accent": null,
+   "details": "black tank top with yellow trim, Bruce-Lee style"
+  },
+  "skinTone": "#b07850",
+  "accessories": [
+   "power-plug-cable",
+   "necklace",
+   "other: nunchucks with chain draped over shoulders",
+   "other: green jade TV-shaped pendant"
+  ],
+  "background": {
+   "setting": "red gradient with gold line-art Chinese dragon wrapped around, plus a dragon-horned TV outline",
+   "palette": [
+    "#c00818",
+    "#7a0010",
+    "#e8b040"
+   ]
+  },
+  "vibe": "kung fu martial artist",
+  "confidence": "high",
+  "notes": "Black screen with yellow vertical-line eyes (inverted colors). Black antennas and black antenna dome. Gold chain necklace with green jade pendant shaped like a tiny TV."
+ },
+ {
+  "id": 13,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3a2a20",
+   "bodyFinish": "patterned",
+   "pattern": "treasure chest: dark wood/leather with brass rivets, gold corner brackets and strap bands",
+   "bezelColor": "#2a1e16",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#3a2a20",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#e8c890",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "pixel-art golden key floating over sand with its shadow beneath, blue sky"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#e8b890",
+   "secondary": "#c89070",
+   "accent": null,
+   "details": "bare torso"
+  },
+  "skinTone": "#e8b890",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "pixel-art tropical beach with palm trees, turquoise ocean, sunset sky with pink clouds",
+   "palette": [
+    "#7a90e0",
+    "#40c0d0",
+    "#f0d8a0",
+    "#3a8a30"
+   ]
+  },
+  "vibe": "treasure hunter on the beach",
+  "confidence": "high",
+  "notes": "Gold antennas with gold ball tips; dark dome. Background is 8-bit pixel art while the character is clean vector. Black plug cable."
+ },
+ {
+  "id": 14,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8d8e8",
+   "bodyFinish": "patterned",
+   "pattern": "paint-splatter / watercolor speckles in pink, blue, purple, orange",
+   "bezelColor": "#2a2a2a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0d0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#2a2a2a",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "drawing-app interface (dark UI) with a greyscale sketch of a Tamashi TV-head character on a white canvas"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: apron / pinafore over white t-shirt",
+   "primary": "#e0dce8",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "white t-shirt under a paint-splattered light grey apron with stitched seams"
+  },
+  "skinTone": "#a87050",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "abstract colorful paint/nebula clouds on dark grey",
+   "palette": [
+    "#e04a8a",
+    "#4a6ab0",
+    "#e09040",
+    "#4a4a5a"
+   ]
+  },
+  "vibe": "digital artist",
+  "confidence": "high",
+  "notes": "Meta: the screen shows the Tamashi artwork being drawn in software. Apron and TV share the same splatter texture."
+ },
+ {
+  "id": 15,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c8c8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#3a3a3a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": "adhesive bandages stuck on screen corners"
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#1e2a2a",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "binary code with stacks of popup error windows: warning triangles, virus-found and danger alerts"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#f0f0f0",
+   "secondary": "#cccccc",
+   "accent": null,
+   "details": "plain white crew-neck t-shirt"
+  },
+  "skinTone": "#6a6a6a",
+  "accessories": [
+   "power-plug-cable",
+   "other: bandages on screen"
+  ],
+  "background": {
+   "setting": "dark matrix-style wall of green/grey binary digits",
+   "palette": [
+    "#0e1416",
+    "#3a5a50",
+    "#5a3a6a"
+   ]
+  },
+  "vibe": "virus-infected computer",
+  "confidence": "high",
+  "notes": "Art is greyscale except red warning icons and teal/purple binary glow. Sweat drops on the neck suggest stress."
+ },
+ {
+  "id": 16,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2a2a",
+   "bodyFinish": "glossy",
+   "pattern": "yellow virus/germ splats on casing",
+   "bezelColor": "#1a1a1a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#9a9a9a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#7a7a72",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "yellow caution text overlaid across the face (warning-tape slogan)"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sweater",
+   "primary": "#2a2a2a",
+   "secondary": "#6a6a6a",
+   "accent": null,
+   "details": "dark grey crew-neck sweater, plain"
+  },
+  "skinTone": "#2a2a2a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "black backdrop crossed by yellow caution/danger tape strips",
+   "palette": [
+    "#f8e800",
+    "#111111",
+    "#a09000"
+   ]
+  },
+  "vibe": "quarantine hazard",
+  "confidence": "medium",
+  "notes": "Character rendered in greyscale lit by yellow; real TV color uncertain (dark grey). Yellow germ/virus blobs splattered on the TV. Screen face is overlaid with bold yellow block text."
+ },
+ {
+  "id": 17,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f4dcec",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#e040c0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f0d0e8",
+   "damage": "cupid's arrow pierced through the screen top-right, glass cracked around it"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e050d8",
+   "glow": "strong",
+   "eyes": "other: hearts",
+   "eyeColor": "#ff70c0",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#d89a90",
+   "secondary": "#c08078",
+   "accent": null,
+   "details": "bare torso"
+  },
+  "skinTone": "#d89a90",
+  "accessories": [
+   "power-plug-cable",
+   "other: cupid's arrow with heart tip through screen"
+  ],
+  "background": {
+   "setting": "pink dreamy sky with big hearts, clouds and sparkles",
+   "palette": [
+    "#f8c0e0",
+    "#f050c0",
+    "#c0d0f0"
+   ]
+  },
+  "vibe": "lovestruck Valentine",
+  "confidence": "high",
+  "notes": "Screen is a glowing magenta box with a starburst center; eyes are pink hearts with white outline. Small hearts spill out of the crack. Pink plug cable."
+ },
+ {
+  "id": 18,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a8a8b0",
+   "bodyFinish": "transparent",
+   "pattern": "anaglyph 3D: offset red and blue ghost copies of the whole character",
+   "bezelColor": "#6a6a72",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c0c0c8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#9a9aa4",
+   "glow": "none",
+   "eyes": "glasses",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#8a8a96",
+   "secondary": "#6a6a76",
+   "accent": null,
+   "details": "bare grey torso, semi-transparent"
+  },
+  "skinTone": "#8a8a96",
+  "accessories": [
+   "power-plug-cable",
+   "other: oversized round wire-rim glasses with thick magnifying lenses"
+  ],
+  "background": {
+   "setting": "eye-test chart (Snellen letters) on pale blue-white, blurred",
+   "palette": [
+    "#e8f0f8",
+    "#111111",
+    "#3040e0",
+    "#f04040"
+   ]
+  },
+  "vibe": "blurry-eyed, needs glasses",
+  "confidence": "medium",
+  "notes": "Character is drawn semi-transparent grey with chromatic red/blue offset copies (double vision). Huge round brown-rim glasses sit across the screen; eyes behind lenses are magnified curved black strokes."
+ },
+ {
+  "id": 19,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0f0f0",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#4a4a4a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "static",
+   "background": "#5a5a5a",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "glitchy horizontal-scanline static with face showing through, plus blurry red heart-like and green/red social reaction icons"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#f0f0f0",
+   "secondary": "#d0d0d0",
+   "accent": null,
+   "details": "plain white crew-neck t-shirt"
+  },
+  "skinTone": "#d0d0d0",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "glitchy multicolor pixel grid wall with framed greyscale Tamashi portraits (recursive)",
+   "palette": [
+    "#4a8ae0",
+    "#e04a8a",
+    "#40c0c0",
+    "#a060e0"
+   ]
+  },
+  "vibe": "social media glitch",
+  "confidence": "medium",
+  "notes": "Screen is part static, part face: two vertical-line eyes visible under scanline noise, overlaid with blurred like/reaction emoji icons. Character itself is mostly greyscale."
+ },
+ {
+  "id": 20,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#5a6068",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a2e34",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#7a8088",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#60c0b0",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: Star-Trek-style uniform tunic",
+   "primary": "#30b8b0",
+   "secondary": "#1a1a1a",
+   "accent": null,
+   "details": "teal V-neck uniform with black collar band, small dark circular emblem on left chest"
+  },
+  "skinTone": "#4a4a5a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "starship observation dome looking out at space with glowing teal wireframe globes/planets",
+   "palette": [
+    "#141020",
+    "#40d8c8",
+    "#8a4a30",
+    "#f0e8e0"
+   ]
+  },
+  "vibe": "starship science officer",
+  "confidence": "high",
+  "notes": "Screen is an iridescent teal/blue/violet gradient. A small electric spark arcs between antenna tips. Neck is dark slate."
+ },
+ {
+  "id": 21,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2030",
+   "bodyFinish": "glossy",
+   "pattern": "neon blue/pink edge outlines; small digital counter on side",
+   "bezelColor": "#1a1420",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#6a6a72",
+   "damage": "cracked glass in top-right of screen"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#4a1a40",
+   "glow": "strong",
+   "eyes": "other: neon text word instead of eyes",
+   "eyeColor": "#80b0ff",
+   "mouth": "other: neon-sign fanged monster grin with stitched lips",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jacket",
+   "primary": "#2a2a5a",
+   "secondary": "#8a3a8a",
+   "accent": "#40e0f0",
+   "details": "dark navy/purple leather jacket with wide collar, open over bare chest"
+  },
+  "skinTone": "#d0c0c0",
+  "accessories": [
+   "power-plug-cable",
+   "other: glowing cyan choker with crystal pendant",
+   "other: circuit-board tattoos on chest"
+  ],
+  "background": {
+   "setting": "dark room with a neon-framed rain-streaked window, cyberpunk",
+   "palette": [
+    "#0e0a14",
+    "#e040c0",
+    "#40c0ff",
+    "#4a1a4a"
+   ]
+  },
+  "vibe": "cyberpunk neon punk",
+  "confidence": "medium",
+  "notes": "Screen face is drawn in neon-tube style: a word written where eyes would be, and a toothy fanged grin with stitches. Chest skin shows glowing circuit traces. TV edges glow neon blue/pink."
+ },
+ {
+  "id": 22,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e0e0e0",
+   "bodyFinish": "patterned",
+   "pattern": "pop-art halftone / hatched shading in black and white",
+   "bezelColor": "#1a1a1a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#a0b0f0",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "aquarium: two orange-red koi/goldfish swimming over blue halftone water"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#d8d8d8",
+   "secondary": "#1a1a1a",
+   "accent": null,
+   "details": "bare light-grey torso, comic ink outlines"
+  },
+  "skinTone": "#d8d8d8",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "Lichtenstein-style pop-art: blue halftone water, yellow floor, green diagonal stripe, black-outlined bubbles",
+   "palette": [
+    "#80c0f0",
+    "#ffe800",
+    "#108a20",
+    "#ffffff"
+   ]
+  },
+  "vibe": "pop-art fishbowl",
+  "confidence": "high",
+  "notes": "Black neck. TV acts as a fish tank. Comic-book halftone dots throughout."
+ },
+ {
+  "id": 23,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2a4a",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#1a1a30",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#9a9aa8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#e09040",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "terrarium: succulents, spider plant, moss and leafy vines on white pebbles against orange clouds; plants spill out of the screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#c08a5a",
+   "secondary": "#4aa040",
+   "accent": null,
+   "details": "bare tan torso with grass/plants growing in front of it"
+  },
+  "skinTone": "#c08a5a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "painterly purple dusk with stars and tropical leafy plants",
+   "palette": [
+    "#5a40a0",
+    "#e070b0",
+    "#3a8a3a",
+    "#f0a040"
+   ]
+  },
+  "vibe": "terrarium plant keeper",
+  "confidence": "high",
+  "notes": "TV is dark navy. Leaves overflow past the screen bezel. Painterly brush-style background."
+ },
+ {
+  "id": 24,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#4a8ef0",
+   "bodyFinish": "transparent",
+   "pattern": "blueprint: white outline-only wireframe on blue grid",
+   "bezelColor": "#ffffff",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#ffffff",
+   "damage": null
+  },
+  "screen": {
+   "kind": "dark",
+   "background": "#4a8ef0",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#ffffff",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#4a8ef0",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "outline-only crew-neck top drawn in white lines"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "blueprint paper: bright blue with white grid",
+   "palette": [
+    "#4a8ef0",
+    "#6aa4f4",
+    "#ffffff"
+   ]
+  },
+  "vibe": "blueprint prototype",
+  "confidence": "high",
+  "notes": "Whole character is a white line drawing on blueprint blue; no fills. Screen is blank (no face). For 3D, render as white wireframe/edges-only material. screen.kind 'dark' is approximate: it is empty, not black."
+ },
+ {
+  "id": 25,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#5a3a2a",
+   "bodyFinish": "wood",
+   "pattern": null,
+   "bezelColor": "#3a2418",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d8d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#3a3428",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "open book with printed pages floating on a dark screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: shirt and vest",
+   "primary": "#2a5a30",
+   "secondary": "#e0d0b0",
+   "accent": "#1a2a1a",
+   "details": "dark green vest over cream button-up collared shirt with dark buttons"
+  },
+  "skinTone": "#8a5a3a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "library wall of dark bookshelves packed with colorful books",
+   "palette": [
+    "#1e1a18",
+    "#a01828",
+    "#e0a020",
+    "#205a28",
+    "#4a1a6a"
+   ]
+  },
+  "vibe": "bookish librarian",
+  "confidence": "high",
+  "notes": "Brown wood-tone TV with brown dome; silver knobs and plug. Book on screen has a small title on the page header."
+ },
+ {
+  "id": 26,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1f3a24",
+   "bodyFinish": "patterned",
+   "pattern": "Van Gogh brushstroke texture in dark green/blue with yellow outline glow",
+   "bezelColor": "#121a14",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8c8d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#141c2e",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#e8e040",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sweater",
+   "primary": "#1e3a22",
+   "secondary": "#2a4a6a",
+   "accent": "#d8d040",
+   "details": "painted brushstroke-textured dark green top matching the TV"
+  },
+  "skinTone": "#8a6a48",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "Starry Night style swirling sky over hillside cottages",
+   "palette": [
+    "#1c2e8a",
+    "#e8d850",
+    "#5a9ad0"
+   ]
+  },
+  "vibe": "Van Gogh starry night",
+  "confidence": "high",
+  "notes": "Whole image rendered in impasto Starry Night style; TV body has yellow rim highlight; antenna base is a lavender dome."
+ },
+ {
+  "id": 27,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f2f2f2",
+   "bodyFinish": "matte",
+   "pattern": "black-and-white ink line art; dark black side/back shell",
+   "bezelColor": "#111111",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#9a9a9a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "screen is see-through: the grey brick wall behind shows through"
+  },
+  "headwear": {
+   "type": "other: rain cloud floating above head dripping red raindrops",
+   "color": "#e8e8e8"
+  },
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#ffffff",
+   "secondary": "#111111",
+   "accent": null,
+   "details": "white shirt with thin wavy black horizontal stripes (Breton-like)"
+  },
+  "skinTone": "#111111",
+  "accessories": [
+   "power-plug-cable",
+   "red umbrella (closed)"
+  ],
+  "background": {
+   "setting": "grey brick wall, spray-paint stencil style",
+   "palette": [
+    "#8a8a8a",
+    "#5a5a5a",
+    "#c8c8c8"
+   ]
+  },
+  "vibe": "gloomy noir street art",
+  "confidence": "high",
+  "notes": "Monochrome image except red rain drops and red umbrella; neck/skin is solid black silhouette. Screen kind enum lacks 'transparent'."
+ },
+ {
+  "id": 28,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1f9aa0",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#167078",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8b878",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#e8e4d8",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "Warhol-style soup can (teal/white label) centered on cream screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: raglan baseball tee",
+   "primary": "#ece8dc",
+   "secondary": "#2aa8b0",
+   "accent": null,
+   "details": "cream body with teal sleeves and teal crew collar"
+  },
+  "skinTone": "#5a5a5a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "Warhol pop-art grid of 9 color-swapped TV-head soup-can panels",
+   "palette": [
+    "#e07a2a",
+    "#2ab0d0",
+    "#d03a7a",
+    "#8a5ab0",
+    "#3ab060"
+   ]
+  },
+  "vibe": "Warhol pop art",
+  "confidence": "high",
+  "notes": "Antenna base and plug are gold/tan; skin appears grey (neutral). Screen has no face, only the can."
+ },
+ {
+  "id": 29,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3a1e1a",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a1412",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c87a3a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0c040",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: Renaissance pleated gown with draped shawl",
+   "primary": "#2e5a4a",
+   "secondary": "#8a6a3a",
+   "accent": null,
+   "details": "dark green finely pleated neckline dress, brown/gold drape over left shoulder"
+  },
+  "skinTone": "#e0b060",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "Mona Lisa parody: hazy green landscape with ochre rocks, framed by loggia pillars; mountains replaced by city skyline silhouettes",
+   "palette": [
+    "#4a7a4a",
+    "#c88a4a",
+    "#6a6a5a"
+   ]
+  },
+  "vibe": "Mona Lisa parody",
+  "confidence": "high",
+  "notes": "Copper/orange antenna balls and dome; warm yellow glowing screen; skin warm golden."
+ },
+ {
+  "id": 30,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d02a1a",
+   "bodyFinish": "patterned",
+   "pattern": "Cubist fragmented shards: red, yellow, teal, green, blue, pink, white slices offset from each other",
+   "bezelColor": "#111111",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d02a1a",
+   "damage": "fragmented/sliced cubist composition rather than physical damage"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0c820",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#f0c020",
+   "secondary": "#e08a20",
+   "accent": null,
+   "details": "bare yellow torso with orange shading, collarbone lines"
+  },
+  "skinTone": "#f0c020",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "abstract geometric cubist room, teal/green/brown blocks with cream lines",
+   "palette": [
+    "#1e7a5a",
+    "#40b0c0",
+    "#7a5a3a",
+    "#e8e0d0"
+   ]
+  },
+  "vibe": "Picasso cubist abstraction",
+  "confidence": "medium",
+  "notes": "TV is broken into multiple misaligned planes; antennas appear duplicated (red/black and teal). Side panel grille is teal. Hard to fix a single body color; red and yellow dominate."
+ },
+ {
+  "id": 31,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#b8b8b8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#9a9a9a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8c8c8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#8a8a8a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "lab-coat",
+   "primary": "#e8e8e8",
+   "secondary": "#ffffff",
+   "accent": "#222222",
+   "details": "white lab coat with lapels, white collared shirt, black tie"
+  },
+  "skinTone": "#222222",
+  "accessories": [
+   "power-plug-cable",
+   "tie",
+   "safety goggles (clear, wrapped across the TV screen)"
+  ],
+  "background": {
+   "setting": "chemistry lab with test tube rack, flasks of green/teal liquid, notes and calendar on wall",
+   "palette": [
+    "#c8c8d0",
+    "#8ad040",
+    "#c050c0",
+    "#40c0c0"
+   ]
+  },
+  "vibe": "lab scientist",
+  "confidence": "high",
+  "notes": "Character is greyscale while lab accents are colored. Eyes have small curved under-lines (smiling eye arcs) beneath the vertical lines."
+ },
+ {
+  "id": 32,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1e2630",
+   "bodyFinish": "matte",
+   "pattern": "front face styled as a graphing calculator (light grey bezel, calculator keypad replaces grille)",
+   "bezelColor": "#e0e0e0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "other: two knobs (cyan, green) plus calculator number keypad",
+   "knobColor": "#30b8d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f4f4f4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "graph paper with x/y axes, pink cubic curve and shaded blue exponential curve behind the eyes"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#1a1e26",
+   "secondary": "#2a4a7a",
+   "accent": "#e0e0e0",
+   "details": "black suit jacket over blue/magenta plaid collared shirt, light grey tie"
+  },
+  "skinTone": "#1a1e26",
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "green chalkboard with quadratic formula, graphs, cube and chalk TV doodle",
+   "palette": [
+    "#2a3a32",
+    "#4a5a50",
+    "#c8d0c8"
+   ]
+  },
+  "vibe": "math teacher",
+  "confidence": "high",
+  "notes": "Small label text in top-right of TV front (model name); eyes are thick black bars."
+ },
+ {
+  "id": 33,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1a1c20",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#c8c8c8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8c8c8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#0a0c0e",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#20e0c0",
+   "mouth": null,
+   "sceneDescription": "white source code text scrolling behind the cyan eye bars"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "hoodie",
+   "primary": "#14181c",
+   "secondary": "#20e0c0",
+   "accent": null,
+   "details": "dark hoodie with hood up behind TV, cyan line highlights"
+  },
+  "skinTone": "#1a1e22",
+  "accessories": [
+   "power-plug-cable",
+   "holographic keyboard"
+  ],
+  "background": {
+   "setting": "dark hacker den with floating cyan holographic HUD panels, charts, data readouts, arc-reactor-like orange core, coffee mug",
+   "palette": [
+    "#0a1418",
+    "#20e0c0",
+    "#f08a20",
+    "#e03030"
+   ]
+  },
+  "vibe": "hacker coder",
+  "confidence": "high",
+  "notes": "Grille on side panel glows cyan; light grey front bezel; overall line-art in teal on near-black."
+ },
+ {
+  "id": 34,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c4bc",
+   "bodyFinish": "other: marble/stone",
+   "pattern": "greyscale weathered stone texture like a classical statue",
+   "bezelColor": "#8a8680",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#b0aca4",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d0ccc4",
+   "glow": "none",
+   "eyes": "other: vertical lines with heavy flat brow bars (T shapes)",
+   "eyeColor": "#111111",
+   "mouth": "other: small flat line under mustache",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: toga / himation",
+   "primary": "#b8b4ac",
+   "secondary": "#8a8680",
+   "accent": null,
+   "details": "draped cloth over left shoulder, bare right shoulder and chest"
+  },
+  "skinTone": "#c0bcb4",
+  "accessories": [
+   "power-plug-cable",
+   "curly full beard and mustache (drawn on screen, spilling past bottom bezel)",
+   "curly hair fringe at top of screen"
+  ],
+  "background": {
+   "setting": "classical museum gallery with arched niches holding statues (fox mask bust, TV-head statue), Greek letters on wall",
+   "palette": [
+    "#a8a49c",
+    "#d8d4cc",
+    "#6a6660"
+   ]
+  },
+  "vibe": "Greek philosopher statue",
+  "confidence": "high",
+  "notes": "Entire image monochrome greyscale. bodyFinish enum lacks stone/marble."
+ },
+ {
+  "id": 35,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a8a49a",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#d8d6d0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8c8c8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#a8a49a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#16181e",
+   "secondary": "#f0f0f0",
+   "accent": "#2a5ab8",
+   "details": "black suit, white dress shirt, blue tie"
+  },
+  "skinTone": "#1a1a1a",
+  "accessories": [
+   "power-plug-cable",
+   "headset with boom mic"
+  ],
+  "background": {
+   "setting": "stock exchange trading floor with blue ticker boards and red/yellow upward arrow; other TV-head traders in suits beside",
+   "palette": [
+    "#1a2a6a",
+    "#3a5ac8",
+    "#e8a020",
+    "#d03030"
+   ]
+  },
+  "vibe": "stock trader",
+  "confidence": "high",
+  "notes": "Screen is unlit, same grey-beige as body. Headset band wraps over top-left of TV."
+ },
+ {
+  "id": 36,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d8d8dc",
+   "bodyFinish": "chrome",
+   "pattern": null,
+   "bezelColor": "#b8b8bc",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#b0b0b4",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "bank vault door with locking bars, bolts and spoked wheel handle fills the screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sweatshirt",
+   "primary": "#d8d8dc",
+   "secondary": "#a8a8ac",
+   "accent": null,
+   "details": "plain silver-white crew-neck long sleeve, chrome-like shading"
+  },
+  "skinTone": "#c8c8cc",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "dark security room crossed with red laser beams",
+   "palette": [
+    "#1a1430",
+    "#e02020",
+    "#3a1a2a"
+   ]
+  },
+  "vibe": "vault heist security",
+  "confidence": "high",
+  "notes": "Whole character silver/chrome monochrome with red laser reflections; no face visible."
+ },
+ {
+  "id": 37,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1a2440",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#24304e",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#1a1a1a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#1c1e22",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#e09030",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#1a2440",
+   "secondary": "#1a2030",
+   "accent": "#111111",
+   "details": "navy pinstripe suit, dark navy shirt, black tie"
+  },
+  "skinTone": "#c89a6a",
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "yakuza boss office: katana on wall rack above, tufted white leather chair, Japanese books, potted plant",
+   "palette": [
+    "#d8d4cc",
+    "#b02020",
+    "#2a2a2a",
+    "#3a8a2a"
+   ]
+  },
+  "vibe": "yakuza boss",
+  "confidence": "high",
+  "notes": "Gold/amber grille and gold antenna tips; black knobs. Seated in tufted Chesterfield-style chair."
+ },
+ {
+  "id": 38,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0e6cc",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#e8dcc0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8a020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#8a2a10",
+   "glow": "strong",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "inside of a music box: golden pinned cylinder and comb mechanism, warm glow"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: 18th-century frock coat",
+   "primary": "#d02a20",
+   "secondary": "#f0e8d8",
+   "accent": null,
+   "details": "red coat with cream ruffled lace jabot cravat"
+  },
+  "skinTone": "#1a1a1a",
+  "accessories": [
+   "power-plug-cable",
+   "jabot cravat",
+   "wind-up crank handle on side of TV"
+  ],
+  "background": {
+   "setting": "line-drawn Vienna opera house facade with handwritten sheet music overlaid on purple-orange sky",
+   "palette": [
+    "#9a80c0",
+    "#f0b070",
+    "#e8e8f0"
+   ]
+  },
+  "vibe": "Mozart classical composer",
+  "confidence": "high",
+  "notes": "Gold antenna dome and tips, gold cable and plug. TV is a music box with crank on left side."
+ },
+ {
+  "id": 39,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#eceef2",
+   "bodyFinish": "other: snow texture",
+   "pattern": "soft snowy white texture",
+   "bezelColor": "#dcdee4",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e4",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0f0f4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": "other: orange carrot nose",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: snowman body",
+   "primary": "#eceef2",
+   "secondary": "#2a7ad8",
+   "accent": "#d02020",
+   "details": "white snow body with blue X-stitched buttons down front"
+  },
+  "skinTone": "#eceef2",
+  "accessories": [
+   "power-plug-cable",
+   "scarf"
+  ],
+  "background": {
+   "setting": "snowy mountains under aurora borealis night sky with stars",
+   "palette": [
+    "#1a2a5a",
+    "#8a5ac0",
+    "#40c0a0",
+    "#e8ecf4"
+   ]
+  },
+  "vibe": "snowman winter",
+  "confidence": "high",
+  "notes": "Thick red knit scarf wrapped around neck and hanging down front. Carrot nose on screen."
+ },
+ {
+  "id": 40,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c8c8",
+   "bodyFinish": "patterned",
+   "pattern": "split vertically: left half black, right half white/light grey (yin-yang chaos vs order)",
+   "bezelColor": "#d8d8d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#d8d8d8",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "fighting game: black TV-head fighter vs white TV-head fighter, VS health bars in orange, labeled chaos vs order"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#f0f0f0",
+   "secondary": "#1a1a1a",
+   "accent": null,
+   "details": "shirt split down the middle with jagged edge: left black, right white"
+  },
+  "skinTone": "#1a1a1a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "dark arcade with glowing multicolored cabinet screens",
+   "palette": [
+    "#1a1418",
+    "#c020c0",
+    "#40c040",
+    "#e0a020",
+    "#3050d0"
+   ]
+  },
+  "vibe": "arcade fighter chaos vs order",
+  "confidence": "high",
+  "notes": "Neck also split black/white with jagged seam. Left body in shadow appears dark purple-grey."
+ },
+ {
+  "id": 41,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8eef4",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#d8e0ea",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e4ea",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f2f6fa",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#4aa0e8",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sleek white bodysuit",
+   "primary": "#e8eef4",
+   "secondary": "#3a9ae0",
+   "accent": null,
+   "details": "white suit with thin blue piping lines running down chest and a blue ring at neck"
+  },
+  "skinTone": "#c8d0dc",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "white grid wall of panels with glowing cyan nodes, sci-fi data center/matrix",
+   "palette": [
+    "#e8ecf0",
+    "#b0b8c4",
+    "#30c8f0"
+   ]
+  },
+  "vibe": "futuristic white android",
+  "confidence": "high",
+  "notes": "Very clean white/ice-blue palette; blue glowing eye bars."
+ },
+ {
+  "id": 42,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1a1012",
+   "bodyFinish": "patterned",
+   "pattern": "black with red and white diagonal stripes/slashes, scratchy red linework",
+   "bezelColor": "#4a2a2e",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e0e0",
+   "damage": "scratchy chaotic red line overlay, glitchy"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0e0e4",
+   "glow": "strong",
+   "eyes": "other: jagged angry slanted slits",
+   "eyeColor": "#8a1018",
+   "mouth": "teeth",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: double-breasted military greatcoat",
+   "primary": "#141012",
+   "secondary": "#8a1a20",
+   "accent": "#d02030",
+   "details": "black coat with red outline, wide lapels, red buttons"
+  },
+  "skinTone": "#1a1012",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "dark smoky void with tangled crimson scribble lines",
+   "palette": [
+    "#141012",
+    "#6a1a24",
+    "#4a4a3a"
+   ]
+  },
+  "vibe": "demonic villain",
+  "confidence": "medium",
+  "notes": "Screen face is a menacing jagged grin with sharp teeth and angry eyes, white-pink glowing screen. Red cyclops-like circle on TV side. Heavy dark red scribble overlay makes details hard to read."
+ },
+ {
+  "id": 43,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#4a6a90",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#c8b49a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#5a4a3a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#ecd8cc",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": "mustache",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: plaid shirt with BBQ apron",
+   "primary": "#c83a3a",
+   "secondary": "#1e1e22",
+   "accent": "#7ab8e0",
+   "details": "red/white gingham check shirt with light-blue collar trim, black apron with large light-blue number on chest"
+  },
+  "skinTone": "#8a7a68",
+  "accessories": [
+   "power-plug-cable",
+   "apron"
+  ],
+  "background": {
+   "setting": "backyard barbecue: wooden fence, grass, picnic table with salad bowl and plates, red kettle grill with cheeseburgers",
+   "palette": [
+    "#4a8ad0",
+    "#d8c8a8",
+    "#3a7a2a",
+    "#b02020"
+   ]
+  },
+  "vibe": "backyard BBQ dad",
+  "confidence": "high",
+  "notes": "Sweat drops and rosy flushed cheeks on screen, smudge of soot above mustache; dark brown antenna dome. Apron number is the token number."
+ },
+ {
+  "id": 44,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8e6e0",
+   "bodyFinish": "patterned",
+   "pattern": "retro surf stripes (orange, yellow, teal) wrapping around the side",
+   "bezelColor": "#d8d6d0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e86020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#14284a",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "snowy winter night: cabin with lit windows among snowy pine trees, falling snow"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#7a4a2e",
+   "secondary": "#5a3420",
+   "accent": null,
+   "details": "bare tanned torso"
+  },
+  "skinTone": "#7a4a2e",
+  "accessories": [
+   "necklace"
+  ],
+  "background": {
+   "setting": "tropical beach with waves, palm island, TV-head surfer, red crab, striped surfboard, sunset rainbow sky",
+   "palette": [
+    "#2a8ad8",
+    "#f0d070",
+    "#e0b080",
+    "#1a6a8a"
+   ]
+  },
+  "vibe": "beach surfer dreaming of winter",
+  "confidence": "high",
+  "notes": "Knobs differ: top orange, bottom yellow; grille teal. Beaded black/grey necklace with small gold pendant. Power-plug cable not visible."
+ },
+ {
+  "id": 45,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a82030",
+   "bodyFinish": "patterned",
+   "pattern": "red/maroon tartan plaid wrapped with glowing warm string lights along every edge",
+   "bezelColor": "#8a1a24",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8c8a0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#b0281e",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#f0b860",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: ugly Christmas knit sweater",
+   "primary": "#b02028",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "red sweater with white snowflakes, braided white band, row of white TV icons, white collar"
+  },
+  "skinTone": "#8a5a3a",
+  "accessories": [
+   "power-plug-cable",
+   "string lights on TV"
+  ],
+  "background": {
+   "setting": "plain deep red radial gradient",
+   "palette": [
+    "#7a1414",
+    "#c03a2a",
+    "#5a0a0a"
+   ]
+  },
+  "vibe": "cozy Christmas sweater",
+  "confidence": "high",
+  "notes": "Cream/tan antennas, dome, knobs and plug. Fairy lights outline TV."
+ },
+ {
+  "id": 46,
+  "tv": {
+   "shape": "boxy",
+   "bodyColor": "#8a5a3a",
+   "bodyFinish": "wood",
+   "pattern": "encased in an interlocking wooden puzzle-box / burr-puzzle frame of protruding wooden beams",
+   "bezelColor": "#7a4e32",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "other: mostly hidden by wooden beams; one knob visible",
+   "knobColor": "#9a7050",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e0a878",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#e0a878",
+   "secondary": "#f0c898",
+   "accent": null,
+   "details": "bare torso with pixel-stepped two-tone lighting split down the middle"
+  },
+  "skinTone": "#e0a878",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "blue pixel-checker gradient pattern",
+   "palette": [
+    "#0a40d0",
+    "#20b0f0",
+    "#0a2a8a"
+   ]
+  },
+  "vibe": "wooden puzzle box",
+  "confidence": "medium",
+  "notes": "Screen has stepped/pixelated light-dark split matching torso. Brown wooden antenna dome. Unclear whether TV body itself is wood or just framed by wood."
+ },
+ {
+  "id": 47,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e83ad0",
+   "bodyFinish": "patterned",
+   "pattern": "multicolor jigsaw puzzle pieces (magenta, yellow, green, blue, orange, red) covering everything",
+   "bezelColor": "#f08a20",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f07020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#3a6ad0",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "screen filled with the same jigsaw puzzle pattern, slightly darker"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: full-body jigsaw puzzle pattern (no clothing distinguishable)",
+   "primary": "#e83ad0",
+   "secondary": "#f0e020",
+   "accent": "#20c040",
+   "details": "whole body, neck and cable tiled in rainbow jigsaw pieces"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "vertical rainbow color bands (red, magenta, yellow, green, blue) with checker shading",
+   "palette": [
+    "#c02020",
+    "#c020b0",
+    "#e0c020",
+    "#30c020",
+    "#1030c0"
+   ]
+  },
+  "vibe": "rainbow jigsaw puzzle",
+  "confidence": "high",
+  "notes": "Magenta antenna dome, yellow antenna balls; knobs orange (top) and blue (bottom); grille green. Orange plug."
+ },
+ {
+  "id": 48,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#6a4a30",
+   "bodyFinish": "matte",
+   "pattern": "weathered dirty brown texture",
+   "bezelColor": "#8a6040",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8d0c0",
+   "damage": "grimy, smudged with dirt"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#a8d8c8",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "straw-hat",
+   "color": "#a87048"
+  },
+  "outfit": {
+   "type": "overalls",
+   "primary": "#4a5a70",
+   "secondary": "#8a5a32",
+   "accent": "#d0a040",
+   "details": "worn blue-grey denim overalls with brass buckles over a brown henley-style button shirt"
+  },
+  "skinTone": "#6a5040",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "terraced green farm fields / rice paddies under blue sky with clouds",
+   "palette": [
+    "#3a7ad0",
+    "#4a8a3a",
+    "#6a5a30"
+   ]
+  },
+  "vibe": "rice farmer",
+  "confidence": "high",
+  "notes": "Antennas poke through the straw hat crown. Screen pale mint-green with dirt smudges. Mint green cable and plug."
+ },
+ {
+  "id": 49,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1e2228",
+   "bodyFinish": "patterned",
+   "pattern": "orange/yellow and blue tire-tread track marks across the side, white racing number on side",
+   "bezelColor": "#2a2e36",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a5ad0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#c8daf0",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: racing suit",
+   "primary": "#2a4ab0",
+   "secondary": "#f0f0f0",
+   "accent": "#1a1e2a",
+   "details": "blue racing jumpsuit with white panels/stripes, stand-up collar with name patch, snap buttons, triangular chest badge, lettering across chest"
+  },
+  "skinTone": "#8a5a3a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "winding race track through green grass with checkered start/finish line",
+   "palette": [
+    "#3aa83a",
+    "#1e1e22",
+    "#d8c8a0",
+    "#f0f0f0"
+   ]
+  },
+  "vibe": "race car driver",
+  "confidence": "high",
+  "notes": "Antenna tips are different colors: left blue, right red. Yellow dome. Knobs: top blue, bottom red; grille yellow. Yellow plug."
+ },
+ {
+  "id": 50,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#dcdcdc",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#c8c8c8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#f07010",
+   "glow": "strong",
+   "eyes": "none",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "bold black brand wordmark text centered on glowing orange screen"
+  },
+  "headwear": {
+   "type": "other: black ponytail with orange/yellow highlights sticking out the back-left of the TV",
+   "color": "#1a1a1a"
+  },
+  "outfit": {
+   "type": "jacket",
+   "primary": "#1a1a1e",
+   "secondary": "#f0f0f0",
+   "accent": null,
+   "details": "black leather/denim jacket with white contrast stitching, open collar, chest flap pocket"
+  },
+  "skinTone": "#b07a50",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "giant waving orange flag with metal flagpole and grommet against dark blue cloudy sky",
+   "palette": [
+    "#f07010",
+    "#f0b030",
+    "#1a2040"
+   ]
+  },
+  "vibe": "rock flag bearer",
+  "confidence": "medium",
+  "notes": "Screen shows text rather than a face. Ponytail hair is unusual; flagpole bottom-right. Unsure whether jacket is leather or denim."
+ },
+ {
+  "id": 51,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#8fd63a",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#2a2a2a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c0408a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#2b2b2b",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#ffffff",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: sweatband/headband wrapped around TV",
+   "color": "#ffffff"
+  },
+  "outfit": {
+   "type": "tank-top",
+   "primary": "#7a2fc0",
+   "secondary": "#ffffff",
+   "accent": "#f0a020",
+   "details": "purple athletic tank/singlet with white and orange trim; headband striped orange/white/purple"
+  },
+  "skinTone": "#6b4530",
+  "accessories": [
+   "power-plug-cable",
+   "towel",
+   "armband-music-player"
+  ],
+  "background": {
+   "setting": "80s retro: purple gradient with lime-green/magenta triangles and yellow diagonal beams",
+   "palette": [
+    "#4a3ab8",
+    "#c8f020",
+    "#f0b020"
+   ]
+  },
+  "vibe": "sweaty 80s workout jogger",
+  "confidence": "high",
+  "notes": "Sweat drops on TV and screen. Orange dome cap atop TV with one green-tipped and one magenta-tipped antenna. White towel draped over neck. Armband MP3/phone shows a timer. Knobs are magenta/orange, grille blue-purple. Screen eyes white on dark screen."
+ },
+ {
+  "id": 52,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3a9ab8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#3a9ab8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8b020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0c890",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#8a7a68",
+   "secondary": "#c46a20",
+   "accent": "#333333",
+   "details": "brown pinstripe suit jacket, orange shirt with dark brown polka dots, dark grey tie"
+  },
+  "skinTone": "#3a2a20",
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "jazz poster: trumpet and saxophone over orange, teal, cream circles, black vinyl records, pink abstract pattern",
+   "palette": [
+    "#f0d088",
+    "#e05a10",
+    "#3a8a9a"
+   ]
+  },
+  "vibe": "cool jazz musician",
+  "confidence": "high",
+  "notes": "Back of TV darker navy-blue. Gold dome cap with gold antennas. Gold plug cable. Cream/peach warm-glow screen."
+ },
+ {
+  "id": 53,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1e2448",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#1e2448",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0a030",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e8eef4",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: conductor/pilot peaked cap with gold braid and TV badge",
+   "color": "#1e2448"
+  },
+  "outfit": {
+   "type": "other: train conductor uniform",
+   "primary": "#1e2448",
+   "secondary": "#ffffff",
+   "accent": "#e0a030",
+   "details": "navy uniform jacket with gold piping, white collared shirt, gold tie"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "aerial view of white bullet trains (shinkansen) on railway tracks with green strips",
+   "palette": [
+    "#5a4a40",
+    "#3a6a30",
+    "#f0f4f8"
+   ]
+  },
+  "vibe": "bullet train conductor",
+  "confidence": "high",
+  "notes": "Gold antennas poke out from under the cap. Gold plug cable. Cap badge is a tiny TV icon."
+ },
+ {
+  "id": 54,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1e1a1a",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#1e1a1a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a2a2a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#c8a890",
+   "glow": "none",
+   "eyes": "other: large anime eyes with lashes and raised brows",
+   "eyeColor": "#111111",
+   "mouth": "other: small surprised 'o' pucker",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: long-sleeve sweatshirt",
+   "primary": "#1e6a3a",
+   "secondary": "#ffffff",
+   "accent": null,
+   "details": "green sweatshirt with white dashed/stripe line down each sleeve"
+  },
+  "skinTone": "#d0a888",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "outer space: starfield, teal nebula, planet horizon with glowing atmosphere, sparkling stars",
+   "palette": [
+    "#0e1e40",
+    "#2ab0a0",
+    "#ffffff"
+   ]
+  },
+  "vibe": "wide-eyed space dreamer",
+  "confidence": "high",
+  "notes": "Expressive cute face instead of the default line eyes; white highlight stripes on side of TV. Black cable and plug."
+ },
+ {
+  "id": 55,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0f0f0",
+   "bodyFinish": "patterned",
+   "pattern": "white top with dark-red wave band and black/white gingham check lower half and antenna base",
+   "bezelColor": "#f0f0f0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#8a1a1a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f8f4f4",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: diner waitress uniform",
+   "primary": "#8a1a1a",
+   "secondary": "#ffffff",
+   "accent": "#111111",
+   "details": "dark red short-sleeve collared uniform with gingham collar and cuffs, name tag on chest"
+  },
+  "skinTone": "#c8a888",
+  "accessories": [
+   "power-plug-cable",
+   "name-tag"
+  ],
+  "background": {
+   "setting": "retro 50s diner: checkered wall, neon EAT sign arrow, neon coffee cup, framed TV photos, red booth seats and chrome counter",
+   "palette": [
+    "#ffffff",
+    "#111111",
+    "#a01a1a"
+   ]
+  },
+  "vibe": "50s diner waitress",
+  "confidence": "high",
+  "notes": "Cable is gingham-patterned. Screen has faint pink blush at bottom."
+ },
+ {
+  "id": 56,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2c30",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a2c30",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f0b020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#5a6a7a",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#f0a020",
+   "mouth": null,
+   "sceneDescription": "water tank/aquarium: wavy water line, sunset-tinted water with a single fish swimming, orange line eyes overlaid"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "overalls",
+   "primary": "#e8b020",
+   "secondary": "#2a2c38",
+   "accent": null,
+   "details": "yellow/gold glossy fishing bib overalls (waders) with black straps and buckles, bare shoulders"
+  },
+  "skinTone": "#c89878",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "ocean at sunset with fishing net and schools of purple fish, boat railing at bottom",
+   "palette": [
+    "#1a4a8a",
+    "#f0b030",
+    "#7a5a9a"
+   ]
+  },
+  "vibe": "deep-sea fisherman",
+  "confidence": "high",
+  "notes": "Character shown from behind/shoulders? Back is visible with overall straps, but the screen faces viewer. Gold antenna tips. Dark sleeves at arms edges."
+ },
+ {
+  "id": 57,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#b898d8",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#d8c8e8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e0f0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e8d8d8",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: pajamas with robe",
+   "primary": "#8a3a4a",
+   "secondary": "#6a6a9a",
+   "accent": null,
+   "details": "maroon/rose robe over lavender-grey pajama top; holding open storybook with sheep and TV-character drawings"
+  },
+  "skinTone": "#d8c8d0",
+  "accessories": [
+   "power-plug-cable",
+   "book"
+  ],
+  "background": {
+   "setting": "cozy night bedroom: hanging glowing moon, stars and clouds mobile, quilted patchwork bed with pillow, nightstand",
+   "palette": [
+    "#3a2a6a",
+    "#f0c040",
+    "#ffffff"
+   ]
+  },
+  "vibe": "bedtime storyteller",
+  "confidence": "high",
+  "notes": "Whole image bathed in purple night light, TV body pastel lilac-pink gradient. Skin tone hard to judge due to lighting."
+ },
+ {
+  "id": 58,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2622",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#2a2622",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0a020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f8e8d0",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#f4f0ec",
+   "secondary": "#8a2a1a",
+   "accent": "#e0a020",
+   "details": "white double-breasted jacket with gold shoulder trim, dark red shirt, gold tie"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "Chinese-style mahjong parlor: dark red walls, lattice windows, red curtains, green felt mahjong tables, marble floor",
+   "palette": [
+    "#7a1a1a",
+    "#2a1a1a",
+    "#2a8a3a"
+   ]
+  },
+  "vibe": "mahjong parlor boss",
+  "confidence": "high",
+  "notes": "Gold dome cap, gold antennas, gold cable/plug. Warm glowing cream screen."
+ },
+ {
+  "id": 59,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0c020",
+   "bodyFinish": "transparent",
+   "pattern": "glowing translucent neon-yellow glass, internals visible",
+   "bezelColor": "#f8d830",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f8d830",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d89818",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#8a5a10",
+   "mouth": null,
+   "sceneDescription": "visible glowing vacuum-tube/filament inside the TV behind the screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "shirtless",
+   "primary": "#e8a818",
+   "secondary": "#f8d830",
+   "accent": null,
+   "details": "entire body is glowing translucent amber/gold, no clothing visible"
+  },
+  "skinTone": "#e8a818",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "plain black/dark brown void with warm glow halo",
+   "palette": [
+    "#000000",
+    "#3a2008",
+    "#f0c020"
+   ]
+  },
+  "vibe": "glowing neon hologram",
+  "confidence": "medium",
+  "notes": "Fully emissive yellow glass/hologram character; use emissive material. Internal tube filaments visible through screen."
+ },
+ {
+  "id": 60,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a8d8e0",
+   "bodyFinish": "glossy",
+   "pattern": "iridescent teal-to-lavender gradient from club lights",
+   "bezelColor": "#c0e8ec",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8d8f0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0d0f0",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "t-shirt",
+   "primary": "#2a2a2e",
+   "secondary": "#4a4a52",
+   "accent": null,
+   "details": "plain dark charcoal tee"
+  },
+  "skinTone": "#a8704a",
+  "accessories": [
+   "power-plug-cable",
+   "dj-controller"
+  ],
+  "background": {
+   "setting": "nightclub: glowing floating mint/teal cubes, purple-pink laser beams; DJ turntable controller with teal glowing pads in foreground",
+   "palette": [
+    "#3a1a5a",
+    "#80f0d0",
+    "#e080e0"
+   ]
+  },
+  "vibe": "neon club DJ",
+  "confidence": "high",
+  "notes": "Screen glows pink-white center fading to lavender. Back of TV teal-green."
+ },
+ {
+  "id": 61,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8a878",
+   "bodyFinish": "wood",
+   "pattern": "light wood grain lines",
+   "bezelColor": "#c8a878",
+   "antennas": "two",
+   "antennaTip": "plain",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#b09070",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0a020",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#3a1a08",
+   "mouth": null,
+   "sceneDescription": "screen looks like a glowing lantern: bright yellow-orange center fading to dark edges"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: qipao / mandarin-collar top",
+   "primary": "#e88830",
+   "secondary": "#4a4a8a",
+   "accent": "#c03a2a",
+   "details": "mandarin collar with knot button and frog closure, vertical piping down front; color is orange-to-indigo gradient lit by lanterns"
+  },
+  "skinTone": "#e8b080",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "night sky full of glowing floating sky lanterns",
+   "palette": [
+    "#1a1420",
+    "#f0a030",
+    "#3a3050"
+   ]
+  },
+  "vibe": "sky lantern festival",
+  "confidence": "medium",
+  "notes": "Lantern-glow lighting colors everything warm orange; actual garment color uncertain (could be white/light). Antenna tips appear plain/no ball."
+ },
+ {
+  "id": 62,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8e2d8",
+   "bodyFinish": "matte",
+   "pattern": "pen-and-ink crosshatched illustration style",
+   "bezelColor": "#e8e2d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e2d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#ece6dc",
+   "glow": "none",
+   "eyes": "other: vertical lines with flat lids/brows above (deadpan, half-lidded)",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jacket",
+   "primary": "#2a2a2a",
+   "secondary": "#e8e2d8",
+   "accent": "#3a2a8a",
+   "details": "dark crosshatched coat, light cravat/high wrapped neckcloth; holds quill pen and paper scroll"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable",
+   "quill",
+   "scroll",
+   "raven"
+  ],
+  "background": {
+   "setting": "dense black-and-white ink scribble hatching with a pale full moon",
+   "palette": [
+    "#1a1a1a",
+    "#e8e2d8",
+    "#3a2a8a"
+   ]
+  },
+  "vibe": "gothic poet (Poe)",
+  "confidence": "high",
+  "notes": "Monochrome ink-drawn style; only color is purple-blue on the raven perched on top of the TV and the quill feather. Edgar Allan Poe 'The Raven' reference."
+ },
+ {
+  "id": 63,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0f4f8",
+   "bodyFinish": "glossy",
+   "pattern": "pale blue pinstripe along side",
+   "bezelColor": "#f0f4f8",
+   "antennas": "two",
+   "antennaTip": "other: flowers (red rose/carnation and yellow flower) with vines",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#7a4a2a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8e8f4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "glassy reflective screen with diagonal glare"
+  },
+  "headwear": {
+   "type": "flower",
+   "color": "#c02a1a"
+  },
+  "outfit": {
+   "type": "overalls",
+   "primary": "#3a4a6a",
+   "secondary": "#4a6a9a",
+   "accent": "#c09040",
+   "details": "dark denim overalls with brass buckles over blue plaid/chambray collared shirt"
+  },
+  "skinTone": "#a8c0d8",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "glass greenhouse with pink, orange and yellow flowers and green foliage",
+   "palette": [
+    "#c8e0f0",
+    "#e870a0",
+    "#2a5a2a"
+   ]
+  },
+  "vibe": "greenhouse gardener",
+  "confidence": "medium",
+  "notes": "Knobs are sunflowers with brown centres. Vines wrap antennas, flowers bloom from antenna tips. antennaTip value outside enum. Skin appears pale bluish-white (porcelain/robot-like) \u2014 unsure if lighting or actual tone."
+ },
+ {
+  "id": 64,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8a810",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#e8a810",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8d8a8",
+   "damage": "screen dirty/smudged with soot-like grime"
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#b8b8b8",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: work shirt with hi-vis safety vest",
+   "primary": "#4a5068",
+   "secondary": "#f0e020",
+   "accent": "#e85020",
+   "details": "slate-blue button-up work shirt, yellow-green hi-vis vest with orange and reflective silver stripes"
+  },
+  "skinTone": "#a06a40",
+  "accessories": [
+   "power-plug-cable",
+   "safety-vest"
+  ],
+  "background": {
+   "setting": "construction site at sunset: cranes, chain-link fence with barbed wire, orange sky",
+   "palette": [
+    "#f0a070",
+    "#3a2a5a",
+    "#c05a40"
+   ]
+  },
+  "vibe": "construction site worker",
+  "confidence": "high",
+  "notes": "Cream/gold antenna dome and knobs. Grey grimy screen. Crane has text on boom (not copied)."
+ },
+ {
+  "id": 65,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#5a7ac0",
+   "bodyFinish": "patterned",
+   "pattern": "blue body with tiny white sparkle/star specks",
+   "bezelColor": "#5a7ac0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c02a3a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8b498",
+   "glow": "none",
+   "eyes": "other: large shoujo anime eyes with lashes and brows",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "face also has pink blush cheeks and a tiny nose line"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: sailor school uniform (seifuku)",
+   "primary": "#f8e0d8",
+   "secondary": "#4a3a8a",
+   "accent": "#8a1a2a",
+   "details": "pale pink blouse, navy-purple sailor collar with red stripe, burgundy bow"
+  },
+  "skinTone": "#d8b498",
+  "accessories": [
+   "power-plug-cable",
+   "bowtie"
+  ],
+  "background": {
+   "setting": "dreamy magical-girl night sky: crescent moon, bubbles, sparkles, purple-pink clouds",
+   "palette": [
+    "#4a5aa8",
+    "#b088d0",
+    "#f8f0a8"
+   ]
+  },
+  "vibe": "90s magical girl",
+  "confidence": "high",
+  "notes": "Sailor Moon homage. Gold antennas/dome and gold grille. Red knobs."
+ },
+ {
+  "id": 66,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2a2a",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#2a2a2a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#4a4a4a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#1a1a1a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#ffffff",
+   "mouth": null,
+   "sceneDescription": "glossy black screen with strong white glare highlights"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jacket",
+   "primary": "#1e1e1e",
+   "secondary": "#3a3a3a",
+   "accent": null,
+   "details": "black leather biker jacket over dark grey t-shirt with black skull graphic, small tear holes in shirt"
+  },
+  "skinTone": "#b07a50",
+  "accessories": [
+   "power-plug-cable",
+   "neck-tattoo"
+  ],
+  "background": {
+   "setting": "rock/metal concert: blue, purple, yellow-green stage spotlights, crowd hands making horns silhouettes",
+   "palette": [
+    "#2a3aa0",
+    "#20a0e0",
+    "#d0e020"
+   ]
+  },
+  "vibe": "heavy metal rocker",
+  "confidence": "high",
+  "notes": "All-black glossy TV with white eyes on black screen. Neck tattoos (swirls/rose)."
+ },
+ {
+  "id": 67,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#0e4a5a",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#f4f4f4",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#3a3a3a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8b498",
+   "glow": "none",
+   "eyes": "other: vertical lines with wrinkle lines around eyes (elderly)",
+   "eyeColor": "#111111",
+   "mouth": "other: white goatee and mustache",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: flannel shirt",
+   "primary": "#1a5a7a",
+   "secondary": "#5a1a20",
+   "accent": "#a01a2a",
+   "details": "blue/teal/red plaid flannel shirt open over maroon t-shirt"
+  },
+  "skinTone": "#d8b498",
+  "accessories": [
+   "power-plug-cable",
+   "backpack"
+  ],
+  "background": {
+   "setting": "snowy mountain range under blue sky with stylized clouds and bright sun",
+   "palette": [
+    "#3a9ac8",
+    "#f0a020",
+    "#3a3a3a"
+   ]
+  },
+  "vibe": "old mountain hiker",
+  "confidence": "high",
+  "notes": "Dark teal TV with white bezel frame. Black/dark brown antennas and dome. Black hiking backpack straps. Brown cable."
+ },
+ {
+  "id": 68,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2a2c",
+   "bodyFinish": "matte",
+   "pattern": "dark charcoal with dark-red gradient at bottom",
+   "bezelColor": "#2a2a2c",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d8d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#3a2018",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#ffffff",
+   "mouth": "mustache",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: bartender shirt with suspenders",
+   "primary": "#1e1e1e",
+   "secondary": "#8a1a2a",
+   "accent": null,
+   "details": "black shirt with dark red collar, dark suspenders, red plaid bow tie"
+  },
+  "skinTone": "#5a3020",
+  "accessories": [
+   "power-plug-cable",
+   "bowtie",
+   "suspenders",
+   "cocktail-shaker"
+  ],
+  "background": {
+   "setting": "cocktail bar: back-lit shelves of liquor bottles in red/green, glowing amber bar counter",
+   "palette": [
+    "#5a0a10",
+    "#f0b030",
+    "#1a1a1a"
+   ]
+  },
+  "vibe": "suave mustached bartender",
+  "confidence": "high",
+  "notes": "Dark brown screen with white line eyes (lower half of each eye is white). Silver/chrome dome and antennas. White cable. Silver shaker in hand."
+ },
+ {
+  "id": 69,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f0f0f0",
+   "bodyFinish": "glossy",
+   "pattern": "two-tone: white upper half, black lower half",
+   "bezelColor": "#f0f0f0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a2a2a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#80e0e8",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: red police siren light dome (replaces antenna dome)",
+   "color": "#d01a1a"
+  },
+  "outfit": {
+   "type": "other: security guard uniform",
+   "primary": "#e8ecf0",
+   "secondary": "#1e2a4a",
+   "accent": "#e0b020",
+   "details": "light grey collared shirt, navy vest with gold shield/badge emblem, black tie"
+  },
+  "skinTone": "#c89070",
+  "accessories": [
+   "power-plug-cable",
+   "tie",
+   "badge"
+  ],
+  "background": {
+   "setting": "bank vault / safe-deposit box room with metal drawer cabinets and frosted windows",
+   "palette": [
+    "#3a3a3e",
+    "#d8e4ec",
+    "#2a2a3a"
+   ]
+  },
+  "vibe": "bank security guard",
+  "confidence": "high",
+  "notes": "Black-and-white police-car TV with glowing red siren dome and red glowing antennas. Cyan screen."
+ },
+ {
+  "id": 70,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a8a4a0",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#a8a4a0",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d4d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#c8c4c0",
+   "glow": "none",
+   "eyes": "glasses",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "vertical line eyes with rimless rectangular reading glasses (light blue lenses) on the screen"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "lab-coat",
+   "primary": "#f0f0f0",
+   "secondary": "#1a6a8a",
+   "accent": null,
+   "details": "white doctor's coat over teal V-neck scrubs"
+  },
+  "skinTone": "#8a6a50",
+  "accessories": [
+   "power-plug-cable",
+   "stethoscope"
+  ],
+  "background": {
+   "setting": "bright white hospital corridor with doors and tiled floor",
+   "palette": [
+    "#f4f2f0",
+    "#c8c4c0",
+    "#8a8480"
+   ]
+  },
+  "vibe": "hospital doctor",
+  "confidence": "high",
+  "notes": "Greyscale TV in a greyscale scene; only color is teal scrubs and blue lens tint."
+ },
+ {
+  "id": 71,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8e8e8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#e8e8e8",
+   "antennas": "one",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e8e8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#ececec",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": "mustache",
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "chef-hat",
+   "color": "#ffffff"
+  },
+  "outfit": {
+   "type": "chef-coat",
+   "primary": "#ffffff",
+   "secondary": "#a02a1a",
+   "accent": "#111111",
+   "details": "white double-breasted chef jacket with black buttons, red neckerchief"
+  },
+  "skinTone": "#9a9a9a",
+  "accessories": [
+   "power-plug-cable",
+   "neckerchief"
+  ],
+  "background": {
+   "setting": "pop food illustration: big yellow plate circle with pasta noodles, macaroni, mushrooms, fried egg, pink cutlery and bowls on white",
+   "palette": [
+    "#f8d010",
+    "#e070a0",
+    "#f0a040"
+   ]
+  },
+  "vibe": "Italian pasta chef",
+  "confidence": "high",
+  "notes": "Chef hat sits tilted on the antenna dome, hiding the second antenna (only one visible). Pink blush on screen. Brown curled mustache. Neck greyish, possibly just shading."
+ },
+ {
+  "id": 72,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3a3a3a",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#3a3a3a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#b8b8b8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#6a6a6a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "glossy grey screen with white glare highlights"
+  },
+  "headwear": {
+   "type": "other: fedora",
+   "color": "#3a3a3a"
+  },
+  "outfit": {
+   "type": "other: trench coat",
+   "primary": "#a8a8a8",
+   "secondary": "#e8e8e8",
+   "accent": "#1a1a1a",
+   "details": "belted trench coat with epaulettes and buttons, white shirt, black tie"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable",
+   "tie"
+  ],
+  "background": {
+   "setting": "dark rainy brick alleyway with spotlight beams from above",
+   "palette": [
+    "#1a1a1a",
+    "#5a5a5a",
+    "#e8e8e8"
+   ]
+  },
+  "vibe": "film noir detective",
+  "confidence": "high",
+  "notes": "Entire image is greyscale (black-and-white noir). Rain streaks. Fedora sits on antenna dome; antennas poke out behind it."
+ },
+ {
+  "id": 73,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c81a10",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#f8f8f8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f8f8f8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e0d8d0",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: superhero suit with cape",
+   "primary": "#2a2a30",
+   "secondary": "#c81a10",
+   "accent": null,
+   "details": "dark grey/black armored muscle bodysuit with red panel lines, flowing red cape"
+  },
+  "skinTone": "#d8a080",
+  "accessories": [
+   "power-plug-cable",
+   "cape"
+  ],
+  "background": {
+   "setting": "fisheye view of city skyscrapers with sunset sky (yellow/purple)",
+   "palette": [
+    "#f0c020",
+    "#8a5ab0",
+    "#f0f0f0"
+   ]
+  },
+  "vibe": "city superhero",
+  "confidence": "high",
+  "notes": "Red TV with white bezel; red knobs with white rims, red grille. Red antenna tips. White cable."
+ },
+ {
+  "id": 74,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a3040",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a3040",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0a830",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#60e0e8",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "glowing cyan screen with cloudy white highlights, cyan glow spills on bezel"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "armor",
+   "primary": "#e0dcd4",
+   "secondary": "#7a4a20",
+   "accent": "#e0b030",
+   "details": "off-white cowl/hooded top, brown leather harness straps with gold buckles, ornate gold pauldrons inset with glowing cyan gems"
+  },
+  "skinTone": "#9a8a7a",
+  "accessories": [
+   "power-plug-cable",
+   "harness"
+  ],
+  "background": {
+   "setting": "dark sci-fi room with floating shelves edge-lit cyan, holding glowing circuit-board cubes; open doorway",
+   "palette": [
+    "#1a2028",
+    "#40e0e8",
+    "#2a3a48"
+   ]
+  },
+  "vibe": "cyber-fantasy adventurer",
+  "confidence": "medium",
+  "notes": "Gold dome, antennas, knobs and grille. Neck beige/grey under the cowl. Assassin's-Creed-like cowl look."
+ },
+ {
+  "id": 75,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e4e4e4",
+   "bodyFinish": "matte",
+   "pattern": "uncolored line-art/sketch style",
+   "bezelColor": "#e4e4e4",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e4e4e4",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8d8d8",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": "other: thin line mouth with a rainbow pouring out of it",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: uncolored line art body",
+   "primary": "#f0f0f0",
+   "secondary": "#c8c8c8",
+   "accent": null,
+   "details": "body drawn only as outlines, obscured by rainbow smoke"
+  },
+  "skinTone": null,
+  "accessories": [
+   "power-plug-cable",
+   "sketchbook",
+   "pencil"
+  ],
+  "background": {
+   "setting": "white/grey vignette filled at the bottom with rainbow paint smoke clouds",
+   "palette": [
+    "#f0f0f0",
+    "#f03080",
+    "#30a0f0"
+   ]
+  },
+  "vibe": "rainbow-dreaming artist",
+  "confidence": "medium",
+  "notes": "Grayscale line-art character; rainbow pours from mouth and glows from antenna dome. Holds rainbow-colored spiral sketchbook with pencil. Outfit/skin not determinable."
+ },
+ {
+  "id": 76,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c8c8",
+   "bodyFinish": "patterned",
+   "pattern": "disco-ball mirror mosaic tiles in silver/grey/white over the entire TV body, antenna dome too",
+   "bezelColor": "#9a9a9a",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#bdbdbd",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#e0a020",
+   "secondary": "#f5c84a",
+   "accent": null,
+   "details": "gold sequin/mosaic-textured suit jacket with matching gold sequin shirt and tie, notched lapels"
+  },
+  "skinTone": "#5a3a24",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "disco dance floor with multicolored lit tiles, dark purple striped back wall",
+   "palette": [
+    "#1a0f2a",
+    "#c040e0",
+    "#30d0c0",
+    "#e0e040"
+   ]
+  },
+  "vibe": "disco ball dancer",
+  "confidence": "high",
+  "notes": "Screen also uses mirror mosaic so face is the only distinguishing mark (two short black vertical-line eyes). Plug cable drapes over the left shoulder (viewer's left) with a silver two-prong plug; cable runs from TV underside. Two knobs plus vertical slot grille on right side panel. Antenna base is a small dome."
+ },
+ {
+  "id": 77,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8961e",
+   "bodyFinish": "metallic",
+   "pattern": "stickers on left side: wing/feather emblem, basketball, black triangle with jersey number",
+   "bezelColor": "#c87a10",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f0a830",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#1a1a1a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#e8a020",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jersey",
+   "primary": "#141414",
+   "secondary": "#e8a020",
+   "accent": null,
+   "details": "black sleeveless basketball jersey with gold trim on collar and armholes, gold team lettering across chest"
+  },
+  "skinTone": "#9a5e34",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "basketball court floor with a wall of repeating grey TV-head silhouettes (crowd)",
+   "palette": [
+    "#d0d0d0",
+    "#3a3a3a",
+    "#8a8a8a",
+    "#1a1a1a"
+   ]
+  },
+  "vibe": "golden basketball star",
+  "confidence": "high",
+  "notes": "Glossy gold/orange TV body (polished metal look). Dark screen with gold vertical-line eyes. Plug cable gold, draped over left shoulder. Jersey shows the token number as sticker on TV side."
+ },
+ {
+  "id": 78,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f2f2f2",
+   "bodyFinish": "glossy",
+   "pattern": "red horizontal band wrapping around the TV body (like a space capsule livery), black circle emblem with white triangle and Japanese text on side",
+   "bezelColor": "#d8d8d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#3a3a3a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#4a2a8a",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#c01818",
+   "mouth": null,
+   "sceneDescription": "purple space/underwater gradient with small floating bubbles behind the eyes"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jacket",
+   "primary": "#a83a14",
+   "secondary": "#d0f020",
+   "accent": null,
+   "details": "rust-orange padded firefighter/space-suit style jacket with high collar, chest flap pockets, neon yellow-green reflective band at bottom"
+  },
+  "skinTone": "#9a6a44",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "deep space nebula in dark navy and rust orange",
+   "palette": [
+    "#1a1a2a",
+    "#7a2a10",
+    "#c05a20"
+   ]
+  },
+  "vibe": "astronaut explorer",
+  "confidence": "medium",
+  "notes": "Gold dome antenna base and gold-tipped antennas. Eyes are red vertical bars with a white top highlight. Plug cable is purple/sparkly, over left shoulder. Jacket could be firefighter turnout coat or flight suit; reflective neon stripe suggests firefighter."
+ },
+ {
+  "id": 79,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#b8b8bc",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#d8d8d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#2a2a2a",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#0a0a0a",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: white sushi-chef hachimaki headband wrapped around top of TV with black triangle emblem, knot on right",
+   "color": "#f4f4f4"
+  },
+  "outfit": {
+   "type": "other: sushi chef / martial arts gi (kimono-style wrap)",
+   "primary": "#eeeeee",
+   "secondary": "#2a2a2a",
+   "accent": null,
+   "details": "white cross-collar wrap jacket with black striped collar lapels, vertical Japanese text on chest"
+  },
+  "skinTone": "#c88a50",
+  "accessories": [
+   "power-plug-cable",
+   "neck tattoo (kanji)",
+   "two crossed long knives/swords"
+  ],
+  "background": {
+   "setting": "wooden sushi bar counter with plates of nigiri and chopsticks, slatted wood screens",
+   "palette": [
+    "#d0a070",
+    "#8a5a30",
+    "#1a1a4a"
+   ]
+  },
+  "vibe": "sushi chef samurai",
+  "confidence": "high",
+  "notes": "Holds two crossed sushi knives/blades in front of chest. Kanji tattoo on neck. Grey plug cable with plug over left shoulder."
+ },
+ {
+  "id": 80,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3a2e28",
+   "bodyFinish": "metallic",
+   "pattern": null,
+   "bezelColor": "#5a4a3e",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8b8a0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#4a3a30",
+   "glow": "soft",
+   "eyes": "other: round welding goggles strapped around the TV over the screen",
+   "eyeColor": "#2a1a14",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: welding goggles with black strap wrapped around TV body",
+   "color": "#1a1a1a"
+  },
+  "outfit": {
+   "type": "overalls",
+   "primary": "#1e1e1e",
+   "secondary": "#c0c0c0",
+   "accent": null,
+   "details": "black work overalls/bib with buckled shoulder straps over bare chest, silver buckles"
+  },
+  "skinTone": "#8a5a3a",
+  "accessories": [
+   "power-plug-cable",
+   "welding goggles",
+   "welding torch with sparks"
+  ],
+  "background": {
+   "setting": "glowing blue blueprint grid with faint mech sketches, dark vignette",
+   "palette": [
+    "#2a5ab0",
+    "#0a0a14",
+    "#a8c8f0"
+   ]
+  },
+  "vibe": "mechanic welder engineer",
+  "confidence": "medium",
+  "notes": "Has FOUR antennas (two pairs: an outer pair and an inner pair) on the dome, schema only allows 'two'. Dark bronze/brown TV with copper-glow reflections. Goggle lenses are reflective dark amber; no other eyes visible. Holding welding torch emitting orange sparks at lower right. Shirtless under overalls."
+ },
+ {
+  "id": 81,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2c50",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#3a3c64",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#3a3c64",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#1e2040",
+   "glow": "strong",
+   "eyes": "other: vertical-line eyes inside a glowing white horizontal eye-slit band (ninja mask opening)",
+   "eyeColor": "#0a0a0a",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: ninja shinobi garb",
+   "primary": "#262848",
+   "secondary": "#1a1a30",
+   "accent": null,
+   "details": "dark navy cross-collar ninja wrap top, high neck covering; kunai blades hanging on a rope/chain at chest"
+  },
+  "skinTone": "#1e2040",
+  "accessories": [
+   "power-plug-cable",
+   "kunai on cord"
+  ],
+  "background": {
+   "setting": "huge full moon glowing behind, night sky",
+   "palette": [
+    "#0a1030",
+    "#e8f0ff",
+    "#80c8c8"
+   ]
+  },
+  "vibe": "moonlit ninja",
+  "confidence": "high",
+  "notes": "Whole character is in dark navy silhouette lighting; neck appears covered by dark cloth (skin not visible). Screen dark except bright white-blue glowing slit containing the two eyes. Antenna tips glow faintly blue."
+ },
+ {
+  "id": 82,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#1e2420",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#2a302c",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a302c",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0c020",
+   "glow": "strong",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "radial gradient: bright yellow center fading to orange then purple at corners"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#1a1a1a",
+   "secondary": "#141414",
+   "accent": null,
+   "details": "all-black suit, black shirt, black tie (secret-service / men-in-black style)"
+  },
+  "skinTone": "#1a1a1a",
+  "accessories": [
+   "power-plug-cable",
+   "earpiece"
+  ],
+  "background": {
+   "setting": "dark brick alley wall with steel door, blue/purple/orange lighting",
+   "palette": [
+    "#1a1a24",
+    "#3a4a8a",
+    "#8a5a30"
+   ]
+  },
+  "vibe": "secret service bodyguard",
+  "confidence": "high",
+  "notes": "Earpiece: coiled security-earpiece cord attached to a round disc on the left side of the TV, coiling down to the collar. Neck appears black (could be dark skin or shading; low certainty on skin)."
+ },
+ {
+  "id": 83,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d4d0d8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#e8e6ec",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8a07a",
+   "glow": "soft",
+   "eyes": "glasses",
+   "eyeColor": "#30b080",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jacket",
+   "primary": "#a89880",
+   "secondary": "#f0e6d8",
+   "accent": "#2a2420",
+   "details": "brown/beige plaid tweed blazer over cream cable-knit sweater"
+  },
+  "skinTone": "#7a5034",
+  "accessories": [
+   "power-plug-cable",
+   "necklace",
+   "round gold glasses"
+  ],
+  "background": {
+   "setting": "makeup vanity with Hollywood bulb-lit mirror, brush cup, phone, gold award plaque",
+   "palette": [
+    "#f0b860",
+    "#e8e8ec",
+    "#c8d8e0"
+   ]
+  },
+  "vibe": "beauty influencer",
+  "confidence": "high",
+  "notes": "Screen shows a feminine eye region on skin-toned (peach) background: thin brows, long eyelashes, green irises with vertical-line pupils, eyeshadow. Large round thin gold wire glasses wrap over the TV front, temple arm reaching to left side. Thin gold chain necklace. Mirror reflects the TV back."
+ },
+ {
+  "id": 84,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#5a6270",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#6a7280",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#2a3240",
+   "glow": "none",
+   "eyes": "other: vertical-line eyes styled as candlesticks (green top, red bottom)",
+   "eyeColor": "#30c070",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "hoodie",
+   "primary": "#8a8e98",
+   "secondary": "#2a2e3a",
+   "accent": null,
+   "details": "grey plaid/check zip hoodie with dark navy hood lining and drawstrings, black t-shirt underneath"
+  },
+  "skinTone": "#8a6040",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "crypto trading desk: candlestick chart monitor, laptop, hardware wallets/USB keys scattered on desk",
+   "palette": [
+    "#e8e0d0",
+    "#2a2e34",
+    "#40c070",
+    "#d04040"
+   ]
+  },
+  "vibe": "crypto day trader",
+  "confidence": "high",
+  "notes": "Eyes are tiny trading candlesticks: green bar above red bar. Small red/green status lights on left side panel of TV. White plug cable over left shoulder."
+ },
+ {
+  "id": 85,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#a01818",
+   "bodyFinish": "glossy",
+   "pattern": "apple theme: brown stem-like antenna dome and antennas, green leaf sprouting from top right",
+   "bezelColor": "#b82020",
+   "antennas": "two",
+   "antennaTip": "plain",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c89a70",
+   "damage": null
+  },
+  "screen": {
+   "kind": "image",
+   "background": "#f0c0a8",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "screen shows the inside of an apple (peach-flesh room) with a green striped worm poking up; the worm has the vertical-line eyes"
+  },
+  "headwear": {
+   "type": "other: apple leaf on top of TV",
+   "color": "#70b030"
+  },
+  "outfit": {
+   "type": "other: school teacher shirt and vest",
+   "primary": "#2a3268",
+   "secondary": "#f2eee4",
+   "accent": null,
+   "details": "navy sweater vest over white collared button-up shirt with dark buttons"
+  },
+  "skinTone": "#c8946a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "classroom whiteboard with math sums, clock, alphabet banner, markers on tray",
+   "palette": [
+    "#4a7ab8",
+    "#f4f4f4",
+    "#e04040",
+    "#60b040"
+   ]
+  },
+  "vibe": "apple-for-the-teacher",
+  "confidence": "high",
+  "notes": "TV is styled as a red apple: glossy red body, brown stem-colored antennas/dome, a big green leaf. Worm with face inside screen. Knobs and grille are tan/brown. Brown plug cable."
+ },
+ {
+  "id": 86,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#4a4e42",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#5e6254",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d0d0d0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#cfd2c8",
+   "glow": "none",
+   "eyes": "glasses",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "screen faintly reflects the newspaper text behind; vertical-line eyes behind large black rectangular glasses"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: flannel shirt",
+   "primary": "#8a3a2a",
+   "secondary": "#4a2018",
+   "accent": "#d8b890",
+   "details": "red-brown plaid flannel button shirt with chest pocket holding a pen, open collar"
+  },
+  "skinTone": "#b88660",
+  "accessories": [
+   "power-plug-cable",
+   "thick black rectangular glasses",
+   "vintage film camera on tan strap",
+   "pen in pocket"
+  ],
+  "background": {
+   "setting": "collage of newspaper front pages",
+   "palette": [
+    "#f0f0ec",
+    "#3a3a3a",
+    "#9a9a9a"
+   ]
+  },
+  "vibe": "investigative journalist photographer",
+  "confidence": "high",
+  "notes": "Thick black wide-rimmed glasses span the screen with arms around the sides. Silver/black rangefinder camera hangs on chest."
+ },
+ {
+  "id": 87,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8c8c8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#dcdcdc",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e8e8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d4d4d4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: medical scrubs",
+   "primary": "#1e4a8a",
+   "secondary": "#163a70",
+   "accent": "#ffffff",
+   "details": "royal blue V-neck scrub top, small white circular logo badge on right chest"
+  },
+  "skinTone": "#e0b890",
+  "accessories": [
+   "power-plug-cable",
+   "ID badge on retractable reel clip"
+  ],
+  "background": {
+   "setting": "empty bright white hospital room/corridor, tiled floor, windows",
+   "palette": [
+    "#f0f0f0",
+    "#c8c8c8",
+    "#a0a0a0"
+   ]
+  },
+  "vibe": "hospital nurse",
+  "confidence": "high",
+  "notes": "Plain grey/white classic TV, very default look. Light skin tone. White plug cable."
+ },
+ {
+  "id": 88,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#f2f2f2",
+   "bodyFinish": "patterned",
+   "pattern": "soccer-ball black pentagon / white hexagon panels over whole body",
+   "bezelColor": "#e8e8e8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d8d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#5a3418",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "cross-section of turf: green grass strip on top, brown soil below (like a terrarium); eyes on soil part"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "jersey",
+   "primary": "#f0f0f0",
+   "secondary": "#141414",
+   "accent": null,
+   "details": "white soccer jersey with black sleeves, three black stripes on shoulders, black collar, small black triangle emblem on chest"
+  },
+  "skinTone": "#9a5e30",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "soccer pitch with chain-link fence and night sky",
+   "palette": [
+    "#3a8a2a",
+    "#1a2a4a",
+    "#f0f0f0"
+   ]
+  },
+  "vibe": "soccer player",
+  "confidence": "high",
+  "notes": "Eyes are vertical lines with a small highlight, drawn on the soil. Black plug cable."
+ },
+ {
+  "id": 89,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#222222",
+   "bodyFinish": "glossy",
+   "pattern": "thin orange outline/rim-light on all edges",
+   "bezelColor": "#2e2e2e",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#f0f0f0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e4e4e4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: white hachimaki headband with orange rising-sun circle, tails hanging below TV",
+   "color": "#f0f0f0"
+  },
+  "outfit": {
+   "type": "other: karate gi",
+   "primary": "#f0f0f0",
+   "secondary": "#e85a10",
+   "accent": null,
+   "details": "white martial-arts gi with crossed lapels, orange outline/pinstripe accents on collar and folds"
+  },
+  "skinTone": "#d0a080",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "traditional wooden dojo interior",
+   "palette": [
+    "#c89a70",
+    "#8a5a38",
+    "#e0c0a0"
+   ]
+  },
+  "vibe": "karate dojo fighter",
+  "confidence": "high",
+  "notes": "Black TV with orange-outlined art style, white knobs, orange-and-white grille. Headband tails flutter below the TV on both sides. Black plug cable."
+ },
+ {
+  "id": 90,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c8a0c8",
+   "bodyFinish": "patterned",
+   "pattern": "lilac/mauve with outlined triangles and orange-outlined circles scattered (memphis style)",
+   "bezelColor": "#d4b0d4",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#2a2a2a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#c8e0f8",
+   "glow": "strong",
+   "eyes": "none",
+   "eyeColor": null,
+   "mouth": null,
+   "sceneDescription": "vending-machine / drinks fridge: two shelves of soda bottles and cans in blue, green, red, magenta, backlit blue-white"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: polka-dot long-sleeve top",
+   "primary": "#c898c8",
+   "secondary": "#e8c8e8",
+   "accent": null,
+   "details": "lilac sweater/shirt with large pale pink polka dots, round neck"
+  },
+  "skinTone": "#9a6844",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "white tiled room with grid floor",
+   "palette": [
+    "#e8e8e8",
+    "#b0b0b0",
+    "#f8f8f8"
+   ]
+  },
+  "vibe": "vending machine soda fan",
+  "confidence": "high",
+  "notes": "No face on screen; screen is a glowing drinks fridge. Black knobs and black vertical grille slot. Black plug cable. Squid-Game-like shapes (triangle/circle) on TV body."
+ },
+ {
+  "id": 91,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8e8e8",
+   "bodyFinish": "patterned",
+   "pattern": "black-and-white chessboard checker squares over whole body",
+   "bezelColor": "#d8d8d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e0e0e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f8f8f8",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: checkered button-up shirt",
+   "primary": "#e8e8e8",
+   "secondary": "#1a1a1a",
+   "accent": null,
+   "details": "black-and-white checkerboard collared shirt"
+  },
+  "skinTone": "#e8e8e8",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "surreal giant chessboard with TV-headed chess pawns/pieces",
+   "palette": [
+    "#ffffff",
+    "#1a1a1a",
+    "#8a8a8a"
+   ]
+  },
+  "vibe": "chess grandmaster",
+  "confidence": "high",
+  "notes": "Entire image is monochrome greyscale, so skin is rendered pale grey/white (actual tone unknown). White plug cable. Antenna dome is black."
+ },
+ {
+  "id": 92,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#3e2a22",
+   "bodyFinish": "other: leather (stitched briefcase leather)",
+   "pattern": "dark brown leather briefcase with stitched seams; screen is covered by the briefcase flap",
+   "bezelColor": "#3a2820",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e89030",
+   "damage": null
+  },
+  "screen": {
+   "kind": "other: briefcase flap",
+   "background": "#3a2820",
+   "glow": "none",
+   "eyes": "none",
+   "eyeColor": null,
+   "mouth": "other: briefcase flap edge forms a jagged toothy grin (white teeth peeking out), gold clasp lock in center",
+   "sceneDescription": "screen covered by leather briefcase flap with gold buckle clasp; white teeth peek from under the flap edge"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "suit",
+   "primary": "#1a1a1a",
+   "secondary": "#f0f0f0",
+   "accent": null,
+   "details": "black suit jacket, white dress shirt, black tie"
+  },
+  "skinTone": "#b88866",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "wood-paneled courtroom (judge's bench, railings), blue carpet",
+   "palette": [
+    "#a0603a",
+    "#3a5a80",
+    "#e8e4dc"
+   ]
+  },
+  "vibe": "shark lawyer",
+  "confidence": "medium",
+  "notes": "bodyFinish and screen.kind use 'other' values the schema lacks (leather/briefcase). Knobs are dark with orange-gold glowing centers. Black antennas and dome. Dark brown plug cable. Teeth could read as briefcase stuffed with papers, but look like a sly grin."
+ },
+ {
+  "id": 93,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#c41a14",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#d02018",
+   "antennas": "one",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8e8e8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "scene",
+   "background": "#a8dce8",
+   "glow": "soft",
+   "eyes": "none",
+   "eyeColor": null,
+   "mouth": null,
+   "sceneDescription": "gumball machine: screen is a glass box filled with colorful gumballs (yellow, blue, pink, green, white, orange); vanilla ice cream drips down into it"
+  },
+  "headwear": {
+   "type": "other: upside-down ice-cream cone with vanilla cookies-and-cream scoop and a cherry, melting over the top of the TV",
+   "color": "#d8963c"
+  },
+  "outfit": {
+   "type": "other: raglan baseball tee",
+   "primary": "#f0ece4",
+   "secondary": "#c42a1a",
+   "accent": "#4a4a9a",
+   "details": "cream t-shirt with red raglan sleeves and red collar, navy rocket ship and stars print on chest"
+  },
+  "skinTone": "#8a5a34",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "candyland: candy-stripe hills, giant decorated eggs, frosted cake building with chocolate-bar door, blue sky clouds",
+   "palette": [
+    "#a8d8f0",
+    "#f0a8c8",
+    "#60c0a0",
+    "#f8f0e0"
+   ]
+  },
+  "vibe": "candyland kid",
+  "confidence": "high",
+  "notes": "Only one antenna visible (other presumably hidden by the ice-cream cone). No face on screen. White plug cable."
+ },
+ {
+  "id": 94,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d898c8",
+   "bodyFinish": "glossy",
+   "pattern": null,
+   "bezelColor": "#e8a8c8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#c8a8e0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#f0dcd8",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": "other: gentle closed smile with wrinkles (laugh lines around eyes, nasolabial folds)",
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: cardigan over turtleneck",
+   "primary": "#8a1e22",
+   "secondary": "#c06a30",
+   "accent": null,
+   "details": "deep red ribbed knit cardigan over burnt-orange ribbed turtleneck sweater"
+  },
+  "skinTone": "#8a5a3a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "cozy room by a big window: cherry-blossom bonsai on shelf, newspaper and reading glasses on table, brown curtains",
+   "palette": [
+    "#f0e8e0",
+    "#a05a40",
+    "#f0b0c0"
+   ]
+  },
+  "vibe": "kindly grandparent",
+  "confidence": "high",
+  "notes": "Pink-to-lilac gradient TV (pinker on front, more purple on side). Elderly face: vertical-line eyes with crow's-feet wrinkle lines, small eyebrows, wrinkled cheeks and soft smile. Lilac antenna dome and knobs/grille. Lilac plug cable."
+ },
+ {
+  "id": 95,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a1c5e",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#3a2a80",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d8dc",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8bca4",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "tracksuit",
+   "primary": "#141418",
+   "secondary": "#4a1ea0",
+   "accent": "#7a3ad0",
+   "details": "black track jacket with a purple ribbed crew-neck collar band; three thin parallel purple stripes run over each shoulder and down the sleeves (classic three-stripe); sleeves/upper arms read deep violet in the purple room light"
+  },
+  "skinTone": "#f0d8c2",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "RGB gaming setup: dual monitors with pink/blue swirl wallpaper, white PC tower with glass side, triangular wall light panels, purple gaming chair behind character",
+   "palette": [
+    "#1a1ad0",
+    "#e010e0",
+    "#40e0f0",
+    "#f0f0f8"
+   ]
+  },
+  "vibe": "late-night gamer",
+  "confidence": "high",
+  "notes": "PLAYER CHARACTER - detailed (measured on 900px art). TV PROPORTIONS: front face ~535 wide x 375 tall (w:h ~1.43:1); visible depth on left side ~55px plus a narrower rear housing box (back bulge ~45px deep, inset ~30px top/bottom) - total depth roughly 0.35-0.45 of width; front edges have small rounded corners, slight perspective (viewed a bit from the right so the left side shows). Front bezel is a slightly lighter indigo with a subtle highlight line along top edge. SCREEN: rounded rectangle, offset LEFT, ~330 wide x 315 tall (about 62% of front width, 84% of height), CRT-curved with soft purple inner vignette/glow around the edges over a warm beige-peach center (#d8bca4 center, #b090a0 edges). Face = two short black vertical bars (~10px wide x 50px tall, ~190px apart) placed slightly below screen center; no mouth. RIGHT CONTROL COLUMN (~60px wide strip right of screen): top = round silver knob (~55px dia) with a ridged/notched rim and a raised diagonal bar across its face; below it a second identical round silver knob with a horizontal bar; below that a tall rounded-rectangle silver grille (~55 x 145px) with ~11 horizontal black slats. ANTENNA: silver/white half-sphere dome (~110px wide, ~40px tall) centered on top of the TV; two thin silver rods sprout from the dome in a V, each angled ~35-40 deg from vertical, length ~150px (~0.28 of TV width), each ending in a small white ball tip. PLUG CABLE: thin white/light-grey cord exits the bottom-left underside of the TV (left rear corner), drops vertically past the neck, then curves over the character's left shoulder (viewer's left) and hangs down onto the chest ending in a white two-prong plug pointing downward. NECK: short, light skin, slightly narrower than the screen. Seen in a gaming chair, upper-arms violet."
+ },
+ {
+  "id": 96,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#6a90c8",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#80a4d8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#d8d8d8",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#c8d8f0",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "other: navy peaked police/mail-carrier uniform cap with small TV-face badge",
+   "color": "#1e2a50"
+  },
+  "outfit": {
+   "type": "other: uniform shirt",
+   "primary": "#5a88c8",
+   "secondary": "#a01c24",
+   "accent": "#1a1a1a",
+   "details": "light blue collared uniform shirt with chest flap pockets, red tie, black whistle/radio on cord at chest"
+  },
+  "skinTone": "#b07850",
+  "accessories": [
+   "power-plug-cable",
+   "tie",
+   "whistle on lanyard"
+  ],
+  "background": {
+   "setting": "street sidewalk with red Japanese post box, white brick wall, green hedge",
+   "palette": [
+    "#b02020",
+    "#e8e8e8",
+    "#4a8a3a",
+    "#b0b0b0"
+   ]
+  },
+  "vibe": "neighborhood police officer",
+  "confidence": "medium",
+  "notes": "Cap sits atop the TV over the antenna dome; antennas poke out either side. Could be mail carrier or police (koban officer) - red postbox in background makes postman plausible. White plug cable."
+ },
+ {
+  "id": 97,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#e8a8d0",
+   "bodyFinish": "glossy",
+   "pattern": "pastel pink-to-lilac gradient with soft dreamy rim glow",
+   "bezelColor": "#f0c0dc",
+   "antennas": "two",
+   "antennaTip": "other: pink daisy flower tips",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8d8f0",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#d8c4c4",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": null
+  },
+  "headwear": {
+   "type": "flower",
+   "color": "#e88a7a"
+  },
+  "outfit": {
+   "type": "jacket",
+   "primary": "#7aa8d8",
+   "secondary": "#f0b040",
+   "accent": null,
+   "details": "light-wash denim jacket with collar over a yellow-orange top with ruffled/scalloped neckline"
+  },
+  "skinTone": "#b0909a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "dreamy pastel bedroom: patchwork quilt and pillows, nightstand, hanging paper sun, clouds and doves on strings",
+   "palette": [
+    "#f0b080",
+    "#a0d0c0",
+    "#f8f0f0",
+    "#e8a0a0"
+   ]
+  },
+  "vibe": "dreamy daydreamer",
+  "confidence": "medium",
+  "notes": "Antenna tips are salmon-pink daisies instead of balls (antennaTip given as 'other' - schema lacks flower tip). Lilac antenna dome, lilac knobs and grille. Whole image has soft pastel/haze filter so colors are washed; skin tone is uncertain (appears mauve-grey due to filter). Lilac/white plug cable."
+ },
+ {
+  "id": 98,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#d8d8dc",
+   "bodyFinish": "matte",
+   "pattern": null,
+   "bezelColor": "#e4e4e8",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "other: hidden behind mask",
+   "knobColor": null,
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#e0e0e4",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "only the left part of the screen visible: one vertical-line eye with red blush; rest covered by a mask"
+  },
+  "headwear": {
+   "type": "other: hyottoko festival mask (pink face, black hair cap, square eyes with vertical-line pupils, pursed puckered red mouth, wrinkled brow) worn tilted over the right half of the TV",
+   "color": "#f0b8b8"
+  },
+  "outfit": {
+   "type": "kimono",
+   "primary": "#1e2a50",
+   "secondary": "#f0b030",
+   "accent": "#d04a2a",
+   "details": "navy plaid (orange/white/red check) kimono with purple collar, yellow-ochre happi/vest with multicolor polka dots (purple, blue, red, white) over it"
+  },
+  "skinTone": "#c08a68",
+  "accessories": [
+   "power-plug-cable",
+   "hyottoko mask"
+  ],
+  "background": {
+   "setting": "Japanese seigaiha wave pattern in blues with radial glow",
+   "palette": [
+    "#1a2040",
+    "#7a90d8",
+    "#d0d8f8"
+   ]
+  },
+  "vibe": "matsuri festival goer",
+  "confidence": "medium",
+  "notes": "Mask covers screen right side and side panel, so knobs/grille not visible. The mask's eyes echo the vertical-line Tamashi eyes inside white rectangles. Black plug cable."
+ },
+ {
+  "id": 99,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#b01418",
+   "bodyFinish": "glossy",
+   "pattern": "two-tone ramen bowl: glossy red top half, black bottom half",
+   "bezelColor": "#c01c20",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#1a1a1a",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#7a4020",
+   "glow": "none",
+   "eyes": "vertical-lines",
+   "eyeColor": "#111111",
+   "mouth": null,
+   "sceneDescription": "bowl of ramen as seen through glass: brown broth and noodles, nori, narutomaki, halved soft-boiled egg, chashu pork slices; eyes in the broth"
+  },
+  "headwear": null,
+  "outfit": {
+   "type": "other: black samue / cross-collar work jacket (ramen cook)",
+   "primary": "#1a1a1a",
+   "secondary": "#b01818",
+   "accent": null,
+   "details": "black wrap-collar jacket over red undershirt"
+  },
+  "skinTone": "#b07a4a",
+  "accessories": [
+   "power-plug-cable"
+  ],
+  "background": {
+   "setting": "ramen shop entrance with black wood lattice, warm backlit slats, white noren curtain",
+   "palette": [
+    "#1a1a1a",
+    "#f0c070",
+    "#d8d8d8",
+    "#5a3a1a"
+   ]
+  },
+  "vibe": "ramen shop chef",
+  "confidence": "high",
+  "notes": "Antennas look like wooden chopsticks (tan/wood brown) with ball tips; black dome. Knobs black, grille red-slatted. Tan/brown plug cable."
+ },
+ {
+  "id": 100,
+  "tv": {
+   "shape": "standard",
+   "bodyColor": "#2a2a2c",
+   "bodyFinish": "patterned",
+   "pattern": "faceted black diamond / obsidian gemstone surface with sharp polygonal reflections",
+   "bezelColor": "#1e1e20",
+   "antennas": "two",
+   "antennaTip": "ball",
+   "sidePanel": "knobs-and-grille",
+   "knobColor": "#e8a020",
+   "damage": null
+  },
+  "screen": {
+   "kind": "face",
+   "background": "#6a6a6e",
+   "glow": "soft",
+   "eyes": "vertical-lines",
+   "eyeColor": "#f0a020",
+   "mouth": null,
+   "sceneDescription": "screen shows a cut black diamond viewed from the top (faceted gem), gold vertical-line eyes on either side"
+  },
+  "headwear": {
+   "type": "crown",
+   "color": "#e8b020"
+  },
+  "outfit": {
+   "type": "suit",
+   "primary": "#1e1e1e",
+   "secondary": "#2a2440",
+   "accent": "#f0f0f0",
+   "details": "black suit, black shirt, black tie, with a dark purple velvet royal robe/cape with white fur trim over the shoulders"
+  },
+  "skinTone": "#a07a5a",
+  "accessories": [
+   "power-plug-cable",
+   "fur-trimmed royal cape"
+  ],
+  "background": {
+   "setting": "dark crimson radial vignette",
+   "palette": [
+    "#1a0404",
+    "#6a0a10",
+    "#0a0000"
+   ]
+  },
+  "vibe": "black diamond king",
+  "confidence": "high",
+  "notes": "Gold crown with purple velvet cap, jeweled band and tiny TV-head finial on top. Antenna tips are orange-gold balls. Gold knobs and gold grille. Gold plug cable with gold plug."
+ }
+]

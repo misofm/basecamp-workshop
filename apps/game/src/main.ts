@@ -7,6 +7,9 @@
  *   ui       (src/ui)     HUD, minimap, dialogs, intro (DOM only)
  *   controller (src/game/controller.ts) glues them; read it first.
  *
+ * `?gallery=1` (all 100 Tamashi in a grid) or `?gallery=<id>` (one up close next to its
+ * artwork) runs the visual-QA gallery (src/tamashi/gallery.ts) instead of the game.
+ *
  * Must not: contain game logic. If you're adding behaviour, it goes in the controller.
  */
 import "@fontsource/dm-sans/400.css";
@@ -26,27 +29,33 @@ import { GameController } from "./game/controller";
 import { installDebugHooks } from "./debug";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
-const worldHost = document.createElement("main");
-worldHost.id = "world";
-app.append(worldHost);
+const gallery = new URLSearchParams(location.search).get("gallery");
 
-const adapter = createAdapter();
-const world = new GameWorld(worldHost);
-const hud = new Hud(app);
-const minimap = new Minimap(hud.root);
-const dialogs = new Dialogs(app);
-const intro = new Intro(app, adapter.network);
+if (gallery) {
+  void import("./tamashi/gallery").then((m) => m.runGallery(app, gallery));
+} else {
+  const worldHost = document.createElement("main");
+  worldHost.id = "world";
+  app.append(worldHost);
 
-const deck = new RecordDeck();
-const controller = new GameController({
-  world,
-  adapter,
-  deck,
-  ambience: new ShopAmbience(),
-  hud,
-  minimap,
-  dialogs,
-  intro,
-});
-installDebugHooks(world, adapter, controller, deck);
-void controller.boot();
+  const adapter = createAdapter();
+  const world = new GameWorld(worldHost);
+  const hud = new Hud(app);
+  const minimap = new Minimap(hud.root);
+  const dialogs = new Dialogs(app);
+  const intro = new Intro(app, adapter.network);
+
+  const deck = new RecordDeck();
+  const controller = new GameController({
+    world,
+    adapter,
+    deck,
+    ambience: new ShopAmbience(),
+    hud,
+    minimap,
+    dialogs,
+    intro,
+  });
+  installDebugHooks(world, adapter, controller, deck);
+  void controller.boot();
+}

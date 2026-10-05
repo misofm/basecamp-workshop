@@ -7,7 +7,9 @@
  * URL params:
  *   ?chain=mock|testnet   (fallback: import.meta.env.VITE_MISO_CHAIN, then "mock")
  *   ?latency=<ms>         mock only: simulated latency per call (default 800)
- *   ?fail=purchase|sell|all  mock only: force those transactions to fail
+ *   ?fail=purchase|sell|withdraw|all  mock only: force those transactions to fail
+ *   ?fail=purchase-lost|sell-lost|withdraw-lost  mock only: they land, then the answer is
+ *                         lost (timeout message); Retry returns the earlier purchase / sale
  *   ?mockhls=1            mock only: every track streams a real testnet HLS quilt
  */
 import type { MisoAdapter } from "./adapter";
@@ -28,10 +30,11 @@ export function adapterOptionsFromUrl(search?: string): MockAdapterOptions {
     options.latencyMs = Math.max(0, Number(latency));
   }
   const fail = p.get("fail");
-  if (fail === "purchase" || fail === "sell" || fail === "withdraw" || fail === "all") {
-    options.failureMode = fail satisfies FailureMode;
+  const modes: readonly FailureMode[] = ["purchase", "sell", "withdraw", "all", "purchase-lost", "sell-lost", "withdraw-lost"];
+  if (fail !== null && (modes as readonly string[]).includes(fail)) {
+    options.failureMode = fail as FailureMode;
   } else if (fail !== null) {
-    console.warn(`[miso] ignoring ?fail=${fail} (expected purchase|sell|withdraw|all)`);
+    console.warn(`[miso] ignoring ?fail=${fail} (expected ${modes.join("|")})`);
   }
   const hls = p.get("mockhls");
   if (hls === "1" || hls === "true") options.mockHls = true;

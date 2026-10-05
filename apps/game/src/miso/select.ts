@@ -15,6 +15,7 @@
 import type { MisoAdapter } from "./adapter";
 import { MockAdapter, type FailureMode, type MockAdapterOptions } from "./mock-adapter";
 import { TestnetAdapter } from "./testnet-adapter";
+import type { PendingSalesStore } from "../app/pending-sales";
 
 function params(search?: string): URLSearchParams {
   const query = search ?? (typeof location !== "undefined" ? location.search : "");
@@ -41,12 +42,13 @@ export function adapterOptionsFromUrl(search?: string): MockAdapterOptions {
   return options;
 }
 
-export function createAdapter(search?: string): MisoAdapter {
+/** `deps.pending`: the pending-sale store handed to the TestnetAdapter (default: its own). */
+export function createAdapter(search?: string, deps: { pending?: PendingSalesStore } = {}): MisoAdapter {
   const requested =
     params(search).get("chain") ?? (import.meta.env?.VITE_MISO_CHAIN as string | undefined) ?? "mock";
   switch (requested) {
     case "testnet":
-      return new TestnetAdapter();
+      return new TestnetAdapter({ pending: deps.pending });
     case "mock":
       return new MockAdapter(adapterOptionsFromUrl(search));
     default:

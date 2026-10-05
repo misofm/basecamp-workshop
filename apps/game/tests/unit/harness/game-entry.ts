@@ -5,13 +5,17 @@
  * `window.__h` (state snapshot, stand/interact, deferreds, counters) stable.
  *
  * Real: GameController (built by app/controller.ts makeController on Chain + GameState +
- * an app Scope), Dialogs, Hud, Intro, TitleCard, MockAdapter.
+ * an app Scope, with the app's ErrorBoundary, Input and Audio code), Dialogs, Hud, Intro,
+ * TitleCard, MockAdapter.
  * Fake: the 3D world (WorldApi), RecordDeck, ShopAmbience, Minimap.
  */
 import { Effect, Exit, Scope } from "effect";
 import { makeController } from "../../../src/app/controller";
 import { makeChain } from "../../../src/app/chain";
 import { GameStateStore } from "../../../src/app/game-state";
+import { makeErrorBoundary } from "../../../src/app/boundary";
+import { makeInput } from "../../../src/app/input";
+import { makeAudio } from "../../../src/app/audio";
 import { Dialogs } from "../../../src/ui/dialogs";
 import { Hud } from "../../../src/ui/hud";
 import { Intro } from "../../../src/ui/intro";
@@ -207,18 +211,25 @@ function makeGame(opts: { latencyMs?: number; adapter?: MockAdapter } = {}) {
   /** The app scope: closing it interrupts every running flow (effect-flows.spec.ts). */
   const scope = Effect.runSync(Scope.make());
   scopes.push(scope);
+  const boundary = makeErrorBoundary((text) => hud.toast(text, { tone: "bad" }));
   const controller = Effect.runSync(
-    makeController({
-      world: world as never,
-      chain: makeChain(adapter),
-      gameState: GameStateStore.makeSync(),
-      deck: new FakeDeck() as never,
-      ambience: new FakeAmbience() as never,
-      hud,
-      minimap: new FakeMinimap() as never,
-      dialogs,
-      intro,
-      titleCard,
+    Effect.gen(function* () {
+      const audio = yield* makeAudio({ deck: new FakeDeck() as never, ambience: new FakeAmbience() as never });
+      return yield* makeController({
+        world: world as never,
+        chain: makeChain(adapter),
+        gameState: GameStateStore.makeSync(),
+        deck: audio.deck,
+        ambience: audio.ambience,
+        hud,
+        minimap: new FakeMinimap() as never,
+        dialogs,
+        intro,
+        titleCard,
+        boundary,
+        input: makeInput(boundary, scope),
+        audio,
+      });
     }).pipe(Scope.provide(scope)),
   );
   const warnings: string[] = [];

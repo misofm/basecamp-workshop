@@ -8,20 +8,21 @@
  * Must not: rethrow, or show anything on the happy path (the toast is the only new copy
  * and only appears when something is actually broken).
  */
-import { Cause } from "effect";
+import { Cause, Context, Layer } from "effect";
+import { Ui } from "./ui";
 
 /** The only new player-facing copy of the port: shown on bug paths only. */
 export const JAMMED_TOAST = "Something jammed. Try again.";
 const TOAST_INTERVAL_MS = 5000;
 
-export interface ErrorBoundary {
+export interface ErrorBoundaryApi {
   /** Log a defect with its context and (rate-limited) tell the player. Never throws. */
   report(context: string, cause: unknown): void;
   /** `fn`, except that a throw is reported and the call returns undefined. */
   guard<F extends (...args: any[]) => any>(context: string, fn: F): F;
 }
 
-export function makeErrorBoundary(toast: (text: string) => void): ErrorBoundary {
+export function makeErrorBoundary(toast: (text: string) => void): ErrorBoundaryApi {
   let lastToast = -Infinity;
   const report = (context: string, cause: unknown): void => {
     try {
@@ -48,4 +49,12 @@ export function makeErrorBoundary(toast: (text: string) => void): ErrorBoundary 
       }
     } as F;
   return { report, guard };
+}
+
+/** The app's one error boundary: toasts on the Hud. */
+export class ErrorBoundary extends Context.Service<ErrorBoundary, ErrorBoundaryApi>()("app/ErrorBoundary") {
+  static readonly layer: Layer.Layer<ErrorBoundary, never, Ui> = Layer.effect(
+    ErrorBoundary,
+    Ui.useSync(({ hud }) => makeErrorBoundary((text) => hud.toast(text, { tone: "bad" }))),
+  );
 }

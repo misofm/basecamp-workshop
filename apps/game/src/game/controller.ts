@@ -47,14 +47,14 @@ import { Cause, Effect } from "effect";
 import type { ChainApi } from "../app/chain";
 import type { ChainError } from "../app/errors";
 import type { GameStateStore } from "../app/game-state";
-import type { ErrorBoundary } from "../app/boundary";
+import type { ErrorBoundaryApi } from "../app/boundary";
 import type { MisoAdapter } from "../miso/adapter";
 import { formatAmount } from "../miso/format";
 import type { OwnedRecord, ShopRecord, Wallet } from "../miso/types";
 import type { Interactable, RecordPlace as WorldPlace, WorldAnchors, WorldApi } from "../world/api";
 import type { RecordDeck } from "../audio/deck";
 import type { ShopAmbience } from "../audio/ambience";
-import { isMuted, toggleMuted, unlockAudio } from "../audio/context";
+import { isMuted, toggleMuted } from "../audio/context";
 import * as sfx from "../audio/sfx";
 import type { Hud } from "../ui/hud";
 import type { Intro } from "../ui/intro";
@@ -157,7 +157,14 @@ export interface ControllerDeps {
    */
   run: <A>(name: string, effect: Effect.Effect<A>) => Promise<A | undefined>;
   /** App-layer error boundary (app/boundary.ts). */
-  boundary: ErrorBoundary;
+  boundary: ErrorBoundaryApi;
+  /**
+   * Add a guarded, app-scoped event listener (app/input.ts): same synchronous
+   * addEventListener as before, removed when the app scope closes.
+   */
+  listen: (target: EventTarget, type: string, handler: (e: Event) => void, options?: boolean | AddEventListenerOptions) => void;
+  /** Resume audio + start the ambience now, retrying on the next key / pointer (app/audio.ts). */
+  startAudio: () => void;
 }
 
 export class GameController {
@@ -173,7 +180,8 @@ export class GameController {
   private readonly chain: ChainApi;
   private readonly gameState: GameStateStore;
   private readonly run: ControllerDeps["run"];
-  private readonly boundary: ErrorBoundary;
+  private readonly boundary: ErrorBoundaryApi;
+  private readonly startAudio: () => void;
   private readonly deck: RecordDeck;
   private readonly ambience: ShopAmbience;
   private readonly hud: Hud;
@@ -216,6 +224,7 @@ export class GameController {
     this.gameState = deps.gameState;
     this.run = deps.run;
     this.boundary = deps.boundary;
+    this.startAudio = deps.startAudio;
     this.deck = deps.deck;
     this.ambience = deps.ambience;
     this.hud = deps.hud;
@@ -285,10 +294,8 @@ export class GameController {
       this.renderPrompt();
     });
     this.dialogs.onNavigate = guard("dialogs.onNavigate", () => sfx.uiBlip());
-    window.addEventListener(
-      "keydown",
-      guard("keydown", (e: KeyboardEvent) => this.onKey(e)),
-    );
+    // Through app/input.ts: guarded (context "keydown") and removed when the app scope closes.
+    deps.listen(window, "keydown", (e) => this.onKey(e as KeyboardEvent));
 
     this.intro.onStart = guard("intro.onStart", () => this.start());
     this.world.setBlocked(true); // until the loading screen is dismissed
@@ -342,18 +349,7 @@ export class GameController {
   private start(): void {
     if (this.started) return;
     this.started = true;
-    const unlock = () => {
-      void unlockAudio()
-        .then(() => this.ambience.start())
-        .then(() => {
-          window.removeEventListener("keydown", unlock, true);
-          window.removeEventListener("pointerdown", unlock, true);
-        })
-        .catch(() => {});
-    };
-    unlock();
-    window.addEventListener("keydown", unlock, true);
-    window.addEventListener("pointerdown", unlock, true);
+    this.startAudio();
     window.focus();
     this.hud.setVisible(true);
     this.applyUiVisibility();

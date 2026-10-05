@@ -111,6 +111,8 @@ export class Player {
   }
 
   shake(amount: number) {
+    // prefers-reduced-motion: no camera shake (smash, landing, the boom). Everything else is unchanged.
+    if (prefersReducedMotion()) return;
     this.shakeAmount = Math.max(this.shakeAmount, amount);
   }
 
@@ -452,6 +454,11 @@ export class Player {
       { passive: false },
     );
   }
+}
+
+/** The OS / browser "reduce motion" setting (read live, so toggling it applies at once). */
+export function prefersReducedMotion(): boolean {
+  return typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function angleDelta(from: number, to: number) {

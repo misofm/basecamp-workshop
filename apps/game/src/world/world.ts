@@ -32,7 +32,7 @@ import { activeBackend, adaptiveQuality, qualityTier, requestedBackend, setActiv
 import { initTextures } from "./materials";
 import { ParkedCars } from "./cars";
 import { BUYER_ID, Npcs } from "./npcs";
-import { Player } from "./player";
+import { Player, prefersReducedMotion } from "./player";
 import { RecordItems } from "./record-item";
 import { Waypoint } from "./waypoint";
 import { Atm } from "./atm";
@@ -318,21 +318,24 @@ export class GameWorld implements WorldApi {
     let sentHome = false;
     let stutterAt = -1,
       stutterLevel = BROWN_OUT;
+    const reduced = prefersReducedMotion();
     return new Promise((resolve) => {
       const step = () => {
         const t = this.elapsed - start;
         if (t < BEAT.drop) this.dim = 1 - (1 - BROWN_OUT) * (t / BEAT.drop);
         else if (t < BEAT.stutter) {
           // Dark, with one weak attempt to come back half way through.
-          this.dim = BROWN_OUT + (t > 1.05 && t < 1.13 ? 0.18 : 0);
+          this.dim = BROWN_OUT + (!reduced && t > 1.05 && t < 1.13 ? 0.18 : 0);
         } else if (t < BEAT.back) {
-          // Stutter: hold a random level for 50-110 ms, ramping up overall.
-          if (this.elapsed >= stutterAt) {
+          // Stutter: hold a random level for 50-110 ms, ramping up overall. With
+          // prefers-reduced-motion the lights come back as a smooth ramp (no flashing).
+          if (reduced) this.dim = BROWN_OUT + (1 - BROWN_OUT) * ((t - BEAT.stutter) / (BEAT.back - BEAT.stutter));
+          else if (this.elapsed >= stutterAt) {
             const k = (t - BEAT.stutter) / (BEAT.back - BEAT.stutter);
             stutterLevel = Math.random() < 0.4 + 0.4 * k ? 0.55 + 0.45 * Math.random() : BROWN_OUT + 0.15 * Math.random();
             stutterAt = this.elapsed + 0.05 + Math.random() * 0.06;
           }
-          this.dim = stutterLevel;
+          if (!reduced) this.dim = stutterLevel;
         } else this.dim = 1;
         if (!sentHome && t > 0.35) {
           sentHome = true;

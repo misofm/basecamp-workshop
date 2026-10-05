@@ -1,5 +1,7 @@
 /**
- * ATM flow: the FakeUSD ATM on the sidewalk outside the shop (the testnet faucet).
+ * ATM flow: the FakeUSD ATM in TriMart's vestibule, next door to Saisei Records (the
+ * testnet faucet). Flavour (bible §7.4 step 5, the secret-identity beat): its CRT
+ * greeting glitches on Gamer's real name before resolving to "ACCOUNT HOLDER: GAMER".
  * The only caller of `adapter.withdrawFakeUsd()`.
  *
  *   E at the ATM → "FakeUSD ATM" → Withdraw 50 FUSD
@@ -12,13 +14,14 @@
  * Works whether or not the player holds a record (it only moves money); refused
  * while any other transaction is pending (one at a time, state.ts).
  *
- * Owns: the ATM dialogs and the withdraw amount.
+ * Owns: the ATM dialogs, the CRT greeting glitch and the withdraw amount.
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
  * MisoAdapter interface.
  */
 import { formatAmount, shortId } from "../../miso/format";
 import * as sfx from "../../audio/sfx";
 import { errorBody, lineItems, paragraph, pendingBody, receiptBody } from "../../ui/dialogs";
+import { h } from "../../ui/dom";
 import { message, type FlowContext } from "./context";
 
 /** What one withdrawal dispenses: 50 FUSD (FakeUSD has 6 decimals). */
@@ -27,7 +30,11 @@ const FUSD_DECIMALS = 6;
 /** "50 FUSD" (whole dollars: the ATM only dispenses round amounts). */
 const AMOUNT_LABEL = formatAmount(ATM_WITHDRAW_AMOUNT, FUSD_DECIMALS, "FUSD", 0);
 
-const EYEBROW = "STREET ATM · FAKEUSD";
+const EYEBROW = "TRIMART VESTIBULE · ATM";
+/** The CRT greeting: glitches on the real name, then resolves (flavour only). */
+const GREETING_GLITCH = "WELCOME BACK, KA\u2592\u2592\u2592 TAKAHA\u2592\u2592";
+const GREETING = "ACCOUNT HOLDER: GAMER";
+const GLITCH_MS = 1100;
 const TITLE = "FakeUSD ATM";
 
 export class AtmFlow {
@@ -49,6 +56,7 @@ export class AtmFlow {
       eyebrow: EYEBROW,
       title: TITLE,
       body: [
+        crtGreeting(),
         paragraph(`Withdraw ${AMOUNT_LABEL} in cash.`),
         lineItems([
           ["Your balance", balance === null ? "…" : ctx.money(balance)],
@@ -121,7 +129,7 @@ export class AtmFlow {
         ],
         ctx.adapter.network === "mock" ? "Offline demo: the receipt link is just for show." : undefined,
       ),
-      actions: [{ id: "done", kind: "primary", label: "Back to the shop", run: () => ctx.dialogs.close() }],
+      actions: [{ id: "done", kind: "primary", label: "Back to the street", run: () => ctx.dialogs.close() }],
     });
     return true;
   }
@@ -143,4 +151,19 @@ export class AtmFlow {
       },
     });
   }
+}
+
+/**
+ * The ATM's CRT greeting: "WELCOME BACK, KA▒▒▒ TAKAHA▒▒" flickers, then resolves to
+ * "ACCOUNT HOLDER: GAMER" and Gamer angles the screen away. Pure flavour.
+ */
+function crtGreeting(): HTMLElement {
+  const line = h("span", { class: "atm-crt-line glitch" }, GREETING_GLITCH);
+  const aside = h("em", { class: "atm-crt-aside", hidden: true }, "(You angle the screen away.)");
+  setTimeout(() => {
+    line.textContent = GREETING;
+    line.classList.remove("glitch");
+    aside.hidden = false;
+  }, GLITCH_MS);
+  return h("div", { class: "atm-greeting" }, h("div", { class: "atm-crt", "aria-live": "polite" }, line), aside);
 }

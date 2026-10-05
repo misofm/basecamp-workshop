@@ -1,5 +1,6 @@
 /**
- * Street flow: smashing a parked car and selling to the collector (steps 5-6).
+ * Street flow: smashing the dead Triangle sedan ("car:0") and selling to Stonks, the
+ * collector at his BUYING table across the street (steps 5-6).
  *
  *   E on a car (holding a record) → dispatch smash → world.smashCar() → "STILL MINT"
  *   E on the collector → offer (1.5× shop price, npc-buyers.ts) → Sell
@@ -66,8 +67,8 @@ export class StreetFlow {
     const r = owned ? ctx.catalog.get(owned.shopRecordId) : undefined;
     if (!owned || !r) {
       const line = s.owned.length
-        ? "Got any wax? Get one of your records out (press C) and I'll make you an offer."
-        : "Got any wax? Come back with a record, I pay above shop price.";
+        ? "Got wax on you? Get one of your records out (press C). I pay above shop price."
+        : "Records! It's limited. No one's going to make any more. Bring me one, I pay above shop price.";
       ctx.hud.toast(line, { tone: "speech", speaker: COLLECTOR.name });
       return;
     }
@@ -80,10 +81,10 @@ export class StreetFlow {
         recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, "Condition: still mint"),
         lineItems([
           ["You paid", ctx.money(r.price.amount)],
-          ["Collector offers", ctx.money(npc.offer)],
+          ["Stonks offers", ctx.money(npc.offer)],
           ["Profit", `+${ctx.money(npc.offer - r.price.amount)}`],
         ]),
-        paragraph("Hand the record over and the collector pays you in FakeUSD on the spot."),
+        paragraph("Hand the record over and Stonks pays you in FakeUSD on the spot. \"Limited supply. HODL is for amateurs.\""),
       ],
       actions: [
         { id: "sell", kind: "primary", label: `Sell for ${ctx.money(npc.offer)}`, run: () => void this.sell() },
@@ -158,10 +159,10 @@ export class StreetFlow {
       key: "sell",
       tone: "pending",
       eyebrow: COLLECTOR.name.toUpperCase(),
-      title: "The collector inspects the grooves…",
+      title: "Stonks inspects the grooves…",
       body: [
         owned ? recordStrip(owned.coverUrl, owned.title, owned.artist, `#${owned.serial}/${owned.maxSupply}`) : null,
-        pendingBody("Closing the deal", "The record goes to the collector, the FakeUSD comes to you."),
+        pendingBody("Closing the deal", "The record goes to Stonks, the FakeUSD comes to you."),
       ],
       actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
     });
@@ -174,7 +175,7 @@ export class StreetFlow {
       tone: "error",
       eyebrow: "SALE FAILED",
       title: "The deal fell through.",
-      body: errorBody(error, "The collector is still keen. Give it another go."),
+      body: errorBody(error, "Stonks is still keen. Give it another go."),
       actions: [
         { id: "retry", kind: "primary", label: "Retry", run: () => void this.sell() },
         { id: "keep", label: "Keep it", run: () => ctx.dialogs.close() },

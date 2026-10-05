@@ -263,12 +263,12 @@ test("testnet full loop: ATM → buy → smash → sell (opt-in, spends testnet 
   await expect(dialog.locator(`.coll-item[data-record-id="${recordId}"]`)).toHaveCount(1, { timeout: 60_000 });
   await page.keyboard.press("Escape");
 
-  // 3. Smash a car with it.
+  // 3. Smash the dead Triangle sedan with it.
   await teleport(page, { x: 0, z: -1.6, heading: 0 });
   await page.keyboard.down("KeyW");
   await until(page, (x) => x.zone === "street", "walked out", 60_000);
   await page.keyboard.up("KeyW");
-  await goTo(page, "car:2");
+  await goTo(page, "car:0");
   await page.keyboard.press("KeyE");
   await expect(page.locator(".big-toast")).toContainText("STILL MINT", { timeout: 30_000 });
   await shot(page, "tnl-06-smash");

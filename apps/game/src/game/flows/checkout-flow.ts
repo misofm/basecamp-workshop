@@ -10,9 +10,10 @@
  *     → dispatch purchaseSuccess → receipt ("View record ↗" / "Receipt no." + "View receipt ↗")
  *   or → dispatch purchaseFail → the adapter's friendly message + Retry / Cancel
  *   Balance known and below the price? No chain call at all: "Not enough FakeUSD —
- *   the ATM outside dispenses cash." (never a silent mint).
+ *   the ATM in TriMart next door dispenses cash." (never a silent mint).
  *
- * Owns: the counter dialogs and the clerk's speech bubble status.
+ * Owns: the counter dialogs (Jazz runs the counter at Saisei Records) and the
+ * clerk's speech bubble status.
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
  * MisoAdapter interface.
  */
@@ -23,9 +24,9 @@ import { errorBody, lineItems, paragraph, pendingBody, receiptBody, recordStrip 
 import { heldOwnedRecord } from "../state";
 import { message, type FlowContext } from "./context";
 
-/** Shown when the player can't afford the held record (the ATM is outside). */
-export const NOT_ENOUGH_FAKEUSD = "Not enough FakeUSD — the ATM outside dispenses cash.";
-const ATM_HINT = "The ATM outside dispenses cash.";
+/** Shown when the player can't afford the held record (the ATM is in TriMart, next door). */
+export const NOT_ENOUGH_FAKEUSD = "Not enough FakeUSD — the ATM in TriMart next door dispenses cash.";
+const ATM_HINT = "The ATM in TriMart next door dispenses cash.";
 
 /** Point an adapter's "Not enough FakeUSD" rejection at the ATM (once). */
 export function withAtmHint(error: string): string {
@@ -45,8 +46,8 @@ export class CheckoutFlow {
     if (!s.hand) {
       const line = s.deck
         ? "Your record's still on the deck. Grab it and bring it here."
-        : "Evening. Bring me a record from the crates and I'll ring it up.";
-      ctx.hud.toast(line, { tone: "speech", speaker: "Clerk" });
+        : "Saisei. Means playback. Also means starting over. Bring me a record from the crates.";
+      ctx.hud.toast(line, { tone: "speech", speaker: "Jazz" });
       return;
     }
     const r = ctx.catalog.get(s.hand.shopRecordId);
@@ -173,7 +174,7 @@ export class CheckoutFlow {
       title: "Ringing it up…",
       body: [
         r ? recordStrip(r.coverUrl, r.title, r.artist, ctx.money(r.price.amount)) : null,
-        pendingBody("Ringing it up", "The clerk's putting your payment through. You can close this; the counter keeps working."),
+        pendingBody("Ringing it up", "Jazz is putting your payment through. You can close this; the counter keeps working."),
       ],
       actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
     });

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import {
+  canGoHome,
   canLeaveShop,
   initialState,
   recordPlace,
@@ -99,7 +100,7 @@ test("full happy path: pick, deck, play, take, buy, smash, sell", () => {
   ]);
   expect(s.balance).toBe(108_000_000n);
   expect(recordPlace(s, "low-tide-tapes")).toBe("npc");
-  expect(objective(s).text).toContain("Press C");
+  expect(objective(s).text).toMatch(/^Job done\..*C: collection/);
 });
 
 test("can't leave the shop holding unpaid stock", () => {
@@ -322,13 +323,13 @@ test("objective: short on FakeUSD points at the ATM", () => {
   expect(objective(base).target).toBe("shop-door");
   // Empty-handed and below the cheapest price (8.00).
   const broke = transition(base, { type: "walletLoaded", balance: 7_999_999n });
-  expect(objective(broke)).toEqual({ text: "Short on FakeUSD. Hit the ATM outside the shop.", target: "atm" });
+  expect(objective(broke)).toEqual({ text: "Short on FakeUSD. Hit the ATM in TriMart, next door.", target: "atm" });
   // Exactly the cheapest price is enough.
   expect(objective(transition(base, { type: "walletLoaded", balance: 8_000_000n })).target).toBe("shop-door");
   // Holding an unpaid record: compared with that record's price.
   const holding = run(base, { type: "setZone", zone: "shop" }, { type: "walletLoaded", balance: 10_000_000n }, { type: "pick", shopRecordId: "big-one" });
   // Unpaid stock can't leave the shop, so the mission says to put it back first.
-  expect(objective(holding)).toEqual({ text: "Short on FakeUSD. Put it back (I), then hit the ATM outside.", target: null });
+  expect(objective(holding)).toEqual({ text: "Short on FakeUSD. Put it back (I), then hit the ATM in TriMart.", target: null });
   const affordable = transition(holding, { type: "pick", shopRecordId: "kindling" });
   expect(objective(affordable).target).toBe("deck");
   // After a withdrawal the normal loop resumes.
@@ -345,4 +346,56 @@ test("objective: short on FakeUSD points at the ATM", () => {
   expect(objective(owning).target).toBe("car"); // on the street, owned Record in hand
   // Prices unknown (catalog not loaded): no nag.
   expect(objective(run(initialState(), { type: "walletLoaded", balance: 0n })).target).toBe("shop-door");
+});
+
+// ------------------------------------------------------------- exit beat / goHome
+
+/** Bought low-tide-tapes, smashed the sedan, sold it to Stonks (empty-handed, on the street). */
+function soldState(): GameState {
+  return run(
+    boughtState(),
+    { type: "setZone", zone: "street" },
+    { type: "smash", carId: "car:0" },
+    { type: "sellStart", npcId: "buyer:collector" },
+    { type: "sellSuccess", paid: 18_000_000n, digest: "S1", balance: 106_000_000n },
+  );
+}
+
+test("goHome: refused before any sale (same object back)", () => {
+  const fresh = initialState();
+  expect(canGoHome(fresh)).toBe(false);
+  expect(transition(fresh, { type: "goHome" })).toBe(fresh);
+  const bought = boughtState();
+  expect(transition(bought, { type: "goHome" })).toBe(bought);
+  expect(fresh.wentHome).toBe(false);
+});
+
+test("goHome: after a sale → wentHome, objective walks you home, then reads Home", () => {
+  const sold = soldState();
+  expect(sold.wentHome).toBe(false);
+  expect(canGoHome(sold)).toBe(true);
+  expect(objective(sold)).toEqual({ text: "Job done. Head home with Inicio: hotel door, west end. (C: collection)", target: "home" });
+  const home = transition(sold, { type: "goHome" });
+  expect(home).not.toBe(sold);
+  expect(home.wentHome).toBe(true);
+  expect(canGoHome(home)).toBe(false);
+  expect(objective(home)).toEqual({ text: "Home. Press H to reset the demo.", target: null });
+  // Only once.
+  expect(transition(home, { type: "goHome" })).toBe(home);
+  // Reset starts over.
+  expect(transition(home, { type: "reset" }).wentHome).toBe(false);
+});
+
+test("goHome: never while an op is pending; an errored op does not block it", () => {
+  const pending = transition(soldState(), { type: "withdrawStart" });
+  expect(canGoHome(pending)).toBe(false);
+  expect(transition(pending, { type: "goHome" })).toBe(pending);
+  const failed = transition(pending, { type: "withdrawFail", error: "down" });
+  expect(transition(failed, { type: "goHome" }).wentHome).toBe(true);
+});
+
+test("goHome: the loop keeps working afterwards (pick another record)", () => {
+  const home = run(soldState(), { type: "goHome" }, { type: "setZone", zone: "shop" }, { type: "pick", shopRecordId: "kindling" });
+  expect(home.hand).toEqual({ shopRecordId: "kindling", recordId: null });
+  expect(objective(home).target).toBe("deck");
 });

@@ -1,7 +1,8 @@
 /**
  * Shop flow: browsing the crates and the listening deck (steps 2-3 of the loop).
  *
- * Owns: the record menu (pick up / swap / sold out), the "in your hands" inspect
+ * Owns: the record menu (pick up / swap / sold out, plus Jazz's one-line note on the
+ * section, jazz-notes.ts), the "in your hands" inspect
  * screen (put back / put away) and the deck menu (place, drop the needle, next
  * track, lift, take back, swap). Each button dispatches one state action.
  * Must not: call the adapter or start audio directly. Playback follows
@@ -11,6 +12,8 @@ import type { ShopRecord } from "../../miso/types";
 import * as sfx from "../../audio/sfx";
 import { paragraph, recordBody, recordStrip, type DialogAction, type RecordView } from "../../ui/dialogs";
 import { canPick, handLocked, heldIsOwned, heldOwnedRecord, recordPlace } from "../state";
+import { h } from "../../ui/dom";
+import { jazzNote } from "../jazz-notes";
 import type { FlowContext } from "./context";
 
 export class ShopFlow {
@@ -51,7 +54,7 @@ export class ShopFlow {
       wide: true,
       eyebrow: `FROM THE CRATES · ${r.section}`,
       title: r.title,
-      body: recordBody(this.recordView(r)),
+      body: [recordBody(this.recordView(r)), jazzLine(r.section)],
       actions,
     });
   }
@@ -205,4 +208,10 @@ export class ShopFlow {
       status,
     };
   }
+}
+
+/** "JAZZ: “…”" under the record, or null for a section Jazz has no line for. */
+function jazzLine(section: string): HTMLElement | null {
+  const note = jazzNote(section);
+  return note ? h("p", { class: "dlg-p jazz-note" }, h("b", null, "JAZZ: "), `\u201c${note}\u201d`) : null;
 }

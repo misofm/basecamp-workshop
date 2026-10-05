@@ -33,7 +33,7 @@ export interface NowPlaying {
 
 export interface ToastOptions {
   tone?: "info" | "good" | "bad" | "speech";
-  /** Speaker name for speech toasts ("Clerk", "The Collector"). */
+  /** Speaker name for speech toasts ("Jazz", "Stonks"). */
   speaker?: string;
   link?: { href: string; label: string };
   durationMs?: number;

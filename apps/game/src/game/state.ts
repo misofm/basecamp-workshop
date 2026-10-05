@@ -92,6 +92,8 @@ export interface GameState {
   op: PendingOp | null;
   zone: Zone;
   lastReceipt: Receipt | null;
+  /** The exit beat happened: Gamer took Inicio home after a sale (bible §7.4). */
+  wentHome: boolean;
 }
 
 export type LoadKind = "catalog" | "wallet" | "collection";
@@ -135,6 +137,8 @@ export type GameAction =
   | { type: "smash"; carId: string }
   | { type: "setZone"; zone: Zone }
   | { type: "dismissError" }
+  /** Exit beat: head home with Inicio (only after a sale, nothing pending, once). */
+  | { type: "goHome" }
   | { type: "reset" };
 
 export const initialState = (): GameState => ({
@@ -151,6 +155,7 @@ export const initialState = (): GameState => ({
   op: null,
   zone: "street",
   lastReceipt: null,
+  wentHome: false,
 });
 
 // ---------------------------------------------------------------- selectors
@@ -196,6 +201,9 @@ export function canPick(state: GameState, shopRecordId: string): boolean {
     recordPlace(state, shopRecordId) === "shelf"
   );
 }
+
+/** May the player head home (exit beat)? After a sale, nothing pending, not already home. */
+export const canGoHome = (state: GameState): boolean => state.sold.length > 0 && !isBusy(state) && !state.wentHome;
 
 /** May a new op start? (Nothing pending; a previous error may be replaced.) */
 const canStartOp = (state: GameState): boolean => !isBusy(state);
@@ -373,6 +381,9 @@ export function transition(state: GameState, action: GameAction): GameState {
 
     case "dismissError":
       return state.op?.status === "error" ? { ...state, op: null } : state;
+
+    case "goHome":
+      return canGoHome(state) ? { ...state, wentHome: true } : state;
 
     case "reset":
       return initialState();

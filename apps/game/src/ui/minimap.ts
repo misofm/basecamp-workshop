@@ -1,9 +1,10 @@
 /**
  * GTA-style circular minimap (bottom-left), drawn on a <canvas>.
  *
- * Owns: drawing a MapSnapshot: roads, buildings, the highlighted shop, blips
- * (deck ♪, cashier $, collector ★, FakeUSD ATM ¤, parked cars, traffic, pedestrians), the player
- * arrow and the waypoint (edge-clamped arrow when it is off the map).
+ * Owns: drawing a MapSnapshot: roads, buildings, the highlighted shop (Saisei Records),
+ * blips (deck ♪, counter $, Stonks ★, the ATM ¤ in TriMart, the hotel door ⌂ once the
+ * exit beat is open, the dead sedan, pedestrians), the player arrow and the waypoint
+ * (edge-clamped arrow when it is off the map). Nothing drives any more: no traffic.
  * Must not: contain game logic or call the world. The controller hands it a
  * snapshot; draw() throttles itself to ≤ 30 Hz.
  *
@@ -26,7 +27,6 @@ const COLORS = {
   buildingEdge: "#a4b2ac",
   shop: "#e7a64f",
   shopEdge: "#ffe2a8",
-  traffic: "#c9d3d8",
   pedestrian: "#e8e3d4",
   car: "#ff6b5b",
   carSmashed: "#5b6366",
@@ -79,7 +79,6 @@ export class Minimap {
     ctx.drawImage(this.staticLayer!, sx(b.minX), sy(b.minZ), (b.maxX - b.minX) * PX_PER_M, (b.maxZ - b.minZ) * PX_PER_M);
 
     for (const p of snapshot.pedestrians) dot(ctx, sx(p.x), sy(p.z), 2.2, COLORS.pedestrian);
-    for (const c of snapshot.cars) dot(ctx, sx(c.x), sy(c.z), 3, COLORS.traffic);
 
     for (const point of snapshot.points) {
       const x = sx(point.x),
@@ -96,6 +95,9 @@ export class Minimap {
           break;
         case "atm":
           blip(ctx, x, y, "¤", "#2b8fd6");
+          break;
+        case "home":
+          if (point.enabled) blip(ctx, x, y, "⌂", "#c0567a");
           break;
         case "car":
           carBlip(ctx, x, y, point.enabled ? COLORS.car : COLORS.carSmashed);
@@ -216,7 +218,7 @@ export class Minimap {
     c.font = `700 ${11 * this.dpr}px "Space Grotesk", sans-serif`;
     c.textAlign = "center";
     c.textBaseline = "middle";
-    c.fillText("RECORDS", x + w / 2, y + d / 2);
+    c.fillText("SAISEI", x + w / 2, y + d / 2);
     this.staticLayer = layer;
     this.staticBounds = { ...b };
   }

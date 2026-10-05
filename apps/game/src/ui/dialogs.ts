@@ -368,8 +368,8 @@ export function helpBody(): HTMLElement {
   return h(
     "div",
     { class: "help" },
-    h("ol", { class: "help-loop" }, ...["Pick a record from the crates", "Spin it on the listening deck", "Buy it at the counter", "Smash a parked car with it", "Sell it to the collector"].map((t) => h("li", null, t))),
-    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM outside the shop dispenses cash."),
+    h("ol", { class: "help-loop" }, ...["Pick a record from the crates at Saisei Records", "Spin it on the listening deck", "Pay Jazz at the counter", "Smash the dead Triangle sedan with it", "Sell it to Stonks across the street", "Head home with Inicio"].map((t) => h("li", null, t))),
+    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM in TriMart, next door, dispenses cash."),
     h("dl", { class: "help-keys" }, ...rows.flatMap(([k, v]) => [h("dt", null, h("kbd", null, k)), h("dd", null, v)])),
   );
 }

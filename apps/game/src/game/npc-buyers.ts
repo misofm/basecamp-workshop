@@ -1,8 +1,8 @@
 /**
  * Street NPCs who buy Records from the player. PURE data + arithmetic.
  *
- * Owns: who the collector is (name, id, a deterministic FAKE Sui address) and
- * what they pay (1.5x the shop price: "I pay above shop price").
+ * Owns: who the collector is (Stonks, at his BUYING table across the street: name,
+ * id, a deterministic FAKE Sui address) and what they pay (1.5x the shop price: "I pay above shop price").
  * Must not: talk to the chain, render, or hold state. The controller builds an
  * NpcBuyer with `buyerFor()` and hands it to `adapter.sellToNpc()`.
  */
@@ -21,7 +21,7 @@ export interface BuyerProfile {
 
 export const COLLECTOR: BuyerProfile = {
   id: "buyer:collector",
-  name: "The Collector",
+  name: "Stonks",
   address: "0xc011ec7024000000000000000000000000000000000000000000000000000a11",
   offerNumerator: 3n,
   offerDenominator: 2n,

@@ -6,13 +6,15 @@
 import { expect, test } from "@playwright/test";
 import { chooseAction, goTo, pageErrors, shot, startGame, state, teleport, until } from "./helpers";
 
-const RECORD = "low-tide-tapes"; // 12.00 FUSD in the mock catalog → collector pays 18.00
-const CAR = "car:2";
+const RECORD = "low-tide-tapes"; // 12.00 FUSD in the mock catalog → Stonks pays 18.00
+const CAR = "car:0"; // the dead Triangle sedan across the street
+/** On the north sidewalk in front of Saisei Records, facing its door. */
+const SHOP_FRONT = { x: 0, z: 1.8, heading: Math.PI };
 
-test("full loop: ATM → shop → deck → buy → smash → sell → collection", async ({ page }) => {
+test("full loop: ATM → shop → deck → buy → smash → sell → collection → home", async ({ page }) => {
   await startGame(page, "?chain=mock&latency=400", "01-intro");
 
-  // 1. Spawn on the street.
+  // 1. Spawn at the hotel side door, west end of the street.
   let s = await state(page);
   expect(s.zone).toBe("street");
   expect(s.balance).toBe("100000000");
@@ -23,20 +25,24 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await expect(page.locator("#hud .controls")).toContainText("Space");
   expect(await page.locator("#hud").innerText()).not.toMatch(/\b(sui|chain|testnet|wallet|digest)\b/i);
   await page.waitForTimeout(600);
-  await shot(page, "02-street-spawn"); // the FakeUSD ATM is in view, left of the door
+  await shot(page, "02-street-spawn"); // looking east down the street towards Saisei Records
 
   // 1a. Jump (Space). Implemented in the world; just exercise it and take a picture.
   await page.evaluate(() => (window as any).__game.world.player.jump?.());
   await page.waitForTimeout(250);
   await shot(page, "02a-jump");
 
-  // 1b. The FakeUSD ATM outside the shop: withdraw 50 FUSD (mock faucet under the hood).
+  // 1b. The ATM in TriMart's vestibule, next door: withdraw 50 FUSD (mock faucet under the hood).
   const dialog = page.locator("dialog.dlg[open]");
   await goTo(page, "atm");
   await expect(page.locator(".prompt-label")).toHaveText("Withdraw FakeUSD");
   await page.keyboard.press("KeyE");
   await expect(dialog.locator(".dlg-title")).toHaveText("FakeUSD ATM");
   await expect(dialog).toContainText("Withdraw 50 FUSD in cash.");
+  // The CRT greeting glitches on Gamer's real name, then resolves (flavour only).
+  await expect(dialog.locator(".atm-crt")).toHaveText("ACCOUNT HOLDER: GAMER", { timeout: 5000 });
+  await expect(dialog.locator(".atm-crt-aside")).toHaveText("(You angle the screen away.)");
+  expect(await dialog.innerText()).not.toMatch(/\b(sui|chain|testnet|wallet|digest|object|explorer|faucet|gas)\b/i);
   await expect(dialog.locator(".dlg-action:focus .dlg-action-label")).toHaveText("Withdraw 50 FUSD");
   await shot(page, "02b-atm-menu");
   await page.keyboard.press("Enter"); // Withdraw
@@ -54,9 +60,9 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await shot(page, "02c-atm-receipt");
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
-  await teleport(page, { x: 0, z: 3.4, heading: Math.PI }); // back to the spawn, facing the door
+  await teleport(page, SHOP_FRONT); // in front of Saisei Records, facing the door
 
-  // 2. Real keyboard walk through the door (spawn faces the door).
+  // 2. Real keyboard walk through the door.
   await page.keyboard.down("KeyW");
   await until(page, (x) => x.zone === "shop", "walked into the shop", 40_000);
   await page.waitForTimeout(700);
@@ -70,6 +76,7 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await expect(dialog.locator(".dlg-title")).toHaveText("Low Tide Tapes");
   await expect(dialog.locator(".rec-edition-row")).toContainText("105 / 250 sold");
   await expect(dialog.locator(".rec-price")).toHaveText("12.00 FUSD");
+  await expect(dialog.locator(".jazz-note")).toHaveText(/^JAZZ: “.+”$/); // Jazz's line on the section
   await shot(page, "04-record-menu");
   await page.keyboard.press("Enter"); // "Pick up" is focused
   s = await until(page, (x) => x.hand?.shopRecordId === RECORD, "picked up");
@@ -162,9 +169,11 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect(s.smashedCars).toContain(CAR);
   expect(await page.evaluate((id) => (window as any).__game.world.getInteractable(id).enabled, CAR)).toBe(false);
 
-  // 9. Sell to the collector.
+  // 9. Sell to Stonks at his BUYING table across the street.
   await goTo(page, "buyer:collector");
+  await expect(page.locator(".prompt-label")).toHaveText("Sell to Stonks");
   await page.keyboard.press("KeyE");
+  await expect(dialog.locator(".dlg-eyebrow")).toHaveText("STONKS");
   await expect(dialog.locator(".dlg-title")).toHaveText("Sell Low Tide Tapes for 18.00 FUSD?");
   await shot(page, "13-buyer-offer");
   await page.keyboard.press("Enter");
@@ -193,12 +202,31 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await shot(page, "17-help");
   await page.keyboard.press("Escape");
 
-  // 11. Repeatable demo: ~20 s after the sale the collector walks back to the spot and
+  // 10b. Exit beat: head home with Inicio → the boom → title card → "Home."
+  await expect(page.locator(".mission-text")).toHaveText(/Head home with Inicio/);
+  await goTo(page, "home");
+  await expect(page.locator(".prompt-label")).toHaveText("Head home with Inicio");
+  await page.keyboard.press("KeyE");
+  const card = page.locator(".title-card");
+  await expect(card).toBeVisible({ timeout: 20_000 });
+  await expect(card).toContainText("Dawn of the Machin");
+  await expect(card).toContainText("Tamashi and Nozomi © Studio Mirai");
+  expect(await page.evaluate(() => (window as any).__game.state().wentHome)).toBe(true);
+  await page.waitForTimeout(1700); // fade-in
+  await shot(page, "17b-title-card");
+  await page.keyboard.press("Escape");
+  await expect(card).toHaveCount(0);
+  await expect(page.locator(".mission-text")).toHaveText(/Home/);
+  await expect(page.locator(".mission-text")).toHaveText(/Press H to reset/);
+  // Still free to walk, and the door is closed again.
+  expect(await page.evaluate(() => (window as any).__game.world.getInteractable("home").enabled)).toBe(false);
+
+  // 11. Repeatable demo: ~20 s after the sale Stonks walks back to the spot and
   // the sold release is back on the shelf (no reload needed for a second run).
   await page.waitForFunction(() => (window as any).__game.state().buyerAway === null, null, { timeout: 60_000 });
   await page.waitForFunction(() => (window as any).__game.world.getInteractable("buyer:collector").enabled, null, { timeout: 300_000 });
   await goTo(page, "buyer:collector");
-  await expect(page.locator(".prompt-label")).toHaveText("Talk to the collector");
+  await expect(page.locator(".prompt-label")).toHaveText("Talk to Stonks");
   await page.waitForTimeout(800);
   await shot(page, "18-collector-returned");
 
@@ -234,7 +262,7 @@ test("purchase failure shows Retry; retry succeeds once the chain recovers; sell
   await page.keyboard.press("Escape");
 
   // Sell: fail once, then Retry succeeds.
-  await teleport(page, { x: 3, z: 3.2, heading: 0 });
+  await teleport(page, SHOP_FRONT);
   await until(page, (x) => x.zone === "street", "outside");
   await goTo(page, "buyer:collector");
   await page.evaluate(() => (window as any).__game.failNext("sell"));

@@ -8,17 +8,20 @@
  *                      └─► audio: deck preview, sfx, ambience     └─► ui: HUD, minimap, dialogs
  *
  * The loop, step by step (objectives.ts holds the mission text for each step):
- *   1. Spawn on the street → walk into the shop (door chime, ambience fades indoors).
+ *   1. Spawn at the hotel side door (west end) → walk east to Saisei Records (door chime,
+ *      ambience fades indoors; fire / diner / band / vending mixed by distance every frame).
  *   2. E on a record → record menu → "Pick up"            dispatch pick
  *   3. E on the deck → place / drop needle / next / lift   placeOnDeck, play … (RecordDeck streams 30 s)
- *   4. E at the cashier → summary → Pay                     purchaseStart → adapter.purchase()
+ *   4. E at the counter (Jazz) → summary → Pay              purchaseStart → adapter.purchase()
  *        → purchaseSuccess (receipt: Record id + explorer links) | purchaseFail (Retry / Cancel)
  *      Unpaid stock can't leave: world.setExitBlocked(!canLeaveShop) + "Oi! Pay for that first."
- *   5. Outside, E on a parked car while holding the record   smash → world.smashCar() → "STILL MINT"
- *   6. E on the collector → offer (1.5× shop price)         sellStart → adapter.sellToNpc()
+ *   5. Outside, E on the dead Triangle sedan ("car:0") with the record   smash → world.smashCar() → "STILL MINT"
+ *   6. E on Stonks (BUYING table) → offer (1.5× shop price) sellStart → adapter.sellToNpc()
  *        → sellSuccess (buyer walks off with it, cash counts up) | sellFail (Retry)
  *   7. C → collection, read back from the chain via adapter.listOwnedRecords().
- *   Any time: E at the FakeUSD ATM outside → Withdraw 50 FUSD   withdrawStart → adapter.withdrawFakeUsd()
+ *   Exit beat (after a sale): E at the hotel door → goHome → sfx.boom() + world.homeBeat()
+ *      → iron footsteps → title card "Book 3 — Dawn of the Machin" → "Home." (H → Reset demo)
+ *   Any time: E at the ATM in TriMart → Withdraw 50 FUSD   withdrawStart → adapter.withdrawFakeUsd()
  *        → withdrawSuccess (receipt, cash counts up) | withdrawFail (Retry / Cancel)
  *   ~20 s after a sale the collector walks back (buyerReturned), so the loop can rerun.
  *
@@ -29,7 +32,8 @@
  *   flows/checkout-flow.ts    cashier: pay → pending → receipt | error   (step 4)
  *   flows/street-flow.ts      smash a car, sell to the collector, return (steps 5-6)
  *   flows/collection-flow.ts  C collection, H help + "Reset demo"        (step 7)
- *   flows/atm-flow.ts         the street ATM: withdraw FakeUSD from the faucet
+ *   flows/atm-flow.ts         the ATM in TriMart's vestibule: withdraw FakeUSD from the faucet
+ *   goHome() (this file)      the exit beat; ui/title-card.ts draws the card
  *
  * Rules this file follows:
  *  - Every adapter call: dispatch xStart → pending UI → await → xSuccess / xFail.
@@ -50,10 +54,12 @@ import * as sfx from "../audio/sfx";
 import type { Hud } from "../ui/hud";
 import type { Minimap } from "../ui/minimap";
 import type { Intro } from "../ui/intro";
+import type { TitleCard } from "../ui/title-card";
 import type { Dialogs } from "../ui/dialogs";
 import { objective } from "./objectives";
 import { COLLECTOR } from "./npc-buyers";
 import {
+  canGoHome,
   canLeaveShop,
   heldIsOwned,
   heldIsUnpaid,
@@ -74,6 +80,27 @@ import { AtmFlow } from "./flows/atm-flow";
 /** Hide the waypoint once the player is this close to it (metres). */
 const WAYPOINT_HIDE_DISTANCE = 2.5;
 const FUSD_SYMBOL = "FUSD";
+/** The exit beat's interactable (the hotel side door). */
+const HOME_ID = "home";
+/** Iron footsteps start this long after the boom (ms). */
+const FOOTSTEPS_DELAY_MS = 1000;
+/** The title card shows once the brown-out is over, or after this long at the latest (ms). */
+const HOME_BEAT_MAX_WAIT_MS = 3500;
+
+/** Ambience falloff: full at ≤ NEAR m from a source, silent at `far` m (smoothstep). */
+const SOUND_NEAR = 4;
+const SOUND_FAR = { fire: 30, band: 30, diner: 18, vending: 18 } as const;
+type SoundLevels = { fire: number; diner: number; band: number; vending: number; street: number };
+
+/**
+ * Audio calls that the audio layer is adding concurrently (sfx.boom, sfx.ironFootsteps,
+ * ShopAmbience.setSources). Called through optional guards so this compiles either way.
+ */
+
+function falloff(distance: number, far: number): number {
+  const t = Math.min(1, Math.max(0, (far - distance) / (far - SOUND_NEAR)));
+  return t * t * (3 - 2 * t);
+}
 
 export interface ControllerDeps {
   world: WorldApi & { anchors: WorldAnchors };
@@ -84,6 +111,7 @@ export interface ControllerDeps {
   minimap: Minimap;
   dialogs: Dialogs;
   intro: Intro;
+  titleCard: TitleCard;
 }
 
 export class GameController {
@@ -101,6 +129,7 @@ export class GameController {
   private readonly minimap: Minimap;
   private readonly dialogs: Dialogs;
   private readonly intro: Intro;
+  private readonly titleCard: TitleCard;
 
   private catalog = new Map<string, ShopRecord>();
   private wallet: Wallet | null = null;
@@ -114,6 +143,11 @@ export class GameController {
   private lastMove = { x: 0, z: 0, t: 0 };
   private outdoors = 1;
   private exitBlocked = false;
+  /** What the world currently has for the "home" interactable. */
+  private homeEnabled = false;
+  /** True from the boom until the title card is dismissed (input frozen, no prompt). */
+  private homeBeatRunning = false;
+  private soundLevels: SoundLevels = { fire: 0, diner: 0, band: 0, vending: 0, street: 1 };
 
   // Per-station flows (./flows/*), sharing one FlowContext.
   private readonly shop: ShopFlow;
@@ -131,6 +165,7 @@ export class GameController {
     this.minimap = deps.minimap;
     this.dialogs = deps.dialogs;
     this.intro = deps.intro;
+    this.titleCard = deps.titleCard;
 
     // What the flows may touch (see flows/context.ts).
     const ctx: FlowContext = {
@@ -164,7 +199,7 @@ export class GameController {
       if (zone === "shop") this.ambience.chime();
     };
     this.world.onExitBlockedBump = () => {
-      this.hud.toast("Oi! Pay for that first.", { tone: "speech", speaker: "Clerk" });
+      this.hud.toast("Oi! Pay for that first.", { tone: "speech", speaker: "Jazz" });
       sfx.error();
     };
 
@@ -181,8 +216,8 @@ export class GameController {
     };
 
     // UI events.
-    this.dialogs.onOpenChange = (open) => {
-      this.world.setBlocked(open || this.intro.isOpen);
+    this.dialogs.onOpenChange = () => {
+      this.syncBlocked();
       this.renderPrompt();
     };
     this.dialogs.onNavigate = () => sfx.uiBlip();
@@ -233,9 +268,9 @@ export class GameController {
     void unlockAudio().catch(() => {});
     void this.ambience.start().catch(() => {});
     this.hud.setVisible(true);
-    this.world.setBlocked(this.dialogs.openKey !== null);
+    this.syncBlocked();
     this.render();
-    this.hud.missionToast("MISO RECORDS", "after hours", "info", 2200);
+    this.hud.missionToast("NOZOMI", "Book 3 — As The World Shook", "info", 2200);
   }
 
   // ═══════════════════════════════ state ═══════════════════════════════
@@ -267,6 +302,12 @@ export class GameController {
     if (blocked !== this.exitBlocked) {
       this.exitBlocked = blocked;
       this.world.setExitBlocked(blocked);
+    }
+    // Exit beat: the hotel door opens up after a sale (state.ts canGoHome).
+    const home = canGoHome(s) && !this.homeBeatRunning;
+    if (home !== this.homeEnabled) {
+      this.homeEnabled = home;
+      this.world.setInteractableEnabled(HOME_ID, home);
     }
     this.world.setDeckPlaying(s.playing !== null);
     this.ambience.setPlaying(s.playing !== null);
@@ -338,7 +379,7 @@ export class GameController {
 
   private renderPrompt(): void {
     const t = this.near;
-    const hidden = !this.started || !t || this.dialogs.openKey !== null || this.street.smashing;
+    const hidden = !this.started || !t || this.dialogs.openKey !== null || this.street.smashing || this.homeBeatRunning;
     this.hud.setPrompt(hidden ? null : this.promptFor(t));
   }
 
@@ -355,13 +396,15 @@ export class GameController {
         if (s.deck) return "Use the deck";
         return s.hand ? "Put it on the deck" : "Listening deck";
       case "cashier":
-        return heldIsUnpaid(s) ? "Pay at the counter" : "Talk to the clerk";
+        return heldIsUnpaid(s) ? "Pay Jazz at the counter" : "Talk to Jazz";
       case "car":
-        return s.hand ? "Smash" : "Nice car";
+        return s.hand ? "Smash" : "Dead Triangle sedan";
       case "buyer":
-        return heldIsOwned(s) ? "Sell to the collector" : "Talk to the collector";
+        return heldIsOwned(s) ? "Sell to Stonks" : "Talk to Stonks";
       case "atm":
         return "Withdraw FakeUSD";
+      case "home":
+        return "Head home with Inicio";
     }
   }
 
@@ -382,9 +425,35 @@ export class GameController {
       this.outdoors = outdoors;
       this.ambience.setOutdoors(outdoors);
     }
+    this.updateSoundSources(x, z);
 
     this.updateWaypoint();
     if (this.started) this.minimap.draw(() => this.world.mapSnapshot());
+  }
+
+  /**
+   * Ambience mix by distance to the fixed sources (layout.ts SOUND_SOURCES via
+   * world.anchors.sounds): fire and band carry ~30 m, diner and vending ~18 m. Inside
+   * the shop everything outdoors is muffled with the street bed. The band falls silent
+   * after the boom (exit beat).
+   */
+  private updateSoundSources(x: number, z: number): void {
+    const src = this.world.anchors.sounds;
+    if (!src) return;
+    const out = this.outdoors;
+    const level = (p: { x: number; z: number }, far: number) => falloff(Math.hypot(p.x - x, p.z - z), far) * out;
+    const next: SoundLevels = {
+      fire: level(src.fire, SOUND_FAR.fire),
+      diner: level(src.diner, SOUND_FAR.diner),
+      band: this.state.wentHome ? 0 : level(src.band, SOUND_FAR.band),
+      vending: level(src.vending, SOUND_FAR.vending),
+      street: out,
+    };
+    const prev = this.soundLevels;
+    const changed = (Object.keys(next) as (keyof SoundLevels)[]).some((k) => Math.abs(next[k] - prev[k]) > 0.01);
+    if (!changed) return;
+    this.soundLevels = next;
+    this.ambience.setSources(next);
   }
 
   /** Waypoint = the objective's target, hidden when the player is already there. */
@@ -400,6 +469,9 @@ export class GameController {
       case "cashier":
       case "atm":
         pos = this.world.getInteractable(target) ?? null;
+        break;
+      case "home":
+        pos = this.world.anchors.homeDoor ?? this.world.getInteractable(HOME_ID) ?? null;
         break;
       case "buyer": {
         const buyer = this.world.getInteractable(COLLECTOR.id);
@@ -453,7 +525,45 @@ export class GameController {
       case "atm":
         this.atm.openAtm();
         break;
+      case "home":
+        void this.goHome();
+        break;
     }
+  }
+
+  /**
+   * The exit beat (bible §7.4): Gamer heads home with Inicio. The boom from the
+   * facility (sfx + world.homeBeat: camera shake, brown-out), iron footsteps a second
+   * later, then the "Book 3 — Dawn of the Machin" title card. Afterwards the player is
+   * free to walk; the mission reads "Home. Press H to reset the demo."
+   * Refused (no-op) before a sale, while anything is pending, or when already home.
+   */
+  async goHome(): Promise<void> {
+    if (this.homeBeatRunning || !this.dispatch({ type: "goHome" })) return;
+    this.homeBeatRunning = true;
+    this.render(); // disables the door, hides the prompt
+    this.syncBlocked();
+    try {
+      sfx.boom();
+      setTimeout(() => sfx.ironFootsteps(), FOOTSTEPS_DELAY_MS);
+      // The card follows the brown-out, but never waits on a slow renderer for long
+      // (homeBeat runs on frame time; at a few fps it would take many seconds).
+      const beat = this.world.homeBeat().catch(() => {});
+      await Promise.all([
+        Promise.race([beat, new Promise((resolve) => setTimeout(resolve, HOME_BEAT_MAX_WAIT_MS))]),
+        new Promise((resolve) => setTimeout(resolve, FOOTSTEPS_DELAY_MS + 200)),
+      ]);
+      await this.titleCard.show();
+    } finally {
+      this.homeBeatRunning = false;
+      this.syncBlocked();
+      this.render();
+    }
+  }
+
+  /** Freeze player input while the intro, a dialog, or the exit beat / title card is up. */
+  private syncBlocked(): void {
+    this.world.setBlocked(this.intro.isOpen || this.dialogs.openKey !== null || this.homeBeatRunning || this.titleCard.isOpen);
   }
 
   /** Buy the held unpaid record (checkout flow). Safe to call again as Retry. */

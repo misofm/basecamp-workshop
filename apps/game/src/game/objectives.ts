@@ -2,17 +2,19 @@
  * Mission text for the HUD, GTA style. PURE: derived from GameState only.
  *
  * Owns: the demo's suggested order and its copy:
- *   enter shop -> pick a record -> preview on the deck -> buy at the cashier ->
- *   head outside -> smash a parked car -> sell to the collector -> done.
+ *   enter Saisei Records -> pick a record -> preview on the deck -> pay Jazz at the
+ *   counter -> head outside -> smash the dead Triangle sedan -> sell to Stonks ->
+ *   head home with Inicio (exit beat) -> home.
  * Short on FakeUSD (empty-handed, or holding unpaid stock you can't afford)? The
- * street ATM comes first.
+ * ATM in TriMart's vestibule, next door, comes first.
  * Must not: change state or know positions. `target` is an interactable id
  * (or kind prefix) the controller resolves to a waypoint via the world:
- *   "shop-door" | "deck" | "cashier" | "car" (nearest unsmashed) | "buyer" | "atm" | null.
+ *   "shop-door" | "deck" | "cashier" | "car" (nearest unsmashed) | "buyer" | "atm" |
+ *   "home" (the hotel side door, world.anchors.homeDoor) | null.
  */
-import { cheapestPrice, heldIsOwned, heldIsUnpaid, type GameState } from "./state";
+import { canGoHome, cheapestPrice, heldIsOwned, heldIsUnpaid, type GameState } from "./state";
 
-export type ObjectiveTarget = "shop-door" | "deck" | "cashier" | "car" | "buyer" | "atm";
+export type ObjectiveTarget = "shop-door" | "deck" | "cashier" | "car" | "buyer" | "atm" | "home";
 
 export interface Objective {
   text: string;
@@ -22,30 +24,34 @@ export interface Objective {
 export function objective(state: GameState): Objective {
   const op = state.op;
   if (op?.status === "pending" && op.kind === "purchase")
-    return { text: "Hang tight. The register's ringing it up.", target: "cashier" };
+    return { text: "Hang tight. Jazz is ringing it up.", target: "cashier" };
   if (op?.status === "pending" && op.kind === "sell")
-    return { text: "The collector's checking the wax…", target: "buyer" };
+    return { text: "Stonks is checking the wax…", target: "buyer" };
   if (op?.status === "pending" && op.kind === "withdraw")
     return { text: "The ATM's counting out your FakeUSD…", target: "atm" };
 
   if (shortOnFakeUsd(state)) {
     // Unpaid stock can't leave the shop (the doorway blocks it), so put it back first.
     if (heldIsUnpaid(state))
-      return { text: "Short on FakeUSD. Put it back (I), then hit the ATM outside.", target: null };
-    return { text: "Short on FakeUSD. Hit the ATM outside the shop.", target: "atm" };
+      return { text: "Short on FakeUSD. Put it back (I), then hit the ATM in TriMart.", target: null };
+    return { text: "Short on FakeUSD. Hit the ATM in TriMart, next door.", target: "atm" };
   }
 
   // Empty-handed after a sale. (Pick up another record and the steps start over:
-  // the collector comes back for a rerun of the demo.)
-  if (state.sold.length > 0 && !state.hand && !state.deck)
+  // Stonks comes back for a rerun of the demo.) Then the exit beat: head home.
+  if (state.sold.length > 0 && !state.hand && !state.deck) {
+    if (state.wentHome) return { text: "Home. Press H to reset the demo.", target: null };
+    if (canGoHome(state))
+      return { text: "Job done. Head home with Inicio: hotel door, west end. (C: collection)", target: "home" };
     return { text: "Job done. Press C to see your collection.", target: null };
+  }
 
   // Holding a paid-for Record: take it outside, smash, sell.
   if (heldIsOwned(state)) {
     if (state.zone === "shop") return { text: "It's yours. Take it outside.", target: "shop-door" };
     if (state.smashedCars.length === 0)
-      return { text: "Find a parked car. Smash it with the record.", target: "car" };
-    return { text: "Still mint. Sell it to the collector.", target: "buyer" };
+      return { text: "Smash the dead Triangle sedan across the street.", target: "car" };
+    return { text: "Still mint. Sell it to Stonks across the street.", target: "buyer" };
   }
 
   // On the deck (paid or not).
@@ -59,13 +65,13 @@ export function objective(state: GameState): Objective {
   if (heldIsUnpaid(state)) {
     if (!state.listened.includes(state.hand!.shopRecordId))
       return { text: "Spin it on the listening deck.", target: "deck" };
-    return { text: "Pay at the counter. No freebies.", target: "cashier" };
+    return { text: "Pay Jazz at the counter. No freebies.", target: "cashier" };
   }
 
   // Empty hands.
   if (state.owned.length > 0)
     return { text: "Press C and grab one of your records.", target: null };
-  if (state.zone === "street") return { text: "Get to the record shop.", target: "shop-door" };
+  if (state.zone === "street") return { text: "Get to Saisei Records, the record shop.", target: "shop-door" };
   return { text: "Dig through the crates. Pick a record.", target: null };
 }
 

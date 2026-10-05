@@ -25,6 +25,7 @@ import { Hud } from "./ui/hud";
 import { Minimap } from "./ui/minimap";
 import { Dialogs } from "./ui/dialogs";
 import { Intro } from "./ui/intro";
+import { TitleCard } from "./ui/title-card";
 import { GameController } from "./game/controller";
 import { installDebugHooks } from "./debug";
 
@@ -55,7 +56,16 @@ if (gallery) {
     minimap,
     dialogs,
     intro,
+    titleCard: new TitleCard(app),
   });
   installDebugHooks(world, adapter, controller, deck);
-  void controller.boot();
+  // The street compiles its GPU pipelines while the intro shows; Enter waits for it (and
+  // for a second warm-up once the records are on the shelves) so play never hitches.
+  intro.setStatus("street", "Lighting up the street…", "loading");
+  const booted = controller.boot();
+  const streetReady = Promise.all([world.ready, booted])
+    .then(() => world.warmUp())
+    .then(() => intro.setStatus("street", "The street is lit", "ok"))
+    .catch(() => intro.setStatus("street", "The street is lit", "ok"));
+  intro.waitFor(streetReady);
 }

@@ -20,7 +20,7 @@
     "@mysten/bcs": "2.1.2",
     "@mysten/move-bytecode-template": "0.4.1",
     "@mysten/sui": "2.29.0",
-    "@unconfirmed/sui-effect": "0.2.1",
+    "@unconfirmed/sui-effect": "0.2.2",
     "effect": "4.0.0-rc.112",
     "hls.js": "^1.7.3",
     "three": "^0.180.0"

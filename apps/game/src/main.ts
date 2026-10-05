@@ -17,6 +17,7 @@ import "@fontsource/dm-sans/700.css";
 import "@fontsource/space-grotesk/500.css";
 import "@fontsource/space-grotesk/700.css";
 import "./ui/style.css";
+import { Effect, Scope } from "effect";
 import { createAdapter } from "./miso/select";
 import { GameWorld } from "./world/world";
 import { RecordDeck } from "./audio/deck";
@@ -26,9 +27,11 @@ import { Minimap } from "./ui/minimap";
 import { Dialogs } from "./ui/dialogs";
 import { Intro } from "./ui/intro";
 import { TitleCard } from "./ui/title-card";
-import { GameController } from "./game/controller";
 import { installDebugHooks } from "./debug";
 import { urlConfig } from "./app/config";
+import { makeChain } from "./app/chain";
+import { GameStateStore } from "./app/game-state";
+import { makeController } from "./app/controller";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 const gallery = urlConfig().gallery;
@@ -48,17 +51,22 @@ if (gallery) {
   const intro = new Intro(app, adapter.network);
 
   const deck = new RecordDeck();
-  const controller = new GameController({
-    world,
-    adapter,
-    deck,
-    ambience: new ShopAmbience(),
-    hud,
-    minimap,
-    dialogs,
-    intro,
-    titleCard: new TitleCard(app),
-  });
+  // The app scope: flows run as fibers in it (a later step makes main.ts one Layer graph).
+  const scope = Effect.runSync(Scope.make());
+  const controller = Effect.runSync(
+    makeController({
+      world,
+      chain: makeChain(adapter),
+      gameState: GameStateStore.makeSync(),
+      deck,
+      ambience: new ShopAmbience(),
+      hud,
+      minimap,
+      dialogs,
+      intro,
+      titleCard: new TitleCard(app),
+    }).pipe(Scope.provide(scope)),
+  );
   installDebugHooks(world, adapter, controller, deck);
   // The street compiles its GPU pipelines behind the loading screen; Enter appears when
   // everything is warm (and the records are on the shelves) so play never hitches.

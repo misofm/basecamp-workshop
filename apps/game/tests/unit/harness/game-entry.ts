@@ -4,10 +4,14 @@
  * controller moves to another architecture, rewrite `makeGame()` and keep the surface on
  * `window.__h` (state snapshot, stand/interact, deferreds, counters) stable.
  *
- * Real: GameController, Dialogs, Hud, Intro, TitleCard, MockAdapter.
+ * Real: GameController (built by app/controller.ts makeController on Chain + GameState +
+ * an app Scope), Dialogs, Hud, Intro, TitleCard, MockAdapter.
  * Fake: the 3D world (WorldApi), RecordDeck, ShopAmbience, Minimap.
  */
-import { GameController } from "../../../src/game/controller";
+import { Effect, Exit, Scope } from "effect";
+import { makeController } from "../../../src/app/controller";
+import { makeChain } from "../../../src/app/chain";
+import { GameStateStore } from "../../../src/app/game-state";
 import { Dialogs } from "../../../src/ui/dialogs";
 import { Hud } from "../../../src/ui/hud";
 import { Intro } from "../../../src/ui/intro";
@@ -182,9 +186,11 @@ class FakeMinimap {
   draw(): void {}
 }
 
-function makeGame(opts: { latencyMs?: number } = {}) {
+const scopes: Scope.Closeable[] = [];
+
+function makeGame(opts: { latencyMs?: number; adapter?: MockAdapter } = {}) {
   const app = document.getElementById("app") ?? document.body;
-  const adapter = new MockAdapter({ latencyMs: opts.latencyMs ?? 50 });
+  const adapter = opts.adapter ?? new MockAdapter({ latencyMs: opts.latencyMs ?? 50 });
   const calls = { purchase: 0, sellToNpc: 0, withdrawFakeUsd: 0 };
   for (const name of Object.keys(calls) as (keyof typeof calls)[]) {
     const original = (adapter[name] as (...a: unknown[]) => unknown).bind(adapter);
@@ -198,17 +204,23 @@ function makeGame(opts: { latencyMs?: number } = {}) {
   const dialogs = new Dialogs(app);
   const intro = new Intro(app, adapter.network);
   const titleCard = new TitleCard(app);
-  const controller = new GameController({
-    world: world as never,
-    adapter,
-    deck: new FakeDeck() as never,
-    ambience: new FakeAmbience() as never,
-    hud,
-    minimap: new FakeMinimap() as never,
-    dialogs,
-    intro,
-    titleCard,
-  });
+  /** The app scope: closing it interrupts every running flow (effect-flows.spec.ts). */
+  const scope = Effect.runSync(Scope.make());
+  scopes.push(scope);
+  const controller = Effect.runSync(
+    makeController({
+      world: world as never,
+      chain: makeChain(adapter),
+      gameState: GameStateStore.makeSync(),
+      deck: new FakeDeck() as never,
+      ambience: new FakeAmbience() as never,
+      hud,
+      minimap: new FakeMinimap() as never,
+      dialogs,
+      intro,
+      titleCard,
+    }).pipe(Scope.provide(scope)),
+  );
   const warnings: string[] = [];
   const warn = console.warn.bind(console);
   console.warn = (...args: unknown[]) => {
@@ -261,4 +273,9 @@ function makeGame(opts: { latencyMs?: number } = {}) {
   return h;
 }
 
-(window as unknown as Record<string, unknown>).__ui = { Dialogs, Intro, TitleCard, makeGame };
+/** Close the app scope of the current game (interrupts its flows); resolves when done. */
+function closeScope(): Promise<void> {
+  return Effect.runPromise(Scope.close(scopes.at(-1)!, Exit.void));
+}
+
+(window as unknown as Record<string, unknown>).__ui = { Dialogs, Intro, TitleCard, MockAdapter, makeGame, closeScope };

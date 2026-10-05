@@ -5,7 +5,7 @@
  *
  *   openCashier → "Ring it up?" → Pay
  *     → dispatch purchaseStart → pending screen ("Ringing it up")
- *     → await adapter.purchase(record)        (resolves after finality)
+ *     → chain.purchase(record)                (an Effect; resolves after finality)
  *     → re-read wallet + owned Records        (chain truth: balance, serial)
  *     → dispatch purchaseSuccess → receipt ("View receipt ↗")
  *   or → dispatch purchaseFail → the adapter's friendly message + Retry / Cancel
@@ -17,11 +17,16 @@
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
  * MisoAdapter interface.
  */
+import { Effect } from "effect";
+import { Rejected, type ChainError } from "../../app/errors";
 import type { OwnedRecord, ShopRecord } from "../../miso/types";
 import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink, recordLine } from "../../ui/dialogs";
 import { heldOwnedRecord } from "../state";
-import { message, type FlowContext } from "./context";
+import { transaction, type FlowContext } from "./context";
+
+/** What the counter says when the purchase broke on our side (also: the state machine refused the result). */
+const REGISTER_JAMMED = "Register jammed. Try again.";
 
 export class CheckoutFlow {
   constructor(private readonly ctx: FlowContext) {}
@@ -74,24 +79,61 @@ export class CheckoutFlow {
   }
 
   /** Buy the held unpaid record. Safe to call again as Retry after a failure. */
-  async purchase(): Promise<void> {
+  purchase(): Promise<void> {
+    return this.ctx.run("purchase", this.purchaseEffect());
+  }
+
+  /** The purchase program (starts synchronously: purchaseStart + pending screen happen inside the key press). */
+  private purchaseEffect(): Effect.Effect<void> {
     const { ctx } = this;
-    const hand = ctx.state().hand;
-    const record = hand ? ctx.catalog.get(hand.shopRecordId) : undefined;
-    if (!record) return;
-    const balance = ctx.state().balance;
-    if (balance !== null && balance < record.price.amount) {
-      // Can't afford it: don't even ask the chain.
-      this.showNotEnough();
-      return;
-    }
-    if (!ctx.dispatch({ type: "purchaseStart" })) return;
-    ctx.world.setCashierStatus("processing");
-    this.showPurchasePending();
-    try {
-      const result = await ctx.adapter.purchase(record);
+    return Effect.suspend(() => {
+      const hand = ctx.state().hand;
+      const record = hand ? ctx.catalog.get(hand.shopRecordId) : undefined;
+      if (!record) return Effect.void;
+      const balance = ctx.state().balance;
+      if (balance !== null && balance < record.price.amount) {
+        // Can't afford it: don't even ask the chain.
+        this.showNotEnough();
+        return Effect.void;
+      }
+      if (!ctx.dispatch({ type: "purchaseStart" })) return Effect.void;
+      ctx.world.setCashierStatus("processing");
+      this.showPurchasePending();
+      return transaction(
+        ctx,
+        {
+          name: "purchase",
+          kind: "purchase",
+          jammed: REGISTER_JAMMED,
+          failAction: (error) => ({ type: "purchaseFail", error }),
+          onFail: (text) => {
+            ctx.dispatch({ type: "purchaseFail", error: text });
+            // The purchase may have landed even though the answer didn't (timeout): re-read chain
+            // truth so the balance and the collection are never stale. (Retry is still safe: the
+            // adapter returns the earlier purchase instead of buying twice.)
+            void ctx.run("refreshWallet", Effect.ignore(ctx.refreshWallet()));
+            void ctx.run("refreshCollection", Effect.ignore(ctx.refreshCollection()));
+            sfx.error();
+            ctx.world.setCashierStatus("error");
+            if (ctx.dialogs.openKey === "purchase") this.showPurchaseError(text);
+            else ctx.hud.toast(text, { tone: "bad" });
+          },
+        },
+        this.purchaseBody(record),
+      );
+    });
+  }
+
+  /** After purchaseStart: the chain call, chain truth re-read, success. Fails into the error branch. */
+  private purchaseBody(record: ShopRecord): Effect.Effect<void, ChainError> {
+    const { ctx } = this;
+    return Effect.gen({ self: this }, function* () {
+      const result = yield* ctx.chain.purchase(record);
       // Re-read chain truth: new balance + the minted Record (serial etc.).
-      const [wallet, owned] = await Promise.all([ctx.refreshWallet(false).catch(() => null), ctx.adapter.listOwnedRecords().catch(() => null)]);
+      const [wallet, owned] = yield* Effect.all(
+        [ctx.refreshWallet(false).pipe(Effect.orElseSucceed(() => null)), ctx.chain.listOwnedRecords.pipe(Effect.orElseSucceed(() => null))],
+        { concurrency: "unbounded" },
+      );
       const mine: OwnedRecord = owned?.find((o) => o.recordId === result.recordId) ?? {
         recordId: result.recordId,
         shopRecordId: record.id,
@@ -109,7 +151,7 @@ export class CheckoutFlow {
       if (!ctx.dispatch({ type: "purchaseSuccess", owned: mine, digest: result.digest, balance, amount: record.price.amount })) {
         // The state machine refused the result (e.g. a Record already sold): never show a
         // receipt for it. Fall through to the error + Retry path with chain truth re-read.
-        throw new Error("Register jammed. Try again.");
+        return yield* Effect.fail(new Rejected({ op: "purchase", message: REGISTER_JAMMED }));
       }
       if (owned) ctx.dispatch({ type: "collectionLoaded", owned });
       sfx.cashRegister();
@@ -119,23 +161,11 @@ export class CheckoutFlow {
       if (!this.showPurchaseReceipt(record, mine, result.digest)) {
         ctx.hud.toast(`Bought ${record.title}`, {
           tone: "good",
-          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
+          link: { href: ctx.chain.explorerTxUrl(result.digest), label: "View receipt ↗" },
           durationMs: 8000,
         });
       }
-    } catch (error) {
-      const text = message(error);
-      ctx.dispatch({ type: "purchaseFail", error: text });
-      // The purchase may have landed even though the answer didn't (timeout): re-read chain
-      // truth so the balance and the collection are never stale. (Retry is still safe: the
-      // adapter returns the earlier purchase instead of buying twice.)
-      void ctx.refreshWallet().catch(() => {});
-      void ctx.refreshCollection().catch(() => {});
-      sfx.error();
-      ctx.world.setCashierStatus("error");
-      if (ctx.dialogs.openKey === "purchase") this.showPurchaseError(text);
-      else ctx.hud.toast(text, { tone: "bad" });
-    }
+    });
   }
 
   /** The balance can't cover the held record: Jazz says so, no chain call. */
@@ -169,7 +199,7 @@ export class CheckoutFlow {
       body: [
         recordLine(r.coverUrl, `${r.title} · #${owned.serial}/${owned.maxSupply}`),
         paragraph(ctx.money(r.price.amount), "dlg-p amount"),
-        receiptLink({ href: ctx.adapter.explorerTxUrl(digest) }),
+        receiptLink({ href: ctx.chain.explorerTxUrl(digest) }),
       ],
       actions: [{ id: "done", kind: "primary", key: "E", label: "Take it outside", run: () => ctx.dialogs.close() }],
     });

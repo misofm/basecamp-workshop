@@ -6,7 +6,7 @@
  *
  *   E at the ATM → "FakeUSD ATM" → Withdraw 50 FUSD
  *     → dispatch withdrawStart → pending screen
- *     → await adapter.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT)   (resolves after finality)
+ *     → chain.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT)           (resolves after finality)
  *     → re-read the wallet                                   (chain truth: balance)
  *     → dispatch withdrawSuccess → receipt ("Receipt no." + "View receipt ↗" explorer link), cash counts up
  *   or → dispatch withdrawFail → the adapter's friendly message + Retry / Cancel
@@ -18,11 +18,12 @@
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
  * MisoAdapter interface.
  */
+import { Effect } from "effect";
 import { formatAmount } from "../../miso/format";
 import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink } from "../../ui/dialogs";
 import { h } from "../../ui/dom";
-import { message, type FlowContext } from "./context";
+import { transaction, type FlowContext } from "./context";
 
 /** What one withdrawal dispenses: 50 FUSD (FakeUSD has 6 decimals). */
 export const ATM_WITHDRAW_AMOUNT = 50_000_000n;
@@ -35,6 +36,8 @@ const GREETING_GLITCH = "WELCOME BACK, KA\u2592\u2592\u2592 TAKAHA\u2592\u2592";
 const GREETING = "ACCOUNT HOLDER: GAMER";
 const GLITCH_MS = 1100;
 const TITLE = "ATM";
+/** What the ATM says when the withdrawal broke on our side (a bug, not the chain). */
+const READER_JAMMED = "Card reader jammed. Try again.";
 
 export class AtmFlow {
   constructor(private readonly ctx: FlowContext) {}
@@ -67,34 +70,51 @@ export class AtmFlow {
   }
 
   /** Withdraw from the faucet. Safe to call again as Retry after a failure. */
-  async withdraw(): Promise<void> {
+  withdraw(): Promise<void> {
+    return this.ctx.run("withdraw", this.withdrawEffect());
+  }
+
+  /** The withdrawal program (starts synchronously: withdrawStart + pending screen happen inside the key press). */
+  private withdrawEffect(): Effect.Effect<void> {
     const { ctx } = this;
-    if (!ctx.dispatch({ type: "withdrawStart" })) return;
-    this.showPending();
-    try {
-      const result = await ctx.adapter.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT);
-      // Re-read chain truth for the new balance.
-      const wallet = await ctx.refreshWallet(false).catch(() => null);
-      const known = ctx.state().balance;
-      const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.amount);
-      // withdrawSuccess sets the balance → render() → the HUD counter counts up green.
-      ctx.dispatch({ type: "withdrawSuccess", digest: result.digest, amount: result.amount, balance });
-      sfx.cashRegister();
-      if (!this.showDone(result.digest, result.amount)) {
-        ctx.hud.toast(`+${ctx.money(result.amount)}`, {
-          tone: "good",
-          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
-          durationMs: 8000,
-        });
-      }
-    } catch (error) {
-      ctx.dispatch({ type: "withdrawFail", error: message(error) });
-      // The cash may have come out even though the answer didn't: re-read the balance.
-      void ctx.refreshWallet().catch(() => {});
-      sfx.error();
-      if (ctx.dialogs.openKey === "atm") this.showError(message(error));
-      else ctx.hud.toast(message(error), { tone: "bad" });
-    }
+    return Effect.suspend(() => {
+      if (!ctx.dispatch({ type: "withdrawStart" })) return Effect.void;
+      this.showPending();
+      return transaction(
+        ctx,
+        {
+          name: "withdraw",
+          kind: "withdraw",
+          jammed: READER_JAMMED,
+          failAction: (error) => ({ type: "withdrawFail", error }),
+          onFail: (text) => {
+            ctx.dispatch({ type: "withdrawFail", error: text });
+            // The cash may have come out even though the answer didn't: re-read the balance.
+            void ctx.run("refreshWallet", Effect.ignore(ctx.refreshWallet()));
+            sfx.error();
+            if (ctx.dialogs.openKey === "atm") this.showError(text);
+            else ctx.hud.toast(text, { tone: "bad" });
+          },
+        },
+        Effect.gen({ self: this }, function* () {
+          const result = yield* ctx.chain.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT);
+          // Re-read chain truth for the new balance.
+          const wallet = yield* ctx.refreshWallet(false).pipe(Effect.orElseSucceed(() => null));
+          const known = ctx.state().balance;
+          const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.amount);
+          // withdrawSuccess sets the balance → render() → the HUD counter counts up green.
+          ctx.dispatch({ type: "withdrawSuccess", digest: result.digest, amount: result.amount, balance });
+          sfx.cashRegister();
+          if (!this.showDone(result.digest, result.amount)) {
+            ctx.hud.toast(`+${ctx.money(result.amount)}`, {
+              tone: "good",
+              link: { href: ctx.chain.explorerTxUrl(result.digest), label: "View receipt ↗" },
+              durationMs: 8000,
+            });
+          }
+        }),
+      );
+    });
   }
 
   private showPending(): void {
@@ -111,7 +131,7 @@ export class AtmFlow {
       tone: "success",
       titleJp: "済",
       title: "CASH OUT",
-      body: [paragraph(`+${ctx.money(amount)}`), receiptLink({ href: ctx.adapter.explorerTxUrl(digest) })],
+      body: [paragraph(`+${ctx.money(amount)}`), receiptLink({ href: ctx.chain.explorerTxUrl(digest) })],
       actions: [{ id: "done", kind: "primary", key: "E", label: "OK", run: () => ctx.dialogs.close() }],
     });
     return true;

@@ -43,6 +43,11 @@
  *  - The UI modules (src/ui/*) only draw what they are given; game rules live in
  *    state.ts, copy for missions in objectives.ts, offers in npc-buyers.ts.
  */
+import { Cause, Effect } from "effect";
+import type { ChainApi } from "../app/chain";
+import type { ChainError } from "../app/errors";
+import type { GameStateStore } from "../app/game-state";
+import type { ErrorBoundary } from "../app/boundary";
 import type { MisoAdapter } from "../miso/adapter";
 import { formatAmount } from "../miso/format";
 import type { OwnedRecord, ShopRecord, Wallet } from "../miso/types";
@@ -65,11 +70,8 @@ import {
   heldIsOwned,
   heldIsUnpaid,
   heldOwnedRecord,
-  initialState,
-  invariantViolations,
   isBusy,
   recordPlace,
-  step,
   type GameAction,
   type GameState,
 } from "./state";
@@ -79,9 +81,6 @@ import { CheckoutFlow } from "./flows/checkout-flow";
 import { StreetFlow } from "./flows/street-flow";
 import { CollectionFlow } from "./flows/collection-flow";
 import { AtmFlow } from "./flows/atm-flow";
-
-/** Dev builds log refused transitions and broken invariants (never in production). */
-const DEV = Boolean(import.meta.env?.DEV);
 
 /** Hide the waypoint once the player is this close to it (metres). */
 const WAYPOINT_HIDE_DISTANCE = 2.5;
@@ -108,6 +107,32 @@ function txInFlight(s: GameState): boolean {
   return isBusy(s) && (s.op?.kind === "purchase" || s.op?.kind === "sell" || s.op?.kind === "withdraw");
 }
 
+/**
+ * `.catch((error) => console.warn(label, error))` for boot reads: a chain error logs the
+ * adapter's original rejection (its `cause`), a defect logs the thrown value. Interruption
+ * propagates.
+ */
+const warnOnFailure =
+  (label: string) =>
+  <A>(self: Effect.Effect<A, ChainError>): Effect.Effect<A | undefined> =>
+    Effect.catchCause(self, (cause) => {
+      if (Cause.hasInterruptsOnly(cause)) return Effect.failCause(cause as Cause.Cause<never>);
+      const error = Cause.squash(cause);
+      const raw = isChainError(error) && error.cause !== undefined ? error.cause : error;
+      return Effect.sync(() => {
+        console.warn(label, raw);
+        return undefined;
+      });
+    });
+
+/** `.catch(() => {})` for boot reads: failures and defects are swallowed, interruption propagates. */
+const ignoreFailure = <A>(self: Effect.Effect<A, ChainError>): Effect.Effect<A | undefined> =>
+  Effect.catchCause(self, (cause) => (Cause.hasInterruptsOnly(cause) ? Effect.failCause(cause as Cause.Cause<never>) : Effect.succeed(undefined)));
+
+function isChainError(error: unknown): error is ChainError {
+  return typeof error === "object" && error !== null && "_tag" in error && "op" in error && "message" in error;
+}
+
 function falloff(distance: number, far: number): number {
   const t = Math.min(1, Math.max(0, (far - distance) / (far - SOUND_NEAR)));
   return t * t * (3 - 2 * t);
@@ -115,7 +140,10 @@ function falloff(distance: number, far: number): number {
 
 export interface ControllerDeps {
   world: WorldApi & { anchors: WorldAnchors };
-  adapter: MisoAdapter;
+  /** The chain (MisoAdapter wrapped as Effects: app/chain.ts). */
+  chain: ChainApi;
+  /** Where the game state lives (app/game-state.ts). */
+  gameState: GameStateStore;
   deck: RecordDeck;
   ambience: ShopAmbience;
   hud: Hud;
@@ -123,17 +151,29 @@ export interface ControllerDeps {
   intro: Intro;
   dialogs: Dialogs;
   titleCard: TitleCard;
+  /**
+   * Fork an Effect into the app-scoped FiberSet (starts synchronously). Defects are
+   * reported via `boundary`; resolves undefined on a defect or interruption.
+   */
+  run: <A>(name: string, effect: Effect.Effect<A>) => Promise<A | undefined>;
+  /** App-layer error boundary (app/boundary.ts). */
+  boundary: ErrorBoundary;
 }
 
 export class GameController {
   /** Current game state (read-only from outside; change it with dispatch()). */
-  state: GameState = initialState();
+  get state(): GameState {
+    return this.gameState.current;
+  }
   /** The interactable the player is standing at (from world.onNear). */
   near: Interactable | null = null;
   started = false;
 
   private readonly world: ControllerDeps["world"];
-  private readonly adapter: MisoAdapter;
+  private readonly chain: ChainApi;
+  private readonly gameState: GameStateStore;
+  private readonly run: ControllerDeps["run"];
+  private readonly boundary: ErrorBoundary;
   private readonly deck: RecordDeck;
   private readonly ambience: ShopAmbience;
   private readonly hud: Hud;
@@ -172,7 +212,10 @@ export class GameController {
 
   constructor(deps: ControllerDeps) {
     this.world = deps.world;
-    this.adapter = deps.adapter;
+    this.chain = deps.chain;
+    this.gameState = deps.gameState;
+    this.run = deps.run;
+    this.boundary = deps.boundary;
     this.deck = deps.deck;
     this.ambience = deps.ambience;
     this.hud = deps.hud;
@@ -184,7 +227,7 @@ export class GameController {
     // What the flows may touch (see flows/context.ts).
     const ctx: FlowContext = {
       world: this.world,
-      adapter: this.adapter,
+      chain: this.chain,
       hud: this.hud,
       dialogs: this.dialogs,
       catalog: this.catalog,
@@ -192,6 +235,8 @@ export class GameController {
       dispatch: (action) => this.dispatch(action),
       refreshWallet: (dispatchBalance) => this.refreshWallet(dispatchBalance),
       refreshCollection: () => this.refreshCollection(),
+      run: (name, effect) => this.run(name, effect),
+      report: (context, cause) => this.boundary.report(context, cause),
       renderPrompt: () => this.renderPrompt(),
       money: (amount) => this.money(amount),
     };
@@ -201,59 +246,75 @@ export class GameController {
     this.collection = new CollectionFlow(ctx);
     this.atm = new AtmFlow(ctx);
 
+    // Every callback handed to the world / audio / UI / window is guarded: an app-layer
+    // throw is reported (console + one toast), never propagated into the render loop or
+    // the event dispatch.
+    const guard = this.boundary.guard;
+
     // World events.
-    this.world.onNear = (target) => {
+    this.world.onNear = guard("world.onNear", (target: Interactable | null) => {
       this.near = target;
       this.renderPrompt();
-    };
-    this.world.onInteract = (target) => this.interact(target);
-    this.world.onMove = (x, z, heading) => this.onMove(x, z, heading);
-    this.world.onZoneChange = (zone) => {
+    });
+    this.world.onInteract = guard("world.onInteract", (target: Interactable | null) => this.interact(target));
+    this.world.onMove = guard("world.onMove", (x: number, z: number, heading: number) => this.onMove(x, z, heading));
+    this.world.onZoneChange = guard("world.onZoneChange", (zone: GameState["zone"]) => {
       this.dispatch({ type: "setZone", zone });
       if (zone === "shop") this.ambience.chime();
-    };
-    this.world.onExitBlockedBump = () => {
+    });
+    this.world.onExitBlockedBump = guard("world.onExitBlockedBump", () => {
       this.hud.toast("Oi! Pay for that first.", { tone: "speech", speaker: "Jazz" });
       sfx.error();
-    };
+    });
 
     // Deck audio events.
     this.deck.setSourcePosition(this.world.anchors.deck.x, this.world.anchors.deck.z);
-    this.deck.onProgress = (elapsed, len) => this.hud.setProgress(elapsed, len);
-    this.deck.onEnded = () => {
+    this.deck.onProgress = guard("deck.onProgress", (elapsed: number, len: number) => this.hud.setProgress(elapsed, len));
+    this.deck.onEnded = guard("deck.onEnded", () => {
       this.dispatch({ type: "stop" });
       this.hud.toast("Like it? Take it to the counter.");
-    };
-    this.deck.onError = (error) => {
+    });
+    this.deck.onError = guard("deck.onError", (error: Error) => {
       this.dispatch({ type: "stop" });
       this.hud.toast(error.message, { tone: "bad" });
-    };
+    });
 
     // UI events.
-    this.dialogs.onOpenChange = () => {
+    this.dialogs.onOpenChange = guard("dialogs.onOpenChange", () => {
       this.syncBlocked();
       this.renderPrompt();
-    };
-    this.dialogs.onNavigate = () => sfx.uiBlip();
-    window.addEventListener("keydown", (e) => this.onKey(e));
+    });
+    this.dialogs.onNavigate = guard("dialogs.onNavigate", () => sfx.uiBlip());
+    window.addEventListener(
+      "keydown",
+      guard("keydown", (e: KeyboardEvent) => this.onKey(e)),
+    );
 
-    this.intro.onStart = () => this.start();
+    this.intro.onStart = guard("intro.onStart", () => this.start());
     this.world.setBlocked(true); // until the loading screen is dismissed
     this.carIds = this.world
       .mapSnapshot()
       .points.filter((p) => p.kind === "car")
       .map((p) => p.id);
-    this.hud.setNetwork(this.adapter.network);
+    this.hud.setNetwork(this.chain.network);
     this.render();
+  }
+
+  /** The raw MisoAdapter (window.__game, debug tools). */
+  get adapter(): MisoAdapter {
+    return this.chain.adapter;
   }
 
   // ═══════════════════════════════ startup ═══════════════════════════════
 
   /** Load catalog, wallet and collection (in parallel) while the boot cover is showing. */
-  async boot(): Promise<void> {
-    const catalog = this.adapter
-      .loadShopCatalog()
-      .then((records) => {
+  boot(): Promise<void> {
+    return this.run("boot", this.bootEffect());
+  }
+
+  private bootEffect(): Effect.Effect<void> {
+    const catalog = this.chain.loadShopCatalog.pipe(
+      Effect.map((records) => {
         for (const r of records) this.catalog.set(r.id, r);
         const prices: Record<string, bigint> = {};
         for (const r of records) prices[r.id] = r.price.amount;
@@ -261,14 +322,16 @@ export class GameController {
           records.map((r) => ({ id: r.id, title: r.title, artist: r.artist, section: r.section, coverUrl: r.coverUrl, palette: r.palette })),
         );
         this.dispatch({ type: "catalogLoaded", prices });
-      })
-      .catch((error: unknown) => console.warn("catalog failed", error));
-    const wallet = this.refreshWallet()
-      .then(() => undefined)
-      .catch((error: unknown) => console.warn("wallet failed", error));
-    const collection = this.refreshCollection().catch(() => {});
-    await Promise.all([catalog, wallet, collection]);
-    document.documentElement.dataset.gameReady = "true";
+      }),
+      warnOnFailure("catalog failed"),
+    );
+    const wallet = this.refreshWallet().pipe(Effect.asVoid, warnOnFailure("wallet failed"));
+    const collection = this.refreshCollection().pipe(Effect.asVoid, ignoreFailure);
+    return Effect.all([catalog, wallet, collection], { concurrency: "unbounded", discard: true }).pipe(
+      Effect.map(() => {
+        document.documentElement.dataset.gameReady = "true";
+      }),
+    );
   }
 
   /**
@@ -302,20 +365,10 @@ export class GameController {
 
   /**
    * Apply an action. Returns false if the state machine refused it (or it changed nothing).
-   * An illegal action is a no-op plus a dev-console warning, never a crash.
+   * An illegal action is a no-op plus a dev-console warning (GameStateStore), never a crash.
    */
   dispatch(action: GameAction): boolean {
-    const { state: next, rejected } = step(this.state, action);
-    if (rejected !== null) {
-      if (DEV) console.warn(`[game] ${action.type} refused: ${rejected}`);
-      return false;
-    }
-    if (next === this.state) return false;
-    this.state = next;
-    if (DEV) {
-      const broken = invariantViolations(next);
-      if (broken.length) console.warn(`[game] invariant broken after ${action.type}: ${broken.join("; ")}`);
-    }
+    if (!this.gameState.dispatch(action)) return false;
     this.render();
     return true;
   }
@@ -407,20 +460,26 @@ export class GameController {
     }
     const record = this.catalog.get(s.deck.shopRecordId);
     if (!record) return;
-    this.deck
-      .play(record, s.playing.trackIndex)
-      .then(() => {
-        if (this.audioKey !== key) return;
-        this.deckSource = this.deck.kind;
-        this.render();
-      })
-      .catch((error: unknown) => {
-        if (error instanceof Error && error.name === "AbortError") return; // superseded
-        if (this.audioKey !== key) return;
-        sfx.error();
-        this.hud.toast(message(error), { tone: "bad" });
-        this.dispatch({ type: "stop" });
-      });
+    const trackIndex = s.playing.trackIndex;
+    void this.run(
+      "deck.play",
+      Effect.tryPromise({ try: () => this.deck.play(record, trackIndex), catch: (error) => error }).pipe(
+        Effect.match({
+          onSuccess: () => {
+            if (this.audioKey !== key) return;
+            this.deckSource = this.deck.kind;
+            this.render();
+          },
+          onFailure: (error) => {
+            if (error instanceof Error && error.name === "AbortError") return; // superseded
+            if (this.audioKey !== key) return;
+            sfx.error();
+            this.hud.toast(message(error), { tone: "bad" });
+            this.dispatch({ type: "stop" });
+          },
+        }),
+      ),
+    );
   }
 
   private renderPrompt(): void {
@@ -584,27 +643,39 @@ export class GameController {
    * free to walk; the mission reads "Home. Press H to reset."
    * Refused (no-op) before a sale, while anything is pending, or when already home.
    */
-  async goHome(): Promise<void> {
-    if (this.homeBeatRunning || !this.dispatch({ type: "goHome" })) return;
-    this.homeBeatRunning = true;
-    this.render(); // disables the door, hides the prompt
-    this.syncBlocked();
-    try {
-      sfx.boom();
-      setTimeout(() => sfx.ironFootsteps(), FOOTSTEPS_DELAY_MS);
-      // The card follows the brown-out, but never waits on a slow renderer for long
-      // (homeBeat runs on frame time; at a few fps it would take many seconds).
-      const beat = this.world.homeBeat().catch(() => {});
-      await Promise.all([
-        Promise.race([beat, new Promise((resolve) => setTimeout(resolve, HOME_BEAT_MAX_WAIT_MS))]),
-        new Promise((resolve) => setTimeout(resolve, FOOTSTEPS_DELAY_MS + 200)),
-      ]);
-      await this.titleCard.show();
-    } finally {
-      this.homeBeatRunning = false;
+  goHome(): Promise<void> {
+    return this.run("goHome", this.goHomeEffect());
+  }
+
+  private goHomeEffect(): Effect.Effect<void> {
+    return Effect.suspend(() => {
+      if (this.homeBeatRunning || !this.dispatch({ type: "goHome" })) return Effect.void;
+      this.homeBeatRunning = true;
+      this.render(); // disables the door, hides the prompt
       this.syncBlocked();
-      this.render();
-    }
+      return Effect.gen({ self: this }, function* () {
+        sfx.boom();
+        setTimeout(() => sfx.ironFootsteps(), FOOTSTEPS_DELAY_MS);
+        // The card follows the brown-out, but never waits on a slow renderer for long
+        // (homeBeat runs on frame time; at a few fps it would take many seconds).
+        const beat = this.world.homeBeat().catch(() => {});
+        yield* Effect.promise(() =>
+          Promise.all([
+            Promise.race([beat, new Promise((resolve) => setTimeout(resolve, HOME_BEAT_MAX_WAIT_MS))]),
+            new Promise((resolve) => setTimeout(resolve, FOOTSTEPS_DELAY_MS + 200)),
+          ]),
+        );
+        yield* Effect.promise(() => this.titleCard.show());
+      }).pipe(
+        Effect.ensuring(
+          Effect.sync(() => {
+            this.homeBeatRunning = false;
+            this.syncBlocked();
+            this.render();
+          }),
+        ),
+      );
+    });
   }
 
   /** Freeze player input while the loading screen, a dialog, or the exit beat / title card is up. */
@@ -694,18 +765,26 @@ export class GameController {
   // ═══════════════════════════════ chain reads ═══════════════════════════════
 
   /** Re-read the wallet; also updates the balance unless `dispatchBalance` is false. */
-  private async refreshWallet(dispatchBalance = true): Promise<Wallet> {
-    const wallet = await this.adapter.getWallet();
-    this.wallet = wallet;
-    this.hud.setNetwork(this.adapter.network, wallet.address);
-    if (dispatchBalance) this.dispatch({ type: "walletLoaded", balance: wallet.fakeUsd });
-    return wallet;
+  private refreshWallet(dispatchBalance = true): Effect.Effect<Wallet, ChainError> {
+    return this.chain.getWallet.pipe(
+      Effect.tap((wallet) =>
+        Effect.sync(() => {
+          this.wallet = wallet;
+          this.hud.setNetwork(this.chain.network, wallet.address);
+          if (dispatchBalance) this.dispatch({ type: "walletLoaded", balance: wallet.fakeUsd });
+        }),
+      ),
+    );
   }
 
-  private async refreshCollection(): Promise<OwnedRecord[]> {
-    const owned = await this.adapter.listOwnedRecords();
-    this.dispatch({ type: "collectionLoaded", owned });
-    return owned;
+  private refreshCollection(): Effect.Effect<OwnedRecord[], ChainError> {
+    return this.chain.listOwnedRecords.pipe(
+      Effect.tap((owned) =>
+        Effect.sync(() => {
+          this.dispatch({ type: "collectionLoaded", owned });
+        }),
+      ),
+    );
   }
 
   // ═══════════════════════════════ helpers ═══════════════════════════════

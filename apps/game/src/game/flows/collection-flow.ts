@@ -6,6 +6,7 @@
  * Hold / Put away buttons, and the help dialog.
  * Must not: cache chain data of its own; `state.owned` is the single cache.
  */
+import { Cause, Effect, Option } from "effect";
 import * as sfx from "../../audio/sfx";
 import { collectionBody, helpBody, type CollectionItem, type DialogAction } from "../../ui/dialogs";
 import { handLocked, heldIsOwned, isBusy } from "../state";
@@ -19,18 +20,25 @@ export class CollectionFlow {
     const show = (body: HTMLElement, actions: DialogAction[] = [{ id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() }]) =>
       ctx.dialogs.show({ key: "collection", skin: "green", wide: true, title: "MY RECORDS", body, actions });
     show(collectionBody({ kind: "loading" }));
-    ctx
-      .refreshCollection()
-      .then(() => {
+    const refresh = ctx.refreshCollection().pipe(
+      Effect.map(() => {
         if (ctx.dialogs.openKey === "collection") this.renderCollection();
-      })
-      .catch((error: unknown) => {
-        if (ctx.dialogs.openKey !== "collection") return;
-        show(collectionBody({ kind: "error", message: message(error) }), [
-          { id: "retry", kind: "primary", key: "E", label: "Retry", run: () => this.openCollection() },
-          { id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() },
-        ]);
-      });
+      }),
+      Effect.catchCause((cause) => {
+        if (Cause.hasInterruptsOnly(cause)) return Effect.failCause(cause as Cause.Cause<never>);
+        // A chain error shows its own words; a bug (defect) is reported and shows its message, as before.
+        const error = Cause.findErrorOption(cause);
+        if (Option.isNone(error)) ctx.report("collection", cause);
+        return Effect.sync(() => {
+          if (ctx.dialogs.openKey !== "collection") return;
+          show(collectionBody({ kind: "error", message: Option.isSome(error) ? error.value.message : message(Cause.squash(cause)) }), [
+            { id: "retry", kind: "primary", key: "E", label: "Retry", run: () => this.openCollection() },
+            { id: "close", key: "Esc", label: "Close", run: () => ctx.dialogs.close() },
+          ]);
+        });
+      }),
+    );
+    void ctx.run("collection", refresh);
   }
 
   /** Collection screen from the cached `state.owned` (already refreshed from chain). */

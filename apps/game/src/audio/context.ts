@@ -15,6 +15,7 @@ const MASTER_LEVEL = 0.8;
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let muted = false;
+let onVisibility: (() => void) | null = null;
 
 /** The shared AudioContext (created on first use, possibly still suspended). */
 export function audioContext(): AudioContext {
@@ -32,14 +33,28 @@ export function audioContext(): AudioContext {
     master.connect(limiter);
     limiter.connect(ctx.destination);
     if (typeof document !== "undefined") {
-      document.addEventListener("visibilitychange", () => {
+      onVisibility = () => {
         if (!ctx) return;
         if (document.hidden) void ctx.suspend();
         else void ctx.resume().catch(() => {});
-      });
+      };
+      document.addEventListener("visibilitychange", onVisibility);
     }
   }
   return ctx;
+}
+
+/**
+ * Close the shared AudioContext (app scope teardown, app/audio.ts) and drop its
+ * visibility listener. A later `audioContext()` would create a fresh one.
+ */
+export function closeAudio(): void {
+  if (onVisibility && typeof document !== "undefined") document.removeEventListener("visibilitychange", onVisibility);
+  onVisibility = null;
+  const c = ctx;
+  ctx = null;
+  master = null;
+  if (c) void c.close().catch(() => {});
 }
 
 /** Node every sound connects to. */

@@ -59,6 +59,8 @@ export class GameWorld implements WorldApi {
   readonly renderer: THREE.WebGPURenderer;
   /** Resolves once the backend is up, pipelines are compiled and frames are running. */
   readonly ready: Promise<void>;
+  /** Removes the listeners this class added itself (dispose()). */
+  private readonly unlisten: (() => void)[] = [];
   readonly anchors: WorldAnchors = {
     deck: { x: DECK.x, z: DECK.z },
     shopDoor: { x: DOOR.x, z: DOOR.z },
@@ -151,8 +153,8 @@ export class GameWorld implements WorldApi {
     this.player = new Player(this.scene, this.camera, this.collision, this.renderer.domElement);
     this.player.teleport(SPAWN.x, SPAWN.z, SPAWN.heading);
 
-    window.addEventListener("resize", () => this.resize());
-    window.addEventListener("keydown", (e) => this.onKey(e));
+    this.listen(window, "resize", () => this.resize());
+    this.listen(window, "keydown", (e) => this.onKey(e as KeyboardEvent));
     this.resize();
     this.ready = this.start();
     // Dev-only console handle for perf triage (`__world.census()`); never in production builds.
@@ -547,8 +549,21 @@ export class GameWorld implements WorldApi {
       this.last = 0;
       this.quality.reset();
     };
-    document.addEventListener("visibilitychange", reset);
-    window.addEventListener("focus", reset);
+    this.listen(document, "visibilitychange", reset);
+    this.listen(window, "focus", reset);
+  }
+
+  /** addEventListener, remembered so dispose() can remove it. */
+  private listen(target: EventTarget, type: string, handler: (e: Event) => void): void {
+    target.addEventListener(type, handler);
+    this.unlisten.push(() => target.removeEventListener(type, handler));
+  }
+
+  /** App scope teardown only (app/world.ts): stop the loop, drop our listeners, free the GPU. */
+  dispose(): void {
+    this.renderer.setAnimationLoop(null);
+    for (const off of this.unlisten.splice(0)) off();
+    this.renderer.dispose();
   }
 
   /** Lower render scale, then drop GTAO, then bloom, if frames are slow; recover when fast. `?adapt=0` pins it. */

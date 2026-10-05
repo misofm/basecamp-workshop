@@ -1,8 +1,8 @@
 /**
  * Accessible modal menus (one native <dialog>), plus view builders for each screen.
  *
- * Owns: the dialog element, its keyboard handling (↑↓ / W S select, Enter / E /
- * Space confirm, Esc close, per-action hotkeys), focus management, the skin (CRT
+ * Owns: the dialog element, its keyboard handling (arrows / WASD select with wrap, Home / End,
+ * Tab / Shift+Tab trapped inside the dialog, Enter / E / Space confirm, Esc close, per-action hotkeys), focus management, the skin (CRT
  * terminal in amber / green, paper, enamel plate, price tag; see docs/UI-STYLE.md) and the
  * DOM for every screen: record tag, deck, counter, pending, receipt, errors, ATM,
  * collection and help.
@@ -49,7 +49,7 @@ export interface DialogSpec {
   onClose?: () => void;
 }
 
-const NAV_KEYS = ["ArrowUp", "ArrowDown", "KeyW", "KeyS", "Enter", "NumpadEnter", "KeyE", "Space", "Escape"];
+const NAV_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Home", "End", "Tab", "KeyW", "KeyS", "KeyA", "KeyD", "Enter", "NumpadEnter", "KeyE", "Space", "Escape"];
 const TILTS: Record<DialogSkin, string> = { amber: "0deg", green: "0deg", paper: "-1.2deg", tag: "1.2deg", enamel: "-0.8deg" };
 
 export class Dialogs {
@@ -61,6 +61,7 @@ export class Dialogs {
   private el: HTMLDialogElement;
   private content: HTMLElement;
   private spec: DialogSpec | null = null;
+  private returnFocus: HTMLElement | null = null;
 
   constructor(host: HTMLElement) {
     this.content = h("div", { class: "dlg-content" });
@@ -72,6 +73,14 @@ export class Dialogs {
     host.append(this.el);
     // Capture phase: runs before the world's E/Enter handler and swallows menu keys.
     window.addEventListener("keydown", (e) => this.onKey(e), true);
+    // Safety net: if focus ever lands outside the open dialog (click on the backdrop, browser UI), pull it back.
+    document.addEventListener("focusin", (e) => {
+      if (this.el.open && e.target instanceof Node && !this.el.contains(e.target)) this.focusFirst();
+    });
+  }
+
+  private focusFirst(): void {
+    (this.navTargets()[0] ?? this.el).focus({ preventScroll: true });
   }
 
   get openKey(): string | null {
@@ -82,6 +91,7 @@ export class Dialogs {
   show(spec: DialogSpec): void {
     const previousFocus = this.el.open && this.spec?.key === spec.key ? (document.activeElement as HTMLElement | null)?.dataset.actionId : undefined;
     const wasOpen = this.el.open;
+    if (!wasOpen) this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const skin = spec.skin ?? "paper";
     this.spec = spec;
     this.el.className = `dlg skin-${skin} tone-${spec.tone ?? "default"}${spec.wide ? " dlg-wide" : ""}${wasOpen ? " dlg-swap" : ""}`;
@@ -136,6 +146,11 @@ export class Dialogs {
     this.el.close();
     this.spec = null;
     this.content.replaceChildren();
+    // Give focus back to the game (never leave it on a removed button or in browser UI).
+    const back = this.returnFocus;
+    this.returnFocus = null;
+    if (back && back.isConnected && back !== document.body) back.focus({ preventScroll: true });
+    else if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     this.onOpenChange(false);
     spec?.onClose?.();
   }
@@ -169,6 +184,19 @@ export class Dialogs {
     }
     const targets = this.navTargets();
     const focused = document.activeElement as HTMLElement | null;
+    const current0 = focused ? targets.indexOf(focused) : -1;
+    if (e.code === "Tab") {
+      if (!targets.length) return;
+      const step = e.shiftKey ? -1 : 1;
+      const i = current0 < 0 ? (step > 0 ? 0 : targets.length - 1) : (current0 + step + targets.length) % targets.length;
+      targets[i]?.focus();
+      return;
+    }
+    if (e.code === "Home" || e.code === "End") {
+      (e.code === "Home" ? targets[0] : targets[targets.length - 1])?.focus();
+      this.onNavigate();
+      return;
+    }
     if (e.code === "Enter" || e.code === "NumpadEnter" || e.code === "KeyE" || e.code === "Space") {
       if (focused && this.el.contains(focused) && targets.includes(focused)) {
         this.onNavigate();
@@ -178,7 +206,7 @@ export class Dialogs {
     }
     if (!targets.length) return;
     const current = focused ? targets.indexOf(focused) : -1;
-    const direction = e.code === "ArrowUp" || e.code === "KeyW" ? -1 : 1;
+    const direction = e.code === "ArrowUp" || e.code === "ArrowLeft" || e.code === "KeyW" || e.code === "KeyA" ? -1 : 1;
     const next = current < 0 ? (direction > 0 ? 0 : targets.length - 1) : (current + direction + targets.length) % targets.length;
     targets[next]?.focus();
     this.onNavigate();

@@ -80,7 +80,7 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 | H | Help (and **Reset demo**) |
 | U | Hide / show the overlay (HUD, minimap, prompts, markers) for clean screenshots |
 | Esc | Close a menu (Enter / Esc / click also dismiss the chapter title card) |
-| ↑ ↓ / W S, Enter / E / Space | Select and confirm in menus |
+| Arrows or W A S D, Tab, Enter / E / Space | Menus: move the selection (wraps; Tab stays in the dialog), confirm |
 | L or drag, + / −, Home | Mouse look, zoom, reset camera |
 
 ## The loop

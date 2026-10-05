@@ -98,8 +98,9 @@ waypoint points at the ATM.
 
 ## Keyboard
 
-WASD move · Shift sprint · Space jump · E/Enter interact · N next track · I inspect ·
+WASD move · Shift sprint · Space jump · E/Enter interact · arrows camera · N next track · I inspect ·
 C collection · M mute · H help · Esc close. Menus: ↑↓ or W/S select, Enter/E/Space confirm, Esc close.
+C / H / I toggle their screen. Audit and rules: docs/CONTROLS-AUDIT.md, docs/STATE-MODEL.md.
 Everything works without a mouse; mouse look (L / drag) is optional. Menus freeze the
 player but never the render loop.
 

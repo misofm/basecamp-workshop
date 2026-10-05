@@ -44,6 +44,7 @@ starts hidden (after the loading screen). Look and copy rules: `docs/UI-STYLE.md
 | `?chain=` | `mock` (default) \| `testnet` | Picks the adapter (`src/miso/select.ts`). Fallback: `VITE_MISO_CHAIN` at build time, then `mock`. |
 | `?latency=` | ms (default 800) | Mock only: simulated latency for every adapter call. |
 | `?fail=` | `purchase` \| `sell` \| `withdraw` \| `all` | Mock only: those transactions fail, to show the error + Retry UI. |
+| `?fail=` | `purchase-lost` \| `sell-lost` \| `withdraw-lost` | Mock only: the transaction lands, then its answer is "lost" (timeout message), like a testnet response that never arrived. Retry returns the earlier purchase / sale (charged / paid once), as on testnet. |
 | `?mockhls=1` | | Mock only: every track streams a real testnet HLS quilt from `cdn.miso.fm` instead of the synth loop. |
 | `?quality=` | `high` \| `medium` \| `low` | `high` is the default on WebGPU (2K textures, full post-processing); `medium` is the WebGL2 fallback tier; `low` = 1K textures, tone mapping only, lowest render scale, low Tamashi detail, fewer particles (weak GPUs, projectors on battery). Automated browsers (`navigator.webdriver`, e.g. Playwright) start at `low` unless a tier is given. |
 | `?backend=` | `webgpu` \| `webgl` | Forces the renderer backend (default: WebGPU when available, else WebGL2). The game logic never depends on it. |
@@ -70,7 +71,8 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 
 | Key | Action |
 | --- | --- |
-| W A S D (or arrows) | Walk · **Shift** sprint |
+| W A S D | Walk · **Shift** sprint |
+| Arrows | Turn / tilt the camera (keyboard-only camera; menus use arrows to move the selection) |
 | Space | Jump |
 | E / Enter | Interact (record, deck, counter, the sedan, Stonks, ATM, the hotel door) |
 | N | Next track on the deck (while playing, or standing at the deck) |
@@ -79,9 +81,15 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 | M | Mute / unmute |
 | H | Help (and **Reset demo**) |
 | U | Hide / show the overlay (HUD, minimap, prompts, markers) for clean screenshots |
-| Esc | Close a menu (Enter / Esc / click also dismiss the chapter title card) |
+| Esc | Close the open menu (never does anything else; Enter / Esc / click also dismiss the chapter title card) |
 | Arrows or W A S D, Tab, Enter / E / Space | Menus: move the selection (wraps; Tab stays in the dialog), confirm |
 | L or drag, + / −, Home | Mouse look, zoom, reset camera |
+
+C, H and I toggle their screen (press again to close). Menus can't open during the smash
+swing or the exit beat. While a purchase, sale or withdrawal is pending the overlay stays
+visible (U is ignored) and Help's *Reset demo* is disabled. Full audit:
+[docs/CONTROLS-AUDIT.md](docs/CONTROLS-AUDIT.md); states, transitions and invariants:
+[docs/STATE-MODEL.md](docs/STATE-MODEL.md).
 
 ## The loop
 
@@ -337,7 +345,7 @@ too.
 ```sh
 npm run typecheck                 # tsc --noEmit (strict)
 npm run build                     # typecheck + vite build
-npm run test:unit                 # state machine, mock adapter, testnet keys + sell logic (no browser)
+npm run test:unit                 # state machine (every state × event), input routing (DOM), mock adapter, testnet keys + sell logic
 npx playwright install chromium   # first time only
 npm test                          # e2e: tests/e2e/*.spec.ts (mock mode + read-only testnet)
 ```
@@ -345,7 +353,10 @@ npm test                          # e2e: tests/e2e/*.spec.ts (mock mode + read-o
 The e2e suite builds the app, serves it with `vite preview` on port 5287 and drives the
 whole loop with the keyboard at 1600×900 on SwiftShader (slow: several minutes; it runs
 at `quality=low` automatically). `loop.spec.ts` covers the full loop including the ATM,
-the exit beat (title card), Stonks's return and the failure/Retry paths; `hls.spec.ts` plays a real HLS preview
+the exit beat (title card), Stonks's return and the failure/Retry paths; `state-safety.spec.ts`
+covers the nasty sequences (double confirm, Esc / tab switch / U / Reset during a pending
+transaction, lost answers and Retry, keys during the smash and the exit beat, keys on the
+loading screen); `hls.spec.ts` plays a real HLS preview
 (`?mockhls=1`, needs network access to `cdn.miso.fm`) and checks the deck's `<audio>`
 time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (default:
 `test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run;

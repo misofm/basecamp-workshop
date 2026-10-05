@@ -11,8 +11,8 @@
  *    fullnode's owned-object index agrees (LOCAL_MERGE_TTL_MS),
  *  - the in-flight purchase digest per release (Retry after a timeout first checks
  *    whether the earlier attempt landed instead of buying twice),
- *  - pending sales in localStorage (see ./sell.ts for the retry rules), with an in-memory
- *    fallback when storage is blocked.
+ *  - pending sales (see ./sell.ts for the retry rules): the injected PendingSalesStore
+ *    (../../app/pending-sales.ts; localStorage with an in-memory fallback by default).
  * Must not: return Sui SDK types; everything leaving here is ../types data or PlayerError.
  * Catalog reads work without keys; everything wallet-related rejects with the
  * "Testnet keys missing" PlayerError.
@@ -34,11 +34,12 @@ import {
   waitFor,
   type ChainRecord,
 } from "./chain";
-import { FUSD_DECIMALS, FUSD_SYMBOL, LOCAL_MERGE_TTL_MS, MAX_WITHDRAW, PENDING_SALES_KEY } from "./config";
+import { FUSD_DECIMALS, FUSD_SYMBOL, LOCAL_MERGE_TTL_MS, MAX_WITHDRAW } from "./config";
 import { MESSAGES, PlayerError, toPlayerError } from "./errors";
 import { getKeys } from "./keys";
 import { getPressing, getRelease } from "./miso-api";
-import { sellRecord, type PendingSale, type PendingStore } from "./sell";
+import { sellRecord } from "./sell";
+import { makePendingSalesStore, type PendingSalesStore } from "../../app/pending-sales";
 
 export class TestnetBackend {
   private catalogPromise: Promise<{ records: ShopRecord[]; terms: Map<string, SaleTerms> }> | null = null;
@@ -48,6 +49,11 @@ export class TestnetBackend {
   /** Records sold this session: never handed back as "the earlier purchase that landed". */
   private soldThisSession = new Set<string>();
   private knownOwned = new Map<string, OwnedRecord>();
+  private readonly pending: PendingSalesStore;
+
+  constructor(options: { pending?: PendingSalesStore } = {}) {
+    this.pending = options.pending ?? makePendingSalesStore();
+  }
 
   /** Player address (throws the "keys missing" PlayerError). */
   private get address(): string {
@@ -190,7 +196,7 @@ export class TestnetBackend {
     }
     // Transferred to the collector but not yet paid: still yours as far as the game goes,
     // so you can hold it and press Retry on the sale.
-    for (const [id, pending] of Object.entries(this.loadPendingSales())) {
+    for (const [id, pending] of Object.entries(this.pending.all())) {
       if (!result.has(id) && pending.player.toLowerCase() === address.toLowerCase()) result.set(id, pending.owned);
     }
 
@@ -224,10 +230,6 @@ export class TestnetBackend {
   async sellToNpc(recordId: string, _npc: NpcBuyer): Promise<SellResult> {
     const { player, game } = getKeys();
     const playerAddress = player.toSuiAddress();
-    const store: PendingStore = {
-      get: (id) => this.loadPendingSales()[id],
-      set: (id, sale) => this.savePendingSale(id, sale),
-    };
     const result = await sellRecord(recordId, {
       player: playerAddress,
       game: game.toSuiAddress(),
@@ -235,7 +237,7 @@ export class TestnetBackend {
       transfer: (id, onDigest) => signAndRun(transferTransaction(id, playerAddress, game.toSuiAddress()), player, onDigest),
       pay: (amount, onDigest) => signAndRun(mintFakeUsdTransaction(amount, game.toSuiAddress(), playerAddress), game, onDigest),
       txStatus,
-      pending: store,
+      pending: this.pending,
       describe: (id, record) => this.knownOwned.get(id) ?? this.describeChainRecord(record),
     });
     this.recentPurchases.delete(recordId);
@@ -272,36 +274,6 @@ export class TestnetBackend {
       return { built: true, ...r, playerMessage: r.success ? null : toPlayerError(Object.assign(new Error(r.error ?? ""), {}), "purchase").message };
     } catch (error) {
       return { built: false, success: false, createsRecord: false, error: error instanceof Error ? error.message : String(error), playerMessage: toPlayerError(error, "purchase").message };
-    }
-  }
-
-  /** Pending sales (localStorage, in-memory fallback). Entries from older builds are dropped. */
-  private loadPendingSales(): Record<string, PendingSale> {
-    let all: Record<string, PendingSale>;
-    try {
-      const raw = localStorage.getItem(PENDING_SALES_KEY);
-      const parsed = raw ? (JSON.parse(raw) as unknown) : {};
-      all = parsed && typeof parsed === "object" ? (parsed as Record<string, PendingSale>) : {};
-    } catch {
-      return this.memoryPending;
-    }
-    const out: Record<string, PendingSale> = {};
-    for (const [id, sale] of Object.entries(all)) {
-      if (typeof sale?.transferDigest === "string" && typeof sale.player === "string" && sale.owned) out[id] = sale;
-    }
-    return out;
-  }
-  private memoryPending: Record<string, PendingSale> = {};
-
-  private savePendingSale(recordId: string, sale: PendingSale | null): void {
-    const all = { ...this.loadPendingSales() };
-    if (sale) all[recordId] = sale;
-    else delete all[recordId];
-    this.memoryPending = all;
-    try {
-      localStorage.setItem(PENDING_SALES_KEY, JSON.stringify(all));
-    } catch {
-      // in-memory only
     }
   }
 }

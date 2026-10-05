@@ -48,14 +48,18 @@ import type { MisoAdapter } from "./adapter";
 import { explorerObjectUrl, explorerTxUrl } from "./explorer";
 import type { NpcBuyer, OwnedRecord, PurchaseResult, SellResult, ShopRecord, Wallet, WithdrawResult } from "./types";
 import type { TestnetBackend } from "./testnet/backend";
+import type { PendingSalesStore } from "../app/pending-sales";
 
 export class TestnetAdapter implements MisoAdapter {
   readonly network = "testnet" as const;
   private backend: Promise<TestnetBackend> | null = null;
 
+  /** `pending`: the pending-sale store (default: localStorage, see ../app/pending-sales.ts). */
+  constructor(private readonly options: { pending?: PendingSalesStore } = {}) {}
+
   private load(): Promise<TestnetBackend> {
     if (!this.backend) {
-      this.backend = import("./testnet/backend").then((m) => new m.TestnetBackend());
+      this.backend = import("./testnet/backend").then((m) => new m.TestnetBackend({ pending: this.options.pending }));
       this.backend.catch((error: unknown) => {
         console.warn("[miso testnet] failed to load the testnet module:", error);
         this.backend = null;

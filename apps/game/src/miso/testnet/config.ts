@@ -39,8 +39,7 @@ export const OFFER_NUMERATOR = 3n;
 export const OFFER_DENOMINATOR = 2n;
 export const MAX_PAYOUT = 150_000_000n; // 150 FUSD
 
-/** Transferred-but-unpaid sales ({ transferDigest, payoutDigest? }), so Retry never transfers or pays twice. */
-export const PENDING_SALES_KEY = "miso-game:pending-sales:testnet";
+export { PENDING_SALES_KEY } from "./storage-keys";
 
 export const READ_TIMEOUT_MS = 10_000;
 export const TX_TIMEOUT_MS = 30_000;

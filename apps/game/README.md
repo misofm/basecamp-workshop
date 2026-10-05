@@ -33,7 +33,9 @@ npm run typecheck    # tsc --noEmit
 | `?latency=` | ms (default 800) | Mock only: simulated latency for every adapter call. |
 | `?fail=` | `purchase` \| `sell` \| `withdraw` \| `all` | Mock only: those transactions fail, to show the error + Retry UI. |
 | `?mockhls=1` | | Mock only: every track streams a real testnet HLS quilt from `cdn.miso.fm` instead of the synth loop. |
-| `?quality=` | `low` \| `high` | `low` starts at the lowest render scale (0.6) with bloom off, for weak GPUs and projectors on battery. Automated browsers (`navigator.webdriver`, e.g. Playwright) get `low` automatically; `high` opts out. Without it, quality adapts to the frame rate. |
+| `?quality=` | `low` \| `high` | `low` starts at the lowest render scale (0.6) with bloom off and low Tamashi detail, for weak GPUs and projectors on battery. Automated browsers (`navigator.webdriver`, e.g. Playwright) get `low` automatically; `high` opts out. Without it, quality adapts to the frame rate. |
+
+| `?gallery=` | `1` \| `<id>` (1–100) | Visual QA for the Tamashi characters instead of the game (`src/tamashi/gallery.ts`): `1` shows all 100 in a grid, an id shows that one up close next to its artwork. |
 
 Example: `/?chain=mock&latency=1500&fail=purchase`.
 
@@ -107,6 +109,12 @@ src/
     format.ts explorer.ts mock-catalog.ts
   world/             Three.js rendering + simulation behind WorldApi (api.ts); no money, no menus
                      (the shop, street, cars, NPCs, the ATM)
+  tamashi/           the procedural Tamashi characters (player, clerk, collector, street crowd)
+    character.ts     createTamashi(id): TV head + screen + body, procedural rig (walk, carry, swing, cheer)
+    tv-head.ts screen.ts body.ts …  the parts character.ts assembles
+    cast.ts          who plays whom (player #95, clerk, collector, crowd ids)
+    traits.ts/.json  per-token traits hand-read from the artwork (© Studio Mirai, see NOTICE.md)
+    gallery.ts       ?gallery= visual QA page
   audio/             deck.ts (HLS/synth previews), sfx.ts, ambience.ts, context.ts (master bus/mute)
   ui/                DOM only: hud.ts, minimap.ts, dialogs.ts, intro.ts, style.css
 ```
@@ -297,7 +305,8 @@ time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (de
 `test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run;
 the testnet spec uses `test-results/shots-testnet/`). `window.__game` (see `src/debug.ts`)
 offers `teleportTo`, `interact`, `press`, `failNext`, `setFailureMode`, `setLatency`,
-`state()`, `measure()`, `deckDebug()` and `buyerReturnNow()`.
+`state()`, `measure()`, `deckDebug()`, `buyerReturnNow()`, `crowdStats()` (street crowd:
+on screen now, distinct Tamashi ids shown so far) and `tamashiGallery()` (opens `?gallery=1`).
 
 ## Assets
 

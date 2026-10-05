@@ -5,7 +5,8 @@
 > runs without a server, on two baked-in testnet keys, so the patch's testnet and server
 > hunks no longer apply. To try it as written, check out commit `cc23ffb` first. On the
 > current game the same idea lives in `src/miso/testnet/sell.ts`: the GAME wallet's payout
-> would take the buyer's offer rule.
+> would take the buyer's offer rule. Its NPC hunks also predate the Tamashi characters (they use the old
+> Mixamo `src/world/characters.ts`, since removed).
 
 A patch for [`apps/game`](../../apps/game/README.md) that adds a second street buyer, the
 **house digger**, across the street from the collector. He pays 2× the shop price, but only

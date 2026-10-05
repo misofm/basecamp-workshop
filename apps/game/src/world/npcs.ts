@@ -1,23 +1,27 @@
 /**
- * Non-player characters: street pedestrians, the shop clerk and the collector buyer.
+ * Non-player characters: the street crowd, the shop clerk and the collector buyer,
+ * all Tamashi (src/tamashi/; who plays whom is src/tamashi/cast.ts).
  *
- * Owns: cloning the rigged characters with per-NPC tinted clothing, pedestrians
- * spread along sidewalk routes (pausing / sidestepping when the player is in the way),
- * the clerk behind the counter with a status speech bubble, the collector
- * ("buyer:collector": a visibly different character with beanie, big headphones, gold
- * chain and a tote full of records, head-nodding to the beat and waving the player
- * over), the gold ground ring and "Got any wax?" bubble, the collector's walk-off
- * after a sale, and the walk back to the spot when the game asks for a rerun.
+ * Owns: the crowd (walkers spread along the sidewalk routes, pausing / sidestepping when
+ * the player is in the way; idlers chatting in pairs, looking in the shop window and
+ * browsing inside the shop, each with a small collision box), cycling the crowd through
+ * every CAST.crowd id over time (one out-of-view member swaps to the next unused id every
+ * few seconds), the clerk behind the counter with a status speech bubble, the collector
+ * ("buyer:collector": nods to the beat, tilts their head while thinking, waves the player
+ * over, cheers on a sale, carries a tote of records), the gold ground ring and "Got any
+ * wax?" bubble, the collector's walk-off after a sale, and the walk back to the spot when
+ * the game asks for a rerun.
  * Must not: decide sale or purchase outcomes; world.ts relays the game layer's statuses.
  */
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { Collision, type Obstacle } from "./collision";
-import { loadCharacter, makeCharacter, rotateBoneAboutWorldAxis, type Character, type CharacterKind } from "./characters";
 import { Interactables } from "./interactables";
 import { BUYER_EXIT, BUYER_SPOT, COUNTER, groundHeight, PED_ROUTES, SHOP_FLOOR_Y } from "./layout";
 import { SpeechBubble } from "./labels";
-import { DISPLAY_SCALE, type Holder } from "./record-item";
+import type { Holder } from "./record-item";
+import { createTamashi, type TamashiCharacter } from "../tamashi/character";
+import { CAST } from "../tamashi/cast";
 
 export const BUYER_ID = "buyer:collector";
 
@@ -33,29 +37,84 @@ const CASHIER_LINES = {
   error: "Hmm, that didn't go through",
 } as const;
 
-interface Walker {
-  character: Character;
-  kind: CharacterKind;
+/** Every this many seconds, one crowd member that is out of view (or far) becomes the next cast id. */
+const SWAP_EVERY = 3;
+/** Beyond this camera distance a crowd member counts as "not really seen" and may be swapped. */
+const SWAP_DISTANCE = 25;
+/** Crowd members further than this (or off screen) advance their rig every few frames only. */
+const FULL_RATE_DISTANCE = 30;
+
+/** Walkers per route (PED_ROUTES index → count), spread evenly along it. */
+const WALKERS_PER_ROUTE = [11, 5, 4, 4];
+
+type IdleMode = "chat" | "window" | "browse";
+/**
+ * Idlers: fixed spots, off the walker routes and clear of every interactable, the ATM,
+ * the bench, the collector and the walk from the spawn to the door. Heading 0 = facing +z.
+ * Inside the shop they browse the wall stands / look at the back-wall poster, away from
+ * the stands' interact points, the deck, the counter and the centre aisle.
+ */
+const IDLE_SPOTS: { x: number; z: number; heading: number; mode: IdleMode }[] = [
+  // Chatting pairs on the sidewalks.
+  { x: -12.9, z: 1.0, heading: Math.PI / 2, mode: "chat" },
+  { x: -12.1, z: 1.0, heading: -Math.PI / 2, mode: "chat" },
+  { x: -4.4, z: 17.2, heading: Math.PI / 2, mode: "chat" },
+  { x: -3.6, z: 17.2, heading: -Math.PI / 2, mode: "chat" },
+  { x: 8.6, z: 17.1, heading: Math.PI / 2, mode: "chat" },
+  { x: 9.4, z: 17.1, heading: -Math.PI / 2, mode: "chat" },
+  { x: 25.4, z: -4.0, heading: 0, mode: "chat" },
+  { x: 25.4, z: -3.2, heading: Math.PI, mode: "chat" },
+  // Looking in the shop's west window (the ATM is further east, at x -4.4).
+  { x: -7.2, z: 0.75, heading: Math.PI, mode: "window" },
+  // Browsing inside the shop.
+  { x: -5.0, z: -8.0, heading: -Math.PI / 2, mode: "browse" },
+  { x: 5.0, z: -4.8, heading: Math.PI / 2, mode: "browse" },
+  { x: 0.9, z: -12.5, heading: Math.PI, mode: "browse" },
+];
+
+interface Member {
+  character: TamashiCharacter;
+  id: number;
+  /** Seconds of animation not yet given to character.update (throttled far members). */
+  pendingDt: number;
+  /** Spreads throttled updates over frames. */
+  slot: number;
+}
+
+interface Walker extends Member {
   route: { x: number; z: number }[];
   loop: boolean;
   target: number;
   dir: 1 | -1;
   speed: number;
   side: number;
-  pausedFor: number;
   heading: number;
-  active?: THREE.AnimationAction;
+  /** Sidestep offset of the drawn body from its route position (world x/z). */
+  offset: { x: number; z: number };
 }
 
-/** Pick or crossfade to a named clip. */
-function play(walker: { character: Character; active?: THREE.AnimationAction }, name: string, timeScale = 1) {
-  const next = walker.character.actions[name];
-  if (!next) return;
-  next.timeScale = timeScale;
-  if (next === walker.active) return;
-  walker.active?.fadeOut(0.25);
-  next.reset().fadeIn(0.25).play();
-  walker.active = next;
+interface Idler extends Member {
+  x: number;
+  z: number;
+  heading: number;
+  mode: IdleMode;
+  phase: number;
+  obstacle: Obstacle;
+}
+
+interface Buyer {
+  character: TamashiCharacter;
+  route: { x: number; z: number }[];
+  target: number;
+  speed: number;
+  heading: number;
+  leaving: boolean;
+  leftAt: number;
+  gone: boolean;
+  /** Walking back to BUYER_SPOT (see buyerReturn); `arrive` resolves its promise. */
+  returning: boolean;
+  returnTarget: number;
+  arrive?: () => void;
 }
 
 function angleDelta(from: number, to: number) {
@@ -63,25 +122,27 @@ function angleDelta(from: number, to: number) {
 }
 
 export class Npcs {
-  private pedestrians: Walker[] = [];
-  private clerk?: { character: Character; active?: THREE.AnimationAction };
+  private walkers: Walker[] = [];
+  private idlers: Idler[] = [];
+  private clerk: TamashiCharacter;
   readonly clerkBubble = new SpeechBubble(3.0, 7);
-  private buyer?: Walker & {
-    leaving: boolean;
-    leftAt: number;
-    gone: boolean;
-    /** Walking back to BUYER_SPOT (see buyerReturn); `arrive` resolves its promise. */
-    returning: boolean;
-    returnTarget: number;
-    arrive?: () => void;
-  };
+  private buyer: Buyer;
   readonly buyerBubble = new SpeechBubble(2.8, 6);
   private buyerRing: THREE.Mesh;
   private buyerObstacle: Obstacle;
   private buyerStatusTimer = 0;
   private buyerStatus: "idle" | "thinking" | "happy" | "error" = "idle";
   private time = 0;
+  private frameCount = 0;
   private player = new THREE.Vector3();
+  /** Crowd ids waiting for their turn on the street (front = next). */
+  private queue: number[] = [];
+  /** Every crowd id that has been on the street this session. */
+  private seen = new Set<number>();
+  private swapTimer = 0;
+  private swapCursor = 0;
+  private frustum = new THREE.Frustum();
+  private cameraPosition = new THREE.Vector3();
 
   constructor(
     private scene: THREE.Scene,
@@ -103,78 +164,97 @@ export class Npcs {
     this.buyerBubble.set(BUYER_LINES.idle, { accent: "#ffc93c" });
     this.buyerObstacle = collision.add({ x: BUYER_SPOT.x, z: BUYER_SPOT.z, w: 0.6, d: 0.6, h: 0, tag: "buyer" });
     interactables.register({ id: BUYER_ID, kind: "buyer", x: BUYER_SPOT.x, z: BUYER_SPOT.z + 0.9, radius: 2.0 });
-    void Promise.all([loadCharacter("male"), loadCharacter("female")]).then(([male, female]) => {
-      const templates = { male, female };
-      // Pedestrians.
-      // `along` = how far around the route (0..1) each walker starts, so they are spread
-      // out rather than clumped at the corners.
-      const looks: { kind: CharacterKind; tint: string; route: number; along: number; dir: 1 | -1 }[] = [
-        // Michelle is ~28k triangles, the Vanguard ~11k: mostly Vanguards for the integrated GPU.
-        { kind: "female", tint: "#9fd8ff", route: 0, along: 0.1, dir: 1 },
-        { kind: "male", tint: "#9fc4ff", route: 0, along: 0.29, dir: -1 }, // walks past the spawn shot
-        { kind: "male", tint: "#c9f2c0", route: 0, along: 0.62, dir: 1 },
-        { kind: "male", tint: "#ffd0b0", route: 1, along: 0.45, dir: 1 },
-        { kind: "female", tint: "#e0c8ff", route: 2, along: 0.3, dir: 1 },
-        { kind: "male", tint: "#fff0a8", route: 3, along: 0.7, dir: -1 },
-      ];
-      for (const look of looks) {
-        const route = PED_ROUTES[look.route];
-        const character = makeCharacter(look.kind, templates[look.kind], look.tint);
-        character.model.traverse((o) => (o.castShadow = false)); // only the player and collector cast
-        const start = pointAlong(route.points, route.loop, look.along);
-        character.root.position.set(start.x, 0, start.z);
-        scene.add(character.root);
+
+    // The crowd: the first ids of CAST.crowd go on the street, the rest wait in the queue.
+    this.queue = [...CAST.crowd];
+    let slot = 0;
+    PED_ROUTES.forEach((route, r) => {
+      const count = WALKERS_PER_ROUTE[r] ?? 0;
+      for (let k = 0; k < count; k++) {
+        const id = this.nextId();
+        if (id === undefined) return;
+        // `along` = how far around the route (0..1) each walker starts, so they are spread
+        // out rather than clumped at the corners; directions alternate.
+        const along = (k + 0.35 * ((k * 7 + r * 3) % 3)) / count;
+        const dir: 1 | -1 = k % 2 === 0 ? 1 : -1;
+        const start = pointAlong(route.points, route.loop, along);
         const n = route.points.length;
-        const walker: Walker = {
+        const character = this.spawn(id, start.x, start.z);
+        // Walking forward heads for the segment's end point, backward for its start.
+        const target = dir === 1 ? (start.segment + 1) % n : start.segment;
+        const t = route.points[target];
+        const heading = Math.atan2(t.x - start.x, t.z - start.z);
+        character.root.rotation.y = heading;
+        slot++;
+        this.walkers.push({
           character,
-          kind: look.kind,
+          id,
+          pendingDt: 0,
+          slot,
           route: route.points,
           loop: route.loop,
-          // Walking forward heads for the segment's end point, backward for its start.
-          target: look.dir === 1 ? (start.segment + 1) % n : start.segment,
-          dir: look.dir,
-          speed: look.kind === "female" ? 1.25 : 1.35,
+          target,
+          dir,
+          // 1.1–1.5 m/s, varied but deterministic.
+          speed: 1.1 + ((slot * 0.618) % 1) * 0.4,
           side: 0,
-          pausedFor: 0,
-          heading: 0,
-        };
-        play(walker, "Walk");
-        walker.character.mixer.update(Math.random() * 2);
-        this.pedestrians.push(walker);
+          heading,
+          offset: { x: 0, z: 0 },
+        });
       }
-      // The clerk behind the counter.
-      const clerk = makeCharacter("female", female, "#cfe8d8");
-      clerk.model.traverse((o) => (o.castShadow = false));
-      clerk.root.position.set(COUNTER.x, SHOP_FLOOR_Y, COUNTER.clerkZ);
-      scene.add(clerk.root);
-      this.clerk = { character: clerk };
-      play(this.clerk, "Idle");
-      // The collector: a different character from the player (Michelle, not the armoured
-      // Vanguard) in a bright jacket, with beanie, big headphones, gold chain and a tote of records.
-      const buyer = makeCharacter("female", female, "#ff9f43");
-      buyer.root.position.set(BUYER_SPOT.x, SHOP_FLOOR_Y, BUYER_SPOT.z);
-      buyer.root.rotation.y = BUYER_SPOT.heading;
-      addCollectorGear(buyer);
-      scene.add(buyer.root);
-      this.buyer = {
-        character: buyer,
-        kind: "female",
-        route: BUYER_EXIT,
-        loop: false,
-        target: 0,
-        dir: 1,
-        speed: 1.5,
-        side: 0,
-        pausedFor: 0,
-        heading: BUYER_SPOT.heading,
-        leaving: false,
-        leftAt: 0,
-        gone: false,
-        returning: false,
-        returnTarget: 0,
-      };
-      play(this.buyer, "Idle");
     });
+    IDLE_SPOTS.forEach((spot, i) => {
+      const id = this.nextId();
+      if (id === undefined) return;
+      const character = this.spawn(id, spot.x, spot.z);
+      character.root.rotation.y = spot.heading;
+      this.idlers.push({
+        character,
+        id,
+        pendingDt: 0,
+        slot: slot++,
+        ...spot,
+        phase: i * 1.7,
+        obstacle: collision.add({ x: spot.x, z: spot.z, w: 0.5, d: 0.5, h: 0, tag: "npc" }),
+      });
+    });
+
+    // The clerk behind the counter.
+    this.clerk = createTamashi(CAST.cashier, { role: "npc", castShadow: false });
+    this.clerk.root.position.set(COUNTER.x, SHOP_FLOOR_Y, COUNTER.clerkZ);
+    scene.add(this.clerk.root);
+
+    // The collector, with a tote full of records.
+    const buyer = createTamashi(CAST.collector, { role: "npc", castShadow: false });
+    buyer.root.position.set(BUYER_SPOT.x, SHOP_FLOOR_Y, BUYER_SPOT.z);
+    buyer.root.rotation.y = BUYER_SPOT.heading;
+    addCollectorTote(buyer);
+    scene.add(buyer.root);
+    this.buyer = {
+      character: buyer,
+      route: BUYER_EXIT,
+      target: 0,
+      speed: 1.5,
+      heading: BUYER_SPOT.heading,
+      leaving: false,
+      leftAt: 0,
+      gone: false,
+      returning: false,
+      returnTarget: 0,
+    };
+  }
+
+  private nextId(): number | undefined {
+    const id = this.queue.shift();
+    if (id !== undefined) this.seen.add(id);
+    return id;
+  }
+
+  private spawn(id: number, x: number, z: number): TamashiCharacter {
+    const c = createTamashi(id, { role: "npc", castShadow: false });
+    c.root.position.set(x, groundHeight(x, z), z);
+    this.scene.add(c.root);
+    return c;
   }
 
   setCashierStatus(status: "idle" | "processing" | "success" | "error") {
@@ -184,12 +264,14 @@ export class Npcs {
         accent: status === "success" ? "#3ccf7a" : status === "error" ? "#ff5c5c" : "#ffb35c",
         busy: status === "processing",
       });
+    if (status === "success") this.clerk.cheer();
   }
 
   setBuyerStatus(npcId: string, status: "idle" | "thinking" | "happy" | "error") {
-    if (npcId !== BUYER_ID || this.buyer?.gone) return;
+    if (npcId !== BUYER_ID || this.buyer.gone) return;
     const accent = status === "happy" ? "#3ccf7a" : status === "error" ? "#ff5c5c" : "#ffc93c";
     this.buyerBubble.set(BUYER_LINES[status], { accent, busy: status === "thinking" });
+    if (status === "happy" && this.buyerStatus !== "happy") this.buyer.character.cheer();
     this.buyerStatus = status;
     // Errors fall back to the idle line after a few seconds.
     this.buyerStatusTimer = status === "error" ? 4 : 0;
@@ -198,25 +280,16 @@ export class Npcs {
   /** Holder that keeps a record in an NPC's right hand. */
   holderFor(npcId: string): Holder | null {
     if (npcId !== BUYER_ID) return null;
-    return (out) => {
-      const b = this.buyer;
-      const hand = b?.character.bones.rightHand;
-      if (!b || !hand || b.gone) return false;
-      hand.getWorldPosition(HAND);
-      const q = Q.copy(b.character.root.quaternion);
-      OFFSET.set(-0.04, -0.2, 0.03).applyQuaternion(q);
-      q.multiply(Q2.setFromEuler(E.set(0.1, -2.0, 0)));
-      out.compose(HAND.add(OFFSET), q, S.setScalar(DISPLAY_SCALE));
-      return true;
-    };
+    return (out) => !this.buyer.gone && this.buyer.character.recordMatrix(out);
   }
 
   /** The collector takes the record and strolls off down the sidewalk, then despawns. */
   buyerLeave(npcId: string) {
-    if (npcId !== BUYER_ID || !this.buyer || this.buyer.leaving) return;
+    if (npcId !== BUYER_ID || this.buyer.leaving) return;
     this.buyer.leaving = true;
     this.buyer.leftAt = this.time;
     this.buyer.target = 0;
+    this.buyer.character.carry = 1;
     this.buyerObstacle.enabled = false;
     this.interactables.setEnabled(BUYER_ID, false);
     this.buyerRing.visible = false;
@@ -231,7 +304,7 @@ export class Npcs {
    */
   buyerReturn(npcId: string): Promise<void> {
     const b = this.buyer;
-    if (npcId !== BUYER_ID || !b || (!b.leaving && !b.gone && !b.returning)) return Promise.resolve();
+    if (npcId !== BUYER_ID || (!b.leaving && !b.gone && !b.returning)) return Promise.resolve();
     if (b.gone) {
       b.character.root.position.set(BUYER_RETURN_START.x, groundHeight(BUYER_RETURN_START.x, BUYER_RETURN_START.z), BUYER_RETURN_START.z);
       b.heading = Math.PI / 2; // facing east, towards the shop
@@ -241,6 +314,7 @@ export class Npcs {
     b.gone = false;
     b.returning = true;
     b.returnTarget = 0;
+    b.character.carry = 0;
     this.buyerBubble.set(null);
     const previous = b.arrive;
     return new Promise<void>((resolve) => {
@@ -252,22 +326,105 @@ export class Npcs {
   }
 
   get buyerPosition() {
-    const p = this.buyer?.character.root.position;
-    return p ? { x: p.x, z: p.z } : { x: BUYER_SPOT.x, z: BUYER_SPOT.z };
+    const p = this.buyer.character.root.position;
+    return { x: p.x, z: p.z };
   }
 
   update(dt: number, player: THREE.Vector3, camera: THREE.Camera) {
     this.time += dt;
+    this.frameCount++;
     this.player.copy(player);
-    for (const w of this.pedestrians) this.walk(w, dt);
-    if (this.clerk) {
-      this.clerk.character.mixer.update(dt);
+    this.updateFrustum(camera);
+    for (const w of this.walkers) {
+      this.walk(w, dt);
+      this.animateMember(w, dt, camera);
     }
-    this.updateBuyer(dt);
+    for (const i of this.idlers) {
+      this.idle(i);
+      this.animateMember(i, dt, camera);
+    }
+    this.clerk.update(dt, camera);
+    this.updateBuyer(dt, camera);
     this.clerkBubble.update(dt, camera);
     this.buyerBubble.update(dt, camera);
     const pulse = 1 + Math.sin(this.time * 3) * 0.08;
     this.buyerRing.scale.set(pulse, pulse, pulse);
+    this.swapTimer += dt;
+    if (this.swapTimer >= SWAP_EVERY) {
+      this.swapTimer = 0;
+      this.swapOne();
+    }
+  }
+
+  // ───────────────────────── crowd ─────────────────────────
+
+  private updateFrustum(camera: THREE.Camera) {
+    camera.updateMatrixWorld();
+    PROJ.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+    this.frustum.setFromProjectionMatrix(PROJ);
+    camera.getWorldPosition(this.cameraPosition);
+  }
+
+  private inView(c: TamashiCharacter) {
+    if (!c.root.visible) return false;
+    SPHERE.center.copy(c.root.position);
+    SPHERE.center.y += 0.9;
+    SPHERE.radius = 1.3;
+    return this.frustum.intersectsSphere(SPHERE);
+  }
+
+  /** Near and on screen: every frame. Otherwise every 4th frame (with the summed dt). */
+  private animateMember(m: Member, dt: number, camera: THREE.Camera) {
+    m.pendingDt += dt;
+    const near = m.character.root.position.distanceTo(this.cameraPosition) < FULL_RATE_DISTANCE && this.inView(m.character);
+    if (near || (this.frameCount + m.slot) % 4 === 0) {
+      m.character.update(m.pendingDt, camera);
+      m.pendingDt = 0;
+    }
+  }
+
+  /** Swap the next crowd member nobody is looking at (off screen or far) to the next unused cast id. */
+  private swapOne() {
+    const members: Member[] = [...this.walkers, ...this.idlers];
+    if (!members.length || !this.queue.length) return;
+    for (let k = 0; k < members.length; k++) {
+      const index = (this.swapCursor + k) % members.length;
+      const m = members[index];
+      const far = m.character.root.position.distanceTo(this.cameraPosition) > SWAP_DISTANCE;
+      if (!far && this.inView(m.character)) continue;
+      this.swapCursor = index + 1;
+      const next = this.nextId()!;
+      this.queue.push(m.id);
+      const old = m.character;
+      const c = createTamashi(next, { role: "npc", castShadow: false });
+      c.root.position.copy(old.root.position);
+      c.root.rotation.copy(old.root.rotation);
+      c.model.position.copy(old.model.position);
+      c.speed = old.speed;
+      old.root.removeFromParent();
+      old.dispose();
+      this.scene.add(c.root);
+      m.character = c;
+      m.id = next;
+      m.pendingDt = 0;
+      return;
+    }
+  }
+
+  /** Crowd numbers for debugging: members on screen now, distinct ids shown so far. */
+  crowdStats(camera: THREE.Camera) {
+    this.updateFrustum(camera);
+    const members: Member[] = [...this.walkers, ...this.idlers];
+    return {
+      crowd: members.length,
+      walkers: this.walkers.length,
+      idlers: this.idlers.length,
+      onScreen: members.filter((m) => this.inView(m.character)).length,
+      distinctSeen: this.seen.size,
+      castSize: CAST.crowd.length,
+      queued: this.queue.length,
+      showing: members.map((m) => m.id),
+    };
   }
 
   private walk(w: Walker, dt: number) {
@@ -306,7 +463,8 @@ export class Npcs {
     // Lateral offset is applied to the drawn position only (route stays clean).
     const ox = -dz * w.side,
       oz = dx * w.side;
-    root.userData.drawOffset = { x: ox, z: oz };
+    w.offset.x = ox;
+    w.offset.z = oz;
     const heading = Math.atan2(dx + ox * 0.15, dz + oz * 0.15);
     w.heading += angleDelta(w.heading, heading) * Math.min(1, dt * 6);
     root.rotation.y = w.heading;
@@ -317,9 +475,7 @@ export class Npcs {
       sin = Math.sin(-w.heading);
     child.position.x = ox * cos + oz * sin;
     child.position.z = -ox * sin + oz * cos;
-    if (speed > 0.05) play(w, "Walk", speed / 1.3);
-    else play(w, "Idle");
-    w.character.mixer.update(dt);
+    w.character.speed = speed > 0.05 ? speed : 0;
   }
 
   private advance(w: Walker) {
@@ -331,10 +487,27 @@ export class Npcs {
     }
   }
 
-  private updateBuyer(dt: number) {
+  /** Idle body language: chatting pairs take turns talking; browsers and window-shoppers tilt their heads. */
+  private idle(i: Idler) {
+    const c = i.character;
+    const t = this.time + i.phase;
+    c.speed = 0;
+    if (i.mode === "chat") {
+      const talking = Math.floor(t / 4) % 2 === 0;
+      c.nod = talking ? 0.08 : 0.03;
+      c.tilt = Math.sin(t * 0.6) * (talking ? 0.05 : 0.12);
+    } else {
+      c.nod = 0;
+      c.tilt = Math.sin(t * 0.35) * 0.16;
+    }
+  }
+
+  // ───────────────────────── the collector ─────────────────────────
+
+  private updateBuyer(dt: number, camera: THREE.Camera) {
     const b = this.buyer;
-    if (!b) return;
-    const root = b.character.root;
+    const c = b.character;
+    const root = c.root;
     const head = root.position;
     if (b.gone) return;
     if (this.buyerStatusTimer > 0) {
@@ -344,6 +517,10 @@ export class Npcs {
         this.buyerStatus = "idle";
       }
     }
+    c.speed = 0;
+    c.nod = 0;
+    c.tilt = 0;
+    c.waving = false;
     if (b.returning) {
       const t = BUYER_RETURN_PATH[b.returnTarget];
       const dx = t.x - head.x,
@@ -357,7 +534,7 @@ export class Npcs {
         b.heading += angleDelta(b.heading, Math.atan2(dx, dz)) * Math.min(1, dt * 5);
         head.y = groundHeight(head.x, head.z);
         root.rotation.y = b.heading;
-        play(b, "Walk", 1.1);
+        c.speed = b.speed;
       } else if (b.returnTarget === BUYER_RETURN_PATH.length - 1) {
         // Back on the spot: same as a fresh spawn.
         b.returning = false;
@@ -383,11 +560,11 @@ export class Npcs {
         head.x += (dx / dist) * step;
         head.z += (dz / dist) * step;
         b.heading += angleDelta(b.heading, Math.atan2(dx, dz)) * Math.min(1, dt * 5);
+        c.speed = b.speed;
       }
       root.rotation.y = b.heading;
-      // A happy little bounce in his step.
-      head.y = groundHeight(head.x, head.z) + Math.abs(Math.sin(elapsed * 6)) * 0.06;
-      play(b, "Walk", 1.15);
+      // A happy little bounce in their step.
+      head.y = groundHeight(head.x, head.z) + Math.abs(Math.sin(elapsed * 6)) * 0.04;
       if (elapsed > 5) this.buyerBubble.set(null);
       if (elapsed > 12) {
         b.gone = true;
@@ -402,47 +579,32 @@ export class Npcs {
       const want = near ? Math.atan2(px, pz) : BUYER_SPOT.heading;
       b.heading += angleDelta(b.heading, want) * Math.min(1, dt * 3);
       root.rotation.y = b.heading;
-      play(b, "Idle");
+      this.collectorBodyLanguage(c, Math.hypot(px, pz));
     }
-    b.character.mixer.update(dt);
-    if (!b.leaving && !b.returning) this.collectorBodyLanguage(b.character, Math.hypot(this.player.x - head.x, this.player.z - head.z));
+    c.update(dt, camera);
     this.buyerBubble.sprite.position.set(head.x, head.y + 2.25, head.z);
   }
 
   /**
-   * Procedural layer over the idle clip so the collector reads as an NPC who wants
-   * something: nods to the music in the headphones, and every few seconds waves the
-   * player over when they are in view. Thinking = head tilted; happy = big nod.
+   * The collector reads as an NPC who wants something: nods to the music, and every few
+   * seconds waves the player over when they are in view. Thinking = head tilted;
+   * happy = big nod (plus the cheer from setBuyerStatus).
    */
-  private collectorBodyLanguage(c: Character, playerDistance: number) {
-    const t = this.time;
-    c.model.updateMatrixWorld(true);
-    const forward = AXIS_F.set(0, 0, 1).applyQuaternion(c.root.quaternion);
-    const right = AXIS_R.set(1, 0, 0).applyQuaternion(c.root.quaternion);
+  private collectorBodyLanguage(c: TamashiCharacter, playerDistance: number) {
     const status = this.buyerStatus;
-    // Head: nod on the beat (≈ 96 bpm), or a thoughtful tilt.
-    const nod = status === "thinking" ? 0.06 : status === "happy" ? 0.22 : 0.12;
-    rotateBoneAboutWorldAxis(c.bones.neck, right, Math.max(0, Math.sin(t * 5.0)) * nod);
-    if (status === "thinking") rotateBoneAboutWorldAxis(c.bones.neck, forward, 0.22);
-    rotateBoneAboutWorldAxis(c.bones.spine, forward, Math.sin(t * 2.5) * 0.045);
-    // Wave: raise the right arm out to the side and wag the forearm (1.6 s every 4.5 s).
-    if (status === "idle" && playerDistance < 16) {
-      const u = (t % 4.5) / 1.6;
-      if (u < 1) {
-        const lift = Math.sin(Math.min(1, u * 1.25) * Math.PI) ** 0.6;
-        rotateBoneAboutWorldAxis(c.bones.rightArm, forward, -2.3 * lift);
-        rotateBoneAboutWorldAxis(c.bones.rightForeArm, forward, (-0.5 + Math.sin(u * Math.PI * 6) * 0.45) * lift);
-      }
-    }
+    c.nod = status === "thinking" ? 0.06 : status === "happy" ? 0.22 : 0.12;
+    c.tilt = status === "thinking" ? 0.22 : 0;
+    // Wave for 1.6 s every 4.5 s.
+    c.waving = status === "idle" && playerDistance < 16 && this.time % 4.5 < 1.6;
   }
 
   positions() {
-    const list = this.pedestrians.map((w) => {
+    const list: { x: number; z: number }[] = this.walkers.map((w) => {
       const p = w.character.root.position;
-      const o = (w.character.root.userData.drawOffset as { x: number; z: number } | undefined) ?? { x: 0, z: 0 };
-      return { x: p.x + o.x, z: p.z + o.z };
+      return { x: p.x + w.offset.x, z: p.z + w.offset.z };
     });
-    if (this.buyer && !this.buyer.gone) list.push(this.buyerPosition);
+    for (const i of this.idlers) list.push({ x: i.x, z: i.z });
+    if (!this.buyer.gone) list.push(this.buyerPosition);
     return list;
   }
 }
@@ -471,7 +633,7 @@ function pointAlong(points: { x: number; z: number }[], loop: boolean, fraction:
   return { x: points[0].x, z: points[0].z, segment: 0 };
 }
 
-/** Geometry part painted with one flat vertex colour (so a whole outfit is one draw call). */
+/** Geometry part painted with one flat vertex colour (so the whole tote is one draw call). */
 function painted(g: THREE.BufferGeometry, color: THREE.ColorRepresentation) {
   const geometry = g.index ? g.toNonIndexed() : g;
   geometry.deleteAttribute("uv");
@@ -482,74 +644,34 @@ function painted(g: THREE.BufferGeometry, color: THREE.ColorRepresentation) {
   return geometry;
 }
 
-/**
- * Attach a merged mesh, modelled in the character's own frame (metres, y up, +z = facing,
- * origin at the bone), to a bone. Works whatever the rig's bone axes and scale are.
- */
-function attachToBone(c: Character, bone: THREE.Object3D | undefined, parts: THREE.BufferGeometry[], material: THREE.Material) {
-  if (!bone) return;
-  c.root.updateMatrixWorld(true);
-  const bonePosition = bone.getWorldPosition(new THREE.Vector3());
-  const mesh = new THREE.Mesh(mergeGeometries(parts)!, material);
-  // World transform we want: character orientation, positioned at the bone.
-  const want = new THREE.Matrix4().compose(bonePosition, c.root.getWorldQuaternion(new THREE.Quaternion()), new THREE.Vector3(1, 1, 1));
-  mesh.matrix.copy(bone.matrixWorld).invert().multiply(want);
-  mesh.matrix.decompose(mesh.position, mesh.quaternion, mesh.scale);
-  mesh.castShadow = false; // tiny in the shadow map; not worth a shadow draw call
-  bone.add(mesh);
-}
-
-const GEAR_MATERIAL = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.15 });
+const TOTE_MATERIAL = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.7, metalness: 0 });
+let toteGeometry: THREE.BufferGeometry | null = null;
 
 /**
- * The collector's silhouette, from simple geometry: beanie with pom-pom and oversized
- * headphones (head), a chunky gold chain with a record pendant and a canvas tote with
- * records sticking out (chest, the tote hanging at the hip). Built in the bind pose.
+ * A canvas tote full of records on the collector's left side, hung from the chest joint
+ * (bone axes = body axes: +x is the character's left, +z forward). One draw call.
  */
-function addCollectorGear(c: Character) {
-  const { head, chest } = c.bones;
-  if (!head) return;
-  // Head: offsets from the Head bone (≈ base of the skull).
-  attachToBone(
-    c,
-    head,
-    [
-      painted(new THREE.SphereGeometry(0.142, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2).scale(1, 1.1, 1.1).translate(0, 0.19, -0.01), "#e8432d"),
-      painted(new THREE.CylinderGeometry(0.146, 0.148, 0.065, 18).scale(1, 1, 1.1).translate(0, 0.19, -0.01), "#b8261a"),
-      painted(new THREE.SphereGeometry(0.055, 10, 8).translate(0, 0.35, -0.02), "#ffe7d0"),
-      painted(new THREE.TorusGeometry(0.19, 0.024, 6, 22, Math.PI).translate(0, 0.12, 0), "#1c1f24"),
-      ...[-1, 1].flatMap((side) => [
-        painted(new THREE.CylinderGeometry(0.1, 0.1, 0.08, 18).rotateZ(Math.PI / 2).translate(side * 0.175, 0.11, 0.0), "#1c1f24"),
-        painted(new THREE.CylinderGeometry(0.07, 0.07, 0.086, 16).rotateZ(Math.PI / 2).translate(side * 0.182, 0.11, 0.0), "#34d6ff"),
-      ]),
-    ],
-    GEAR_MATERIAL,
-  );
-  // Chest: chunky gold chain with a record pendant, and a tote bag on a strap over the
-  // right shoulder hanging at the left hip, full of records. (Chain and bag share a mesh:
-  // with the head gear that's two extra draw calls for the whole outfit.)
-  const bag = [
-    painted(new THREE.TorusGeometry(0.1, 0.017, 6, 24).rotateX(Math.PI / 2 - 0.55).scale(1.05, 1, 1.15).translate(0, 0.02, 0.04), "#ffc93c"),
-    painted(new THREE.CylinderGeometry(0.042, 0.042, 0.014, 16).rotateX(Math.PI / 2 - 0.35).translate(0, -0.07, 0.12), "#ffd75a"),
-    painted(new THREE.BoxGeometry(0.07, 0.3, 0.3).translate(0.22, -0.36, -0.07), "#5f6e3f"),
-    painted(new THREE.BoxGeometry(0.02, 0.56, 0.035).rotateZ(0.62).translate(0.05, -0.04, 0.05), "#3f4a2a"),
-    painted(new THREE.BoxGeometry(0.02, 0.56, 0.035).rotateZ(0.62).translate(0.05, -0.04, -0.17), "#3f4a2a"),
-  ];
-  ["#ff4f7b", "#3ad1ff", "#ffd23c"].forEach((color, i) => {
-    bag.push(painted(new THREE.BoxGeometry(0.012, 0.26, 0.26).rotateX((i - 1) * 0.15).translate(0.205 + i * 0.012, -0.24 + i * 0.012, -0.07 + (i - 1) * 0.035), color));
-  });
-  attachToBone(c, chest ?? head, bag, GEAR_MATERIAL);
+function addCollectorTote(c: TamashiCharacter) {
+  if (!toteGeometry) {
+    const parts = [
+      painted(new THREE.BoxGeometry(0.07, 0.3, 0.3).translate(0.3, -0.42, -0.02), "#5f6e3f"),
+      painted(new THREE.BoxGeometry(0.025, 0.36, 0.035).translate(0.27, -0.12, 0.06), "#3f4a2a"),
+      painted(new THREE.BoxGeometry(0.025, 0.36, 0.035).translate(0.27, -0.12, -0.1), "#3f4a2a"),
+    ];
+    ["#ff4f7b", "#3ad1ff", "#ffd23c"].forEach((color, i) => {
+      parts.push(painted(new THREE.BoxGeometry(0.012, 0.26, 0.26).rotateX((i - 1) * 0.15).translate(0.285 + i * 0.012, -0.3 + i * 0.012, -0.02 + (i - 1) * 0.035), color));
+    });
+    toteGeometry = mergeGeometries(parts);
+  }
+  const mesh = new THREE.Mesh(toteGeometry, TOTE_MATERIAL);
+  mesh.name = "collector-tote";
+  mesh.castShadow = false;
+  c.bone("chest").add(mesh);
 }
 
 /** Where a despawned collector reappears, and the way back to the spot. */
 const BUYER_RETURN_START = { x: -16, z: BUYER_EXIT[0].z };
 const BUYER_RETURN_PATH = [BUYER_EXIT[0], { x: BUYER_SPOT.x, z: BUYER_SPOT.z }];
 
-const AXIS_F = new THREE.Vector3();
-const AXIS_R = new THREE.Vector3();
-const HAND = new THREE.Vector3();
-const OFFSET = new THREE.Vector3();
-const S = new THREE.Vector3();
-const Q = new THREE.Quaternion();
-const Q2 = new THREE.Quaternion();
-const E = new THREE.Euler();
+const PROJ = new THREE.Matrix4();
+const SPHERE = new THREE.Sphere();

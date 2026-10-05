@@ -15,34 +15,30 @@ Scanned PBR texture sets from [Poly Haven](https://polyhaven.com), downloaded at
 Files are in `public/textures/`. Each includes diffuse color, OpenGL normal, and roughness maps.
 Poly Haven assets are [CC0](https://polyhaven.com/license). The public API was used only during local asset preparation; there is no live API integration.
 
-## Character and animation
+## Tamashi characters
 
-`public/models/player-male.glb` embeds the male **Soldier / Vanguard** character
-and its original idle/walk/run animations from Adobe Mixamo, distributed with the
-[Three.js examples](https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf).
-The model is normalized to 1.82 m and its right-hand bone carries the record item.
-This is a placeholder character for the interactive prototype.
-See [Adobe's Mixamo FAQ](https://helpx.adobe.com/creative-cloud/faq/mixamo-faq.html)
-for permitted project uses. These assets are embedded in the game, not offered as
-a standalone asset library.
+The player, the shop clerk, the collector and the street crowd are **Tamashi**.
+Tamashi characters and artwork © Studio Mirai, LLC. All rights reserved. Included with
+permission; **not covered by the Apache-2.0 code licence** (see the repo-root `NOTICE.md`).
 
-`public/models/visitor.glb` is **Michelle** (Mixamo character "Ch03", material `Ch03_Body`)
-with Idle / Walk / Run clips, as distributed in the
-[Three.js examples](https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf)
-(`Michelle.glb`). It is used for street pedestrians and the shop clerk. The male rig
-above is also reused (cloned via SkeletonUtils) for pedestrians and the collector NPC.
-Each NPC gets cloned, colour-tinted materials; the collector's hat and headphones are
-procedural geometry. Same Mixamo terms apply. The overhead "record swing" is a
-procedural bone rotation in `src/world/player.ts`, not a Mixamo clip.
+- The 3D characters are procedural (`src/tamashi/`): a TV head, screen and body built at
+  runtime from per-token traits hand-read from the original artwork
+  (`src/tamashi/traits.json`), with a procedural animation rig (idle, walk, run, carry,
+  overhead record swing, cheer). There are no model files or animation clips.
+- `public/tamashi/screens/<n>.webp` are crops of the screen region of the original artwork
+  for the 25 tokens whose screen shows an image rather than a face (crop boxes in
+  `scripts/tamashi-screen-boxes.json`, regenerated with `scripts/tamashi-assets.mjs`).
+- `public/tamashi/portraits/<n>.webp` are 256 px portraits of all 100 Tamashi, for dialogs
+  and the collection.
 
-The previous Michelle/Ch03 retargeting source and preparation script remain under
-`scripts/` for development reference.
+Who plays whom (player #95, clerk, collector, crowd) is set in `src/tamashi/cast.ts`.
+`?gallery=1` shows all 100 in a grid, `?gallery=<id>` one up close next to its artwork.
 
 ## Original assets
 
 The city (buildings with a procedural window atlas, streets, crosswalks, streetlights,
 props), all cars (traffic and parked, including the glass-shard smash effect), the
-waypoint marker, speech bubbles and section signs are procedural geometry and canvas
+waypoint marker, speech bubbles, section signs and the collector's tote are procedural geometry and canvas
 textures generated at runtime in `src/world/`.
 
 Record sleeve artwork, store signage, store architecture, fixtures, traffic, rain,

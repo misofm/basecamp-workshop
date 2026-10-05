@@ -24,5 +24,14 @@ the catalog are fictional; any resemblance to real ones is coincidental.
 
 ## Third-party game assets
 
-Textures, character models and fonts used by the game come from third parties under their
-own licenses. See [apps/game/docs/ASSETS.md](apps/game/docs/ASSETS.md).
+Textures and fonts used by the game come from third parties under their own licenses. The
+game's characters are the Tamashi (below). See [apps/game/docs/ASSETS.md](apps/game/docs/ASSETS.md).
+
+## Tamashi
+
+Tamashi characters and artwork © Studio Mirai, LLC. All rights reserved. Included with
+permission. They are not covered by the Apache License 2.0 that covers the code. This
+includes:
+
+- `apps/game/src/tamashi/traits.json`
+- `apps/game/public/tamashi/`

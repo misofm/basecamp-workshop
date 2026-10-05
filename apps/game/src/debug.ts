@@ -17,6 +17,8 @@
  *   __game.measure()                  draw calls / triangles for one frame
  *   __game.deckDebug()                deck source, <audio> currentTime, preview window start
  *   __game.buyerReturnNow()           bring the collector back now (normally ~20 s after a sale)
+ *   __game.crowdStats()               street crowd: members on screen, distinct Tamashi ids shown so far
+ *   __game.tamashiGallery()           open the Tamashi gallery (?gallery=1) instead of the game
  */
 import type { MisoAdapter } from "./miso/adapter";
 import { MockAdapter, type FailKind, type FailureMode } from "./miso/mock-adapter";
@@ -60,6 +62,10 @@ export function installDebugHooks(world: GameWorld, adapter: MisoAdapter, contro
     measure: () => world.measure(),
     deckDebug: () => deck.debugInfo(),
     buyerReturnNow: () => controller.buyerReturnNow(),
+    crowdStats: () => world.crowdStats(),
+    tamashiGallery(): void {
+      location.assign(`${location.pathname}?gallery=1`);
+    },
   };
   (window as unknown as { __game: typeof hooks }).__game = hooks;
 }

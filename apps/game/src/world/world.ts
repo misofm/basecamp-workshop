@@ -3,7 +3,7 @@
  *
  * Owns: the renderer, scene, lights, post-processing (bloom, FXAA, film grain),
  * adaptive quality (render scale / bloom drop on slow GPUs; `?quality=low`, or any
- * automated browser, starts at the bottom: lowest scale, no bloom), the frame loop, and the
+ * automated browser, starts at the bottom: lowest scale, no bloom, low Tamashi detail), the frame loop, and the
  * wiring between subsystems (city, shop, ATM, traffic, parked cars, NPCs, player, records,
  * interactables, waypoint). Translates WorldApi calls into subsystem calls and fires
  * the WorldApi events (onNear, onInteract, onMove, onZoneChange, onExitBlockedBump).
@@ -30,6 +30,7 @@ import { Player } from "./player";
 import { RecordItems } from "./record-item";
 import { Waypoint } from "./waypoint";
 import { Atm } from "./atm";
+import { setTamashiQuality } from "../tamashi/character";
 import { BOUNDS, BUILDINGS, COUNTER, DECK, DOOR, ROADS, SHOP, SPAWN, groundHeight, inShop } from "./layout";
 
 const EXIT_BUMP_THROTTLE_MS = 1500;
@@ -76,6 +77,8 @@ export class GameWorld implements WorldApi {
   private fxaa: ShaderPass;
   private film: ShaderPass;
   private blocked = false;
+  /** The record in the player's hand, if any (drives the carry pose). */
+  private handRecord: string | null = null;
   private deckPlaying = false;
   private zone: Zone = "street";
   private lastBump = -Infinity;
@@ -112,6 +115,7 @@ export class GameWorld implements WorldApi {
     this.moon.shadow.normalBias = 0.03;
     this.scene.add(this.moon, this.moon.target);
 
+    if (this.lowQuality) setTamashiQuality("low");
     this.interactables = new Interactables(this.scene);
     this.city = new City(this.scene, this.collision);
     this.shop = new Shop(this.scene, this.collision, this.interactables);
@@ -160,6 +164,9 @@ export class GameWorld implements WorldApi {
   setRecordPlace(recordId: string, place: RecordPlace, npcId?: string) {
     const item = this.records.get(recordId);
     if (!item) return;
+    if (place === "hand") this.handRecord = recordId;
+    else if (this.handRecord === recordId) this.handRecord = null;
+    this.player.carrying = this.handRecord !== null;
     switch (place) {
       case "shelf": {
         const anchor = this.shop.anchorFor(recordId);
@@ -277,6 +284,11 @@ export class GameWorld implements WorldApi {
     return result;
   }
 
+  /** Street crowd: Tamashi on screen now, distinct ids shown so far (debug / tests). */
+  crowdStats() {
+    return this.npcs.crowdStats(this.camera);
+  }
+
   get stationPositions() {
     return { spawn: SPAWN, door: DOOR, deck: DECK, counter: COUNTER };
   }
@@ -328,7 +340,7 @@ export class GameWorld implements WorldApi {
     this.elapsed += dt;
     this.adaptQuality(rawDelta);
 
-    this.player.update(dt, this.elapsed);
+    this.player.update(dt);
     const p = this.player.position;
     if (this.player.bumpedDoor && this.collision.doorWall.enabled && time - this.lastBump > EXIT_BUMP_THROTTLE_MS) {
       this.lastBump = time;

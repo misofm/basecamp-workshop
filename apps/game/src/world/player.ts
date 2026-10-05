@@ -1,18 +1,19 @@
 /**
  * The player: animated character, walking, third-person camera and input.
  *
- * Owns: the Mixamo character (idle/walk/run), WASD movement relative to the camera
+ * Owns: the player's Tamashi (CAST.player, src/tamashi/) and its per-frame animation
+ * inputs (speed, carry, the procedural overhead record swing), WASD movement relative to the camera
  * (Shift jogs), collision sliding, the follow camera with camera collision, keyboard
  * camera (arrows orbit, + / − zoom, Home resets), optional mouse look (L or drag),
- * the procedural overhead record swing, camera shake, and where the held record sits.
+ * the swing timing, camera shake, and where the held record sits (the Tamashi's right hand).
  * Must not: decide what interactions mean or know about records' data; E/Enter are
  * handled by world.ts so this module only ever moves the body and the camera.
  */
 import * as THREE from "three";
 import { Collision, type Obstacle } from "./collision";
-import { loadCharacter, makeCharacter, rotateBoneAboutWorldAxis, type Character } from "./characters";
 import { DOOR, groundHeight, inShop, SHOP_FLOOR_Y, SHOP_INTERIOR } from "./layout";
-import { DISPLAY_SCALE } from "./record-item";
+import { createTamashi, type TamashiCharacter } from "../tamashi/character";
+import { CAST } from "../tamashi/cast";
 
 const MOVE_KEYS = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "ShiftLeft", "ShiftRight"];
 const DEFAULT_PITCH = 0.14;
@@ -29,8 +30,11 @@ interface Swing {
 }
 
 export class Player {
-  readonly root = new THREE.Group();
-  character?: Character;
+  /** The Tamashi's own root: the player moves and turns it directly (no wrapper group). */
+  readonly root: THREE.Group;
+  readonly character: TamashiCharacter;
+  /** Holding a record (world.ts sets it from setRecordPlace): eases the carry pose in/out. */
+  carrying = false;
   heading = 0;
   /** Camera orbit around the player (0 = camera south of the player, looking north). */
   yaw = 0;
@@ -42,7 +46,6 @@ export class Player {
   /** Set during a frame when the player pushed into the blocked shop doorway. */
   bumpedDoor = false;
   private keys = new Set<string>();
-  private active?: THREE.AnimationAction;
   private swing: Swing | null = null;
   private swingAngle = 0;
   private shakeAmount = 0;
@@ -50,7 +53,6 @@ export class Player {
   private dragMoved = false;
   private lastPointer = { x: 0, y: 0 };
   private cameraRay = new THREE.Raycaster();
-  private fallback: THREE.Group;
   private hit = new THREE.Vector3();
 
   constructor(
@@ -59,27 +61,10 @@ export class Player {
     private collision: Collision,
     private canvas: HTMLCanvasElement,
   ) {
-    this.root.name = "player";
-    this.fallback = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 1.1, 4, 12), new THREE.MeshStandardMaterial({ color: "#d9b26a" }));
-    body.position.y = 0.85;
-    body.castShadow = true;
-    this.fallback.add(body);
-    this.root.add(this.fallback);
+    this.character = createTamashi(CAST.player, { role: "player", castShadow: true });
+    this.root = this.character.root;
     scene.add(this.root);
-    void loadCharacter("male")
-      .then((template) => {
-        const c = makeCharacter("male", template, undefined, true);
-        this.character = c;
-        this.root.add(c.root);
-        this.fallback.visible = false;
-        this.active = c.actions.Idle;
-        this.active?.play();
-        document.documentElement.dataset.character = "ready";
-      })
-      .catch(() => {
-        document.documentElement.dataset.character = "fallback";
-      });
+    document.documentElement.dataset.character = "ready";
     this.bindInput();
   }
 
@@ -122,7 +107,7 @@ export class Player {
     return this.swing !== null;
   }
 
-  update(dt: number, elapsed: number) {
+  update(dt: number) {
     this.bumpedDoor = false;
     const k = (code: string) => (this.keys.has(code) ? 1 : 0);
     let dx = 0,
@@ -168,11 +153,10 @@ export class Player {
     this.running = moved && running;
     this.root.rotation.y = this.heading;
     p.y = THREE.MathUtils.lerp(p.y, groundHeight(p.x, p.z), 1 - Math.exp(-dt * 18));
-    if (!this.character) this.fallback.position.y = moved ? Math.abs(Math.sin(elapsed * 10)) * 0.04 : 0;
     this.animate(dt);
   }
 
-  /** Swing timing runs even before the character model has loaded, so the promise always resolves. */
+  /** Swing timing: raise, bring down hard (impact resolves swingAt's promise), recover. */
   private swingPhase(dt: number) {
     this.swingAngle = 0;
     this.swingLean = 0;
@@ -205,40 +189,16 @@ export class Player {
   private animate(dt: number) {
     this.swingPhase(dt);
     const c = this.character;
-    if (!c) return;
-    const name = this.moving ? (this.running ? "Run" : "Walk") : "Idle";
-    const next = c.actions[name];
-    if (next && next !== this.active) {
-      this.active?.fadeOut(0.2);
-      next.reset().fadeIn(0.2).play();
-      this.active = next;
-    }
-    c.mixer.update(dt);
-    // Procedural overhead swing, layered on top of whatever clip is playing
-    // (the Mixamo clips have no swing, so the arm and spine are rotated additively).
-    if (this.swingAngle !== 0 || this.swingLean !== 0) {
-      c.model.updateMatrixWorld(true);
-      const right = AXIS.set(1, 0, 0).applyQuaternion(this.root.quaternion); // character's local +x axis in world space
-      rotateBoneAboutWorldAxis(c.bones.spine, right, this.swingLean);
-      rotateBoneAboutWorldAxis(c.bones.rightArm, right, this.swingAngle);
-      rotateBoneAboutWorldAxis(c.bones.rightForeArm, right, this.swingAngle * -0.15);
-    }
-    c.model.updateMatrixWorld(true);
+    c.speed = this.moving ? (this.running ? RUN_SPEED : WALK_SPEED) : 0;
+    c.carry += ((this.carrying ? 1 : 0) - c.carry) * Math.min(1, dt * 8);
+    if (Math.abs(c.carry - (this.carrying ? 1 : 0)) < 0.001) c.carry = this.carrying ? 1 : 0;
+    c.swingArm = this.swingAngle;
+    c.swingLean = this.swingLean;
+    c.update(dt, this.camera);
   }
 
   /** World matrix for a record held in the right hand (record-item Holder). */
-  holdMatrix = (out: THREE.Matrix4) => {
-    const hand = this.character?.bones.rightHand;
-    if (!hand) return false;
-    hand.getWorldPosition(HAND);
-    const q = Q.copy(this.root.quaternion).multiply(Q2.setFromAxisAngle(X, this.swingAngle));
-    // Hang the sleeve just below the grip, cover turned out to the side and back toward the camera.
-    OFFSET.set(-0.04, -0.2, 0.02).applyQuaternion(q);
-    HAND.add(OFFSET);
-    q.multiply(Q2.setFromEuler(E.set(0.12, -2.1, 0.0)));
-    out.compose(HAND, q, S.setScalar(DISPLAY_SCALE));
-    return this.root.visible;
-  };
+  holdMatrix = (out: THREE.Matrix4) => this.character.recordMatrix(out);
 
   /** Third-person follow camera with collision. Call after update(). */
   updateCamera(dt: number) {
@@ -412,17 +372,9 @@ function clampIndoors(v: THREE.Vector3, margin: number) {
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
 const easeIn = (t: number) => Math.pow(Math.min(1, Math.max(0, t)), 2);
 
-const AXIS = new THREE.Vector3();
-const X = new THREE.Vector3(1, 0, 0);
-const HAND = new THREE.Vector3();
-const OFFSET = new THREE.Vector3();
 const OFFSET2 = new THREE.Vector3();
 const ANCHOR = new THREE.Vector3();
 const DESIRED = new THREE.Vector3();
 const DIR = new THREE.Vector3();
 const SAFE = new THREE.Vector3();
 const SAFE_HIGH = new THREE.Vector3();
-const S = new THREE.Vector3();
-const Q = new THREE.Quaternion();
-const Q2 = new THREE.Quaternion();
-const E = new THREE.Euler();

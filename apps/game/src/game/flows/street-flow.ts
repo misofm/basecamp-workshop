@@ -12,7 +12,6 @@
  * return timer.
  * Must not: decide legality (state.ts) or touch the chain except via the adapter.
  */
-import { shortId } from "../../miso/format";
 import * as sfx from "../../audio/sfx";
 import { errorBody, lineItems, paragraph, pendingBody, recordStrip } from "../../ui/dialogs";
 import { COLLECTOR, buyerFor } from "../npc-buyers";
@@ -27,12 +26,7 @@ export class StreetFlow {
   smashing = false;
   private returnTimer: ReturnType<typeof setTimeout> | null = null;
 
-  /** The real collector address from the adapter (the bank server on testnet), once known. */
-  private collectorAddress: string | null = null;
-
-  constructor(private readonly ctx: FlowContext) {
-    ctx.adapter.collectorAddress().then((a) => (this.collectorAddress = a), () => {});
-  }
+  constructor(private readonly ctx: FlowContext) {}
 
   // ─────────────────────────────── smash ───────────────────────────────
 
@@ -89,7 +83,7 @@ export class StreetFlow {
           ["Collector offers", ctx.money(npc.offer)],
           ["Profit", `+${ctx.money(npc.offer - r.price.amount)}`],
         ]),
-        paragraph(`The Record moves to the collector's wallet (${shortId(this.collectorAddress ?? npc.address)}) and they pay you in FakeUSD.`),
+        paragraph("Hand the record over and the collector pays you in FakeUSD on the spot."),
       ],
       actions: [
         { id: "sell", kind: "primary", label: `Sell for ${ctx.money(npc.offer)}`, run: () => void this.sell() },
@@ -119,9 +113,9 @@ export class StreetFlow {
       if (ctx.dialogs.openKey === "sell") ctx.dialogs.close();
       sfx.cashRegister();
       ctx.hud.missionToast("SOLD", `+${ctx.money(result.paid)} · ${record.title}`, "good", 5500);
-      ctx.hud.toast(`Sold ${record.title} · tx ${shortId(result.digest, 6, 6)}`, {
+      ctx.hud.toast(`Sold ${record.title}`, {
         tone: "good",
-        link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "Receipt ↗" },
+        link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
         durationMs: 12000,
       });
       void ctx.refreshCollection().catch(() => {});
@@ -167,7 +161,7 @@ export class StreetFlow {
       title: "The collector inspects the grooves…",
       body: [
         owned ? recordStrip(owned.coverUrl, owned.title, owned.artist, `#${owned.serial}/${owned.maxSupply}`) : null,
-        pendingBody("Settling on Sui", "Record goes to the collector, FakeUSD comes to you, in one transaction."),
+        pendingBody("Closing the deal", "The record goes to the collector, the FakeUSD comes to you."),
       ],
       actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
     });
@@ -178,7 +172,7 @@ export class StreetFlow {
     ctx.dialogs.show({
       key: "sell",
       tone: "error",
-      eyebrow: "TRANSACTION FAILED",
+      eyebrow: "SALE FAILED",
       title: "The deal fell through.",
       body: errorBody(error, "The collector is still keen. Give it another go."),
       actions: [

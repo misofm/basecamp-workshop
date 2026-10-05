@@ -20,7 +20,8 @@
  *   VITE_GAME_SUI_PRIVATE_KEY (the game world = the collector NPC). They are read only in
  *   the lazy testnet chunk; VITE_* values end up in the shipped JS, so a hosted keyed build
  *   must sit behind access control. Missing / invalid keys: the catalog still loads, every
- *   wallet call rejects with "Testnet keys missing: …". No server, no /api.
+ *   wallet call rejects with the player-safe "The shop's till is offline right now" (the
+ *   developer hint "Testnet keys missing: …" goes to the console). No server, no /api.
  * - Wallet: the player address; balances via gRPC getBalance (coins + address balance).
  *   The player pays its own gas (fund its address at faucet.sui.io).
  * - ATM (withdrawFakeUsd): a player-signed mint from the permissionless FakeUSD faucet
@@ -41,10 +42,10 @@
  * - Errors / timeouts: Move aborts (sold out, listing disabled, price changed, wrong
  *   payment), FakeUSD / gas shortfalls, not-owned, missing keys and timeouts (10 s reads,
  *   30 s txs) map to short messages; raw errors go to console.warn only.
- * - Explorer links: Suiscan testnet (./explorer).
+ * - Explorer links: devxplorer (./explorer).
  */
 import type { MisoAdapter } from "./adapter";
-import { suiscanObjectUrl, suiscanTxUrl } from "./explorer";
+import { explorerObjectUrl, explorerTxUrl } from "./explorer";
 import type { NpcBuyer, OwnedRecord, PurchaseResult, SellResult, ShopRecord, Wallet, WithdrawResult } from "./types";
 import type { TestnetBackend } from "./testnet/backend";
 
@@ -61,7 +62,7 @@ export class TestnetAdapter implements MisoAdapter {
       });
     }
     return this.backend.catch(() => {
-      throw new Error("Couldn't load the Sui testnet code. Check your connection and reload.");
+      throw new Error("Couldn't open the shop. Check your internet and reload.");
     });
   }
 
@@ -91,9 +92,9 @@ export class TestnetAdapter implements MisoAdapter {
     return (await this.load()).debugSimulatePurchase(shopRecordId, sender);
   }
   explorerTxUrl(digest: string): string {
-    return suiscanTxUrl(digest);
+    return explorerTxUrl(digest);
   }
   explorerObjectUrl(objectId: string): string {
-    return suiscanObjectUrl(objectId);
+    return explorerObjectUrl(objectId);
   }
 }

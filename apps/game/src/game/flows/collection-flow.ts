@@ -6,7 +6,6 @@
  * Hold / Put away buttons, and the help dialog.
  * Must not: cache chain data of its own; `state.owned` is the single cache.
  */
-import { shortId } from "../../miso/format";
 import * as sfx from "../../audio/sfx";
 import { collectionBody, helpBody, type CollectionItem, type DialogAction } from "../../ui/dialogs";
 import { handLocked, heldIsOwned } from "../state";
@@ -18,7 +17,7 @@ export class CollectionFlow {
   openCollection(): void {
     const { ctx } = this;
     const show = (body: HTMLElement, actions: DialogAction[] = [{ id: "close", label: "Close", run: () => ctx.dialogs.close() }]) =>
-      ctx.dialogs.show({ key: "collection", wide: true, eyebrow: `YOUR WALLET · ${ctx.networkBadge()}`, title: "Your collection.", body, actions });
+      ctx.dialogs.show({ key: "collection", wide: true, eyebrow: "YOUR RECORDS", title: "Your collection.", body, actions });
     show(collectionBody({ kind: "loading" }));
     ctx
       .refreshCollection()
@@ -43,7 +42,6 @@ export class CollectionFlow {
       const onDeck = s.deck?.shopRecordId === o.shopRecordId;
       return {
         recordId: o.recordId,
-        shortRecordId: shortId(o.recordId),
         title: o.title,
         artist: o.artist,
         coverUrl: o.coverUrl,
@@ -69,12 +67,11 @@ export class CollectionFlow {
     const sold = s.sold.map((x) => ({
       title: ctx.catalog.get(x.shopRecordId)?.title ?? x.shopRecordId,
       paidText: `+${ctx.money(x.paid)}`,
-      shortRecordId: shortId(x.recordId),
     }));
     ctx.dialogs.show({
       key: "collection",
       wide: true,
-      eyebrow: `YOUR WALLET · ${ctx.networkBadge()}`,
+      eyebrow: "YOUR RECORDS",
       title: items.length ? `Your collection · ${items.length}` : "Your collection.",
       body: collectionBody({ kind: "ready", items, sold }),
       actions: [{ id: "close", label: "Close", run: () => ctx.dialogs.close() }],
@@ -97,7 +94,7 @@ export class CollectionFlow {
           label: "Reset demo (reload page)",
           // Reload keeps the URL (and its ?chain=…&latency=… params). The mock chain
           // lives in memory, so a reload is a fresh wallet; testnet state is on chain.
-          detail: mock ? "fresh mock wallet, 100 FUSD" : "restarts the game; on-chain state stays",
+          detail: mock ? "starts over with 100 FUSD" : "restarts the game; your records stay yours",
           run: () => window.location.reload(),
         },
       ],

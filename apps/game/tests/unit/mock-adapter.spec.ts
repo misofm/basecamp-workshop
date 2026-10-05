@@ -45,7 +45,7 @@ test("purchase deducts the price and returns ids", async () => {
   const ownedList = await adapter.listOwnedRecords();
   expect(ownedList).toHaveLength(1);
   expect(ownedList[0]).toMatchObject({ recordId: result.recordId, shopRecordId: record.id, serial: record.minted + 1 });
-  expect(adapter.explorerTxUrl(result.digest)).toBe(`https://suiscan.xyz/testnet/tx/${result.digest}`);
+  expect(adapter.explorerTxUrl(result.digest)).toBe(`https://devxplorer.io/?search=${encodeURIComponent(result.digest)}&network=testnet`);
 });
 
 test("insufficient funds error is player friendly", async () => {
@@ -61,12 +61,12 @@ test("failNext fails exactly one transaction without spending", async () => {
   const adapter = new MockAdapter({ latencyMs: 0 });
   const [record] = await adapter.loadShopCatalog();
   adapter.failNext("purchase");
-  await expect(adapter.purchase(record)).rejects.toThrow(/Transaction rejected/);
+  await expect(adapter.purchase(record)).rejects.toThrow(/Couldn't complete the purchase/);
   expect((await adapter.getWallet()).fakeUsd).toBe(100_000_000n);
   await expect(adapter.purchase(record)).resolves.toBeTruthy();
 
   adapter.setFailureMode("all");
-  await expect(adapter.purchase(record)).rejects.toThrow(/Transaction rejected/);
+  await expect(adapter.purchase(record)).rejects.toThrow(/Couldn't complete the purchase/);
   adapter.setFailureMode("none");
 });
 
@@ -105,7 +105,7 @@ test("withdrawFakeUsd credits the balance and returns a digest", async () => {
   expect(result.amount).toBe(50_000_000n);
   expect(result.digest).toMatch(/^[1-9A-HJ-NP-Za-km-z]{44}$/);
   expect((await adapter.getWallet()).fakeUsd).toBe(150_000_000n);
-  expect(adapter.explorerTxUrl(result.digest)).toBe(`https://suiscan.xyz/testnet/tx/${result.digest}`);
+  expect(adapter.explorerTxUrl(result.digest)).toBe(`https://devxplorer.io/?search=${encodeURIComponent(result.digest)}&network=testnet`);
   // A withdrawal tops up enough to buy what a short wallet couldn't.
   const poor = new MockAdapter({ latencyMs: 0, startFakeUsd: 5_000_000n });
   const [record] = await poor.loadShopCatalog();

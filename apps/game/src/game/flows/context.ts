@@ -35,10 +35,6 @@ export interface FlowContext {
 
   /** "12.50 FUSD" */
   money(amount: bigint): string;
-  /** "MOCK CHAIN" | "SUI TESTNET" */
-  networkBadge(): string;
-  /** "the mock chain" | "Sui testnet" */
-  networkName(): string;
 }
 
 /** A rejection's player-safe message. */

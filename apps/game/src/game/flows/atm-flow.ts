@@ -6,7 +6,7 @@
  *     → dispatch withdrawStart → pending screen
  *     → await adapter.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT)   (resolves after finality)
  *     → re-read the wallet                                   (chain truth: balance)
- *     → dispatch withdrawSuccess → receipt (tx digest + explorer link), cash counts up
+ *     → dispatch withdrawSuccess → receipt ("Receipt no." + "View receipt ↗" explorer link), cash counts up
  *   or → dispatch withdrawFail → the adapter's friendly message + Retry / Cancel
  *
  * Works whether or not the player holds a record (it only moves money); refused
@@ -40,7 +40,7 @@ export class AtmFlow {
     if (s.op?.kind === "withdraw" && s.op.status === "pending") return this.showPending();
     if (s.op?.kind === "withdraw" && s.op.status === "error") return this.showError(s.op.error ?? "Something went wrong.");
     if (s.op?.status === "pending") {
-      ctx.hud.toast("One transaction at a time. The ATM can wait a moment.", { tone: "bad" });
+      ctx.hud.toast("One thing at a time. The ATM can wait a moment.", { tone: "bad" });
       return;
     }
     const balance = s.balance;
@@ -49,12 +49,12 @@ export class AtmFlow {
       eyebrow: EYEBROW,
       title: TITLE,
       body: [
-        paragraph(`Withdraw ${AMOUNT_LABEL} from ${this.faucetName()}`),
+        paragraph(`Withdraw ${AMOUNT_LABEL} in cash.`),
         lineItems([
           ["Your balance", balance === null ? "…" : ctx.money(balance)],
           ["After withdrawal", balance === null ? "…" : ctx.money(balance + ATM_WITHDRAW_AMOUNT)],
         ]),
-        paragraph(`Testnet dollars, free to mint: no real money involved. Paid out on ${ctx.networkName()}.`),
+        paragraph("FakeUSD is play money: free to withdraw, no real money involved."),
       ],
       actions: [
         { id: "withdraw", kind: "primary", label: `Withdraw ${AMOUNT_LABEL}`, run: () => void this.withdraw() },
@@ -77,9 +77,9 @@ export class AtmFlow {
       ctx.dispatch({ type: "withdrawSuccess", digest: result.digest, amount: result.amount, balance });
       sfx.cashRegister();
       if (!this.showReceipt(result.digest, result.amount, balance)) {
-        ctx.hud.toast(`Withdrew ${ctx.money(result.amount)} · tx ${shortId(result.digest, 6, 6)}`, {
+        ctx.hud.toast(`Withdrew ${ctx.money(result.amount)}`, {
           tone: "good",
-          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "Receipt ↗" },
+          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
           durationMs: 8000,
         });
       }
@@ -91,10 +91,6 @@ export class AtmFlow {
     }
   }
 
-  private faucetName(): string {
-    return this.ctx.adapter.network === "mock" ? "the mock faucet" : "the testnet faucet";
-  }
-
   private showPending(): void {
     const { ctx } = this;
     ctx.dialogs.show({
@@ -102,7 +98,7 @@ export class AtmFlow {
       tone: "pending",
       eyebrow: EYEBROW,
       title: TITLE,
-      body: pendingBody("Counting out your FakeUSD", `Minting ${AMOUNT_LABEL} from ${this.faucetName()} on ${ctx.networkName()}. You can close this; the ATM keeps working.`),
+      body: pendingBody("Counting out your FakeUSD", `${AMOUNT_LABEL} coming right up. You can close this; the ATM keeps working.`),
       actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
     });
   }
@@ -117,13 +113,13 @@ export class AtmFlow {
       eyebrow: "CASH OUT · RECEIPT",
       title: TITLE,
       body: receiptBody(
-        `${ctx.money(amount)} in your wallet.`,
+        `${ctx.money(amount)} in your pocket.`,
         [
-          { label: "Tx", value: shortId(digest, 6, 6), copy: digest, href: ctx.adapter.explorerTxUrl(digest), linkLabel: "Tx ↗" },
           { label: "Withdrew", value: ctx.money(amount) },
           { label: "Balance", value: ctx.money(balance) },
+          { label: "Receipt no.", value: shortId(digest), href: ctx.adapter.explorerTxUrl(digest), linkLabel: "View receipt ↗", linkId: "tx" },
         ],
-        ctx.adapter.network === "mock" ? "Mock chain: the digest is fake, the explorer link won't resolve." : undefined,
+        ctx.adapter.network === "mock" ? "Offline demo: the receipt link is just for show." : undefined,
       ),
       actions: [{ id: "done", kind: "primary", label: "Back to the shop", run: () => ctx.dialogs.close() }],
     });
@@ -135,7 +131,7 @@ export class AtmFlow {
     ctx.dialogs.show({
       key: "atm",
       tone: "error",
-      eyebrow: "TRANSACTION FAILED",
+      eyebrow: "ATM ERROR",
       title: TITLE,
       body: errorBody(error, "Nothing was withdrawn. Give it another go."),
       actions: [

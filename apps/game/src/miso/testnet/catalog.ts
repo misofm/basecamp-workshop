@@ -53,11 +53,18 @@ export interface SaleTerms {
 const SHOP_FILE = "/shop.testnet.json";
 const ID_RE = /^0x[0-9a-f]{64}$/;
 
-/** Validate the parsed shop file. Throws a PlayerError naming the first problem. */
+/** What the player sees when the shop file is missing or broken (details go to devDetail + console). */
+const SHELVES_EMPTY = "The shelves aren't stocked right now. Try reloading in a moment.";
+
+/** Validate the parsed shop file. Throws a PlayerError whose devDetail names the first problem. */
 export function parseShopFile(raw: unknown): ShopEntry[] {
-  const bad = (why: string) => new PlayerError(`${SHOP_FILE} is malformed: ${why}`);
+  const bad = (why: string) => {
+    const detail = `${SHOP_FILE} is malformed: ${why}`;
+    console.warn(`[miso testnet] ${detail}`);
+    return new PlayerError(SHELVES_EMPTY, "other", detail);
+  };
   if (!Array.isArray(raw)) throw bad("expected a JSON array of { releaseId, edition, section }");
-  if (raw.length === 0) throw new PlayerError(`${SHOP_FILE} is empty: add at least one { releaseId, edition, section }`);
+  if (raw.length === 0) throw bad("it is empty: add at least one { releaseId, edition, section }");
   const entries: ShopEntry[] = [];
   const seen = new Set<string>();
   raw.forEach((item: unknown, i) => {
@@ -93,7 +100,7 @@ async function loadShopFile(): Promise<ShopEntry[]> {
     raw = await fetchJson<unknown>(SHOP_FILE, { timeoutMs: READ_TIMEOUT_MS, cache: "no-cache" });
   } catch (error) {
     console.warn(`[miso testnet] could not load ${SHOP_FILE}:`, error);
-    throw new PlayerError(`Couldn't load ${SHOP_FILE} (missing or not valid JSON).`);
+    throw new PlayerError(SHELVES_EMPTY, "other", `Couldn't load ${SHOP_FILE} (missing or not valid JSON).`);
   }
   return parseShopFile(raw);
 }
@@ -198,7 +205,7 @@ export async function loadCatalog(): Promise<{ records: ShopRecord[]; terms: Map
   });
   if (!records.length) {
     throw new PlayerError(
-      failures === entries.length ? "Couldn't reach the Miso API. Check your connection and reload." : "None of the records in shop.testnet.json are on sale right now.",
+      failures === entries.length ? "Couldn't reach the record shop. Check your internet and reload." : "None of the records are on sale right now.",
     );
   }
   return { records, terms };

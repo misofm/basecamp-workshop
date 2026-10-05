@@ -47,7 +47,7 @@ export class Atm {
     box(r, w, 1.5, d, 0, 0.85, 0, BODY);
     box(r, w - 0.12, 0.62, 0.03, 0, 1.25, front + 0.015, TRIM, {});
     // Lit screen.
-    const screen = signMesh("FakeUSD", 0.56, 0.38, { bg: "#062018", ink: "#59f0b8", glow: 2.2, sub: "TESTNET FAUCET", scale: 0.4 });
+    const screen = signMesh("FakeUSD", 0.56, 0.38, { bg: "#062018", ink: "#59f0b8", glow: 2.2, sub: "CASH · 24 HRS", scale: 0.4 });
     screen.position.set(0, 1.27, front + 0.036);
     r.add(screen);
     // Sloped keypad shelf and the cash slot below it.

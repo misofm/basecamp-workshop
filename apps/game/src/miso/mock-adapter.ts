@@ -14,7 +14,7 @@
  * URL knobs (parsed in select.ts): ?latency=ms, ?fail=purchase|sell|withdraw|all, ?mockhls=1.
  */
 import type { MisoAdapter } from "./adapter";
-import { suiscanObjectUrl, suiscanTxUrl } from "./explorer";
+import { explorerObjectUrl, explorerTxUrl } from "./explorer";
 import { formatAmount } from "./format";
 import { MOCK_CATALOG, MOCK_HLS_QUILT } from "./mock-catalog";
 import { COLLECTOR } from "../game/npc-buyers";
@@ -52,13 +52,14 @@ const FUSD_SYMBOL = "FUSD";
 export const MOCK_WALLET_ADDRESS =
   "0x5ca1ab1e000000000000000000000000000000000000000000000000c0ffee01";
 
+// Player-facing (shown in the error dialogs): plain game language, no chain terms.
 const TX_FAILED_MESSAGE =
-  "Transaction rejected: the network timed out. Your FakeUSD was not spent.";
+  "Couldn't complete the purchase — the shop's connection dropped. Your FakeUSD was not spent.";
 const SELL_FAILED_MESSAGE =
-  "Transaction rejected: the network timed out. You still own the record.";
+  "The sale didn't go through — the connection dropped. You still own the record.";
 
 const WITHDRAW_FAILED_MESSAGE =
-  "The ATM couldn't reach the faucet: the network timed out. Nothing was withdrawn.";
+  "The ATM couldn't reach the bank. Nothing was withdrawn.";
 
 const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
@@ -145,7 +146,7 @@ export class MockAdapter implements MisoAdapter {
     await this.simulate("purchase");
     const stock = this.catalog.find((r) => r.id === record.id);
     if (!stock) throw new Error("That record isn't for sale here.");
-    if (stock.minted >= stock.maxSupply) throw new Error("Sold out — every copy has been pressed.");
+    if (stock.minted >= stock.maxSupply) throw new Error("Sold out — every copy has been sold.");
     const price = stock.price.amount;
     if (this.fakeUsd < price) {
       throw new Error(
@@ -197,10 +198,10 @@ export class MockAdapter implements MisoAdapter {
   }
 
   explorerTxUrl(digest: string): string {
-    return suiscanTxUrl(digest);
+    return explorerTxUrl(digest);
   }
   explorerObjectUrl(objectId: string): string {
-    return suiscanObjectUrl(objectId);
+    return explorerObjectUrl(objectId);
   }
 
   // ---- internals ----

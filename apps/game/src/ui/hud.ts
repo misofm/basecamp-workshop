@@ -2,7 +2,7 @@
  * The heads-up display: everything drawn over the 3D scene while playing.
  *
  * Owns: the DOM for the GTA-style money counter (count-up animation, green/red
- * flash, pending spinner), wallet + network badge, mission text, held-record card,
+ * flash, pending spinner), a tiny "online" / "offline demo" indicator, mission text, held-record card,
  * now-playing bar, the [E] interaction prompt, toasts (small + big centre
  * "mission" toasts), the mute badge and the controls footer.
  * Must not: contain game logic, read game state or call the adapter/world. The
@@ -49,7 +49,7 @@ export class Hud {
   private moneyDelta: HTMLElement;
   private pendingEl: HTMLElement;
   private pendingText: HTMLElement;
-  private walletEl: HTMLElement;
+  private netEl: HTMLElement;
   private missionEl: HTMLElement;
   private missionText: HTMLElement;
   private heldEl: HTMLElement;
@@ -77,9 +77,9 @@ export class Hud {
     this.moneyValue = h("span", { class: "money-value" }, "—");
     this.moneyDelta = h("div", { class: "money-delta", "aria-hidden": "true" });
     this.moneyEl = h("div", { class: "money", role: "status", "aria-label": "FakeUSD balance" }, this.moneySymbol, this.moneyValue);
-    this.pendingText = h("span", null, "Processing on Sui…");
+    this.pendingText = h("span", null, "Ringing it up…");
     this.pendingEl = h("div", { class: "money-pending", hidden: true }, h("span", { class: "spinner" }), this.pendingText);
-    this.walletEl = h("div", { class: "wallet" });
+    this.netEl = h("div", { class: "net-status", "aria-label": "Connection" });
     this.missionText = h("p", { class: "mission-text" });
     this.missionEl = h("section", { class: "mission", "aria-live": "polite" }, h("div", { class: "mission-label" }, "MISSION"), this.missionText);
     this.heldEl = h("section", { class: "held-card", hidden: true, "aria-live": "polite" });
@@ -97,6 +97,7 @@ export class Hud {
       ...[
         ["WASD", "move"],
         ["Shift", "sprint"],
+        ["Space", "jump"],
         ["E", "interact"],
         ["C", "collection"],
         ["M", "mute"],
@@ -106,7 +107,7 @@ export class Hud {
     this.root = h(
       "div",
       { id: "hud", class: "hud", hidden: true },
-      h("div", { class: "hud-top-right" }, this.moneyEl, this.moneyDelta, this.pendingEl, this.walletEl, this.muteEl),
+      h("div", { class: "hud-top-right" }, this.moneyEl, this.moneyDelta, this.pendingEl, this.netEl, this.muteEl),
       this.missionEl,
       h("div", { class: "hud-bottom-right" }, this.playingEl, this.heldEl),
       this.promptEl,
@@ -173,11 +174,16 @@ export class Hud {
     if (text) this.pendingText.textContent = text;
   }
 
-  setWallet(address: string | null, network: "mock" | "testnet"): void {
-    this.walletEl.replaceChildren(
-      h("span", { class: `net-badge net-${network}` }, network === "mock" ? "MOCK CHAIN" : "SUI TESTNET"),
-      h("span", { class: "wallet-address" }, address ?? "connecting…"),
-    );
+  /**
+   * The small connection indicator: "online" (testnet) or "offline demo" (mock). No
+   * network names or addresses are shown to the player; the address (if known) is kept
+   * in data-address for developers and tests only.
+   */
+  setNetwork(network: "mock" | "testnet", address: string | null = null): void {
+    this.netEl.dataset.network = network;
+    if (address) this.netEl.dataset.address = address;
+    else delete this.netEl.dataset.address;
+    this.netEl.replaceChildren(h("i", { class: "net-dot", "aria-hidden": "true" }), network === "mock" ? "offline demo" : "online");
   }
 
   setMuted(muted: boolean): void {

@@ -18,24 +18,35 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect(s.balance).toBe("100000000");
   await expect(page.locator(".mission-text")).toHaveText(/record shop/i);
   await expect(page.locator(".money-value")).toHaveText("100.00");
+  // Player-facing copy reads like a normal game: a quiet "offline demo" indicator, no chain jargon.
+  await expect(page.locator("#hud .net-status")).toHaveText("offline demo");
+  await expect(page.locator("#hud .controls")).toContainText("Space");
+  expect(await page.locator("#hud").innerText()).not.toMatch(/\b(sui|chain|testnet|wallet|digest)\b/i);
   await page.waitForTimeout(600);
   await shot(page, "02-street-spawn"); // the FakeUSD ATM is in view, left of the door
 
-  // 1b. The FakeUSD ATM outside the shop: withdraw 50 FUSD from the (mock) faucet.
+  // 1a. Jump (Space). Implemented in the world; just exercise it and take a picture.
+  await page.evaluate(() => (window as any).__game.world.player.jump?.());
+  await page.waitForTimeout(250);
+  await shot(page, "02a-jump");
+
+  // 1b. The FakeUSD ATM outside the shop: withdraw 50 FUSD (mock faucet under the hood).
   const dialog = page.locator("dialog.dlg[open]");
   await goTo(page, "atm");
   await expect(page.locator(".prompt-label")).toHaveText("Withdraw FakeUSD");
   await page.keyboard.press("KeyE");
   await expect(dialog.locator(".dlg-title")).toHaveText("FakeUSD ATM");
-  await expect(dialog).toContainText("Withdraw 50 FUSD from the mock faucet");
+  await expect(dialog).toContainText("Withdraw 50 FUSD in cash.");
   await expect(dialog.locator(".dlg-action:focus .dlg-action-label")).toHaveText("Withdraw 50 FUSD");
   await shot(page, "02b-atm-menu");
   await page.keyboard.press("Enter"); // Withdraw
   await expect(dialog.locator(".pending")).toBeVisible();
   expect((await state(page)).op).toMatchObject({ kind: "withdraw", status: "pending" });
   await expect(page.locator(".money-pending")).toBeVisible();
-  await expect(dialog.locator('[data-receipt-link="Tx"]')).toBeVisible({ timeout: 20_000 });
-  await expect(dialog.locator('[data-receipt-link="Tx"]')).toHaveAttribute("href", /suiscan\.xyz\/testnet\/tx\//);
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toBeVisible({ timeout: 20_000 });
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveText("View receipt ↗");
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveAttribute("href", /^https:\/\/devxplorer\.io\/\?search=[1-9A-HJ-NP-Za-km-z]{44}&network=testnet$/);
+  await expect(dialog).toContainText("Receipt no.");
   s = await state(page);
   expect(s.op).toBeNull();
   expect(s.balance).toBe("150000000");
@@ -57,7 +68,7 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await expect(page.locator(".prompt-label")).toHaveText(/Low Tide Tapes/);
   await page.keyboard.press("KeyE");
   await expect(dialog.locator(".dlg-title")).toHaveText("Low Tide Tapes");
-  await expect(dialog.locator(".rec-edition-row")).toContainText("105 / 250 minted");
+  await expect(dialog.locator(".rec-edition-row")).toContainText("105 / 250 sold");
   await expect(dialog.locator(".rec-price")).toHaveText("12.00 FUSD");
   await shot(page, "04-record-menu");
   await page.keyboard.press("Enter"); // "Pick up" is focused
@@ -114,9 +125,11 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect(s.hand?.recordId).toMatch(/^0x[0-9a-f]{64}$/);
   expect(s.owned[0]?.recordId).toBe(s.hand?.recordId);
   expect(s.balance).toBe("138000000"); // 150 after the ATM − 12
-  await expect(dialog.locator('[data-receipt-link="Record"]')).toHaveAttribute("href", new RegExp(`/object/${s.hand!.recordId}$`));
-  await expect(dialog.locator('[data-receipt-link="Tx"]')).toHaveAttribute("href", /suiscan\.xyz\/testnet\/tx\//);
-  await expect(dialog.locator('[data-receipt-link="Record"]')).toHaveAttribute("target", "_blank");
+  await expect(dialog.locator('[data-receipt-link="record"]')).toHaveAttribute("href", `https://devxplorer.io/?search=${s.hand!.recordId}&network=testnet`);
+  await expect(dialog.locator('[data-receipt-link="record"]')).toHaveText("View record ↗");
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveAttribute("href", /^https:\/\/devxplorer\.io\/\?search=[1-9A-HJ-NP-Za-km-z]{44}&network=testnet$/);
+  await expect(dialog.locator('[data-receipt-link="record"]')).toHaveAttribute("target", "_blank");
+  expect(await dialog.innerText()).not.toMatch(/\b(sui|chain|testnet|wallet|digest|object|minted|explorer|tx)\b/i);
   await page.waitForTimeout(1100); // money counter finishes counting down
   await shot(page, "08-receipt");
   const recordId = s.hand!.recordId!;
@@ -159,7 +172,7 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect((await state(page)).op).toMatchObject({ kind: "sell", status: "pending" });
   await shot(page, "14-sell-pending");
   await expect(page.locator(".big-toast")).toContainText("SOLD", { timeout: 20_000 });
-  await expect(page.locator(".toast", { hasText: "Sold Low Tide Tapes" }).locator("a")).toHaveAttribute("href", /\/tx\//);
+  await expect(page.locator(".toast", { hasText: "Sold Low Tide Tapes" }).locator("a")).toHaveAttribute("href", /^https:\/\/devxplorer\.io\/\?search=[1-9A-HJ-NP-Za-km-z]{44}&network=testnet$/);
   await shot(page, "15-sold-cash");
   s = await until(page, (x) => x.sold.length === 1 && x.op === null, "sold");
   expect(s.balance).toBe("156000000");
@@ -204,7 +217,7 @@ test("purchase failure shows Retry; retry succeeds once the chain recovers; sell
   await page.keyboard.press("KeyE");
   await page.keyboard.press("Enter"); // Pay
   const dialog = page.locator("dialog.dlg[open]");
-  await expect(dialog.locator(".err-msg")).toContainText("Transaction rejected", { timeout: 15_000 });
+  await expect(dialog.locator(".err-msg")).toContainText("Couldn't complete the purchase", { timeout: 15_000 });
   let s = await state(page);
   expect(s.op).toMatchObject({ kind: "purchase", status: "error" });
   expect(s.hand?.recordId).toBeNull();
@@ -253,7 +266,7 @@ test("ATM withdraw failure shows Retry; retry succeeds once the faucet recovers"
 
   await page.evaluate(() => (window as any).__game.setFailureMode("none"));
   await page.keyboard.press("Enter"); // Retry
-  await expect(dialog.locator('[data-receipt-link="Tx"]')).toBeVisible({ timeout: 15_000 });
+  await expect(dialog.locator('[data-receipt-link="tx"]')).toBeVisible({ timeout: 15_000 });
   s = await state(page);
   expect(s.op).toBeNull();
   expect(s.balance).toBe("150000000");

@@ -205,7 +205,7 @@ export function recordBody(r: RecordView): HTMLElement {
         h(
           "div",
           { class: "rec-edition" },
-          h("div", { class: "rec-edition-row" }, h("span", null, r.edition), h("b", null, `${r.minted} / ${r.maxSupply} minted`)),
+          h("div", { class: "rec-edition-row" }, h("span", null, r.edition), h("b", null, `${r.minted} / ${r.maxSupply} sold`)),
           h("div", { class: "rec-bar" }, h("i", { style: `width:${pct.toFixed(1)}%` })),
         ),
       ),
@@ -249,10 +249,13 @@ export interface ReceiptRow {
   /** Full value copied by the copy button. */
   copy?: string;
   href?: string;
+  /** Link text, e.g. "View receipt ↗". */
   linkLabel?: string;
+  /** Stable hook for tests (data-receipt-link), e.g. "tx" | "record". Defaults to the label. */
+  linkId?: string;
 }
 
-/** Receipt with copy buttons and explorer links (open in a new tab). */
+/** Receipt rows with optional copy buttons and "View … ↗" links (open in a new tab). */
 export function receiptBody(headline: string, rows: ReceiptRow[], footnote?: string): HTMLElement {
   return h(
     "div",
@@ -277,7 +280,7 @@ export function receiptBody(headline: string, rows: ReceiptRow[], footnote?: str
           h("code", { class: `receipt-value${row.copy ? " mono" : ""}`, title: row.copy ?? row.value }, row.value),
           copy,
           row.href
-            ? h("a", { class: "mini link dlg-nav", href: row.href, target: "_blank", rel: "noopener noreferrer", "data-receipt-link": row.label }, row.linkLabel ?? "Explorer ↗")
+            ? h("a", { class: "mini link dlg-nav", href: row.href, target: "_blank", rel: "noopener noreferrer", "data-receipt-link": row.linkId ?? row.label }, row.linkLabel ?? "View ↗")
             : null,
         );
       }),
@@ -292,7 +295,6 @@ export function paragraph(text: string, className = "dlg-p"): HTMLElement {
 
 export interface CollectionItem {
   recordId: string;
-  shortRecordId: string;
   title: string;
   artist: string;
   coverUrl: string;
@@ -307,16 +309,15 @@ export interface CollectionItem {
 export interface SoldItem {
   title: string;
   paidText: string;
-  shortRecordId: string;
 }
 
 export function collectionBody(
   state: { kind: "loading" } | { kind: "error"; message: string } | { kind: "ready"; items: CollectionItem[]; sold: SoldItem[] },
 ): HTMLElement {
   if (state.kind === "loading") {
-    return h("div", { class: "coll coll-loading", "aria-busy": "true" }, ...[0, 1, 2].map(() => h("div", { class: "coll-item skeleton" }, h("div", { class: "sk-cover" }), h("div", { class: "sk-lines" }, h("i"), h("i")))), h("p", { class: "dlg-p" }, "Reading your wallet…"));
+    return h("div", { class: "coll coll-loading", "aria-busy": "true" }, ...[0, 1, 2].map(() => h("div", { class: "coll-item skeleton" }, h("div", { class: "sk-cover" }), h("div", { class: "sk-lines" }, h("i"), h("i")))), h("p", { class: "dlg-p" }, "Flipping through your records…"));
   }
-  if (state.kind === "error") return errorBody(state.message, "Your records are safe on chain. Try again in a moment.");
+  if (state.kind === "error") return errorBody(state.message, "Your records are safe. Try again in a moment.");
   const items = state.items.map((item) => {
     const button = item.actionLabel
       ? h("button", { class: "mini dlg-nav coll-hold", type: "button", disabled: item.actionDisabled ?? false }, item.actionLabel)
@@ -331,7 +332,7 @@ export function collectionBody(
         { class: "coll-text" },
         h("strong", null, item.title),
         h("span", null, item.artist),
-        h("small", null, `${item.serialText} · `, h("a", { class: "dlg-nav", href: item.explorerUrl, target: "_blank", rel: "noopener noreferrer" }, `${item.shortRecordId} ↗`)),
+        h("small", null, `${item.serialText} · `, h("a", { class: "dlg-nav", href: item.explorerUrl, target: "_blank", rel: "noopener noreferrer", title: item.recordId }, "View record ↗")),
       ),
       button,
     );
@@ -339,13 +340,13 @@ export function collectionBody(
   return h(
     "div",
     { class: "coll" },
-    items.length ? h("div", { class: "coll-list" }, ...items) : paragraph(state.sold.length ? "Nothing in your wallet right now. The shop restocks every release." : "No Records yet. Buy one at the counter in the shop."),
+    items.length ? h("div", { class: "coll-list" }, ...items) : paragraph(state.sold.length ? "No records on you right now. The shop restocks every release." : "No Records yet. Buy one at the counter in the shop."),
     state.sold.length
       ? h(
           "div",
           { class: "coll-sold" },
           h("div", { class: "coll-sold-title" }, "SOLD"),
-          ...state.sold.map((s) => h("div", { class: "coll-sold-row" }, h("span", null, s.title), h("code", null, s.shortRecordId), h("b", null, s.paidText))),
+          ...state.sold.map((s) => h("div", { class: "coll-sold-row" }, h("span", null, s.title), h("b", null, s.paidText))),
         )
       : null,
   );
@@ -355,10 +356,11 @@ export function helpBody(): HTMLElement {
   const rows: [string, string][] = [
     ["W A S D", "Walk (arrow keys too)"],
     ["Shift", "Sprint"],
+    ["Space", "Jump"],
     ["E / Enter", "Interact with what's in front of you"],
     ["N", "Next track on the deck"],
     ["I", "Inspect the record in your hands"],
-    ["C", "Your collection (read from the chain)"],
+    ["C", "Your record collection"],
     ["M", "Mute / unmute"],
     ["L or drag", "Mouse look · + − zoom · Home reset camera"],
     ["↑↓ Enter Esc", "Menus: select, confirm, close"],
@@ -366,8 +368,8 @@ export function helpBody(): HTMLElement {
   return h(
     "div",
     { class: "help" },
-    h("ol", { class: "help-loop" }, ...["Pick a record from the crates", "Spin it on the listening deck", "Buy it at the counter (on Sui)", "Smash a parked car with it", "Sell it to the collector"].map((t) => h("li", null, t))),
-    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM outside the shop dispenses testnet dollars."),
+    h("ol", { class: "help-loop" }, ...["Pick a record from the crates", "Spin it on the listening deck", "Buy it at the counter", "Smash a parked car with it", "Sell it to the collector"].map((t) => h("li", null, t))),
+    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM outside the shop dispenses cash."),
     h("dl", { class: "help-keys" }, ...rows.flatMap(([k, v]) => [h("dt", null, h("kbd", null, k)), h("dd", null, v)])),
   );
 }

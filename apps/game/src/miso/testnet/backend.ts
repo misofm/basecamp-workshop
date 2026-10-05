@@ -129,7 +129,7 @@ export class TestnetBackend {
       this.pendingPurchases.delete(record.id);
       const recordId = executed.created.find((c) => isRecordType(c.type))?.objectId;
       if (!recordId) {
-        throw new PlayerError("The purchase went through but the Record didn't show up yet. Check your collection (C).");
+        throw new PlayerError("The purchase went through but the record isn't in your bag yet. Check your collection (C).");
       }
       return await this.afterPurchase(record, recordId, executed.digest);
     } catch (error) {

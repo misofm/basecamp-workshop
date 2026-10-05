@@ -20,6 +20,8 @@ export class PlayerError extends Error {
   constructor(
     message: string,
     readonly kind: ErrorKind = "other",
+    /** Developer-only explanation (console / tests); never shown to the player. */
+    readonly devDetail?: string,
   ) {
     super(message);
     this.name = "PlayerError";
@@ -41,21 +43,36 @@ export type ErrorKind =
 /** What was being attempted: picks the fallback text and whose gas ran out. */
 export type Phase = "read" | "purchase" | "withdraw" | "sell" | "payout";
 
-const ATM_HINT = "The ATM outside dispenses testnet dollars.";
+// Everything below is PLAYER-VISIBLE: plain game language, no chain / wallet / gas terms.
+// Developer detail (which key, which faucet, the raw error) goes to console.warn instead.
+const ATM_HINT = "The ATM outside dispenses cash.";
+
+/** Shown for "the shop can't sign or pay for transactions" (no gas, missing / bad keys). */
+export const TILL_OFFLINE = "The shop's till is offline right now. Try again later.";
 
 export const MESSAGES = {
-  gas: "The player wallet is out of testnet SUI for gas. Fund VITE_PLAYER_SUI_PRIVATE_KEY's address at faucet.sui.io.",
-  gameGas: "The collector (game wallet) is out of testnet SUI for gas. Fund VITE_GAME_SUI_PRIVATE_KEY's address at faucet.sui.io.",
+  gas: TILL_OFFLINE,
+  gameGas: "The collector's till is offline right now.",
   soldOut: "Sold out — every copy of this pressing has been sold.",
-  disabled: "This record isn't on sale right now (the shop paused the listing).",
+  disabled: "This record isn't on sale right now.",
   priceChanged: "The price just changed. Reload the page to see the new price.",
   wrongPayment: "The payment didn't match the price. Reload the page and try again.",
   notListed: "This record isn't for sale here any more.",
   notOwned: "You don't own that record any more.",
-  timeout: "Sui testnet didn't answer in time. Check your connection and try again.",
-  network: "Couldn't reach Sui testnet. Check your connection and try again.",
-  withdraw: "The ATM couldn't reach the faucet. Try again.",
+  timeout: "The shop took too long to answer. Try again.",
+  network: "The shop's connection dropped. Check your internet and try again.",
+  withdraw: "The ATM couldn't reach the bank. Try again.",
   alreadyCollected: "The collector already has this record.",
+  purchase: "Couldn't complete the purchase — try again.",
+  sell: "Couldn't complete the sale — try again.",
+  read: "Couldn't reach the shop. Try again.",
+  payout: "The payment didn't go through.",
+} as const;
+
+/** Developer-only hints for a gas shortfall (console only, never shown to the player). */
+const GAS_DEV_HINT = {
+  player: "the player wallet is out of testnet SUI for gas: fund VITE_PLAYER_SUI_PRIVATE_KEY's address at faucet.sui.io",
+  game: "the game wallet (collector) is out of testnet SUI for gas: fund VITE_GAME_SUI_PRIVATE_KEY's address at faucet.sui.io",
 } as const;
 
 const LISTING_ABORTS: Record<number, [string, ErrorKind]> = {
@@ -112,12 +129,16 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
     const table = abort.module === "listing" ? LISTING_ABORTS : abort.module === "pressing" ? PRESSING_ABORTS : {};
     const hit = table[abort.code];
     if (hit && phase === "purchase") return new PlayerError(hit[0], hit[1]);
-    if (phase === "sell") return new PlayerError("The transfer was rejected by Sui. You still own the record.");
-    if (phase === "withdraw" || phase === "payout") return new PlayerError(MESSAGES.withdraw);
-    return new PlayerError("The shop's contract rejected this purchase. Nothing was charged.");
+    if (phase === "sell") return new PlayerError("The sale didn't go through. You still own the record.");
+    if (phase === "withdraw") return new PlayerError(MESSAGES.withdraw);
+    if (phase === "payout") return new PlayerError(MESSAGES.payout);
+    return new PlayerError(`${MESSAGES.purchase} Nothing was charged.`);
   }
 
-  const gas = () => new PlayerError(phase === "payout" ? MESSAGES.gameGas : MESSAGES.gas, "gas");
+  const gas = () => {
+    console.warn(`[miso testnet] ${phase}: ${phase === "payout" ? GAS_DEV_HINT.game : GAS_DEV_HINT.player}`);
+    return new PlayerError(phase === "payout" ? MESSAGES.gameGas : MESSAGES.gas, "gas");
+  };
 
   // tx.balance() resolution: "Insufficient balance of <type> for owner 0x…. Required: N, Available: M"
   const insufficient = /Insufficient balance of (\S+) for owner \S+ Required: (\d+), Available: (\d+)/i.exec(text);
@@ -132,7 +153,7 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
   if (/No valid gas coins|InsufficientGas|GasBalanceTooLow|gas.*(balance|budget)|balance.*gas/i.test(text)) return gas();
   if (/not owned by|is not owned|is owned by account address|not signed by the correct sender|ObjectNotFound|InputObjectDeleted|object .*(deleted|not found|does not exist)|IncorrectUserSignature|ObjectVersionUnavailable/i.test(text)) {
     if (phase === "sell") return new PlayerError(MESSAGES.notOwned, "notOwned");
-    return new PlayerError("Sui testnet couldn't find part of this sale. Reload the page and try again.");
+    return new PlayerError("The shop lost track of this sale. Reload the page and try again.");
   }
   if (error instanceof TimeoutError || (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) || /DEADLINE_EXCEEDED|timed out/i.test(text)) {
     return new PlayerError(MESSAGES.timeout, "timeout");
@@ -140,7 +161,9 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
   if (/Failed to fetch|NetworkError|Load failed|RpcError|UNAVAILABLE|ECONNREFUSED|fetch failed/i.test(text)) {
     return new PlayerError(MESSAGES.network, "network");
   }
-  if (phase === "read") return new PlayerError("Couldn't read from Sui testnet. Try again.");
+  if (phase === "read") return new PlayerError(MESSAGES.read);
   if (phase === "withdraw") return new PlayerError(MESSAGES.withdraw);
-  return new PlayerError("Something went wrong on Sui testnet. Try again.");
+  if (phase === "payout") return new PlayerError(MESSAGES.payout);
+  if (phase === "sell") return new PlayerError(MESSAGES.sell);
+  return new PlayerError(MESSAGES.purchase);
 }

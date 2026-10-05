@@ -4,13 +4,13 @@
  * only caller of `adapter.purchase()`.
  *
  *   openCashier → "Ring it up?" → Pay
- *     → dispatch purchaseStart → pending screen ("Processing on Sui…")
+ *     → dispatch purchaseStart → pending screen ("Ringing it up")
  *     → await adapter.purchase(record)        (resolves after finality)
  *     → re-read wallet + owned Records        (chain truth: balance, serial)
- *     → dispatch purchaseSuccess → receipt (Record id, tx digest, explorer links)
+ *     → dispatch purchaseSuccess → receipt ("View record ↗" / "Receipt no." + "View receipt ↗")
  *   or → dispatch purchaseFail → the adapter's friendly message + Retry / Cancel
  *   Balance known and below the price? No chain call at all: "Not enough FakeUSD —
- *   the ATM outside dispenses testnet dollars." (never a silent mint).
+ *   the ATM outside dispenses cash." (never a silent mint).
  *
  * Owns: the counter dialogs and the clerk's speech bubble status.
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
@@ -24,8 +24,8 @@ import { heldOwnedRecord } from "../state";
 import { message, type FlowContext } from "./context";
 
 /** Shown when the player can't afford the held record (the ATM is outside). */
-export const NOT_ENOUGH_FAKEUSD = "Not enough FakeUSD — the ATM outside dispenses testnet dollars.";
-const ATM_HINT = "The ATM outside dispenses testnet dollars.";
+export const NOT_ENOUGH_FAKEUSD = "Not enough FakeUSD — the ATM outside dispenses cash.";
+const ATM_HINT = "The ATM outside dispenses cash.";
 
 /** Point an adapter's "Not enough FakeUSD" rejection at the ATM (once). */
 export function withAtmHint(error: string): string {
@@ -58,8 +58,8 @@ export class CheckoutFlow {
         eyebrow: "AT THE COUNTER",
         title: "Already yours.",
         body: [
-          recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, `Record ${shortId(owned.recordId)}`),
-          paragraph("That one's already in your wallet. Go on, take it outside."),
+          recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, "Paid for"),
+          paragraph("That one's already yours. Go on, take it outside."),
         ],
         actions: [{ id: "ok", kind: "primary", label: "Cheers", run: () => ctx.dialogs.close() }],
       });
@@ -78,7 +78,7 @@ export class CheckoutFlow {
           ["Your balance", balance === null ? "…" : ctx.money(balance)],
           ["After purchase", balance === null ? "…" : ctx.money(balance - price)],
         ]),
-        paragraph(`Paid in FakeUSD on ${ctx.networkName()}. A Record object is minted straight to your wallet.`),
+        paragraph("Paid in FakeUSD. It's yours the moment the till rings."),
       ],
       actions: [
         { id: "pay", kind: "primary", label: `Pay ${ctx.money(price)}`, run: () => void this.purchase() },
@@ -125,9 +125,9 @@ export class CheckoutFlow {
       ctx.world.setCashierStatus("success");
       setTimeout(() => ctx.world.setCashierStatus("idle"), 4000);
       if (!this.showPurchaseReceipt(record, mine, result.digest, balance)) {
-        ctx.hud.toast(`Bought ${record.title} · Record ${shortId(mine.recordId)}`, {
+        ctx.hud.toast(`Bought ${record.title}`, {
           tone: "good",
-          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "Receipt ↗" },
+          link: { href: ctx.adapter.explorerTxUrl(result.digest), label: "View receipt ↗" },
           durationMs: 8000,
         });
       }
@@ -173,7 +173,7 @@ export class CheckoutFlow {
       title: "Ringing it up…",
       body: [
         r ? recordStrip(r.coverUrl, r.title, r.artist, ctx.money(r.price.amount)) : null,
-        pendingBody("Processing on Sui", `Minting your Record on ${ctx.networkName()}. You can close this; the counter keeps working.`),
+        pendingBody("Ringing it up", "The clerk's putting your payment through. You can close this; the counter keeps working."),
       ],
       actions: [{ id: "hide", label: "Close (keeps processing)", run: () => ctx.dialogs.close() }],
     });
@@ -191,14 +191,14 @@ export class CheckoutFlow {
       body: [
         recordStrip(r.coverUrl, r.title, r.artist, `#${owned.serial}/${owned.maxSupply}`, r.edition),
         receiptBody(
-          "Minted to your wallet.",
+          "Paid in full. Bag's yours.",
           [
-            { label: "Record", value: shortId(owned.recordId, 6, 6), copy: owned.recordId, href: ctx.adapter.explorerObjectUrl(owned.recordId), linkLabel: "Object ↗" },
-            { label: "Tx", value: shortId(digest, 6, 6), copy: digest, href: ctx.adapter.explorerTxUrl(digest), linkLabel: "Tx ↗" },
+            { label: "Record", value: `#${owned.serial} of ${owned.maxSupply}`, href: ctx.adapter.explorerObjectUrl(owned.recordId), linkLabel: "View record ↗", linkId: "record" },
             { label: "Paid", value: ctx.money(r.price.amount) },
             { label: "Balance", value: ctx.money(balance) },
+            { label: "Receipt no.", value: shortId(digest), href: ctx.adapter.explorerTxUrl(digest), linkLabel: "View receipt ↗", linkId: "tx" },
           ],
-          ctx.adapter.network === "mock" ? "Mock chain: ids are fake, explorer links won't resolve." : undefined,
+          ctx.adapter.network === "mock" ? "Offline demo: the record and receipt links are just for show." : undefined,
         ),
       ],
       actions: [{ id: "done", kind: "primary", label: "Take it outside", run: () => ctx.dialogs.close() }],
@@ -211,7 +211,7 @@ export class CheckoutFlow {
     ctx.dialogs.show({
       key: "purchase",
       tone: "error",
-      eyebrow: "TRANSACTION FAILED",
+      eyebrow: "PAYMENT FAILED",
       title: "The register jammed.",
       body: errorBody(error, "Nothing was charged. The record is still in your hands."),
       actions: [

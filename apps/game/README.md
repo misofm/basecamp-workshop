@@ -53,10 +53,11 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 | Key | Action |
 | --- | --- |
 | W A S D (or arrows) | Walk · **Shift** sprint |
+| Space | Jump |
 | E / Enter | Interact (record, deck, counter, car, collector, ATM) |
 | N | Next track on the deck (while playing, or standing at the deck) |
 | I | Inspect the record in your hands |
-| C | Your collection, read from the chain |
+| C | Your collection, read from the chain (`listOwnedRecords()`) |
 | M | Mute / unmute |
 | H | Help (and **Reset demo**) |
 | Esc | Close a menu |
@@ -67,13 +68,14 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
 
 0. Short on FakeUSD? The mission points you to the **FakeUSD ATM** by the shop door:
    **E** → *Withdraw 50 FUSD* (minted from the testnet faucet; on mock, from thin air) →
-   receipt with the transaction digest. The balance counter counts up.
+   receipt: "Receipt no." (short tx digest) + *View receipt ↗* (devxplorer). The balance
+   counter counts up.
 1. Spawn on the sidewalk, walk through the shop door.
-2. **E** on a record → sleeve, liner notes, price, edition (minted / max supply) → *Pick up*.
+2. **E** on a record → sleeve, liner notes, price, edition ("N / max sold" = minted / max supply) → *Pick up*.
 3. **E** on the deck → place it → *Drop the needle* (30 s from mid-track) → *Next track* → *Take it back*.
-4. **E** at the counter → *Pay* → "Processing on Sui…" → receipt with the Record object id,
-   transaction digest and explorer links. Fails? Friendly message + *Retry* (not enough
-   FakeUSD: "The ATM outside dispenses testnet dollars.").
+4. **E** at the counter → *Pay* → "Ringing it up…" → receipt: *View record ↗* (the Record
+   object), "Receipt no." + *View receipt ↗* (the transaction), both on devxplorer. Fails?
+   Friendly message + *Retry* (not enough FakeUSD: "The ATM outside dispenses cash.").
    Walking out with unpaid stock is blocked: "Oi! Pay for that first."
 5. Outside, **E** on a parked car while holding the record → smash → **RECORD CONDITION: STILL MINT**.
 6. **E** on the collector → "Sell *title* for N FUSD" (1.5× shop price, capped at 150) → the
@@ -81,6 +83,11 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
    walk off with it.
 7. **C** → your collection and sales history, read back via `listOwnedRecords()`.
 8. ~20 s later the collector is back on the spot: pick another record and go again.
+
+Everything the player sees reads like a normal game: no "Sui", "chain", "testnet", "wallet",
+"digest" or "object" in the HUD, dialogs, toasts or errors (developer detail goes to the
+console). The HUD shows only a quiet **online** (testnet) / **offline demo** (mock) indicator;
+receipts link out with *View receipt ↗* / *View record ↗* (devxplorer). See `docs/UX.md`.
 
 ## Architecture
 
@@ -200,8 +207,10 @@ Setup:
    `npm run dev` also picks up `.env.local`; open it with `?chain=testnet`.
 
 Without keys the testnet build still loads the live catalog, and the intro says
-"Wallet: Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and VITE_GAME_SUI_PRIVATE_KEY
-in apps/game/.env.local, then rebuild." Buying, the ATM and selling stay unavailable.
+"Cash: The shop's till is offline right now. Try again later." (players never see chain
+details); the browser console says "Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and
+VITE_GAME_SUI_PRIVATE_KEY in apps/game/.env.local, then rebuild." Buying, the ATM and selling
+stay unavailable.
 
 Costs per loop: gas only, four transactions (ATM mint, purchase, Record transfer: player;
 payout: game). FakeUSD is free.
@@ -218,9 +227,10 @@ Measured on testnet (one full loop, net gas after storage rebates):
 
 So 1 testnet SUI in the player wallet covers roughly 100 loops.
 
-When the player wallet runs out of gas the game says "The player wallet is out of testnet SUI
-for gas. Fund VITE_PLAYER_SUI_PRIVATE_KEY's address at faucet.sui.io."; the collector's is the
-same with `VITE_GAME_SUI_PRIVATE_KEY`.
+When the player wallet runs out of gas the player sees "The shop's till is offline right
+now. Try again later." (the collector's payout: "The collector's till is offline right now.");
+the console says which address to fund ("…fund VITE_PLAYER_SUI_PRIVATE_KEY's address at
+faucet.sui.io", or `VITE_GAME_SUI_PRIVATE_KEY` for the collector).
 
 ### What lives where
 
@@ -271,8 +281,8 @@ collection so you can Retry. The entry is cleared after a confirmed payout.
 
 `tests/e2e/testnet.spec.ts` runs read-only checks by default (no gas): the real catalog, gRPC
 from the browser, the purchase PTB resolving for a funded sender (simulate only), and that
-mock mode never loads the SDK. Built without keys it checks the "Testnet keys missing"
-message; with keys, the HUD's player address. The full ATM → buy → smash → sell loop spends
+mock mode never loads the SDK. Built without keys it checks the player-facing "till is
+offline" message; with keys, the player address on the HUD indicator's `data-address`. The full ATM → buy → smash → sell loop spends
 testnet gas and is opt-in; it needs a keyed build with both addresses funded:
 
 ```sh
@@ -312,7 +322,7 @@ on screen now, distinct Tamashi ids shown so far, and the named cast with id, na
 
 See [docs/ASSETS.md](docs/ASSETS.md). UX notes: [docs/UX.md](docs/UX.md).
 In mock mode all releases, artists and prices are fictional. Mock ids and digests are fake; their
-explorer links will not resolve.
+explorer (devxplorer) links will not resolve.
 
 ## Hosted build
 
@@ -322,7 +332,8 @@ explorer links will not resolve.
 **What gets deployed depends on whether `.env.local` holds keys when you build:**
 
 - **No keys:** mock mode by default; `?chain=testnet` shows the live catalog and plays real
-  previews, and says "Testnet keys missing" for the wallet. Safe to host publicly.
+  previews, and says "The shop's till is offline right now" for the cash (the console says
+  "Testnet keys missing"). Safe to host publicly.
 - **Keys:** both testnet keys are inside the deployed JavaScript (even if the default chain is
   mock: the testnet chunk ships in `dist/`). **Only deploy this behind Cloudflare Access**
   (or equivalent access control on the whole hostname, including `/assets/*`). Everyone behind

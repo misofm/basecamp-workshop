@@ -205,7 +205,7 @@ test("a timed-out transfer keeps the pending entry so Retry re-checks it", async
     onDigest("transfer-slow");
     throw Object.assign(new Error("timed out"), { name: "TimeoutError" });
   };
-  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/didn't answer in time/);
+  await expect(sellRecord(RECORD_ID, deps)).rejects.toThrow(/took too long to answer/);
   expect(chain.store.get(RECORD_ID)?.transferDigest).toBe("transfer-slow");
   // It landed after all: Retry only pays.
   chain.owner = GAME;

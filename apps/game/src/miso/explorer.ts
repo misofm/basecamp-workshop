@@ -1,11 +1,15 @@
 /**
- * Block explorer links (Suiscan, testnet) for receipts.
+ * Explorer links (devxplorer, testnet) for receipts.
  *
- * Owns: URL shapes only. MockAdapter returns the same shapes for its fake ids;
- * those links will not resolve, which is expected in mock mode.
+ * Owns: URL shapes only. Transactions and objects share one search URL:
+ * https://devxplorer.io/?search=<digest-or-object-id>&network=testnet (value URL-encoded).
+ * MockAdapter returns the same shapes for its fake ids; those links will not resolve,
+ * which is expected in mock mode. Players only ever see "View receipt ↗" / "View record ↗".
  */
-const SUISCAN_TESTNET = "https://suiscan.xyz/testnet";
+const DEVXPLORER = "https://devxplorer.io/";
 
-export const suiscanTxUrl = (digest: string): string => `${SUISCAN_TESTNET}/tx/${digest}`;
-export const suiscanObjectUrl = (objectId: string): string =>
-  `${SUISCAN_TESTNET}/object/${objectId}`;
+const devxplorerSearchUrl = (value: string): string =>
+  `${DEVXPLORER}?search=${encodeURIComponent(value)}&network=testnet`;
+
+export const explorerTxUrl = (digest: string): string => devxplorerSearchUrl(digest);
+export const explorerObjectUrl = (objectId: string): string => devxplorerSearchUrl(objectId);

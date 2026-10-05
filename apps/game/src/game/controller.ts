@@ -40,7 +40,7 @@
  *    state.ts, copy for missions in objectives.ts, offers in npc-buyers.ts.
  */
 import type { MisoAdapter } from "../miso/adapter";
-import { formatAmount, shortId } from "../miso/format";
+import { formatAmount } from "../miso/format";
 import type { OwnedRecord, ShopRecord, Wallet } from "../miso/types";
 import type { Interactable, RecordPlace as WorldPlace, WorldAnchors, WorldApi } from "../world/api";
 import type { RecordDeck } from "../audio/deck";
@@ -145,8 +145,6 @@ export class GameController {
       refreshCollection: () => this.refreshCollection(),
       renderPrompt: () => this.renderPrompt(),
       money: (amount) => this.money(amount),
-      networkBadge: () => this.networkBadge(),
-      networkName: () => this.networkName(),
     };
     this.shop = new ShopFlow(ctx);
     this.checkout = new CheckoutFlow(ctx);
@@ -196,7 +194,7 @@ export class GameController {
       .mapSnapshot()
       .points.filter((p) => p.kind === "car")
       .map((p) => p.id);
-    this.hud.setWallet(null, this.adapter.network);
+    this.hud.setNetwork(this.adapter.network);
     this.render();
   }
 
@@ -206,7 +204,7 @@ export class GameController {
   async boot(): Promise<void> {
     const intro = this.intro;
     intro.setStatus("catalog", "Loading the crates…", "loading");
-    intro.setStatus("wallet", "Opening your wallet…", "loading");
+    intro.setStatus("wallet", "Counting your cash…", "loading");
     const catalog = this.adapter
       .loadShopCatalog()
       .then((records) => {
@@ -221,8 +219,8 @@ export class GameController {
       })
       .catch((error: unknown) => intro.setStatus("catalog", `Catalog: ${message(error)}`, "error"));
     const wallet = this.refreshWallet()
-      .then((w) => intro.setStatus("wallet", `Wallet ${shortId(w.address)} · ${this.money(w.fakeUsd)}`, "ok"))
-      .catch((error: unknown) => intro.setStatus("wallet", `Wallet: ${message(error)}`, "error"));
+      .then((w) => intro.setStatus("wallet", `Cash: ${this.money(w.fakeUsd)}`, "ok"))
+      .catch((error: unknown) => intro.setStatus("wallet", `Cash: ${message(error)}`, "error"));
     const collection = this.refreshCollection().catch(() => {});
     await Promise.all([catalog, wallet, collection]);
     document.documentElement.dataset.gameReady = "true";
@@ -277,8 +275,9 @@ export class GameController {
     // HUD.
     this.hud.setMoney(s.balance, this.wallet?.fakeUsdDecimals ?? 6, FUSD_SYMBOL);
     const op = s.op?.status === "pending" ? s.op.kind : null;
+    this.world.setJumpAllowed(op === null); // no jumping while a purchase, sale or ATM withdrawal is pending
     this.hud.setPending(
-      op === "purchase" ? "Processing on Sui…" : op === "sell" ? "Settling the sale on Sui…" : op === "withdraw" ? "Withdrawing FakeUSD…" : null,
+      op === "purchase" ? "Ringing it up…" : op === "sell" ? "Closing the deal…" : op === "withdraw" ? "Withdrawing FakeUSD…" : null,
     );
     this.hud.setMission(objective(s).text);
     const held = s.hand ? this.catalog.get(s.hand.shopRecordId) : undefined;
@@ -524,7 +523,7 @@ export class GameController {
   private async refreshWallet(dispatchBalance = true): Promise<Wallet> {
     const wallet = await this.adapter.getWallet();
     this.wallet = wallet;
-    this.hud.setWallet(shortId(wallet.address), this.adapter.network);
+    this.hud.setNetwork(this.adapter.network, wallet.address);
     if (dispatchBalance) this.dispatch({ type: "walletLoaded", balance: wallet.fakeUsd });
     return wallet;
   }
@@ -539,14 +538,6 @@ export class GameController {
 
   private money(amount: bigint): string {
     return formatAmount(amount, this.wallet?.fakeUsdDecimals ?? 6, FUSD_SYMBOL);
-  }
-
-  private networkBadge(): string {
-    return this.adapter.network === "mock" ? "MOCK CHAIN" : "SUI TESTNET";
-  }
-
-  private networkName(): string {
-    return this.adapter.network === "mock" ? "the mock chain" : "Sui testnet";
   }
 
   /** For tests/debug: is sound muted? */

@@ -7,7 +7,6 @@
  * Must not: call the adapter or start audio directly. Playback follows
  * `state.playing` via the controller's render() → RecordDeck.
  */
-import { shortId } from "../../miso/format";
 import type { ShopRecord } from "../../miso/types";
 import * as sfx from "../../audio/sfx";
 import { paragraph, recordBody, recordStrip, type DialogAction, type RecordView } from "../../ui/dialogs";
@@ -92,9 +91,9 @@ export class ShopFlow {
     ctx.dialogs.show({
       key: "inspect",
       wide: true,
-      eyebrow: owned ? "IN YOUR HANDS · OWNED ON SUI" : "IN YOUR HANDS · UNPAID",
+      eyebrow: owned ? "IN YOUR HANDS · OWNED" : "IN YOUR HANDS · UNPAID",
       title: r.title,
-      body: recordBody(this.recordView(r, owned ? `OWNED · #${owned.serial}/${owned.maxSupply} · ${shortId(owned.recordId)}` : "UNPAID · pay at the counter")),
+      body: recordBody(this.recordView(r, owned ? `OWNED · #${owned.serial}/${owned.maxSupply}` : "UNPAID · pay at the counter")),
       actions,
     });
   }

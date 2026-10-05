@@ -169,41 +169,36 @@ html[data-mouse-look="true"] #world::after {
   border-top-color: var(--gold);
   animation: spin 0.8s linear infinite;
 }
-.wallet {
-  display: flex;
+/* Tiny connection indicator: "online" (testnet) / "offline demo" (mock). Deliberately quiet. */
+.net-status {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   margin-top: 4px;
-  font-size: 17px;
-  font-weight: 700;
-  color: #fff;
+  font: 700 12px/1.2 var(--display);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffffb3;
   text-shadow: var(--outline-thin);
 }
-.money-pending + .wallet {
-  margin-top: 4px;
-}
-.money-delta + .money-pending[hidden] + .wallet {
+.money-delta + .money-pending[hidden] + .net-status {
   margin-top: 30px;
 }
-.wallet-address {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.3px;
+.net-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7ad67a;
+  box-shadow: 0 0 6px #7ad67a99;
 }
-.net-badge {
-  padding: 4px 10px;
-  border-radius: 6px;
-  font: 700 14px/1.2 var(--display);
-  letter-spacing: 1.5px;
-  text-shadow: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-}
-.net-mock {
+.net-status[data-network="mock"] .net-dot {
   background: var(--gold);
-  color: #2a1d00;
+  box-shadow: 0 0 6px #f2c46d99;
 }
-.net-testnet {
-  background: #4da2ff;
-  color: #001b3a;
+.intro-top .net-status {
+  margin-top: 0;
+  color: var(--muted);
+  text-shadow: none;
 }
 .mute-badge {
   padding: 5px 12px;
@@ -1189,9 +1184,6 @@ html[data-mouse-look="true"] #world::after {
 }
 .coll-sold-row span {
   flex: 1;
-}
-.coll-sold-row code {
-  color: var(--dim);
 }
 .coll-sold-row b {
   color: var(--money);

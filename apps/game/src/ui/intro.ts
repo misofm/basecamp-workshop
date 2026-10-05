@@ -1,7 +1,7 @@
 /**
  * Title card shown before play ("MISO RECORDS · AFTER HOURS").
  *
- * Owns: the intro overlay DOM, its loading lines (catalog / wallet) and the
+ * Owns: the intro overlay DOM, its loading lines (crates / cash) and the
  * "Press Enter" start (Enter, Space or click).
  * Must not: start audio or the game itself; it calls `onStart` and the
  * controller does the rest (unlock audio, ambience, show the HUD).
@@ -25,12 +25,17 @@ export class Intro {
       h(
         "div",
         { class: "intro-card" },
-        h("div", { class: "intro-top" }, h("span", { class: `net-badge net-${network}` }, network === "mock" ? "MOCK CHAIN" : "SUI TESTNET"), h("span", { class: "intro-kicker" }, "A MISO BASECAMP DEMO")),
+        h(
+          "div",
+          { class: "intro-top" },
+          h("span", { class: "intro-kicker" }, "A MISO BASECAMP DEMO"),
+          h("span", { class: "net-status", "data-network": network }, h("i", { class: "net-dot", "aria-hidden": "true" }), network === "mock" ? "offline demo" : "online"),
+        ),
         h("h1", { id: "intro-title", class: "intro-title" }, h("span", null, "MISO RECORDS"), h("em", null, "after hours")),
-        h("p", { class: "intro-pitch" }, "Buy a record on Sui. Smash a car with it. Sell it on."),
+        h("p", { class: "intro-pitch" }, "Buy a record. Smash a car with it. Sell it on."),
         this.status,
         this.button,
-        h("p", { class: "intro-keys" }, "WASD move · Shift sprint · E interact · C collection · M mute · H help"),
+        h("p", { class: "intro-keys" }, "WASD move · Shift sprint · Space jump · E interact · C collection · M mute · H help"),
       ),
     );
     host.append(this.root);

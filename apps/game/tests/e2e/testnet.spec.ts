@@ -8,9 +8,10 @@
  *  - `?chain=testnet` loads the real catalog from shop.testnet.json (titles from chain,
  *    cdn.miso.fm covers, tracks with quilt ids + durations) and gRPC works from the browser
  *    origin (CORS); the purchase PTB resolves for a funded sender (build + simulate, unsigned);
- *  - keyless build: the intro says "Wallet: Testnet keys missing: …" and every wallet call
- *    rejects with that message; keyed build: the HUD shows the player's short address and
- *    the collector is the GAME address.
+ *  - keyless build: the intro says "Cash: The shop's till is offline right now. …" (the
+ *    developer hint "Testnet keys missing: …" goes to the console) and every wallet call
+ *    rejects with that message; keyed build: the HUD shows a quiet "online" indicator (the
+ *    player's address only in data-address) and the collector is the GAME address.
  *
  * Opt-in full loop (spends testnet gas; needs a keyed build with both addresses funded with
  * testnet SUI): ATM (+50 FUSD) → shop → buy the cheapest record → smash → sell.
@@ -36,7 +37,8 @@ const RELEASES = SHOP.map((s) => s.releaseId);
 /** A testnet wallet that has bought records before (holds FakeUSD + SUI as address balance). */
 const FUNDED_SENDER = "0xad69173b206b5c0be6a83f6e6cde2a282d2ada46c4c81ab491b0fdc646e5795f";
 const FULL_LOOP = process.env.MISO_TESTNET_E2E === "1";
-const KEYS_MISSING = /^Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and VITE_GAME_SUI_PRIVATE_KEY in apps\/game\/\.env\.local, then rebuild\.$/;
+/** What the PLAYER sees for a keyless build (the "set VITE_…" hint is console-only). */
+const KEYS_MISSING = /^The shop's till is offline right now\. Try again later\.$/;
 const ATM_AMOUNT = 50_000_000n;
 
 function watchConsole(page: Page): { errors: string[]; warnings: string[] } {
@@ -115,10 +117,10 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   console.log("keys in this build:", keyed);
   const walletLine = page.locator('.intro-status [data-id="wallet"]');
   if (!wallet.ok) {
-    // Keyless build: catalog works, everything wallet-related explains how to fix it.
+    // Keyless build: catalog works, everything wallet-related says the till is offline.
     expect(wallet.error).toMatch(KEYS_MISSING);
     await expect(walletLine).toHaveClass("st-error");
-    await expect(walletLine).toHaveText(`Wallet: ${wallet.error}`);
+    await expect(walletLine).toHaveText(`Cash: ${wallet.error}`);
     for (const m of ["collectorAddress", "listOwnedRecords"]) {
       const r = await call(page, m);
       expect(r).toMatchObject({ ok: false });
@@ -143,7 +145,7 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
       const sim = await page.evaluate((id) => (window as any).__game.adapter.debugSimulatePurchase(id), RELEASES[0]);
       console.log("simulate (player):", JSON.stringify(sim));
       expect(sim.built).toBe(false);
-      expect(sim.playerMessage).toMatch(/^Not enough FakeUSD — you have \d+\.\d{2} FUSD, this costs \d+\.\d{2} FUSD\. The ATM outside dispenses testnet dollars\.$/);
+      expect(sim.playerMessage).toMatch(/^Not enough FakeUSD — you have \d+\.\d{2} FUSD, this costs \d+\.\d{2} FUSD\. The ATM outside dispenses cash\.$/);
     }
   }
 
@@ -152,24 +154,21 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   console.log("simulate (funded sender):", JSON.stringify(funded));
   // The sender may have spent its FakeUSD by now; either way the result must be explained.
   if (funded.built) expect(funded).toMatchObject({ success: true, createsRecord: true });
-  else expect(funded.playerMessage).toMatch(/Not enough FakeUSD|out of testnet SUI/);
+  else expect(funded.playerMessage).toMatch(/Not enough FakeUSD|till is offline/);
 
   // gRPC-web from the browser origin (CORS) worked.
   const grpc = requests.filter((r) => r.url.startsWith("https://fullnode.testnet.sui.io/"));
   expect(grpc.length).toBeGreaterThan(0);
   expect(grpc.every((r) => r.status === 200)).toBe(true);
 
-  // Into the game: the HUD shows the player's short address (keyed) or still "connecting…".
+  // Into the game: a quiet "online" indicator; the address is only a data attribute (keyed).
   await page.waitForFunction(() => document.documentElement.dataset.character !== undefined, null, { timeout: 120_000 });
   await frames(page, 4);
   await shot(page, "tn-01-intro");
   await page.keyboard.press("Enter");
   await expect(page.locator("#hud")).toBeVisible();
-  await expect(page.locator("#hud .net-badge")).toHaveText("SUI TESTNET");
-  if (wallet.ok) {
-    const a = wallet.value.address;
-    await expect(page.locator("#hud .wallet-address")).toHaveText(`${a.slice(0, 6)}…${a.slice(-4)}`);
-  }
+  await expect(page.locator("#hud .net-status")).toHaveText("online");
+  if (wallet.ok) await expect(page.locator("#hud .net-status")).toHaveAttribute("data-address", wallet.value.address);
   await shot(page, "tn-02-hud");
   await teleport(page, `record:${RELEASES[0]}`);
   await page.waitForTimeout(800);

@@ -151,7 +151,8 @@ export class CheckoutFlow {
       title: "PAID",
       stamp: { jp: "領収", en: "PAID" },
       body: [
-        recordLine(r.coverUrl, `${r.title} · #${owned.serial}/${owned.maxSupply} · ${ctx.money(r.price.amount)}`),
+        recordLine(r.coverUrl, `${r.title} · #${owned.serial}/${owned.maxSupply}`),
+        paragraph(ctx.money(r.price.amount), "dlg-p amount"),
         receiptLink({ href: ctx.adapter.explorerTxUrl(digest) }),
       ],
       actions: [{ id: "done", kind: "primary", key: "E", label: "Take it outside", run: () => ctx.dialogs.close() }],

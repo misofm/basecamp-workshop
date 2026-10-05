@@ -173,7 +173,7 @@ export class SpeechBubble {
     this.texture.colorSpace = THREE.SRGBColorSpace;
     this.texture.anisotropy = 4;
     this.sprite = new THREE.Sprite(
-      new THREE.SpriteMaterial({ map: this.texture, color: "#d6d6d6", transparent: true, depthTest: false, depthWrite: false, fog: false, toneMapped: false }),
+      new THREE.SpriteMaterial({ map: this.texture, color: "#ffffff", transparent: true, depthTest: false, depthWrite: false, fog: false, toneMapped: false }),
     );
     this.sprite.center.set(0.5, 0);
     this.sprite.renderOrder = 10;
@@ -236,7 +236,7 @@ export class SpeechBubble {
     c.fillStyle = "rgba(0,0,0,0.55)";
     c.fill();
     cut(0, 0);
-    c.fillStyle = "#efe6d2";
+    c.fillStyle = "#f3ead6";
     c.fill();
     c.lineWidth = 8;
     c.lineJoin = "round";
@@ -253,10 +253,10 @@ export class SpeechBubble {
       c.lineTo(w / 2 - 6, h - 6);
       c.lineTo(w / 2 + 40, bodyH - 6);
     }
-    c.fillStyle = "#efe6d2";
+    c.fillStyle = "#f3ead6";
     c.fill();
     c.stroke();
-    c.fillStyle = "#efe6d2";
+    c.fillStyle = "#f3ead6";
     if (up) c.fillRect(w / 2 - 34, 8, 68, 14);
     else c.fillRect(w / 2 - 34, bodyH - 20, 68, 14);
     // Speaker name: a small red stamp, slightly crooked, pushing the text down a little.
@@ -268,11 +268,10 @@ export class SpeechBubble {
       c.save();
       c.translate(66 + (tw + 36) / 2, 44);
       c.rotate(-0.04);
-      c.globalAlpha = 0.92;
-      c.strokeStyle = "#c0392b";
-      c.lineWidth = 6;
-      c.strokeRect(-(tw + 36) / 2, -28, tw + 36, 56);
-      c.fillStyle = "#c0392b";
+      c.globalAlpha = 1;
+      c.fillStyle = "#b02a1e";
+      c.fillRect(-(tw + 36) / 2, -28, tw + 36, 56);
+      c.fillStyle = "#fff6e4";
       c.textBaseline = "middle";
       c.textAlign = "center";
       c.fillText(tag, 0, 3);
@@ -300,7 +299,7 @@ export class SpeechBubble {
     }
     let text = this.text;
     if (this.style.busy) text = text.replace(/[.…]+$/, "") + ".".repeat(1 + (Math.floor(this.time * 3) % 3));
-    c.fillStyle = "#2a2017";
+    c.fillStyle = "#14100c";
     c.textBaseline = "middle";
     c.textAlign = this.style.busy ? "left" : "center";
     const maxW = w - left - 60;
@@ -373,8 +372,8 @@ export class SpeechBubble {
     this.sprite.scale.set(w, (w * this.canvas.height) / this.canvas.width, 1);
   }
 }
-/** Default cap on a speech bubble's height: 12% of the viewport. */
-export const MAX_BUBBLE_SCREEN_FRACTION = 0.12;
+/** Default cap on a speech bubble's height: 16% of the viewport. */
+export const MAX_BUBBLE_SCREEN_FRACTION = 0.16;
 const TMP = new THREE.Vector3();
 const TMP2 = new THREE.Vector3();
 const TMP3 = new THREE.Vector3();

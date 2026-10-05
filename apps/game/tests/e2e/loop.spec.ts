@@ -132,7 +132,8 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect(s.owned[0]?.recordId).toBe(s.hand?.recordId);
   expect(s.balance).toBe("138000000"); // 150 after the ATM − 12
   await expect(dialog.locator(".dlg-title")).toHaveText(/領収 PAID/);
-  await expect(dialog).toContainText("Low Tide Tapes · #106/250 · 12.00 FUSD");
+  await expect(dialog).toContainText("Low Tide Tapes · #106/250");
+  await expect(dialog).toContainText("12.00 FUSD");
   await expect(dialog.locator("[data-receipt-link]")).toHaveCount(1);
   await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveText("View receipt ↗");
   await expect(dialog.locator('[data-receipt-link="tx"]')).toHaveAttribute("href", /^https:\/\/devxplorer\.io\/\?search=[1-9A-HJ-NP-Za-km-z]{44}&network=testnet$/);
@@ -175,7 +176,8 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   await expect(page.locator(".prompt-label")).toHaveText("Sell to Stonks");
   await page.keyboard.press("KeyE");
   await expect(dialog.locator(".dlg-title")).toHaveText("Stonks wants it");
-  await expect(dialog).toContainText("18.00 FUSD for Low Tide Tapes");
+  await expect(dialog).toContainText("18.00 FUSD");
+  await expect(dialog).toContainText("for Low Tide Tapes");
   await shot(page, "13-buyer-offer");
   await page.keyboard.press("Enter");
   await expect(dialog.locator(".pending")).toBeVisible();

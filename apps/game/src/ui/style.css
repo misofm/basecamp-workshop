@@ -512,8 +512,9 @@ html[data-mouse-look="true"] #world::after {
   gap: calc(20 * var(--u));
   padding: calc(6 * var(--u)) calc(16 * var(--u));
   background: rgba(10, 9, 8, 0.7);
-  font: 500 calc(15 * var(--u)) var(--display);
-  color: #c4bba8;
+  font: 600 calc(17 * var(--u)) var(--display);
+  color: #ddd5c2;
+  background: rgba(10, 9, 8, 0.78);
 }
 .controls span {
   display: inline-flex;
@@ -521,9 +522,9 @@ html[data-mouse-look="true"] #world::after {
   gap: calc(7 * var(--u));
 }
 .controls kbd {
-  font-size: calc(13 * var(--u));
-  background: #25221e;
-  color: #cfc6b2;
+  font-size: calc(16 * var(--u));
+  background: #34302a;
+  color: #f0e9d8;
 }
 
 /* ───────────── 4. minimap: a station map plate ───────────── */
@@ -581,7 +582,7 @@ html[data-mouse-look="true"] #world::after {
   width: min(calc(940 * var(--u)), calc(100vw - 32px));
 }
 .dlg::backdrop {
-  background: rgba(6, 5, 4, 0.62);
+  background: rgba(6, 5, 4, 0.4);
 }
 .dlg:focus {
   outline: none;
@@ -742,12 +743,15 @@ html[data-mouse-look="true"] #world::after {
 }
 .atm-greeting {
   margin: calc(8 * var(--u)) 0 calc(4 * var(--u));
-  font-size: calc(18 * var(--u));
-  letter-spacing: 0.1em;
-  opacity: 0.85;
+  font-size: calc(22 * var(--u));
+  letter-spacing: 0.08em;
 }
 .atm-crt-line.glitch {
   animation: crt-glitch 0.18s steps(2) infinite;
+}
+.tone-success.skin-amber .dlg-p {
+  font-size: calc(48 * var(--u));
+  font-weight: 700;
 }
 .tone-error.skin-amber .dlg-content {
   --phosphor: #ff8a5c;
@@ -823,13 +827,25 @@ html[data-mouse-look="true"] #world::after {
 }
 .skin-paper .dlg-p,
 .skin-tag .dlg-p {
-  color: #3a2d1f;
+  color: #1a1612;
   font-family: var(--body);
-  font-weight: 500;
+  font-weight: 700;
+  font-size: calc(30 * var(--u));
+}
+/* The key amount is the hero: stamped, bold, big. */
+.skin-paper .dlg-p.amount {
+  display: inline-block;
+  margin-top: calc(14 * var(--u));
+  padding: 0 calc(12 * var(--u));
+  border: 4px solid #1a1612;
+  font: 700 calc(48 * var(--u)) / 1.15 var(--mono);
+  transform: rotate(-1.5deg);
+  mix-blend-mode: multiply;
 }
 .skin-paper .dlg-action,
 .skin-tag .dlg-action {
-  color: var(--paper-ink);
+  color: #1a1612;
+  font-size: calc(28 * var(--u));
   border: 3px solid transparent;
   text-transform: uppercase;
   font-family: var(--display);
@@ -856,8 +872,10 @@ html[data-mouse-look="true"] #world::after {
 }
 .skin-paper .mini.link,
 .skin-tag .mini.link {
-  color: #7a2418;
+  color: #12307a;
   font-family: var(--display);
+  font-size: calc(22 * var(--u));
+  text-decoration-thickness: 2px;
 }
 .skin-paper .err-msg {
   font-family: var(--body);
@@ -943,7 +961,8 @@ html[data-mouse-look="true"] #world::after {
 }
 .rec-artist {
   margin: 0;
-  font: 500 calc(26 * var(--u)) / 1.25 var(--body);
+  color: #1a1612;
+  font: 700 calc(28 * var(--u)) / 1.25 var(--body);
 }
 .rec-price {
   display: inline-block;
@@ -974,7 +993,8 @@ html[data-mouse-look="true"] #world::after {
 }
 .strip-line {
   margin: 0;
-  font: 700 calc(26 * var(--u)) / 1.25 var(--body);
+  color: #1a1612;
+  font: 700 calc(28 * var(--u)) / 1.25 var(--body);
 }
 
 /* Enamel shop plate: weathered navy, chipped white lettering. */

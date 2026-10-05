@@ -77,7 +77,7 @@ export class StreetFlow {
       key: "sell",
       skin: "paper",
       title: "Stonks wants it",
-      body: paragraph(`${ctx.money(npc.offer)} for ${r.title}`),
+      body: [paragraph(ctx.money(npc.offer), "dlg-p amount"), paragraph(`for ${r.title}`)],
       actions: [
         { id: "sell", kind: "primary", key: "E", label: "Sell", run: () => void this.sell() },
         { id: "keep", key: "Esc", label: "Keep", run: () => ctx.dialogs.close() },
@@ -111,7 +111,7 @@ export class StreetFlow {
           tone: "success",
           title: "SOLD",
           stamp: { jp: "済", en: "SOLD" },
-          body: [paragraph(`+${ctx.money(result.paid)}`), receiptLink({ href: ctx.adapter.explorerTxUrl(result.digest) })],
+          body: [paragraph(`+${ctx.money(result.paid)}`, "dlg-p amount"), receiptLink({ href: ctx.adapter.explorerTxUrl(result.digest) })],
           actions: [{ id: "done", kind: "primary", key: "E", label: "OK", run: () => ctx.dialogs.close() }],
         });
       } else {

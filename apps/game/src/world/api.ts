@@ -12,10 +12,11 @@ export type InteractableKind =
   | "deck" // the listening station turntable
   | "cashier" // shop counter / clerk NPC
   | "car" // a parked, smashable car
-  | "buyer"; // the collector NPC on the street
+  | "buyer" // the collector NPC on the street
+  | "atm"; // the FakeUSD ATM on the sidewalk outside the shop
 
 export interface Interactable {
-  /** Unique id, e.g. "record:low-tide-tapes", "deck", "cashier", "car:2", "buyer:collector". */
+  /** Unique id, e.g. "record:low-tide-tapes", "deck", "cashier", "car:2", "buyer:collector", "atm". */
   id: string;
   kind: InteractableKind;
   /** World position (x, z on the ground plane) used for proximity. */

@@ -28,10 +28,10 @@ export function adapterOptionsFromUrl(search?: string): MockAdapterOptions {
     options.latencyMs = Math.max(0, Number(latency));
   }
   const fail = p.get("fail");
-  if (fail === "purchase" || fail === "sell" || fail === "all") {
+  if (fail === "purchase" || fail === "sell" || fail === "withdraw" || fail === "all") {
     options.failureMode = fail satisfies FailureMode;
   } else if (fail !== null) {
-    console.warn(`[miso] ignoring ?fail=${fail} (expected purchase|sell|all)`);
+    console.warn(`[miso] ignoring ?fail=${fail} (expected purchase|sell|withdraw|all)`);
   }
   const hls = p.get("mockhls");
   if (hls === "1" || hls === "true") options.mockHls = true;

@@ -79,6 +79,13 @@ export const SPAWN = { x: 0, z: 3.4, heading: Math.PI };
 export const DECK = { x: -5.5, z: -12.9, interactX: -5.5, interactZ: -11.5 };
 export const COUNTER = { x: 5.5, z: -12.6, interactX: 5.5, interactZ: -11.2, clerkZ: -13.5 };
 
+/**
+ * The FakeUSD ATM: a street kiosk with its back to the shop front, west of the door
+ * (clear of the OPEN sign), facing the street so it is in view from the spawn.
+ * `x, z` is the kiosk centre; the player stands at `interactX, interactZ`.
+ */
+export const ATM = { x: -4.4, z: 0.36, w: 0.84, d: 0.6, interactX: -4.4, interactZ: 1.45 };
+
 /** Parked cars at the shop-side curb (x centres), all facing west. */
 export const PARKED_CARS = [-18, -11.5, -5.6, 6.2].map((x) => ({ x, z: LANES.parkingNorth }));
 

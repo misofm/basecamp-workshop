@@ -1,5 +1,5 @@
 /**
- * Error mapping: turns SDK / RPC / Move-abort / HTTP failures into short messages that
+ * Error mapping: turns SDK / RPC / Move-abort failures into short messages that
  * are safe to show the player. Raw errors go to console.warn for developers only.
  *
  * Owns: PlayerError, the Move abort code tables and `toPlayerError`.
@@ -35,13 +35,17 @@ export type ErrorKind =
   | "notOwned"
   | "timeout"
   | "network"
-  | "server"
+  | "keys"
   | "other";
 
-export type Phase = "read" | "purchase" | "sell";
+/** What was being attempted: picks the fallback text and whose gas ran out. */
+export type Phase = "read" | "purchase" | "withdraw" | "sell" | "payout";
+
+const ATM_HINT = "The ATM outside dispenses testnet dollars.";
 
 export const MESSAGES = {
-  gas: "Not enough SUI for gas. The gas bank is topping you up, try again in a moment.",
+  gas: "The player wallet is out of testnet SUI for gas. Fund VITE_PLAYER_SUI_PRIVATE_KEY's address at faucet.sui.io.",
+  gameGas: "The collector (game wallet) is out of testnet SUI for gas. Fund VITE_GAME_SUI_PRIVATE_KEY's address at faucet.sui.io.",
   soldOut: "Sold out — every copy of this pressing has been sold.",
   disabled: "This record isn't on sale right now (the shop paused the listing).",
   priceChanged: "The price just changed. Reload the page to see the new price.",
@@ -50,7 +54,8 @@ export const MESSAGES = {
   notOwned: "You don't own that record any more.",
   timeout: "Sui testnet didn't answer in time. Check your connection and try again.",
   network: "Couldn't reach Sui testnet. Check your connection and try again.",
-  serverDown: "The bank server isn't running (npm run server).",
+  withdraw: "The ATM couldn't reach the faucet. Try again.",
+  alreadyCollected: "The collector already has this record.",
 } as const;
 
 const LISTING_ABORTS: Record<number, [string, ErrorKind]> = {
@@ -106,25 +111,25 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
   if (abort) {
     const table = abort.module === "listing" ? LISTING_ABORTS : abort.module === "pressing" ? PRESSING_ABORTS : {};
     const hit = table[abort.code];
-    if (hit) return new PlayerError(hit[0], hit[1]);
-    return new PlayerError(
-      phase === "sell" ? "The transfer was rejected by Sui. You still own the record." : "The shop's contract rejected this purchase. Nothing was charged.",
-    );
+    if (hit && phase === "purchase") return new PlayerError(hit[0], hit[1]);
+    if (phase === "sell") return new PlayerError("The transfer was rejected by Sui. You still own the record.");
+    if (phase === "withdraw" || phase === "payout") return new PlayerError(MESSAGES.withdraw);
+    return new PlayerError("The shop's contract rejected this purchase. Nothing was charged.");
   }
+
+  const gas = () => new PlayerError(phase === "payout" ? MESSAGES.gameGas : MESSAGES.gas, "gas");
 
   // tx.balance() resolution: "Insufficient balance of <type> for owner 0x…. Required: N, Available: M"
   const insufficient = /Insufficient balance of (\S+) for owner \S+ Required: (\d+), Available: (\d+)/i.exec(text);
   if (insufficient) {
-    if (/::sui::SUI$/i.test(insufficient[1])) return new PlayerError(MESSAGES.gas, "gas");
+    if (/::sui::SUI$/i.test(insufficient[1])) return gas();
     return new PlayerError(
-      `Not enough FakeUSD — you have ${fusd(BigInt(insufficient[3]))}, this costs ${fusd(BigInt(insufficient[2]))}.`,
+      `Not enough FakeUSD — you have ${fusd(BigInt(insufficient[3]))}, this costs ${fusd(BigInt(insufficient[2]))}. ${ATM_HINT}`,
       "fusd",
     );
   }
-  if (/InsufficientCoinBalance|insufficient.*fakeusd/i.test(text)) return new PlayerError("Not enough FakeUSD for this record.", "fusd");
-  if (/No valid gas coins|InsufficientGas|GasBalanceTooLow|gas.*(balance|budget)|balance.*gas/i.test(text)) {
-    return new PlayerError(MESSAGES.gas, "gas");
-  }
+  if (/InsufficientCoinBalance|insufficient.*fakeusd/i.test(text)) return new PlayerError(`Not enough FakeUSD for this record. ${ATM_HINT}`, "fusd");
+  if (/No valid gas coins|InsufficientGas|GasBalanceTooLow|gas.*(balance|budget)|balance.*gas/i.test(text)) return gas();
   if (/not owned by|is not owned|is owned by account address|not signed by the correct sender|ObjectNotFound|InputObjectDeleted|object .*(deleted|not found|does not exist)|IncorrectUserSignature|ObjectVersionUnavailable/i.test(text)) {
     if (phase === "sell") return new PlayerError(MESSAGES.notOwned, "notOwned");
     return new PlayerError("Sui testnet couldn't find part of this sale. Reload the page and try again.");
@@ -135,5 +140,7 @@ export function toPlayerError(error: unknown, phase: Phase): PlayerError {
   if (/Failed to fetch|NetworkError|Load failed|RpcError|UNAVAILABLE|ECONNREFUSED|fetch failed/i.test(text)) {
     return new PlayerError(MESSAGES.network, "network");
   }
-  return new PlayerError(phase === "read" ? "Couldn't read from Sui testnet. Try again." : "Something went wrong on Sui testnet. Try again.");
+  if (phase === "read") return new PlayerError("Couldn't read from Sui testnet. Try again.");
+  if (phase === "withdraw") return new PlayerError(MESSAGES.withdraw);
+  return new PlayerError("Something went wrong on Sui testnet. Try again.");
 }

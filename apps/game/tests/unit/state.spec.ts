@@ -269,3 +269,80 @@ test("the collector comes back: buyerReturned puts the sold release back in stoc
   expect(again.hand).toEqual({ shopRecordId: "low-tide-tapes", recordId: null });
   expect(objective(again).target).toBe("deck");
 });
+
+// ------------------------------------------------------------- ATM / withdraw
+
+const PRICES = { "low-tide-tapes": 12_000_000n, kindling: 8_000_000n, "big-one": 25_000_000n };
+
+test("withdraw: start → pending → success sets balance and receipt; hand is not locked", () => {
+  let s = run(initialState(), { type: "walletLoaded", balance: 100_000_000n }, { type: "pick", shopRecordId: "kindling" });
+  s = transition(s, { type: "withdrawStart" });
+  expect(s.op).toEqual({ kind: "withdraw", status: "pending" });
+  expect(objective(s)).toEqual({ text: "The ATM's counting out your FakeUSD…", target: "atm" });
+  // Only one op at a time.
+  expect(transition(s, { type: "purchaseStart" })).toBe(s);
+  expect(transition(s, { type: "withdrawStart" })).toBe(s);
+  // Withdrawing never locks the record in your hands.
+  expect(transition(s, { type: "putBack" }).hand).toBeNull();
+  // Results for other ops are ignored.
+  expect(transition(s, { type: "sellSuccess", paid: 1n, digest: "X", balance: 1n })).toBe(s);
+
+  s = transition(s, { type: "withdrawSuccess", digest: "W1", amount: 50_000_000n, balance: 150_000_000n });
+  expect(s.op).toBeNull();
+  expect(s.balance).toBe(150_000_000n);
+  expect(s.lastReceipt).toEqual({ kind: "withdraw", digest: "W1", amount: 50_000_000n });
+  // Not pending any more: a late success is refused.
+  expect(transition(s, { type: "withdrawSuccess", digest: "W2", amount: 1n, balance: 1n })).toBe(s);
+});
+
+test("withdraw: fail → error, Retry can start again, dismissError clears it", () => {
+  let s = run(initialState(), { type: "walletLoaded", balance: 5_000_000n }, { type: "withdrawStart" });
+  s = transition(s, { type: "withdrawFail", error: "faucet down" });
+  expect(s.op).toEqual({ kind: "withdraw", status: "error", error: "faucet down" });
+  expect(s.balance).toBe(5_000_000n);
+  expect(transition(s, { type: "withdrawFail", error: "again" })).toBe(s); // not pending
+  const retry = transition(s, { type: "withdrawStart" });
+  expect(retry.op).toEqual({ kind: "withdraw", status: "pending" });
+  expect(transition(s, { type: "dismissError" }).op).toBeNull();
+  // Can't withdraw while a purchase is pending.
+  const buying = run(initialState(), { type: "pick", shopRecordId: "kindling" }, { type: "purchaseStart" });
+  expect(transition(buying, { type: "withdrawStart" })).toBe(buying);
+});
+
+test("catalogLoaded stores prices for the objective", () => {
+  const s = transition(initialState(), { type: "catalogLoaded", prices: PRICES });
+  expect(s.prices).toEqual(PRICES);
+  // Without prices (and nothing pending) it is a no-op.
+  expect(transition(s, { type: "catalogLoaded" })).toBe(s);
+});
+
+test("objective: short on FakeUSD points at the ATM", () => {
+  const base = run(initialState(), { type: "catalogLoaded", prices: PRICES });
+  // Balance unknown: no ATM nag.
+  expect(objective(base).target).toBe("shop-door");
+  // Empty-handed and below the cheapest price (8.00).
+  const broke = transition(base, { type: "walletLoaded", balance: 7_999_999n });
+  expect(objective(broke)).toEqual({ text: "Short on FakeUSD. Hit the ATM outside the shop.", target: "atm" });
+  // Exactly the cheapest price is enough.
+  expect(objective(transition(base, { type: "walletLoaded", balance: 8_000_000n })).target).toBe("shop-door");
+  // Holding an unpaid record: compared with that record's price.
+  const holding = run(base, { type: "setZone", zone: "shop" }, { type: "walletLoaded", balance: 10_000_000n }, { type: "pick", shopRecordId: "big-one" });
+  // Unpaid stock can't leave the shop, so the mission says to put it back first.
+  expect(objective(holding)).toEqual({ text: "Short on FakeUSD. Put it back (I), then hit the ATM outside.", target: null });
+  const affordable = transition(holding, { type: "pick", shopRecordId: "kindling" });
+  expect(objective(affordable).target).toBe("deck");
+  // After a withdrawal the normal loop resumes.
+  const topped = run(holding, { type: "withdrawStart" }, { type: "withdrawSuccess", digest: "W", amount: 50_000_000n, balance: 60_000_000n });
+  expect(objective(topped).target).toBe("deck");
+  // Holding an owned Record: never nagged (go sell it).
+  const owning = run(
+    base,
+    { type: "walletLoaded", balance: 100_000_000n },
+    { type: "pick", shopRecordId: "low-tide-tapes" },
+    { type: "purchaseStart" },
+    { type: "purchaseSuccess", owned: owned("low-tide-tapes"), digest: "D", balance: 1n, amount: 12_000_000n },
+  );
+  expect(objective(owning).target).toBe("car"); // on the street, owned Record in hand
+  // Prices unknown (catalog not loaded): no nag.
+  expect(objective(run(initialState(), { type: "walletLoaded", balance: 0n })).target).toBe("shop-door");
+});

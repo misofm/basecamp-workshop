@@ -4,13 +4,15 @@
  * Owns: the demo's suggested order and its copy:
  *   enter shop -> pick a record -> preview on the deck -> buy at the cashier ->
  *   head outside -> smash a parked car -> sell to the collector -> done.
+ * Short on FakeUSD (empty-handed, or holding unpaid stock you can't afford)? The
+ * street ATM comes first.
  * Must not: change state or know positions. `target` is an interactable id
  * (or kind prefix) the controller resolves to a waypoint via the world:
- *   "shop-door" | "deck" | "cashier" | "car" (nearest unsmashed) | "buyer" | null.
+ *   "shop-door" | "deck" | "cashier" | "car" (nearest unsmashed) | "buyer" | "atm" | null.
  */
-import { heldIsOwned, heldIsUnpaid, type GameState } from "./state";
+import { cheapestPrice, heldIsOwned, heldIsUnpaid, type GameState } from "./state";
 
-export type ObjectiveTarget = "shop-door" | "deck" | "cashier" | "car" | "buyer";
+export type ObjectiveTarget = "shop-door" | "deck" | "cashier" | "car" | "buyer" | "atm";
 
 export interface Objective {
   text: string;
@@ -23,6 +25,15 @@ export function objective(state: GameState): Objective {
     return { text: "Hang tight. The register's ringing it up.", target: "cashier" };
   if (op?.status === "pending" && op.kind === "sell")
     return { text: "The collector's checking the wax…", target: "buyer" };
+  if (op?.status === "pending" && op.kind === "withdraw")
+    return { text: "The ATM's counting out your FakeUSD…", target: "atm" };
+
+  if (shortOnFakeUsd(state)) {
+    // Unpaid stock can't leave the shop (the doorway blocks it), so put it back first.
+    if (heldIsUnpaid(state))
+      return { text: "Short on FakeUSD. Put it back (I), then hit the ATM outside.", target: null };
+    return { text: "Short on FakeUSD. Hit the ATM outside the shop.", target: "atm" };
+  }
 
   // Empty-handed after a sale. (Pick up another record and the steps start over:
   // the collector comes back for a rerun of the demo.)
@@ -56,4 +67,20 @@ export function objective(state: GameState): Objective {
     return { text: "Press C and grab one of your records.", target: null };
   if (state.zone === "street") return { text: "Get to the record shop.", target: "shop-door" };
   return { text: "Dig through the crates. Pick a record.", target: null };
+}
+
+/**
+ * True when the known balance can't cover what the player would buy next: the held
+ * unpaid record's price, or (empty-handed, nothing on the deck) the cheapest record.
+ * False while the balance or the prices are still unknown.
+ */
+export function shortOnFakeUsd(state: GameState): boolean {
+  if (state.balance === null) return false;
+  if (heldIsUnpaid(state)) {
+    const price = state.prices[state.hand!.shopRecordId];
+    return price !== undefined && state.balance < price;
+  }
+  if (state.hand || state.deck) return false;
+  const cheapest = cheapestPrice(state);
+  return cheapest !== null && state.balance < cheapest;
 }

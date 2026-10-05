@@ -4,7 +4,7 @@
  * Owns: the dialog element, its keyboard handling (↑↓ / W S select, Enter / E /
  * Space confirm, Esc close), focus management, and the DOM for every screen:
  * record sleeve, deck, purchase (summary / pending / receipt / error), sell offer,
- * collection and help.
+ * ATM withdrawal, collection and help.
  * Must not: decide what an action does. Screens take plain view data and a list of
  * actions (label + callback) chosen by the controller. Opening/closing reports
  * through `onOpenChange` so the controller can freeze player input; nothing here
@@ -367,6 +367,7 @@ export function helpBody(): HTMLElement {
     "div",
     { class: "help" },
     h("ol", { class: "help-loop" }, ...["Pick a record from the crates", "Spin it on the listening deck", "Buy it at the counter (on Sui)", "Smash a parked car with it", "Sell it to the collector"].map((t) => h("li", null, t))),
+    h("p", { class: "dlg-p" }, "Short on FakeUSD? The ATM outside the shop dispenses testnet dollars."),
     h("dl", { class: "help-keys" }, ...rows.flatMap(([k, v]) => [h("dt", null, h("kbd", null, k)), h("dd", null, v)])),
   );
 }

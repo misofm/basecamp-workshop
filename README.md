@@ -100,9 +100,11 @@ network.
 
 ### The game on testnet
 
-Testnet mode needs the game's bank server, which holds two testnet keys (an operator that
-funds new players and a collector that pays for records). You create and fund your own; see
-[apps/game/README.md, "Sui testnet (stage setup)"](apps/game/README.md#sui-testnet-stage-setup).
+Testnet mode runs fully in the browser on two testnet keys you create and fund yourself (a
+player wallet and the game's collector), baked into the build from `apps/game/.env.local`.
+FakeUSD comes from an in-game ATM that mints from the public faucet. The keys end up in the
+built JavaScript, so a hosted keyed build must sit behind access control; see
+[apps/game/README.md, "Sui testnet"](apps/game/README.md#sui-testnet).
 
 ### Explore the catalog with misofm/skills
 
@@ -198,7 +200,7 @@ parties/            parties.json (31 fictional parties) + parties.testnet.json (
 releases/           one folder per release (table above) + registry.testnet.json
 scripts/            the pipeline, new-key.ts and fetch-masters.ts
 apps/spa/           keyless catalog web app (React + Vite)
-apps/game/          record-shop game (Three.js) + bank server (Bun)
+apps/game/          record-shop game (Three.js), static: mock or Sui testnet
 examples/           live-mini-spa, billboard.patch, second-collector.patch
 keys/               your own testnet keys (gitignored; created by scripts/new-key.ts)
 ```
@@ -215,7 +217,8 @@ keys/               your own testnet keys (gitignored; created by scripts/new-ke
 ## Limitations
 
 This is Sui testnet only. Testnet can be reset, which would remove the releases, parties and
-Records; the files in this repo would then describe objects that no longer exist. The burner
-wallets the game creates live in your browser's `localStorage`: anyone with access to that
-browser profile has the key, so they are for testnet only. FakeUsd has no value. The
+Records; the files in this repo would then describe objects that no longer exist. The game's
+two testnet keys are compiled into its JavaScript bundle: anyone who can load a keyed build has
+them, so they are for testnet only and a hosted keyed build belongs behind access control.
+FakeUsd has no value. The
 TypeScript `miso` CLI is the current tool; a Rust core will eventually replace it.

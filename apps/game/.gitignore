@@ -6,5 +6,7 @@ playwright-report/
 .wrangler/
 dist-e2e
 
-# bank server ledger (testnet payouts)
-server/data/
+# testnet keys (VITE_PLAYER_SUI_PRIVATE_KEY / VITE_GAME_SUI_PRIVATE_KEY): never commit
+.env.local
+.env.*.local
+!.env.example

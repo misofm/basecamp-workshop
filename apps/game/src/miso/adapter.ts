@@ -13,6 +13,8 @@
  * - Failures reject with an Error whose `message` is safe to show to the player.
  * - `purchase()` resolves only after the transaction is final (effects success),
  *   with the newly created Record object id.
+ * - `withdrawFakeUsd()` credits `amount` FakeUSD (base units) to the player (the street
+ *   ATM; on testnet a player-signed faucet mint), resolving after finality.
  * - `sellToNpc()` transfers the Record to `npc.address` and the NPC pays
  *   `npc.offer` FakeUSD to the player; resolves with the digest and amount paid.
  */
@@ -23,6 +25,7 @@ import type {
   SellResult,
   ShopRecord,
   Wallet,
+  WithdrawResult,
   Network,
 } from "./types";
 
@@ -31,6 +34,8 @@ export interface MisoAdapter {
   loadShopCatalog(): Promise<ShopRecord[]>;
   getWallet(): Promise<Wallet>;
   purchase(record: ShopRecord): Promise<PurchaseResult>;
+  /** The street ATM: get `amount` FakeUSD (base units) from the testnet faucet. */
+  withdrawFakeUsd(amount: bigint): Promise<WithdrawResult>;
   listOwnedRecords(): Promise<OwnedRecord[]>;
   sellToNpc(recordId: string, npc: NpcBuyer): Promise<SellResult>;
   /** Address Records are sold to (shown in the sell dialog so the audience can check it). */

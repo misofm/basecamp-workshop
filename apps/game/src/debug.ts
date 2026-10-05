@@ -8,11 +8,11 @@
  *
  *   __game.state()                    current GameState (pure data)
  *   __game.teleportTo("deck")         stand at an interactable ("record:<id>", "cashier",
- *   __game.teleportTo({x, z, heading})  "car:0", "buyer:collector"…) or a point
+ *   __game.teleportTo({x, z, heading})  "car:0", "buyer:collector", "atm"…) or a point
  *   __game.interact()                 same as pressing E where you stand
  *   __game.press("KeyN")              dispatch a key (code or single letter) on window
- *   __game.failNext("purchase")       mock: next purchase/sell/any fails once
- *   __game.setFailureMode("none")     mock: purchase|sell|all|none, sticky
+ *   __game.failNext("purchase")       mock: next purchase/sell/withdraw/any fails once
+ *   __game.setFailureMode("none")     mock: purchase|sell|withdraw|all|none, sticky
  *   __game.setLatency(1500)           mock: simulated chain latency (ms)
  *   __game.measure()                  draw calls / triangles for one frame
  *   __game.deckDebug()                deck source, <audio> currentTime, preview window start

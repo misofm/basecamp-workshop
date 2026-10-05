@@ -1,5 +1,12 @@
 # Second collector: the house digger
 
+> **Out of date:** this patch was made against the earlier version of the game that had a
+> Bun bank server (`apps/game/server/`, `src/miso/testnet/bank.ts`, `burner.ts`). The game now
+> runs without a server, on two baked-in testnet keys, so the patch's testnet and server
+> hunks no longer apply. To try it as written, check out commit `cc23ffb` first. On the
+> current game the same idea lives in `src/miso/testnet/sell.ts`: the GAME wallet's payout
+> would take the buyer's offer rule.
+
 A patch for [`apps/game`](../../apps/game/README.md) that adds a second street buyer, the
 **house digger**, across the street from the collector. He pays 2× the shop price, but only
 for records from the HOUSE section, and politely turns down anything else.
@@ -43,8 +50,8 @@ cd apps/game && npm install && npm run dev
 ```
 
 Mock mode (`npm run dev`) runs the whole thing with fake money: buy Warehouse Gospel (HOUSE),
-walk across the street, sell it for 2×. On testnet, real payouts need the bank server with your
-own funded keys (`npm run stage`; see the game README's "Sui testnet (stage setup)" section).
+walk across the street, sell it for 2×. On testnet (at commit `cc23ffb`), real payouts needed
+the bank server with your own funded keys.
 
 Tests: `npm run test:unit` covers the offer rules; `npx playwright test tests/e2e/house-digger.spec.ts`
 plays the refusal and the 2× sale in mock mode.

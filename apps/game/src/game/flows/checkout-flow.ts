@@ -9,6 +9,8 @@
  *     → re-read wallet + owned Records        (chain truth: balance, serial)
  *     → dispatch purchaseSuccess → receipt (Record id, tx digest, explorer links)
  *   or → dispatch purchaseFail → the adapter's friendly message + Retry / Cancel
+ *   Balance known and below the price? No chain call at all: "Not enough FakeUSD —
+ *   the ATM outside dispenses testnet dollars." (never a silent mint).
  *
  * Owns: the counter dialogs and the clerk's speech bubble status.
  * Must not: decide legality (state.ts does) or know any chain detail beyond the
@@ -20,6 +22,16 @@ import * as sfx from "../../audio/sfx";
 import { errorBody, lineItems, paragraph, pendingBody, receiptBody, recordStrip } from "../../ui/dialogs";
 import { heldOwnedRecord } from "../state";
 import { message, type FlowContext } from "./context";
+
+/** Shown when the player can't afford the held record (the ATM is outside). */
+export const NOT_ENOUGH_FAKEUSD = "Not enough FakeUSD — the ATM outside dispenses testnet dollars.";
+const ATM_HINT = "The ATM outside dispenses testnet dollars.";
+
+/** Point an adapter's "Not enough FakeUSD" rejection at the ATM (once). */
+export function withAtmHint(error: string): string {
+  if (!/not enough fakeusd/i.test(error) || /\bATM\b/.test(error)) return error;
+  return `${error.trimEnd()} ${ATM_HINT}`;
+}
 
 export class CheckoutFlow {
   constructor(private readonly ctx: FlowContext) {}
@@ -55,7 +67,7 @@ export class CheckoutFlow {
     }
     const balance = s.balance;
     const price = r.price.amount;
-    const short = balance !== null && balance < price;
+    if (balance !== null && balance < price) return this.showNotEnough(r, balance);
     ctx.dialogs.show({
       key: "purchase",
       eyebrow: "AT THE COUNTER",
@@ -66,15 +78,10 @@ export class CheckoutFlow {
           ["Your balance", balance === null ? "…" : ctx.money(balance)],
           ["After purchase", balance === null ? "…" : ctx.money(balance - price)],
         ]),
-        paragraph(
-          short
-            ? "Not enough FakeUSD for this one. Put it back and pick something cheaper."
-            : `Paid in FakeUSD on ${ctx.networkName()}. A Record object is minted straight to your wallet.`,
-          short ? "dlg-p warn" : "dlg-p",
-        ),
+        paragraph(`Paid in FakeUSD on ${ctx.networkName()}. A Record object is minted straight to your wallet.`),
       ],
       actions: [
-        { id: "pay", kind: "primary", label: `Pay ${ctx.money(price)}`, disabled: short, run: () => void this.purchase() },
+        { id: "pay", kind: "primary", label: `Pay ${ctx.money(price)}`, run: () => void this.purchase() },
         { id: "cancel", label: "Not yet", run: () => ctx.dialogs.close() },
       ],
     });
@@ -85,7 +92,14 @@ export class CheckoutFlow {
     const { ctx } = this;
     const hand = ctx.state().hand;
     const record = hand ? ctx.catalog.get(hand.shopRecordId) : undefined;
-    if (!record || !ctx.dispatch({ type: "purchaseStart" })) return;
+    if (!record) return;
+    const balance = ctx.state().balance;
+    if (balance !== null && balance < record.price.amount) {
+      // Can't afford it: don't even ask the chain.
+      this.showNotEnough(record, balance);
+      return;
+    }
+    if (!ctx.dispatch({ type: "purchaseStart" })) return;
     ctx.world.setCashierStatus("processing");
     this.showPurchasePending();
     try {
@@ -118,12 +132,34 @@ export class CheckoutFlow {
         });
       }
     } catch (error) {
-      ctx.dispatch({ type: "purchaseFail", error: message(error) });
+      const text = withAtmHint(message(error));
+      ctx.dispatch({ type: "purchaseFail", error: text });
       sfx.error();
       ctx.world.setCashierStatus("error");
-      if (ctx.dialogs.openKey === "purchase") this.showPurchaseError(message(error));
-      else ctx.hud.toast(`Purchase failed: ${message(error)}`, { tone: "bad" });
+      if (ctx.dialogs.openKey === "purchase") this.showPurchaseError(text);
+      else ctx.hud.toast(`Purchase failed: ${text}`, { tone: "bad" });
     }
+  }
+
+  /** The balance can't cover the held record: point at the ATM, no chain call. */
+  private showNotEnough(r: ShopRecord, balance: bigint): void {
+    const { ctx } = this;
+    sfx.error();
+    ctx.dialogs.show({
+      key: "purchase",
+      tone: "error",
+      eyebrow: "AT THE COUNTER",
+      title: "Card declined.",
+      body: [
+        recordStrip(r.coverUrl, r.title, r.artist, ctx.money(r.price.amount)),
+        lineItems([
+          ["Your balance", ctx.money(balance)],
+          ["Price", ctx.money(r.price.amount)],
+        ]),
+        errorBody(NOT_ENOUGH_FAKEUSD, "Nothing was charged. Put the record back, grab some FakeUSD and come back."),
+      ],
+      actions: [{ id: "ok", kind: "primary", label: "OK", run: () => ctx.dialogs.close() }],
+    });
   }
 
   private showPurchasePending(): void {

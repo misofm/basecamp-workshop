@@ -2,7 +2,7 @@
  * GTA-style circular minimap (bottom-left), drawn on a <canvas>.
  *
  * Owns: drawing a MapSnapshot: roads, buildings, the highlighted shop, blips
- * (deck ♪, cashier $, collector ★, parked cars, traffic, pedestrians), the player
+ * (deck ♪, cashier $, collector ★, FakeUSD ATM ¤, parked cars, traffic, pedestrians), the player
  * arrow and the waypoint (edge-clamped arrow when it is off the map).
  * Must not: contain game logic or call the world. The controller hands it a
  * snapshot; draw() throttles itself to ≤ 30 Hz.
@@ -93,6 +93,9 @@ export class Minimap {
           break;
         case "buyer":
           if (point.enabled) blip(ctx, x, y, "★", "#ffb020");
+          break;
+        case "atm":
+          blip(ctx, x, y, "¤", "#2b8fd6");
           break;
         case "car":
           carBlip(ctx, x, y, point.enabled ? COLORS.car : COLORS.carSmashed);

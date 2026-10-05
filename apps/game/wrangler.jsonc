@@ -1,6 +1,12 @@
 {
-  // Static deploy of the game (no bank server). Mock mode by default; ?chain=testnet reads
-  // the live catalog, but funding and selling need the bank server (see README).
+  // Pure static-assets deploy of dist/ (no Worker code, no server): `npm run deploy`.
+  //
+  // !!! KEYS ARE BAKED INTO THE JS. `vite build` compiles VITE_PLAYER_SUI_PRIVATE_KEY and
+  // VITE_GAME_SUI_PRIVATE_KEY from .env.local into the testnet chunk in dist/, so anyone
+  // who can load the site can read both testnet keys. Only deploy a keyed build behind
+  // Cloudflare Access (or equivalent access control); never deploy one publicly. A build
+  // made without .env.local has no keys: mock mode works, ?chain=testnet shows the live
+  // catalog and "Testnet keys missing".
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "basecamp-workshop",
   "compatibility_date": "2026-10-01",

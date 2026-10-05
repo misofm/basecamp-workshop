@@ -98,3 +98,38 @@ test("formatAmount and shortId", () => {
   expect(formatAmount(5n, 0, "X", 2)).toBe("5 X");
   expect(shortId("0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f9f0e")).toBe("0x1a2b…9f0e");
 });
+
+test("withdrawFakeUsd credits the balance and returns a digest", async () => {
+  const adapter = new MockAdapter({ latencyMs: 0 });
+  const result = await adapter.withdrawFakeUsd(50_000_000n);
+  expect(result.amount).toBe(50_000_000n);
+  expect(result.digest).toMatch(/^[1-9A-HJ-NP-Za-km-z]{44}$/);
+  expect((await adapter.getWallet()).fakeUsd).toBe(150_000_000n);
+  expect(adapter.explorerTxUrl(result.digest)).toBe(`https://suiscan.xyz/testnet/tx/${result.digest}`);
+  // A withdrawal tops up enough to buy what a short wallet couldn't.
+  const poor = new MockAdapter({ latencyMs: 0, startFakeUsd: 5_000_000n });
+  const [record] = await poor.loadShopCatalog();
+  await expect(poor.purchase(record)).rejects.toThrow(/Not enough FakeUSD/);
+  await poor.withdrawFakeUsd(50_000_000n);
+  await expect(poor.purchase(record)).resolves.toBeTruthy();
+  expect((await poor.getWallet()).fakeUsd).toBe(55_000_000n - record.price.amount);
+});
+
+test("withdrawFakeUsd failure injection and invalid amounts", async () => {
+  const adapter = new MockAdapter({ latencyMs: 0 });
+  await expect(adapter.withdrawFakeUsd(0n)).rejects.toThrow();
+  await expect(adapter.withdrawFakeUsd(-1n)).rejects.toThrow();
+  adapter.failNext("withdraw");
+  await expect(adapter.withdrawFakeUsd(50_000_000n)).rejects.toThrow(/Nothing was withdrawn/);
+  expect((await adapter.getWallet()).fakeUsd).toBe(100_000_000n);
+  await expect(adapter.withdrawFakeUsd(50_000_000n)).resolves.toMatchObject({ amount: 50_000_000n });
+  // failNext("purchase") does not hit withdrawals.
+  adapter.failNext("purchase");
+  await expect(adapter.withdrawFakeUsd(1n)).resolves.toBeTruthy();
+  adapter.setFailureMode("withdraw");
+  await expect(adapter.withdrawFakeUsd(1n)).rejects.toThrow(/ATM/);
+  adapter.setFailureMode("all");
+  await expect(adapter.withdrawFakeUsd(1n)).rejects.toThrow();
+  adapter.setFailureMode("none");
+  expect((await adapter.getWallet()).fakeUsd).toBe(150_000_001n);
+});

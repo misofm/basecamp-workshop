@@ -11,7 +11,7 @@
  * (0x + 64 hex) and digests look like base58 transaction digests (44 chars), but
  * none of them exist anywhere; explorer links for them will not resolve.
  *
- * URL knobs (parsed in select.ts): ?latency=ms, ?fail=purchase|sell|all, ?mockhls=1.
+ * URL knobs (parsed in select.ts): ?latency=ms, ?fail=purchase|sell|withdraw|all, ?mockhls=1.
  */
 import type { MisoAdapter } from "./adapter";
 import { suiscanObjectUrl, suiscanTxUrl } from "./explorer";
@@ -25,12 +25,13 @@ import type {
   SellResult,
   ShopRecord,
   Wallet,
+  WithdrawResult,
 } from "./types";
 
-/** Which transactions are forced to fail. "all" = purchase and sell. Reads never fail. */
-export type FailureMode = "none" | "purchase" | "sell" | "all";
-/** For failNext(): "any" = the next purchase OR sell, whichever comes first. */
-export type FailKind = "purchase" | "sell" | "any";
+/** Which transactions are forced to fail. "all" = purchase, sell and withdraw. Reads never fail. */
+export type FailureMode = "none" | "purchase" | "sell" | "withdraw" | "all";
+/** For failNext(): "any" = the next purchase, sell OR withdraw, whichever comes first. */
+export type FailKind = "purchase" | "sell" | "withdraw" | "any";
 
 export interface MockAdapterOptions {
   /** Simulated network latency per call, ms. Default 800. */
@@ -55,6 +56,9 @@ const TX_FAILED_MESSAGE =
   "Transaction rejected: the network timed out. Your FakeUSD was not spent.";
 const SELL_FAILED_MESSAGE =
   "Transaction rejected: the network timed out. You still own the record.";
+
+const WITHDRAW_FAILED_MESSAGE =
+  "The ATM couldn't reach the faucet: the network timed out. Nothing was withdrawn.";
 
 const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
@@ -165,6 +169,14 @@ export class MockAdapter implements MisoAdapter {
     return { recordId, digest: this.fakeDigest() };
   }
 
+  async withdrawFakeUsd(amount: bigint): Promise<WithdrawResult> {
+    if (amount <= 0n) throw new Error("The ATM can't dispense nothing.");
+    await this.simulate("withdraw");
+    this.fakeUsd += amount;
+    this.sui -= 1_000_000n; // pretend gas
+    return { digest: this.fakeDigest(), amount };
+  }
+
   async listOwnedRecords(): Promise<OwnedRecord[]> {
     await this.simulate("read");
     return this.owned.map((r) => ({ ...r }));
@@ -194,17 +206,17 @@ export class MockAdapter implements MisoAdapter {
   // ---- internals ----
 
   /** Wait the simulated latency, then throw if failure injection says so. */
-  private async simulate(kind: "read" | "purchase" | "sell"): Promise<void> {
+  private async simulate(kind: "read" | "purchase" | "sell" | "withdraw"): Promise<void> {
     await sleep(this.latencyMs);
     if (kind !== "read") {
       const queued = this.pendingFailures.findIndex((k) => k === kind || k === "any");
       if (queued >= 0) {
         this.pendingFailures.splice(queued, 1);
-        throw new Error(kind === "sell" ? SELL_FAILED_MESSAGE : TX_FAILED_MESSAGE);
+        throw new Error(kind === "sell" ? SELL_FAILED_MESSAGE : kind === "withdraw" ? WITHDRAW_FAILED_MESSAGE : TX_FAILED_MESSAGE);
       }
       const mode = this.failureMode;
       if (mode === "all" || mode === kind) {
-        throw new Error(kind === "sell" ? SELL_FAILED_MESSAGE : TX_FAILED_MESSAGE);
+        throw new Error(kind === "sell" ? SELL_FAILED_MESSAGE : kind === "withdraw" ? WITHDRAW_FAILED_MESSAGE : TX_FAILED_MESSAGE);
       }
     }
   }

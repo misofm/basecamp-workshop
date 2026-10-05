@@ -4,7 +4,7 @@
  * Owns: the renderer, scene, lights, post-processing (bloom, FXAA, film grain),
  * adaptive quality (render scale / bloom drop on slow GPUs; `?quality=low`, or any
  * automated browser, starts at the bottom: lowest scale, no bloom), the frame loop, and the
- * wiring between subsystems (city, shop, traffic, parked cars, NPCs, player, records,
+ * wiring between subsystems (city, shop, ATM, traffic, parked cars, NPCs, player, records,
  * interactables, waypoint). Translates WorldApi calls into subsystem calls and fires
  * the WorldApi events (onNear, onInteract, onMove, onZoneChange, onExitBlockedBump).
  * Must not: know about money, wallets, chains, menus or HUD; it never touches the DOM
@@ -29,6 +29,7 @@ import { BUYER_ID, Npcs } from "./npcs";
 import { Player } from "./player";
 import { RecordItems } from "./record-item";
 import { Waypoint } from "./waypoint";
+import { Atm } from "./atm";
 import { BOUNDS, BUILDINGS, COUNTER, DECK, DOOR, ROADS, SHOP, SPAWN, groundHeight, inShop } from "./layout";
 
 const EXIT_BUMP_THROTTLE_MS = 1500;
@@ -118,6 +119,7 @@ export class GameWorld implements WorldApi {
     this.traffic = new Traffic(this.scene, 6);
     this.cars = new ParkedCars(this.scene, this.collision, this.interactables);
     this.npcs = new Npcs(this.scene, this.collision, this.interactables);
+    new Atm(this.scene, this.collision, this.interactables);
     this.waypoint = new Waypoint(this.scene);
     this.player = new Player(this.scene, this.camera, this.collision, this.renderer.domElement);
     this.player.teleport(SPAWN.x, SPAWN.z, SPAWN.heading);

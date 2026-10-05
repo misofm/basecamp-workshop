@@ -41,7 +41,7 @@ cd apps/game && npm install && npm run dev
 In mock mode (`npm run dev`) mock records have no publish time, so the billboard shows the
 first record in the shop. On testnet (`?chain=testnet`, or `npm run stage`; see the game
 README) it shows the shop release with the latest publish time. Reading the catalog on testnet
-needs no keys; the bank server is only needed for buying and selling.
+needs no keys; only buying and selling need the game's testnet keys in `.env.local`.
 
 ## Revert
 

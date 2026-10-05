@@ -46,5 +46,3 @@ export async function fetchJson<T>(url: string, init: RequestInit & { timeoutMs:
   if (!res.ok) throw new HttpError(res.status, body, url);
   return body as T;
 }
-
-export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));

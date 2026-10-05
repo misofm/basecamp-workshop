@@ -31,7 +31,8 @@
  * - Only one op at a time: starting any op while one is pending is refused.
  *   An op in "error" status may be replaced by a new op (retry) or dismissed.
  * - While a purchase or sell is pending, the held record is locked (no pick,
- *   put back, deck moves or holdOwned).
+ *   put back, deck moves or holdOwned). A withdraw (the street ATM) only moves
+ *   money, so it never locks the hand.
  */
 import type { OwnedRecord } from "../miso/types";
 
@@ -41,7 +42,7 @@ export interface HeldItem {
   recordId: string | null;
 }
 
-export type OpKind = "catalog" | "wallet" | "purchase" | "sell" | "collection";
+export type OpKind = "catalog" | "wallet" | "purchase" | "sell" | "withdraw" | "collection";
 
 export interface PendingOp {
   kind: OpKind;
@@ -58,13 +59,16 @@ export interface SoldRecord {
   paid: bigint;
 }
 
-export interface Receipt {
-  kind: "purchase" | "sell";
-  shopRecordId: string;
-  recordId: string;
-  digest: string;
-  amount: bigint;
-}
+export type Receipt =
+  | {
+      kind: "purchase" | "sell";
+      shopRecordId: string;
+      recordId: string;
+      digest: string;
+      amount: bigint;
+    }
+  /** FakeUSD from the street ATM (no Record involved). */
+  | { kind: "withdraw"; digest: string; amount: bigint };
 
 export type Zone = "street" | "shop";
 
@@ -83,6 +87,8 @@ export interface GameState {
   listened: string[];
   /** FakeUSD base units; null until the wallet loads. */
   balance: bigint | null;
+  /** Shop price (FakeUSD base units) per shopRecordId; filled at catalog load. */
+  prices: Readonly<Record<string, bigint>>;
   op: PendingOp | null;
   zone: Zone;
   lastReceipt: Receipt | null;
@@ -112,12 +118,17 @@ export type GameAction =
   | { type: "sellStart"; npcId: string }
   | { type: "sellSuccess"; paid: bigint; digest: string; balance: bigint }
   | { type: "sellFail"; error: string }
+  // Withdraw FakeUSD at the street ATM
+  | { type: "withdrawStart" }
+  | { type: "withdrawSuccess"; digest: string; amount: bigint; balance: bigint }
+  | { type: "withdrawFail"; error: string }
   /** The buyer came back to their spot (repeatable demo): their record is stock again. */
   | { type: "buyerReturned"; npcId: string }
   // Reads (optional pending UI for catalog / wallet / collection loads)
   | { type: "loadStart"; kind: LoadKind }
   | { type: "loadFail"; kind: LoadKind; error: string }
-  | { type: "catalogLoaded" }
+  /** `prices`: shop price per shopRecordId (for the "short on FakeUSD" objective). */
+  | { type: "catalogLoaded"; prices?: Record<string, bigint> }
   | { type: "collectionLoaded"; owned: OwnedRecord[] }
   | { type: "walletLoaded"; balance: bigint }
   // World
@@ -136,6 +147,7 @@ export const initialState = (): GameState => ({
   smashedCars: [],
   listened: [],
   balance: null,
+  prices: {},
   op: null,
   zone: "street",
   lastReceipt: null,
@@ -169,6 +181,13 @@ export const heldOwnedRecord = (state: GameState): OwnedRecord | undefined =>
 /** True while a purchase/sell is in flight and the held record must not move. */
 export const handLocked = (state: GameState): boolean =>
   isBusy(state) && (state.op?.kind === "purchase" || state.op?.kind === "sell");
+
+/** The cheapest shop price, or null before the catalog loads. */
+export function cheapestPrice(state: GameState): bigint | null {
+  let min: bigint | null = null;
+  for (const price of Object.values(state.prices)) if (min === null || price < min) min = price;
+  return min;
+}
 
 export function canPick(state: GameState, shopRecordId: string): boolean {
   return (
@@ -296,6 +315,23 @@ export function transition(state: GameState, action: GameAction): GameState {
       if (!isPending(state, "sell")) return state;
       return { ...state, op: { ...state.op!, status: "error", error: action.error } };
 
+    case "withdrawStart":
+      if (!canStartOp(state)) return state;
+      return { ...state, op: { kind: "withdraw", status: "pending" } };
+
+    case "withdrawSuccess":
+      if (!isPending(state, "withdraw")) return state;
+      return {
+        ...state,
+        balance: action.balance,
+        op: null,
+        lastReceipt: { kind: "withdraw", digest: action.digest, amount: action.amount },
+      };
+
+    case "withdrawFail":
+      if (!isPending(state, "withdraw")) return state;
+      return { ...state, op: { ...state.op!, status: "error", error: action.error } };
+
     case "buyerReturned":
       if (state.buyerAway?.npcId !== action.npcId) return state;
       return { ...state, buyerAway: null };
@@ -308,8 +344,11 @@ export function transition(state: GameState, action: GameAction): GameState {
       if (!isPending(state, action.kind)) return state;
       return { ...state, op: { kind: action.kind, status: "error", error: action.error } };
 
-    case "catalogLoaded":
-      return isPending(state, "catalog") ? { ...state, op: null } : state;
+    case "catalogLoaded": {
+      const prices = action.prices ? { ...action.prices } : state.prices;
+      if (!isPending(state, "catalog") && prices === state.prices) return state;
+      return { ...state, prices, op: isPending(state, "catalog") ? null : state.op };
+    }
 
     case "collectionLoaded":
       return {

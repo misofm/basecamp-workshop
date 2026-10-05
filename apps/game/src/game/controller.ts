@@ -18,6 +18,8 @@
  *   6. E on the collector → offer (1.5× shop price)         sellStart → adapter.sellToNpc()
  *        → sellSuccess (buyer walks off with it, cash counts up) | sellFail (Retry)
  *   7. C → collection, read back from the chain via adapter.listOwnedRecords().
+ *   Any time: E at the FakeUSD ATM outside → Withdraw 50 FUSD   withdrawStart → adapter.withdrawFakeUsd()
+ *        → withdrawSuccess (receipt, cash counts up) | withdrawFail (Retry / Cancel)
  *   ~20 s after a sale the collector walks back (buyerReturned), so the loop can rerun.
  *
  * Where things live: this file is the core (wiring, boot, render(), world events,
@@ -27,6 +29,7 @@
  *   flows/checkout-flow.ts    cashier: pay → pending → receipt | error   (step 4)
  *   flows/street-flow.ts      smash a car, sell to the collector, return (steps 5-6)
  *   flows/collection-flow.ts  C collection, H help + "Reset demo"        (step 7)
+ *   flows/atm-flow.ts         the street ATM: withdraw FakeUSD from the faucet
  *
  * Rules this file follows:
  *  - Every adapter call: dispatch xStart → pending UI → await → xSuccess / xFail.
@@ -66,6 +69,7 @@ import { ShopFlow } from "./flows/shop-flow";
 import { CheckoutFlow } from "./flows/checkout-flow";
 import { StreetFlow } from "./flows/street-flow";
 import { CollectionFlow } from "./flows/collection-flow";
+import { AtmFlow } from "./flows/atm-flow";
 
 /** Hide the waypoint once the player is this close to it (metres). */
 const WAYPOINT_HIDE_DISTANCE = 2.5;
@@ -116,6 +120,7 @@ export class GameController {
   private readonly checkout: CheckoutFlow;
   private readonly street: StreetFlow;
   private readonly collection: CollectionFlow;
+  private readonly atm: AtmFlow;
 
   constructor(deps: ControllerDeps) {
     this.world = deps.world;
@@ -147,6 +152,7 @@ export class GameController {
     this.checkout = new CheckoutFlow(ctx);
     this.street = new StreetFlow(ctx);
     this.collection = new CollectionFlow(ctx);
+    this.atm = new AtmFlow(ctx);
 
     // World events.
     this.world.onNear = (target) => {
@@ -205,10 +211,12 @@ export class GameController {
       .loadShopCatalog()
       .then((records) => {
         for (const r of records) this.catalog.set(r.id, r);
+        const prices: Record<string, bigint> = {};
+        for (const r of records) prices[r.id] = r.price.amount;
         this.world.setShopRecords(
           records.map((r) => ({ id: r.id, title: r.title, artist: r.artist, section: r.section, coverUrl: r.coverUrl, palette: r.palette })),
         );
-        this.dispatch({ type: "catalogLoaded" });
+        this.dispatch({ type: "catalogLoaded", prices });
         intro.setStatus("catalog", `${records.length} records in the crates`, "ok");
       })
       .catch((error: unknown) => intro.setStatus("catalog", `Catalog: ${message(error)}`, "error"));
@@ -269,7 +277,9 @@ export class GameController {
     // HUD.
     this.hud.setMoney(s.balance, this.wallet?.fakeUsdDecimals ?? 6, FUSD_SYMBOL);
     const op = s.op?.status === "pending" ? s.op.kind : null;
-    this.hud.setPending(op === "purchase" ? "Processing on Sui…" : op === "sell" ? "Settling the sale on Sui…" : null);
+    this.hud.setPending(
+      op === "purchase" ? "Processing on Sui…" : op === "sell" ? "Settling the sale on Sui…" : op === "withdraw" ? "Withdrawing FakeUSD…" : null,
+    );
     this.hud.setMission(objective(s).text);
     const held = s.hand ? this.catalog.get(s.hand.shopRecordId) : undefined;
     if (s.hand && held) {
@@ -351,6 +361,8 @@ export class GameController {
         return s.hand ? "Smash" : "Nice car";
       case "buyer":
         return heldIsOwned(s) ? "Sell to the collector" : "Talk to the collector";
+      case "atm":
+        return "Withdraw FakeUSD";
     }
   }
 
@@ -387,6 +399,7 @@ export class GameController {
         break;
       case "deck":
       case "cashier":
+      case "atm":
         pos = this.world.getInteractable(target) ?? null;
         break;
       case "buyer": {
@@ -438,6 +451,9 @@ export class GameController {
       case "buyer":
         this.street.openBuyer();
         break;
+      case "atm":
+        this.atm.openAtm();
+        break;
     }
   }
 
@@ -449,6 +465,11 @@ export class GameController {
   /** Sell the held owned Record to the collector (street flow). Safe to call again as Retry. */
   sell(): Promise<void> {
     return this.street.sell();
+  }
+
+  /** Withdraw FakeUSD at the ATM (atm flow). Safe to call again as Retry. */
+  withdraw(): Promise<void> {
+    return this.atm.withdraw();
   }
 
   /** Bring the collector back now instead of waiting ~20 s after a sale (tests / rehearsal). */

@@ -1,44 +1,44 @@
 /**
  * TestnetBackend: the heavy half of TestnetAdapter (loaded lazily with the Sui SDK).
  *
+ * Runs fully client-side on two keys baked in at build time (./keys.ts): the PLAYER
+ * wallet signs purchases, ATM withdrawals and the Record transfer of a sale; the GAME
+ * wallet (the collector NPC) signs the sale's FakeUSD payout. No server.
+ *
  * Owns: session state that makes the chain feel instant and retries safe:
  *  - the hydrated catalog + raw listing terms (purchase passes them as expectedPricing),
  *  - locally-known recent purchases / sales, merged into chain reads until the
  *    fullnode's owned-object index agrees (LOCAL_MERGE_TTL_MS),
  *  - the in-flight purchase digest per release (Retry after a timeout first checks
  *    whether the earlier attempt landed instead of buying twice),
- *  - pending sales in localStorage (Record transferred, collector not yet paid), so
- *    Retry skips the transfer and only re-asks the bank server for payment,
- *  - one auto-fund attempt per session (and again after a gas / FakeUSD shortfall).
+ *  - pending sales in localStorage (see ./sell.ts for the retry rules), with an in-memory
+ *    fallback when storage is blocked.
  * Must not: return Sui SDK types; everything leaving here is ../types data or PlayerError.
+ * Catalog reads work without keys; everything wallet-related rejects with the
+ * "Testnet keys missing" PlayerError.
  */
-import type { NpcBuyer, OwnedRecord, PurchaseResult, SellResult, ShopRecord, Wallet } from "../types";
-import { collectorBuy, fund, getCollector, type CollectorBuyResponse } from "./bank";
-import { getBurner } from "./burner";
+import type { NpcBuyer, OwnedRecord, PurchaseResult, SellResult, ShopRecord, Wallet, WithdrawResult } from "../types";
+import { formatAmount } from "../format";
 import { artistOf, loadCatalog, releaseCoverUrl, type SaleTerms } from "./catalog";
 import {
   getBalances,
   getRecord,
   isRecordType,
   listRecords,
+  mintFakeUsdTransaction,
   purchaseTransaction,
   signAndRun,
   simulatePurchase,
   transferTransaction,
+  txStatus,
   waitFor,
   type ChainRecord,
 } from "./chain";
-import { FUSD_DECIMALS, LOCAL_MERGE_TTL_MS, MIN_FUSD, MIN_SUI, PENDING_SALES_KEY } from "./config";
-import { MESSAGES, PlayerError, toPlayerError, type Phase } from "./errors";
+import { FUSD_DECIMALS, FUSD_SYMBOL, LOCAL_MERGE_TTL_MS, MAX_WITHDRAW, PENDING_SALES_KEY } from "./config";
+import { MESSAGES, PlayerError, toPlayerError } from "./errors";
+import { getKeys } from "./keys";
 import { getPressing, getRelease } from "./miso-api";
-import { sleep } from "./net";
-
-interface PendingSale {
-  digest: string;
-  owned: OwnedRecord;
-}
-
-const sameAddress = (a: string | null | undefined, b: string) => !!a && a.toLowerCase() === b.toLowerCase();
+import { sellRecord, type PendingSale, type PendingStore } from "./sell";
 
 export class TestnetBackend {
   private catalogPromise: Promise<{ records: ShopRecord[]; terms: Map<string, SaleTerms> }> | null = null;
@@ -46,11 +46,15 @@ export class TestnetBackend {
   private recentSales = new Map<string, number>();
   private pendingPurchases = new Map<string, string>();
   private knownOwned = new Map<string, OwnedRecord>();
-  private fundTried = false;
-  private funding: Promise<boolean> | null = null;
 
+  /** Player address (throws the "keys missing" PlayerError). */
   private get address(): string {
-    return getBurner().toSuiAddress();
+    return getKeys().player.toSuiAddress();
+  }
+
+  /** The collector NPC = the GAME wallet. */
+  async collectorAddress(): Promise<string> {
+    return getKeys().game.toSuiAddress();
   }
 
   // ───────────────────────────── catalog ─────────────────────────────
@@ -75,45 +79,29 @@ export class TestnetBackend {
 
   async getWallet(): Promise<Wallet> {
     const address = this.address;
-    let balances: { sui: bigint; fakeUsd: bigint };
     try {
-      balances = await getBalances(address);
+      const balances = await getBalances(address);
+      return { address, fakeUsd: balances.fakeUsd, fakeUsdDecimals: FUSD_DECIMALS, sui: balances.sui };
     } catch (error) {
       throw toPlayerError(error, "read");
     }
-    if (!this.fundTried && (balances.sui < MIN_SUI || balances.fakeUsd < MIN_FUSD)) {
-      this.fundTried = true;
-      if (await this.requestFunds()) balances = await getBalances(address).catch(() => balances);
+  }
+
+  // ───────────────────────────── ATM ─────────────────────────────
+
+  /** Player-signed faucet mint of `amount` FakeUSD to the player (≤ MAX_WITHDRAW). */
+  async withdrawFakeUsd(amount: bigint): Promise<WithdrawResult> {
+    if (typeof amount !== "bigint" || amount <= 0n || amount > MAX_WITHDRAW) {
+      throw new PlayerError(`The ATM dispenses up to ${formatAmount(MAX_WITHDRAW, FUSD_DECIMALS, FUSD_SYMBOL)} at a time.`);
     }
-    return { address, fakeUsd: balances.fakeUsd, fakeUsdDecimals: FUSD_DECIMALS, sui: balances.sui };
-  }
-
-  /** Ask the bank server to top the burner up. Never throws; true if a funding tx landed. */
-  private requestFunds(): Promise<boolean> {
-    this.funding ??= (async () => {
-      try {
-        const res = await fund(this.address);
-        if (!res.funded) {
-          console.info(`[miso testnet] bank: not funded (${res.reason ?? "no reason"})`);
-          return false;
-        }
-        if (res.digest) await waitFor(res.digest, 20_000).catch(() => {});
-        return true;
-      } catch (error) {
-        console.warn(`[miso testnet] bank top-up failed: ${error instanceof Error ? error.message : String(error)}`);
-        return false;
-      } finally {
-        this.funding = null;
-      }
-    })();
-    return this.funding;
-  }
-
-  /** Map an error and, for a gas / FakeUSD shortfall, ask the bank for a top-up in the background. */
-  private fail(error: unknown, phase: Phase): PlayerError {
-    const mapped = toPlayerError(error, phase);
-    if (mapped.kind === "gas" || mapped.kind === "fusd") void this.requestFunds();
-    return mapped;
+    const signer = getKeys().player;
+    const address = signer.toSuiAddress();
+    try {
+      const executed = await signAndRun(mintFakeUsdTransaction(amount, address, address), signer);
+      return { digest: executed.digest, amount };
+    } catch (error) {
+      throw toPlayerError(error, "withdraw");
+    }
   }
 
   // ───────────────────────────── purchase ─────────────────────────────
@@ -126,7 +114,7 @@ export class TestnetBackend {
       throw toPlayerError(error, "read");
     }
     if (!terms) throw new PlayerError(MESSAGES.notListed);
-    const signer = getBurner();
+    const signer = getKeys().player;
     const buyer = signer.toSuiAddress();
     try {
       // Retry after a timeout: did the earlier attempt land after all?
@@ -145,7 +133,7 @@ export class TestnetBackend {
       }
       return await this.afterPurchase(record, recordId, executed.digest);
     } catch (error) {
-      const mapped = this.fail(error, "purchase");
+      const mapped = toPlayerError(error, "purchase");
       // Only an unanswered submission can still land; anything else is final.
       if (mapped.kind !== "timeout" && mapped.kind !== "network") this.pendingPurchases.delete(record.id);
       throw mapped;
@@ -198,7 +186,9 @@ export class TestnetBackend {
     }
     // Transferred to the collector but not yet paid: still yours as far as the game goes,
     // so you can hold it and press Retry on the sale.
-    for (const [id, pending] of Object.entries(this.loadPendingSales())) if (!result.has(id)) result.set(id, pending.owned);
+    for (const [id, pending] of Object.entries(this.loadPendingSales())) {
+      if (!result.has(id) && pending.player.toLowerCase() === address.toLowerCase()) result.set(id, pending.owned);
+    }
 
     const list = [...result.values()].sort((a, b) => b.acquiredAt - a.acquiredAt);
     for (const o of list) this.knownOwned.set(o.recordId, o);
@@ -222,61 +212,46 @@ export class TestnetBackend {
 
   // ───────────────────────────── sell ─────────────────────────────
 
+  /**
+   * Two transactions: the player transfers the Record to the GAME, then the GAME pays
+   * offerFor(purchase_price) FakeUSD by faucet mint. Decision logic and retry rules: ./sell.ts.
+   * `npc.address` / `npc.offer` are display only; the real ones come from keys and chain.
+   */
   async sellToNpc(recordId: string, _npc: NpcBuyer): Promise<SellResult> {
-    // npc.address is the game's display-only collector; the real one comes from the bank server.
-    const signer = getBurner();
-    const seller = signer.toSuiAddress();
-    let pending: PendingSale | undefined = this.loadPendingSales()[recordId];
-    try {
-      const { owner, record } = await getRecord(recordId);
-      if (pending && sameAddress(owner, seller)) {
-        // The earlier transfer never landed: start over.
-        this.savePendingSale(recordId, null);
-        pending = undefined;
-      }
-      if (!pending) {
-        if (!sameAddress(owner, seller)) throw new PlayerError(MESSAGES.notOwned, "notOwned");
-        const collector = await getCollector(); // fail before moving anything if the bank is down
-        const owned: OwnedRecord = this.knownOwned.get(recordId) ?? {
-          recordId,
-          shopRecordId: record?.releaseId ?? "",
-          title: "Record",
-          artist: "",
-          coverUrl: "",
-          serial: record?.number ?? 0,
-          maxSupply: record?.number ?? 0,
-          acquiredAt: record?.purchasedAtMs ?? Date.now(),
-        };
-        try {
-          // Persist the digest before submitting so a Retry never transfers twice.
-          await signAndRun(transferTransaction(recordId, seller, collector.address), signer, (digest) => {
-            pending = { digest, owned };
-            this.savePendingSale(recordId, pending);
-          });
-        } catch (error) {
-          const mapped = this.fail(error, "sell");
-          // An unanswered submission may still land (Retry re-checks the owner); anything else is final.
-          if (mapped.kind !== "timeout" && mapped.kind !== "network") this.savePendingSale(recordId, null);
-          throw mapped;
-        }
-      }
-    } catch (error) {
-      throw this.fail(error, "sell");
-    }
-    try {
-      const paid = await this.collectPayment(recordId, pending!.digest);
-      this.savePendingSale(recordId, null);
-      this.recentPurchases.delete(recordId);
-      this.recentSales.set(recordId, Date.now());
-      this.knownOwned.delete(recordId);
-      return { digest: paid.digest, paid: BigInt(paid.paid) };
-    } catch (error) {
-      const mapped = this.fail(error, "sell");
-      throw new PlayerError(
-        `The collector has your record but hasn't paid yet: ${mapped.message} Press Retry to ask again; the record won't be sent twice.`,
-        mapped.kind,
-      );
-    }
+    const { player, game } = getKeys();
+    const playerAddress = player.toSuiAddress();
+    const store: PendingStore = {
+      get: (id) => this.loadPendingSales()[id],
+      set: (id, sale) => this.savePendingSale(id, sale),
+    };
+    const result = await sellRecord(recordId, {
+      player: playerAddress,
+      game: game.toSuiAddress(),
+      getRecord,
+      transfer: (id, onDigest) => signAndRun(transferTransaction(id, playerAddress, game.toSuiAddress()), player, onDigest),
+      pay: (amount, onDigest) => signAndRun(mintFakeUsdTransaction(amount, game.toSuiAddress(), playerAddress), game, onDigest),
+      txStatus,
+      pending: store,
+      describe: (id, record) => this.knownOwned.get(id) ?? this.describeChainRecord(record),
+    });
+    this.recentPurchases.delete(recordId);
+    this.recentSales.set(recordId, Date.now());
+    this.knownOwned.delete(recordId);
+    return result;
+  }
+
+  /** Collection entry for a Record we haven't seen through listOwnedRecords yet. */
+  private describeChainRecord(record: ChainRecord): OwnedRecord {
+    return {
+      recordId: record.recordId,
+      shopRecordId: record.releaseId,
+      title: "Record",
+      artist: "",
+      coverUrl: "",
+      serial: record.number,
+      maxSupply: record.number,
+      acquiredAt: record.purchasedAtMs || Date.now(),
+    };
   }
 
   /**
@@ -295,28 +270,21 @@ export class TestnetBackend {
     }
   }
 
-  /** POST /api/collector/buy, retried with backoff while the server or chain catches up. */
-  private async collectPayment(recordId: string, digest: string): Promise<CollectorBuyResponse> {
-    const delays = [1500, 3000];
-    for (let attempt = 0; ; attempt++) {
-      try {
-        return await collectorBuy(recordId, digest);
-      } catch (error) {
-        const retryable = (error as { retryable?: boolean }).retryable === true;
-        if (!retryable || attempt >= delays.length) throw error;
-        await sleep(delays[attempt]);
-      }
-    }
-  }
-
+  /** Pending sales (localStorage, in-memory fallback). Entries from older builds are dropped. */
   private loadPendingSales(): Record<string, PendingSale> {
+    let all: Record<string, PendingSale>;
     try {
       const raw = localStorage.getItem(PENDING_SALES_KEY);
       const parsed = raw ? (JSON.parse(raw) as unknown) : {};
-      return parsed && typeof parsed === "object" ? (parsed as Record<string, PendingSale>) : {};
+      all = parsed && typeof parsed === "object" ? (parsed as Record<string, PendingSale>) : {};
     } catch {
       return this.memoryPending;
     }
+    const out: Record<string, PendingSale> = {};
+    for (const [id, sale] of Object.entries(all)) {
+      if (typeof sale?.transferDigest === "string" && typeof sale.player === "string" && sale.owned) out[id] = sale;
+    }
+    return out;
   }
   private memoryPending: Record<string, PendingSale> = {};
 

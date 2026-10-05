@@ -25,14 +25,24 @@
  * Unpaid stock can never leave the shop (canLeaveShop). Sold-out checks need
  * catalog data, so the controller does them before dispatching pick.
  *
- * ## Rules
- * - `transition` returns the SAME state object for an illegal action, so the
- *   controller can detect refusal with `next === state`.
+ * ## Rules (docs/STATE-MODEL.md has the full transition table and invariants)
+ * - `step` is the single transition function. It returns `{ state, rejected }`:
+ *   an illegal action gives back the SAME state object plus a reason (the
+ *   controller logs it as a dev-console warning); a harmless no-op (setZone to
+ *   the current zone, stop while silent…) gives back the same object with
+ *   `rejected: null`. `step` never throws. `transition` is `step(...).state`.
  * - Only one op at a time: starting any op while one is pending is refused.
  *   An op in "error" status may be replaced by a new op (retry) or dismissed.
  * - While a purchase or sell is pending, the held record is locked (no pick,
- *   put back, deck moves or holdOwned). A withdraw (the street ATM) only moves
- *   money, so it never locks the hand.
+ *   put back, deck moves, holdOwned, stowOwned or smash). A withdraw (the
+ *   street ATM) only moves money, so it never locks the hand.
+ * - A purchase / sell error is about the record in your hand: once the hand
+ *   changes, the error is stale and is cleared (Retry would act on another record).
+ * - Chain reads can lag or race a transaction: collectionLoaded never drops the
+ *   Record in your hand or on the deck and never resurrects one you sold;
+ *   balances are never negative (an unknown balance stays null).
+ * - `invariantViolations(state)` lists broken invariants (empty for every state
+ *   `step` can produce from `initialState()`); the controller checks it in dev.
  */
 import type { OwnedRecord } from "../miso/types";
 
@@ -44,13 +54,21 @@ export interface HeldItem {
 
 export type OpKind = "catalog" | "wallet" | "purchase" | "sell" | "withdraw" | "collection";
 
-export interface PendingOp {
-  kind: OpKind;
-  status: "pending" | "error";
-  error?: string;
-  /** purchase: shopRecordId; sell: npcId. */
-  targetId?: string;
-}
+/** One chain operation: in flight, or failed with a player-safe message (Retry / dismiss). */
+export type PendingOp =
+  | {
+      kind: OpKind;
+      status: "pending";
+      /** purchase: shopRecordId; sell: npcId. */
+      targetId?: string;
+    }
+  | {
+      kind: OpKind;
+      status: "error";
+      error: string;
+      /** purchase: shopRecordId; sell: npcId. */
+      targetId?: string;
+    };
 
 export interface SoldRecord {
   recordId: string;
@@ -114,15 +132,16 @@ export type GameAction =
   | { type: "stop" }
   // Purchase at the cashier
   | { type: "purchaseStart" }
-  | { type: "purchaseSuccess"; owned: OwnedRecord; digest: string; balance: bigint; amount: bigint }
+  /** `balance`: the re-read wallet balance, or null when it could not be read (keeps the known one). */
+  | { type: "purchaseSuccess"; owned: OwnedRecord; digest: string; balance: bigint | null; amount: bigint }
   | { type: "purchaseFail"; error: string }
   // Sell to a street buyer
   | { type: "sellStart"; npcId: string }
-  | { type: "sellSuccess"; paid: bigint; digest: string; balance: bigint }
+  | { type: "sellSuccess"; paid: bigint; digest: string; balance: bigint | null }
   | { type: "sellFail"; error: string }
   // Withdraw FakeUSD at the street ATM
   | { type: "withdrawStart" }
-  | { type: "withdrawSuccess"; digest: string; amount: bigint; balance: bigint }
+  | { type: "withdrawSuccess"; digest: string; amount: bigint; balance: bigint | null }
   | { type: "withdrawFail"; error: string }
   /** The buyer came back to their spot (repeatable demo): their record is stock again. */
   | { type: "buyerReturned"; npcId: string }
@@ -210,80 +229,136 @@ const canStartOp = (state: GameState): boolean => !isBusy(state);
 
 // --------------------------------------------------------------- transition
 
+/** Result of one transition: the next state, or the same object plus why it was refused. */
+export interface StepResult {
+  state: GameState;
+  /** null = accepted (or a harmless no-op); a reason = illegal in this state. */
+  rejected: string | null;
+}
+
+/** Apply an action. Illegal actions are a no-op (same object back). Never throws. */
 export function transition(state: GameState, action: GameAction): GameState {
+  return step(state, action).state;
+}
+
+/** The single transition function: next state, or the same state plus the reason it was refused. */
+export function step(state: GameState, action: GameAction): StepResult {
+  try {
+    return stepUnsafe(state, action);
+  } catch (error) {
+    // Defensive: a malformed action (e.g. from the console) must never crash the game.
+    return { state, rejected: `threw: ${error instanceof Error ? error.message : String(error)}` };
+  }
+}
+
+const ok = (state: GameState): StepResult => ({ state, rejected: null });
+const no = (state: GameState, reason: string): StepResult => ({ state, rejected: reason });
+
+/** A new balance from a chain result: null or negative (impossible) keeps the known one. */
+const nextBalance = (state: GameState, balance: bigint | null): bigint | null =>
+  balance !== null && balance >= 0n ? balance : state.balance;
+
+/**
+ * Move the record(s) between hand and deck. A purchase / sell error describes the record
+ * that was in the hand, so it is cleared once the hand changes (no Retry on the wrong record).
+ */
+function moveRecords(state: GameState, patch: Pick<Partial<GameState>, "hand" | "deck" | "playing">): GameState {
+  const next = { ...state, ...patch };
+  if (next.op?.status === "error" && (next.op.kind === "purchase" || next.op.kind === "sell")) next.op = null;
+  return next;
+}
+
+const LOCKED = "hand locked: a purchase or sale is in flight";
+
+function stepUnsafe(state: GameState, action: GameAction): StepResult {
   switch (action.type) {
     case "pick": {
-      if (!canPick(state, action.shopRecordId)) return state;
+      if (handLocked(state)) return no(state, LOCKED);
+      if (heldIsOwned(state)) return no(state, "hands full (holding an owned Record)");
+      const place = recordPlace(state, action.shopRecordId);
+      if (place !== "shelf") return no(state, `that release is not on the shelf (${place})`);
       // Holding unpaid stock? It goes back to its shelf (swap).
-      return { ...state, hand: { shopRecordId: action.shopRecordId, recordId: null } };
+      return ok(moveRecords(state, { hand: { shopRecordId: action.shopRecordId, recordId: null } }));
     }
 
     case "putBack":
-      if (handLocked(state) || !heldIsUnpaid(state)) return state;
-      return { ...state, hand: null };
+      if (handLocked(state)) return no(state, LOCKED);
+      if (!heldIsUnpaid(state)) return no(state, "not holding unpaid stock");
+      return ok(moveRecords(state, { hand: null }));
 
     case "placeOnDeck":
-      if (handLocked(state) || !state.hand || state.deck) return state;
-      return { ...state, deck: state.hand, hand: null, playing: null };
+      if (handLocked(state)) return no(state, LOCKED);
+      if (!state.hand) return no(state, "nothing in hand");
+      if (state.deck) return no(state, "the deck is occupied");
+      return ok(moveRecords(state, { deck: state.hand, hand: null, playing: null }));
 
     case "takeFromDeck":
-      if (handLocked(state) || !state.deck || state.hand) return state;
-      return { ...state, hand: state.deck, deck: null, playing: null };
+      if (handLocked(state)) return no(state, LOCKED);
+      if (!state.deck) return no(state, "the deck is empty");
+      if (state.hand) return no(state, "hands full");
+      return ok(moveRecords(state, { hand: state.deck, deck: null, playing: null }));
 
     case "swapWithDeck":
-      if (handLocked(state) || !state.deck || !state.hand) return state;
-      return { ...state, hand: state.deck, deck: state.hand, playing: null };
+      if (handLocked(state)) return no(state, LOCKED);
+      if (!state.deck || !state.hand) return no(state, "swap needs a record in hand and one on the deck");
+      return ok(moveRecords(state, { hand: state.deck, deck: state.hand, playing: null }));
 
     case "holdOwned": {
-      if (handLocked(state)) return state;
+      if (handLocked(state)) return no(state, LOCKED);
       const record = ownedRecord(state, action.recordId);
-      if (!record) return state;
-      if (state.hand?.recordId != null) return state; // already holding an owned record
-      if (state.deck?.recordId === action.recordId) return state; // it's on the deck
-      // One physical object per release: can't conjure it while that release is on the deck.
-      if (state.deck?.shopRecordId === record.shopRecordId) return state;
-      return { ...state, hand: { shopRecordId: record.shopRecordId, recordId: record.recordId } };
+      if (!record) return no(state, "not an owned Record");
+      if (state.hand?.recordId != null) return no(state, "already holding an owned Record");
+      if (state.deck?.recordId === action.recordId) return no(state, "that Record is on the deck");
+      // One physical object per release: can't conjure it while that release is on the deck
+      // or walking away with the collector.
+      if (state.deck?.shopRecordId === record.shopRecordId) return no(state, "that release is on the deck");
+      if (state.buyerAway?.shopRecordId === record.shopRecordId) return no(state, "that release is with the collector");
+      return ok(moveRecords(state, { hand: { shopRecordId: record.shopRecordId, recordId: record.recordId } }));
     }
 
     case "stowOwned":
-      if (handLocked(state) || !heldIsOwned(state)) return state;
-      return { ...state, hand: null };
+      if (handLocked(state)) return no(state, LOCKED);
+      if (!heldIsOwned(state)) return no(state, "not holding an owned Record");
+      return ok(moveRecords(state, { hand: null }));
 
     case "play": {
-      if (!state.deck) return state;
+      if (!state.deck) return no(state, "the deck is empty");
       const id = state.deck.shopRecordId;
-      return {
+      return ok({
         ...state,
-        playing: { trackIndex: Math.max(0, action.trackIndex ?? 0) },
+        playing: { trackIndex: Math.max(0, Math.floor(action.trackIndex ?? 0) || 0) },
         listened: state.listened.includes(id) ? state.listened : [...state.listened, id],
-      };
+      });
     }
 
     case "nextTrack":
-      if (!state.playing || action.trackCount < 1) return state;
-      return {
+      if (!state.playing) return no(state, "nothing is playing");
+      if (!(action.trackCount >= 1)) return no(state, "no tracks");
+      return ok({
         ...state,
-        playing: { trackIndex: (state.playing.trackIndex + 1) % action.trackCount },
-      };
+        playing: { trackIndex: (state.playing.trackIndex + 1) % Math.floor(action.trackCount) },
+      });
 
     case "stop":
-      return state.playing ? { ...state, playing: null } : state;
+      return ok(state.playing ? { ...state, playing: null } : state);
 
     case "purchaseStart":
-      if (!canStartOp(state) || !heldIsUnpaid(state)) return state;
-      return {
+      if (!canStartOp(state)) return no(state, `busy: ${state.op?.kind} pending`);
+      if (!state.hand || state.hand.recordId !== null) return no(state, "not holding unpaid stock");
+      return ok({
         ...state,
-        op: { kind: "purchase", status: "pending", targetId: state.hand!.shopRecordId },
-      };
+        op: { kind: "purchase", status: "pending", targetId: state.hand.shopRecordId },
+      });
 
     case "purchaseSuccess": {
-      if (!isPending(state, "purchase") || !heldIsUnpaid(state)) return state;
-      if (state.hand!.shopRecordId !== action.owned.shopRecordId) return state;
-      return {
+      if (!isPending(state, "purchase")) return no(state, "no purchase pending");
+      if (!state.hand || state.hand.recordId !== null) return no(state, "not holding unpaid stock");
+      if (state.hand.shopRecordId !== action.owned.shopRecordId) return no(state, "the Record bought is not the one in hand");
+      return ok({
         ...state,
         hand: { shopRecordId: action.owned.shopRecordId, recordId: action.owned.recordId },
         owned: [action.owned, ...state.owned.filter((r) => r.recordId !== action.owned.recordId)],
-        balance: action.balance,
+        balance: nextBalance(state, action.balance),
         op: null,
         lastReceipt: {
           kind: "purchase",
@@ -292,104 +367,164 @@ export function transition(state: GameState, action: GameAction): GameState {
           digest: action.digest,
           amount: action.amount,
         },
-      };
+      });
     }
 
     case "purchaseFail":
-      if (!isPending(state, "purchase")) return state;
-      return { ...state, op: { ...state.op!, status: "error", error: action.error } };
+      if (!isPending(state, "purchase")) return no(state, "no purchase pending");
+      return ok({ ...state, op: { kind: "purchase", status: "error", error: action.error, targetId: state.op?.targetId } });
 
     case "sellStart":
-      if (!canStartOp(state) || !heldIsOwned(state)) return state;
-      return { ...state, op: { kind: "sell", status: "pending", targetId: action.npcId } };
+      if (!canStartOp(state)) return no(state, `busy: ${state.op?.kind} pending`);
+      if (!heldIsOwned(state)) return no(state, "not holding an owned Record");
+      if (state.buyerAway?.npcId === action.npcId) return no(state, "that buyer is away");
+      return ok({ ...state, op: { kind: "sell", status: "pending", targetId: action.npcId } });
 
     case "sellSuccess": {
-      if (!isPending(state, "sell") || !heldIsOwned(state)) return state;
-      const { shopRecordId, recordId } = state.hand as { shopRecordId: string; recordId: string };
-      const npcId = state.op!.targetId ?? "buyer";
-      return {
+      if (!isPending(state, "sell")) return no(state, "no sale pending");
+      if (!state.hand || state.hand.recordId === null) return no(state, "not holding an owned Record");
+      const { shopRecordId, recordId } = state.hand;
+      const npcId = state.op?.targetId ?? "buyer";
+      return ok({
         ...state,
         hand: null,
         owned: state.owned.filter((r) => r.recordId !== recordId),
         sold: [...state.sold, { recordId, shopRecordId, npcId, paid: action.paid }],
         buyerAway: { npcId, shopRecordId },
-        balance: action.balance,
+        balance: nextBalance(state, action.balance),
         op: null,
         lastReceipt: { kind: "sell", shopRecordId, recordId, digest: action.digest, amount: action.paid },
-      };
+      });
     }
 
     case "sellFail":
-      if (!isPending(state, "sell")) return state;
-      return { ...state, op: { ...state.op!, status: "error", error: action.error } };
+      if (!isPending(state, "sell")) return no(state, "no sale pending");
+      return ok({ ...state, op: { kind: "sell", status: "error", error: action.error, targetId: state.op?.targetId } });
 
     case "withdrawStart":
-      if (!canStartOp(state)) return state;
-      return { ...state, op: { kind: "withdraw", status: "pending" } };
+      if (!canStartOp(state)) return no(state, `busy: ${state.op?.kind} pending`);
+      return ok({ ...state, op: { kind: "withdraw", status: "pending" } });
 
     case "withdrawSuccess":
-      if (!isPending(state, "withdraw")) return state;
-      return {
+      if (!isPending(state, "withdraw")) return no(state, "no withdrawal pending");
+      return ok({
         ...state,
-        balance: action.balance,
+        balance: nextBalance(state, action.balance),
         op: null,
         lastReceipt: { kind: "withdraw", digest: action.digest, amount: action.amount },
-      };
+      });
 
     case "withdrawFail":
-      if (!isPending(state, "withdraw")) return state;
-      return { ...state, op: { ...state.op!, status: "error", error: action.error } };
+      if (!isPending(state, "withdraw")) return no(state, "no withdrawal pending");
+      return ok({ ...state, op: { kind: "withdraw", status: "error", error: action.error } });
 
     case "buyerReturned":
-      if (state.buyerAway?.npcId !== action.npcId) return state;
-      return { ...state, buyerAway: null };
+      // The return timer and buyerReturnNow() can both fire: a second return is a harmless no-op.
+      if (state.buyerAway?.npcId !== action.npcId) return ok(state);
+      return ok({ ...state, buyerAway: null });
 
     case "loadStart":
-      if (!canStartOp(state)) return state;
-      return { ...state, op: { kind: action.kind, status: "pending" } };
+      if (!canStartOp(state)) return no(state, `busy: ${state.op?.kind} pending`);
+      return ok({ ...state, op: { kind: action.kind, status: "pending" } });
 
     case "loadFail":
-      if (!isPending(state, action.kind)) return state;
-      return { ...state, op: { kind: action.kind, status: "error", error: action.error } };
+      if (!isPending(state, action.kind)) return no(state, `no ${action.kind} read pending`);
+      return ok({ ...state, op: { kind: action.kind, status: "error", error: action.error } });
 
     case "catalogLoaded": {
       const prices = action.prices ? { ...action.prices } : state.prices;
-      if (!isPending(state, "catalog") && prices === state.prices) return state;
-      return { ...state, prices, op: isPending(state, "catalog") ? null : state.op };
+      if (!isPending(state, "catalog") && prices === state.prices) return ok(state);
+      return ok({ ...state, prices, op: isPending(state, "catalog") ? null : state.op });
     }
 
-    case "collectionLoaded":
-      return {
+    case "collectionLoaded": {
+      // Chain reads can lag a sale or race a purchase. Never resurrect a Record sold this
+      // session, and never drop the one in your hand / on the deck (the HUD would read
+      // UNPAID and the sale could not start). The read is truth for everything else.
+      const sold = new Set(state.sold.map((r) => r.recordId));
+      const owned = action.owned.filter((r) => !sold.has(r.recordId));
+      for (const item of [state.deck, state.hand]) {
+        if (!item?.recordId || owned.some((r) => r.recordId === item.recordId)) continue;
+        const known = ownedRecord(state, item.recordId);
+        if (known) owned.unshift(known);
+      }
+      return ok({
         ...state,
-        owned: action.owned,
+        owned,
         op: isPending(state, "collection") ? null : state.op,
-      };
+      });
+    }
 
     case "walletLoaded":
-      return {
+      if (action.balance < 0n) return no(state, "negative balance");
+      return ok({
         ...state,
         balance: action.balance,
         op: isPending(state, "wallet") ? null : state.op,
-      };
+      });
 
     case "smash":
-      if (!state.hand || isCarSmashed(state, action.carId)) return state;
-      return { ...state, smashedCars: [...state.smashedCars, action.carId] };
+      if (!state.hand) return no(state, "nothing in hand to swing");
+      // The record mid-sale (or mid-purchase) stays put: no swinging it at a car.
+      if (handLocked(state)) return no(state, LOCKED);
+      if (isCarSmashed(state, action.carId)) return no(state, "that car is already smashed");
+      return ok({ ...state, smashedCars: [...state.smashedCars, action.carId] });
 
     case "setZone":
-      return state.zone === action.zone ? state : { ...state, zone: action.zone };
+      return ok(state.zone === action.zone ? state : { ...state, zone: action.zone });
 
     case "dismissError":
-      return state.op?.status === "error" ? { ...state, op: null } : state;
+      // Error dialogs dismiss on close; after a Retry started there is nothing to dismiss.
+      return ok(state.op?.status === "error" ? { ...state, op: null } : state);
 
     case "goHome":
-      return canGoHome(state) ? { ...state, wentHome: true } : state;
+      if (state.wentHome) return no(state, "already home");
+      if (state.sold.length === 0) return no(state, "nothing sold yet");
+      if (isBusy(state)) return no(state, `busy: ${state.op?.kind} pending`);
+      return ok({ ...state, wentHome: true });
 
     case "reset":
-      return initialState();
+      return ok(initialState());
+
+    default: {
+      const unknown: never = action;
+      return no(state, `unknown action ${JSON.stringify((unknown as { type?: unknown }).type)}`);
+    }
   }
 }
 
 function isPending(state: GameState, kind: OpKind): boolean {
   return state.op?.kind === kind && state.op.status === "pending";
+}
+
+// --------------------------------------------------------------- invariants
+
+/**
+ * Invariants every reachable state satisfies (docs/STATE-MODEL.md). Returns the broken
+ * ones (empty = fine). Pure; the controller checks it after each transition in dev and the
+ * unit tests check it for every state x action.
+ */
+export function invariantViolations(s: GameState): string[] {
+  const out: string[] = [];
+  if (s.playing && !s.deck) out.push("playing without a record on the deck");
+  const places = [s.hand?.shopRecordId, s.deck?.shopRecordId, s.buyerAway?.shopRecordId].filter((x): x is string => !!x);
+  if (new Set(places).size !== places.length) out.push("one release in two places (hand / deck / collector)");
+  for (const [where, item] of [["hand", s.hand], ["deck", s.deck]] as const) {
+    if (!item?.recordId) continue;
+    const record = ownedRecord(s, item.recordId);
+    if (!record) out.push(`${where} holds a Record that is not owned`);
+    else if (record.shopRecordId !== item.shopRecordId) out.push(`${where} Record belongs to another release`);
+  }
+  if (s.hand?.recordId && s.hand.recordId === s.deck?.recordId) out.push("the same Record in hand and on the deck");
+  const ids = s.owned.map((r) => r.recordId);
+  if (new Set(ids).size !== ids.length) out.push("duplicate owned Record");
+  for (const sale of s.sold) if (ids.includes(sale.recordId)) out.push("a sold Record is still owned");
+  if (s.op?.status === "pending" && s.op.kind === "purchase" && (!heldIsUnpaid(s) || s.op.targetId !== s.hand?.shopRecordId))
+    out.push("purchase pending without that unpaid record in hand");
+  if (s.op?.status === "pending" && s.op.kind === "sell" && !heldIsOwned(s)) out.push("sale pending without an owned Record in hand");
+  if (s.op?.status === "error" && !s.op.error) out.push("error op without a message");
+  if (s.balance !== null && s.balance < 0n) out.push("negative balance");
+  if (s.wentHome && s.sold.length === 0) out.push("went home before any sale");
+  if (new Set(s.smashedCars).size !== s.smashedCars.length) out.push("car smashed twice");
+  return out;
 }

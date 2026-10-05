@@ -457,23 +457,28 @@ export class GameController {
     const record = this.catalog.get(s.deck.shopRecordId);
     if (!record) return;
     const trackIndex = s.playing.trackIndex;
+    // As before the port: `.then(success).catch(failure)`, so a throw in the success
+    // handler (render) also ends in the failure branch (toast + stop).
     void this.run(
       "deck.play",
-      Effect.tryPromise({ try: () => this.deck.play(record, trackIndex), catch: (error) => error }).pipe(
-        Effect.match({
-          onSuccess: () => {
+      Effect.tryPromise({
+        try: () =>
+          this.deck.play(record, trackIndex).then(() => {
             if (this.audioKey !== key) return;
             this.deckSource = this.deck.kind;
             this.render();
-          },
-          onFailure: (error) => {
+          }),
+        catch: (error) => error,
+      }).pipe(
+        Effect.catch((error) =>
+          Effect.sync(() => {
             if (error instanceof Error && error.name === "AbortError") return; // superseded
             if (this.audioKey !== key) return;
             sfx.error();
             this.hud.toast(message(error), { tone: "bad" });
             this.dispatch({ type: "stop" });
-          },
-        }),
+          }),
+        ),
       ),
     );
   }

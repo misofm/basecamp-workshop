@@ -98,6 +98,21 @@ export function transaction(
   );
 }
 
+/**
+ * A chain-truth re-read whose result is optional (`.catch(() => null)` before the port):
+ * any failure, including a defect, becomes null so a transaction that landed is never shown
+ * as failed because a follow-up read broke. Interruption still propagates.
+ */
+export function orNull<A, E>(effect: Effect.Effect<A, E>): Effect.Effect<A | null> {
+  return effect.pipe(
+    Effect.catchCause((cause) => {
+      if (Cause.hasInterruptsOnly(cause)) return Effect.failCause(cause as Cause.Cause<never>);
+      if (!Option.isSome(Cause.findErrorOption(cause))) console.warn("[app] re-read failed", Cause.pretty(cause));
+      return Effect.succeed(null);
+    }),
+  );
+}
+
 /** A rejection's player-safe message. */
 export function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error);

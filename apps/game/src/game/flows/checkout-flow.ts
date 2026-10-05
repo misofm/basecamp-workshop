@@ -23,7 +23,7 @@ import type { OwnedRecord, ShopRecord } from "../../miso/types";
 import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink, recordLine } from "../../ui/dialogs";
 import { heldOwnedRecord } from "../state";
-import { transaction, type FlowContext } from "./context";
+import { orNull, transaction, type FlowContext } from "./context";
 
 /** What the counter says when the purchase broke on our side (also: the state machine refused the result). */
 const REGISTER_JAMMED = "Register jammed. Try again.";
@@ -131,7 +131,7 @@ export class CheckoutFlow {
       const result = yield* ctx.chain.purchase(record);
       // Re-read chain truth: new balance + the minted Record (serial etc.).
       const [wallet, owned] = yield* Effect.all(
-        [ctx.refreshWallet(false).pipe(Effect.orElseSucceed(() => null)), ctx.chain.listOwnedRecords.pipe(Effect.orElseSucceed(() => null))],
+        [orNull(ctx.refreshWallet(false)), orNull(ctx.chain.listOwnedRecords)],
         { concurrency: "unbounded" },
       );
       const mine: OwnedRecord = owned?.find((o) => o.recordId === result.recordId) ?? {

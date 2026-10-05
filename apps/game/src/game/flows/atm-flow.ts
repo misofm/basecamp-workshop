@@ -23,7 +23,7 @@ import { formatAmount } from "../../miso/format";
 import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink } from "../../ui/dialogs";
 import { h } from "../../ui/dom";
-import { transaction, type FlowContext } from "./context";
+import { orNull, transaction, type FlowContext } from "./context";
 
 /** What one withdrawal dispenses: 50 FUSD (FakeUSD has 6 decimals). */
 export const ATM_WITHDRAW_AMOUNT = 50_000_000n;
@@ -99,7 +99,7 @@ export class AtmFlow {
         Effect.gen({ self: this }, function* () {
           const result = yield* ctx.chain.withdrawFakeUsd(ATM_WITHDRAW_AMOUNT);
           // Re-read chain truth for the new balance.
-          const wallet = yield* ctx.refreshWallet(false).pipe(Effect.orElseSucceed(() => null));
+          const wallet = yield* orNull(ctx.refreshWallet(false));
           const known = ctx.state().balance;
           const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.amount);
           // withdrawSuccess sets the balance → render() → the HUD counter counts up green.

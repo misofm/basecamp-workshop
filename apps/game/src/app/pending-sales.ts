@@ -8,14 +8,14 @@
  * chunk); only the dependency-free key module.
  *
  * Semantics match the TestnetBackend's own store before the port (same key, saving
- * rewrites the whole map, memory fallback when storage throws), except validation: corrupt
- * JSON or a Schema-invalid entry is dropped and logged with console.warn, never thrown;
- * valid entries next to an invalid one are kept.
+ * rewrites the whole map, memory fallback when storage throws or the JSON is corrupt, the
+ * same per-entry check), plus logging: a corrupt blob or a dropped entry is reported with
+ * console.warn, never thrown; valid entries next to an invalid one are kept.
  *
  * Two faces: Effect methods for the app, and a synchronous `store` for sell.ts (it saves
  * the digest synchronously, before the transaction is submitted).
  */
-import { Context, Effect, Layer, Option, Schema } from "effect";
+import { Context, Effect, Layer, Schema } from "effect";
 import type { PendingSale, PendingStore } from "../miso/testnet/sell";
 import { PENDING_SALES_KEY } from "../miso/testnet/storage-keys";
 
@@ -54,17 +54,28 @@ export interface StorageLike {
   setItem(key: string, value: string): void;
 }
 
-const decodeEntry = Schema.decodeUnknownOption(PendingSaleSchema);
+/**
+ * What an entry must have to be kept: exactly the check the TestnetBackend made before the
+ * port (string `player` and `transferDigest`, an `owned` object). Deliberately looser than
+ * PendingSaleSchema: a stricter check could drop a real transferred-but-unpaid sale (e.g.
+ * one whose `serial` came back from the API as a string), and then Retry could no longer
+ * pay it. The entry is kept as stored (not re-encoded), so nothing is stripped on rewrite.
+ */
+const KeptEntry = Schema.Struct({ player: Schema.String, transferDigest: Schema.String, owned: Schema.Unknown });
+const isKeptEntry = Schema.is(KeptEntry);
+const keep = (entry: unknown): entry is PendingSale => isKeptEntry(entry) && typeof entry.owned === "object" && entry.owned !== null;
 
-/** Parse the stored JSON; drop (and log) anything that does not decode. Never throws. */
-export function parsePendingSales(raw: string | null): Record<string, PendingSale> {
+/** Corrupt JSON (as opposed to a missing key). */
+const CORRUPT = Symbol("corrupt");
+
+function parseBlob(raw: string | null): Record<string, PendingSale> | typeof CORRUPT {
   if (!raw) return {};
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch (error) {
     console.warn("[pending-sales] ignoring corrupt stored pending sales:", error);
-    return {};
+    return CORRUPT;
   }
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
     console.warn("[pending-sales] ignoring stored pending sales that are not an object");
@@ -72,11 +83,16 @@ export function parsePendingSales(raw: string | null): Record<string, PendingSal
   }
   const out: Record<string, PendingSale> = {};
   for (const [id, entry] of Object.entries(parsed as Record<string, unknown>)) {
-    const decoded = decodeEntry(entry);
-    if (Option.isSome(decoded)) out[id] = decoded.value;
+    if (keep(entry)) out[id] = entry;
     else console.warn(`[pending-sales] dropping invalid pending sale for ${id}`);
   }
   return out;
+}
+
+/** Parse the stored JSON; drop (and log) anything that is not a pending sale. Never throws. */
+export function parsePendingSales(raw: string | null): Record<string, PendingSale> {
+  const parsed = parseBlob(raw);
+  return parsed === CORRUPT ? {} : parsed;
 }
 
 /** `globalThis.localStorage`, read at call time (throws where storage is blocked or missing). */
@@ -109,7 +125,9 @@ export function makePendingSalesStore(storage: () => StorageLike = browserStorag
     } catch {
       return memory;
     }
-    return parsePendingSales(raw);
+    // Corrupt JSON: the in-memory copy of the last save (as before the port).
+    const parsed = parseBlob(raw);
+    return parsed === CORRUPT ? memory : parsed;
   };
   const set = (recordId: string, sale: PendingSale | null): void => {
     const next = { ...all() };

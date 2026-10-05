@@ -192,7 +192,7 @@ test("adapter methods are called lazily (spies installed after makeChain still c
 
 test("interrupting a pending purchase completes promptly", async () => {
   const adapter = fakeAdapter({});
-  const chain = makeChain(adapter); // default 120 s timeout
+  const chain = makeChain(adapter); // default 300 s timeout
   const fiber = Effect.runFork(chain.purchase(someRecord));
   await new Promise((r) => setTimeout(r, 10));
   expect(adapter.calls.purchase).toBe(1);

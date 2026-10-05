@@ -47,11 +47,22 @@ export interface ChainOptions {
   readonly readRetryBaseMs?: number;
 }
 
+/**
+ * Last-resort safety nets only: each is well above the slowest path the testnet adapter
+ * can take before it gives up on its own (10 s per read, 30 s per tx step: build, submit,
+ * wait), so they fire only if an adapter promise never settles. Firing earlier would turn a
+ * slow-but-landing transaction into an error while it still runs, and a Retry could then
+ * queue a second one behind it (docs/EFFECT.md "Timeouts").
+ *   read      worst ≈ 10 s list + 10 s per-record lookups + 20 s first catalog hydrate → 90 s
+ *   purchase  worst ≈ 30 s catalog + 8 s earlier-digest lookup + 90 s tx + 10 s read → 300 s
+ *   withdraw  worst ≈ 90 s tx → 300 s
+ *   sell      worst ≈ 10 s + 8/10 s lookups + 2 × 90 s txs ≈ 200 s → 420 s
+ */
 export const CHAIN_DEFAULTS = {
-  readTimeoutMs: 45_000,
-  purchaseTimeoutMs: 120_000,
-  withdrawTimeoutMs: 120_000,
-  sellTimeoutMs: 180_000,
+  readTimeoutMs: 90_000,
+  purchaseTimeoutMs: 300_000,
+  withdrawTimeoutMs: 300_000,
+  sellTimeoutMs: 420_000,
   readRetries: 2,
   readRetryBaseMs: 250,
 } as const satisfies Required<ChainOptions>;

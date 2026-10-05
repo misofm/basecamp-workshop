@@ -63,9 +63,23 @@ exactly the words they showed before.
 | `ResponseLost` | a transaction's answer was lost (adapter timeout on purchase / sell / withdraw, mock `*-lost`, or our outer safety timeout): it may have landed; Retry is idempotent in the adapter |
 | `Rejected` | everything else the adapter refused (gas / keys / disabled / price changed / not owned / mock failures) |
 
-Timeouts (outer safety nets, deliberately longer than the testnet adapter's own 10 s
-read / 30 s tx timeouts and the e2e's 20 s mock latency, so they never change today's
-behaviour): reads 45 s, purchase / withdraw 120 s, sell 180 s (two txs + lookups).
+### Timeouts
+
+Outer safety nets only, for an adapter promise that never settles (before the port that
+left the op `pending` forever). Each is well above the slowest path the testnet adapter
+can take before it gives up on its own (10 s per read, 30 s per tx step: build, submit,
+wait for finality), so they never fire on a slow-but-working call. Firing early would be
+worse than useless: the transaction keeps running, and a Retry could queue a second one
+behind it on the signer lock (a review found the first draft's 180 s sell net could fire
+before a ~200 s worst-case sale).
+
+| Op | Adapter worst case | Net |
+| --- | --- | --- |
+| reads | 10 s list + 10 s per-record lookups + ~20 s first catalog hydrate | 90 s |
+| purchase | ~30 s catalog + 8 s earlier-digest lookup + 3 × 30 s tx + 10 s read | 300 s |
+| withdraw | 3 × 30 s tx | 300 s |
+| sell | 10 s owner read + 8/10 s digest lookups + 2 × 90 s txs ≈ 200 s | 420 s |
+
 Retry: reads only (catalog, wallet, collection, collector), on `Network` only, 2 retries,
 exponential from 250 ms. Transactions are **never** retried automatically; idempotency
 per operation stays inside the adapters exactly as before (testnet in-flight digest per

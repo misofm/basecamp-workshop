@@ -101,11 +101,14 @@ test("corrupt JSON reads as empty and is logged, never thrown", async () => {
 test("one invalid entry next to a valid one: the valid one is kept, the invalid one dropped and logged", async () => {
   const storage = memoryStorage();
   const invalid = { player: PLAYER, transferDigest: 7, owned: sale(2).owned };
-  const partialOwned = { ...sale(3), owned: { recordId: "0x3" } };
-  storage.setItem(PENDING_SALES_KEY, JSON.stringify({ good: sale(1), bad: invalid, partial: partialOwned }));
+  const noOwned = { ...sale(4), owned: null };
+  // Same check as the TestnetBackend before the port: a partial `owned` (e.g. a serial the
+  // API sent as a string) is KEPT as stored, so Retry can still pay that sale.
+  const partialOwned = { ...sale(3), owned: { recordId: "0x3", serial: "3" } };
+  storage.setItem(PENDING_SALES_KEY, JSON.stringify({ good: sale(1), bad: invalid, none: noOwned, partial: partialOwned }));
   const store = makePendingSalesStore(() => storage);
   const { result, warnings } = await captureWarnings(() => store.all());
-  expect(result).toEqual({ good: sale(1) });
+  expect(result).toEqual({ good: sale(1), partial: partialOwned });
   expect(warnings).toHaveLength(2);
   expect((await captureWarnings(() => store.get("good"))).result).toEqual(sale(1));
 });
@@ -135,4 +138,14 @@ test("storage that throws falls back to memory", async () => {
   const store = makePendingSalesStore();
   store.set("r1", sale(1));
   expect(store.get("r1")).toEqual(sale(1));
+});
+
+test("corrupt JSON reads as the in-memory copy of the last save (as before the port)", async () => {
+  const storage = memoryStorage();
+  const store = makePendingSalesStore(() => storage);
+  await captureWarnings(() => store.set("r1", sale(1)));
+  storage.setItem(PENDING_SALES_KEY, "{not json");
+  const { result, warnings } = await captureWarnings(() => store.all());
+  expect(result).toEqual({ r1: sale(1) });
+  expect(warnings).toHaveLength(1);
 });

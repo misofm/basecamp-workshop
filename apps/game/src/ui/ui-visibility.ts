@@ -18,5 +18,5 @@ export class UiVisibility {
 
 /** `?ui=0` (or `off` / `false`) starts hidden; anything else starts visible. */
 export function uiVisibleFromSearch(search: string): boolean {
-  return parseConfig(search).uiVisible;
+  return parseConfig(search, { warn: false }).uiVisible;
 }

@@ -18,7 +18,7 @@ import * as sfx from "../../audio/sfx";
 import { errorBody, paragraph, pendingBody, receiptLink } from "../../ui/dialogs";
 import { COLLECTOR, buyerFor } from "../npc-buyers";
 import { handLocked, heldOwnedRecord } from "../state";
-import { transaction, type FlowContext } from "./context";
+import { orNull, transaction, type FlowContext } from "./context";
 
 /** What the collector says when the sale broke on our side (a bug, not the chain). */
 const DEAL_FELL_THROUGH = "Deal fell through. You still own it.";
@@ -147,7 +147,7 @@ export class StreetFlow {
         },
         Effect.gen({ self: this }, function* () {
           const result = yield* ctx.chain.sellToNpc(owned.recordId, npc);
-          const wallet = yield* ctx.refreshWallet(false).pipe(Effect.orElseSucceed(() => null));
+          const wallet = yield* orNull(ctx.refreshWallet(false));
           const known = ctx.state().balance;
           const balance = wallet?.fakeUsd ?? (known === null ? null : known + result.paid);
           // sellSuccess moves the record to "npc" → render() calls world.buyerLeave().

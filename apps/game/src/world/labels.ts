@@ -12,10 +12,17 @@ export const FONT_STACK = '"Space Grotesk", "DM Sans", system-ui, sans-serif';
 type Draw = (c: CanvasRenderingContext2D, w: number, h: number) => void;
 const redraws: (() => void)[] = [];
 let fontsReady = false;
+/** The Japanese sign subset (src/world/signage.ts, docs/SIGNAGE.md): Noto Sans JP Bold, SIL OFL. */
+function loadJapaneseSignFont(): Promise<unknown> {
+  if (typeof FontFace === "undefined") return Promise.resolve();
+  const face = new FontFace("Nozomi JP", `url(${import.meta.env.BASE_URL}fonts/nozomi-jp-signs.woff2)`, { weight: "700" });
+  return face.load().then((f) => (document.fonts as unknown as { add(face: FontFace): void }).add(f));
+}
 if (typeof document !== "undefined" && document.fonts) {
   void Promise.all([
     document.fonts.load(`700 64px "Space Grotesk"`),
     document.fonts.load(`500 64px "Space Grotesk"`),
+    loadJapaneseSignFont().catch(() => undefined),
   ])
     .catch(() => undefined)
     .then(() => document.fonts.ready)
@@ -117,6 +124,13 @@ export interface BubbleStyle {
   /** Show an animated spinner + trailing dots ("Processing…"). */
   busy?: boolean;
   icon?: string;
+  /** Speaker's name, drawn small in the accent colour at the top left (named story cast). */
+  name?: string;
+  /**
+   * Tail on top, pointing up (a voice from a window above). The owner sets the sprite's
+   * `center` to (0.5, 1) so the tail tip sits at its position.
+   */
+  tailUp?: boolean;
 }
 
 /**
@@ -172,8 +186,16 @@ export class SpeechBubble {
   get current() {
     return this.text;
   }
+  /** 0..1: faded out while a building sits between the camera and the bubble. */
+  get opacity() {
+    return this.fade;
+  }
   set(text: string | null, style?: BubbleStyle) {
-    if (text === this.text && (!style || (style.accent === this.style.accent && style.busy === this.style.busy))) return;
+    if (
+      text === this.text &&
+      (!style || (style.accent === this.style.accent && style.busy === this.style.busy && style.name === this.style.name && style.tailUp === this.style.tailUp))
+    )
+      return;
     this.text = text;
     if (style) this.style = style;
     this.sprite.visible = text !== null;
@@ -188,6 +210,11 @@ export class SpeechBubble {
     if (!this.text) return;
     const tail = 46;
     const bodyH = h - tail - 8;
+    const up = !!this.style.tailUp;
+    // A tail on top: the whole body moves down by the tail's height.
+    const shift = up ? 42 : 0;
+    c.save();
+    c.translate(0, shift);
     // Shadow, body, accent border.
     c.fillStyle = "rgba(0,0,0,0.35)";
     roundRect(c, 14, 14, w - 20, bodyH - 4, 56);
@@ -200,16 +227,38 @@ export class SpeechBubble {
     c.stroke();
     // Tail.
     c.beginPath();
-    c.moveTo(w / 2 - 40, bodyH - 10);
-    c.lineTo(w / 2, h - 6);
-    c.lineTo(w / 2 + 40, bodyH - 10);
+    if (up) {
+      c.moveTo(w / 2 - 40, 14);
+      c.lineTo(w / 2, 6 - shift);
+      c.lineTo(w / 2 + 40, 14);
+    } else {
+      c.moveTo(w / 2 - 40, bodyH - 10);
+      c.lineTo(w / 2, h - 6);
+      c.lineTo(w / 2 + 40, bodyH - 10);
+    }
     c.closePath();
     c.fillStyle = "#fffaf0";
     c.fill();
     c.strokeStyle = this.style.accent;
     c.stroke();
     c.fillStyle = "#fffaf0";
-    c.fillRect(w / 2 - 34, bodyH - 22, 68, 16);
+    if (up) c.fillRect(w / 2 - 34, 8, 68, 16);
+    else c.fillRect(w / 2 - 34, bodyH - 22, 68, 16);
+    // Speaker name tag (top left), pushing the text down a little.
+    let top = 0;
+    if (this.style.name) {
+      const tag = this.style.name.toUpperCase();
+      c.font = `700 50px ${FONT_STACK}`;
+      const tw = c.measureText(tag).width;
+      c.fillStyle = this.style.accent;
+      roundRect(c, 60, 14, tw + 40, 58, 26);
+      c.fill();
+      c.fillStyle = "#1d2422";
+      c.textBaseline = "middle";
+      c.textAlign = "left";
+      c.fillText(tag, 80, 45);
+      top = 40;
+    }
     // Text (one or two lines), optional spinner on the left.
     let left = 40;
     if (this.style.busy) {
@@ -237,7 +286,7 @@ export class SpeechBubble {
     const maxW = w - left - 60;
     const words = text.split(" ");
     let lines = [text];
-    let size = 104;
+    let size = top ? 90 : 104;
     c.font = `700 ${size}px ${FONT_STACK}`;
     if (c.measureText(text).width > maxW) {
       // Split into two balanced lines.
@@ -253,7 +302,7 @@ export class SpeechBubble {
         }
       }
       lines = [words.slice(0, best).join(" "), words.slice(best).join(" ")];
-      size = 84;
+      size = top ? 68 : 84;
       c.font = `700 ${size}px ${FONT_STACK}`;
       const widest = Math.max(...lines.map((l) => c.measureText(l).width));
       if (widest > maxW) size = Math.floor((size * maxW) / widest);
@@ -262,7 +311,8 @@ export class SpeechBubble {
       size = fitText(c, text, maxW, size);
     }
     const x = this.style.busy ? left : w / 2 - 4;
-    lines.forEach((line, i) => c.fillText(line, x, bodyH / 2 + (i - (lines.length - 1) / 2) * size * 1.08 + 4));
+    lines.forEach((line, i) => c.fillText(line, x, (bodyH + top) / 2 + (i - (lines.length - 1) / 2) * size * 1.08 + 4));
+    c.restore();
     this.texture.needsUpdate = true;
   }
   /** Animate (spinner, pop-in) and keep the on-screen size between the min and max. */

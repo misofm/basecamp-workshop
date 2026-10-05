@@ -5,7 +5,9 @@
  * named story characters around the block, and the street crowd (everyone else).
  * Canon: the Nozomi world bible, chapter 3.0 setting (§2 characters, §7.9 NPC positions
  * and lines). Lines are verbatim canon lines or new lines in the character's canon voice,
- * as listed there. Speech bubbles for the named NPCs are not wired yet (a later pass).
+ * as listed there. src/world/npcs.ts shows them as speech bubbles: the nearest named NPC
+ * within a few metres cycles through its lines, the shopkeeper talks when the player is at
+ * the counter, the collector between his "Got any wax?" calls, Miné from the hotel window.
  * Must not: hold coordinates. A role's `spot` is a key into CAST_SPOTS in
  * src/world/layout.ts, so the environment pass can move everyone in one place.
  */
@@ -20,7 +22,7 @@ export interface CastRole {
   name: string;
   /** Who they are in this scene (one line, for humans reading the code). */
   role: string;
-  /** Things they say (speech bubbles, later). */
+  /** Things they say (speech bubbles, in this order, starting from the first). */
   lines: string[];
 }
 
@@ -32,6 +34,12 @@ export interface PlacedRole extends CastRole {
 }
 
 export interface Cast {
+  /**
+   * A real-person cameo for the Sui Basecamp stage build: Adeniyi Abiodun (Mysten Labs
+   * co-founder), consented, hanging out by Saisei's window (src/tamashi/cameo.ts +
+   * src/world/cameo.ts). `?cameo=0` removes him (public take-home build).
+   */
+  cameo?: "adeniyi";
   /** The player character. */
   player: CastRole;
   /** Behind the shop counter. */
@@ -61,7 +69,7 @@ const CASHIER: CastRole = {
   role: "shopkeeper of the record shop; the band member who left (joined Team Order)",
   lines: [
     "Saisei. Means 'playback.' Also means starting over. Seemed fitting.",
-    "Cash only. The card readers still answer to the Triangle network.",
+    "Register's all gears and springs. Nothing in here answers to the Triangle network.",
     "Four of the five out there drinking? Don't tell them I'm in here. ...Tell Disco the jacket still looks like a beehive.",
   ],
 };
@@ -77,6 +85,12 @@ const COLLECTOR: CastRole = {
   ],
 };
 
+/**
+ * Inicio's answer when Gamer asks him over (the exit beat, Npcs.sendInicioHome). The last
+ * of his lines; npcs.ts only cycles it once he has gone home with Gamer.
+ */
+export const INICIO_HOME_LINE = "Your room? Sure. I'll bring the orb.";
+
 const NAMED: PlacedRole[] = [
   // Inside the shop.
   {
@@ -90,6 +104,7 @@ const NAMED: PlacedRole[] = [
       "It's not really anything",
       "It looks cool though, right?",
       "Motor was dead. Gave it a nudge. Want to hear something?",
+      INICIO_HOME_LINE,
     ],
   },
   // The band, on the curb by the casino's east fire exit, sharing Disco's sake.
@@ -128,13 +143,13 @@ const NAMED: PlacedRole[] = [
     pose: "sit",
     lines: ["No. Not since he joined Team Order."],
   },
-  // Celebrity fans watching the band (canon: on a bench across from them; standing until there is one).
+  // Celebrity fans on the bench across from the band (FAN_BENCH), whispering.
   {
     id: 54,
     name: "Kasimir",
     role: "celebrity living incognito; a fan of the band",
     spot: "fan1",
-    pose: "stand",
+    pose: "sit",
     lines: ["Is that them?", "Don't worry darling. We're going to make this work."],
   },
   {
@@ -142,7 +157,7 @@ const NAMED: PlacedRole[] = [
     name: "Natsuki",
     role: "celebrity escaping fame; a fan of the band",
     spot: "fan2",
-    pose: "stand",
+    pose: "sit",
     lines: ["At least four of the five, yeah?", "...Turn that off. Please. We're nobody. Just fans."],
   },
   // Near the casino at the east end.
@@ -200,7 +215,7 @@ const NAMED: PlacedRole[] = [
     id: 57,
     name: "Miné",
     role: "Gamer's mother; a voice from a hotel window at the west end",
-    spot: null, // voice only in canon; the environment pass adds the hotel window
+    spot: null, // voice only in canon: npcs.ts shows her line at HOTEL_WINDOW (layout.ts)
     pose: "stand",
     lines: ["Ka-Gamer... home before dark!"],
   },
@@ -241,6 +256,7 @@ const NAMED: PlacedRole[] = [
 const taken = new Set([PLAYER.id, CASHIER.id, COLLECTOR.id, ...NAMED.map((r) => r.id)]);
 
 export const CAST: Cast = {
+  cameo: "adeniyi", // consented cameo for the Basecamp stage build; ?cameo=0 disables it
   player: PLAYER,
   cashier: CASHIER,
   collector: COLLECTOR,

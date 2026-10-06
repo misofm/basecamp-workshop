@@ -1,10 +1,11 @@
 import { useEffect, useRef } from "react";
 import { MISO_API, MISO_CDN, SUI_GRAPHQL, WALRUS_AGGREGATOR } from "../config";
+import { PUBLISHER_QUERY } from "../lib/sui";
 import { shortId } from "../lib/media";
 import { useRequestLog, type LoggedRequest } from "../lib/requestLog";
 
 const ENDPOINTS = [
-  `POST ${SUI_GRAPHQL}  (objects of type Release)`,
+  `POST ${SUI_GRAPHQL}  (Release objects created in transactions sent by the publisher; polled every 15 s)`,
   `GET  ${MISO_API}/protocol/releases/{id}?include=trackCredits`,
   `GET  ${MISO_API}/compositions/{id}/lyrics`,
   `GET  ${MISO_API}/platform/artists/{id}`,
@@ -53,7 +54,7 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
 
         <ol className="steps">
           <li>
-            <strong>Sui GraphQL</strong> finds every Release object on chain.
+            <strong>Sui GraphQL</strong> lists the Release objects the publisher wallet created (the query is below).
           </li>
           <li>
             <strong>The Miso read API</strong> returns the release, credits, artist, pressings and wallet
@@ -77,6 +78,11 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
             </li>
           ))}
         </ul>
+
+        <h3>GraphQL query</h3>
+        <pre className="gql">
+          <code>{PUBLISHER_QUERY}</code>
+        </pre>
 
         <h3>Live request log</h3>
         <ul className="request-log">

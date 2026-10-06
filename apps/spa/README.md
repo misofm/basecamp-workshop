@@ -18,7 +18,8 @@ npm run test:e2e   # Playwright smoke tests (builds and serves on port 4319)
 ## Data flow
 
 ```
-Sui GraphQL ── objects(filter: { type: Release }) ──> release ids
+Sui GraphQL ── address(publisher).transactions(SENT) ── created Release objects ──> release ids
+   (polled every 15 s while the tab is visible; ?publisher=all: objects(filter: { type: Release }))
                                                          │
                                   one GET per release    ▼
 Miso API  /protocol/releases/{id}?include=trackCredits ──> title, kind, cover blob id,
@@ -36,8 +37,13 @@ Miso API  /protocol/releases/{id}?include=trackCredits ──> title, kind, cove
    └─ /platform/wallets/{address}/records         records a wallet owns (polled every 10 s)
 ```
 
-There is no "list releases" endpoint, so the chain itself is the index: Sui GraphQL returns every object of the
-Release type. Everything else comes from the Miso read API and CDN.
+There is no "list releases" endpoint, so the chain itself is the index. By default the catalog is scoped to one
+publisher wallet (`PUBLISHER` in `src/config.ts`): the app pages through the transactions that wallet sent and keeps
+the objects they created whose type is the Release type. `?publisher=0x...` picks another wallet and
+`?publisher=all` lists every Release on testnet. The home page re-runs discovery every 15 s (paused while the tab is
+hidden, one request at a time); new releases appear at the top marked "new". Each release is fetched from the Miso
+API once and cached, so a poll costs one GraphQL request plus one call per new release. Artist pages use the same
+scope; the Collection page does not. Everything else comes from the Miso read API and CDN.
 
 `cdn.miso.fm` serves only media that Miso uploaded itself, which includes the ten workshop releases. Anything
 else (for example a release you published yourself through the public Walrus publisher) 404s there, so covers
@@ -75,8 +81,9 @@ src/config.ts                     network constants (ids, URLs, preview timing)
 src/styles.css                    all styles; light and dark themes via CSS variables
 src/lib/http.ts                   fetch wrapper: in-memory cache, 404 -> null, request logging
 src/lib/requestLog.ts             request log store + useRequestLog(); media requests via PerformanceObserver
-src/lib/sui.ts                    listReleaseIds() (GraphQL) and derivePressingId()
+src/lib/sui.ts                    listReleaseIds() (GraphQL, publisher scope) and derivePressingId()
 src/lib/miso.ts                   typed read functions for the Miso API + small release helpers
+src/lib/useCatalog.ts            catalog with 15 s polling and "new" ids
 src/lib/media.ts                  CDN URLs, aggregator fallback and formatting (time, kind, roles, ids)
 src/lib/types.ts                  API response types (only the fields used)
 src/lib/useAsync.ts               { data, error, loading, retry } for an async function

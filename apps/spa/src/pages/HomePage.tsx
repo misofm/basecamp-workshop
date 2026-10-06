@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { ReleaseGrid } from "../components/ReleaseGrid";
-import { loadCatalog } from "../lib/miso";
-import { useAsync } from "../lib/useAsync";
+import { useCatalog } from "../lib/useCatalog";
 
 export function HomePage() {
-  const { data: releases, loading, error, retry } = useAsync(loadCatalog, []);
+  const { releases, loading, error, retry, fresh } = useCatalog();
   const [genre, setGenre] = useState<string | null>(null);
 
   const genres = [...new Set(releases?.flatMap((release) => release.genres))].sort();
@@ -37,7 +36,13 @@ export function HomePage() {
       {error ? (
         <ErrorMessage error={error} onRetry={retry} />
       ) : (
-        <ReleaseGrid releases={visible} loading={loading} emptyText="No published releases yet." />
+        releases?.length === 0 ? (
+        <div className="empty-state">
+          <p>No releases published yet — this page updates by itself.</p>
+        </div>
+      ) : (
+        <ReleaseGrid releases={visible} loading={loading} fresh={fresh} />
+      )
       )}
     </>
   );

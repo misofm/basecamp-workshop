@@ -58,8 +58,8 @@ export async function getJson<T>(url: string, options = { cache: true }): Promis
 }
 
 /** POST a JSON body (used for GraphQL queries, which are read-only, so caching is safe). */
-export async function postJson<T>(url: string, body: unknown): Promise<T> {
-  const data = await cached(url + JSON.stringify(body), "POST", url, body);
+export async function postJson<T>(url: string, body: unknown, options = { cache: true }): Promise<T> {
+  const data = options.cache ? await cached(url + JSON.stringify(body), "POST", url, body) : await send("POST", url, body);
   if (data === null) throw new HttpError(404, url);
   return data as T;
 }

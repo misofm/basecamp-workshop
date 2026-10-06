@@ -1,9 +1,9 @@
 import type { Release } from "../lib/types";
 import { ReleaseCard } from "./ReleaseCard";
 
-type Props = { releases?: Release[]; loading?: boolean; emptyText?: string };
+type Props = { releases?: Release[]; loading?: boolean; emptyText?: string; fresh?: ReadonlySet<string> };
 
-export function ReleaseGrid({ releases, loading, emptyText = "Nothing here yet." }: Props) {
+export function ReleaseGrid({ releases, loading, emptyText = "Nothing here yet.", fresh }: Props) {
   if (loading) {
     return (
       <div className="grid" aria-busy="true" aria-label="Loading releases">
@@ -21,7 +21,7 @@ export function ReleaseGrid({ releases, loading, emptyText = "Nothing here yet."
   return (
     <div className="grid">
       {releases.map((release) => (
-        <ReleaseCard key={release.id} release={release} />
+        <ReleaseCard key={release.id} release={release} isNew={fresh?.has(release.id)} />
       ))}
     </div>
   );

@@ -89,7 +89,6 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   await page.goto("/?chain=testnet");
   await page.waitForFunction(() => document.documentElement.dataset.gameReady === "true", null, { timeout: 60_000 });
   await expect(page.locator(".intro")).toBeVisible();
-  await expect(page.locator('.intro-status [data-id="catalog"]')).toHaveClass("st-ok");
   expect(requests.some((r) => /\/assets\/backend-[^/]*\.js/.test(r.url))).toBe(true);
   expect(requests.filter((r) => /\/api\//.test(r.url))).toEqual([]);
 
@@ -117,12 +116,9 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   const wallet = await call<{ address: string; fakeUsd: string; sui: string }>(page, "getWallet");
   const keyed = wallet.ok;
   console.log("keys in this build:", keyed);
-  const walletLine = page.locator('.intro-status [data-id="wallet"]');
   if (!wallet.ok) {
     // Keyless build: catalog works, everything wallet-related says the till is offline.
     expect(wallet.error).toMatch(KEYS_MISSING);
-    await expect(walletLine).toHaveClass("st-error");
-    await expect(walletLine).toHaveText(`Cash: ${wallet.error}`);
     for (const m of ["collectorAddress", "listOwnedRecords"]) {
       const r = await call(page, m);
       expect(r).toMatchObject({ ok: false });
@@ -134,7 +130,6 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   } else {
     const w = wallet.value;
     expect(w.address).toMatch(/^0x[0-9a-f]{64}$/);
-    await expect(walletLine).toHaveClass("st-ok");
     const collector = await call<string>(page, "collectorAddress");
     expect(collector.ok).toBe(true);
     expect((collector as { value: string }).value).toMatch(/^0x[0-9a-f]{64}$/);

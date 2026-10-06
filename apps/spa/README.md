@@ -18,8 +18,8 @@ npm run test:e2e   # Playwright smoke tests (builds and serves on port 4319)
 ## Data flow
 
 ```
-Sui GraphQL ── objects(filter: { type: Release }) ── created at or after MIN_CHECKPOINT ──> release ids
-   (polled every 15 s while the tab is visible; ?since=<checkpoint> overrides, ?since=0 shows all)
+Sui GraphQL ── objects(filter: { type: Release }) ──> release ids
+   (polled every 15 s while the tab is visible)
                                                          │
                                   one GET per release    ▼
 Miso API  /protocol/releases/{id}?include=trackCredits ──> title, kind, cover blob id,
@@ -37,13 +37,10 @@ Miso API  /protocol/releases/{id}?include=trackCredits ──> title, kind, cove
    └─ /platform/wallets/{address}/records         records a wallet owns (polled every 10 s)
 ```
 
-There is no "list releases" endpoint, so the chain itself is the index. The catalog shows the releases created since
-the demo started: the app pages through every live object of the Release type and keeps those whose creating
-transaction is at or after `MIN_CHECKPOINT` in `src/config.ts` (the checkpoint of a release's first version).
-`?since=<checkpoint>` picks another start and `?since=0` lists every Release on testnet. The home page re-runs discovery every 15 s (paused while the tab is
+There is no "list releases" endpoint, so the chain itself is the index. The app pages through every live object of
+the Release type on testnet. The home page re-runs discovery every 15 s (paused while the tab is
 hidden, one request at a time); new releases appear at the top marked "new". Each release is fetched from the Miso
-API once and cached, so a poll costs one GraphQL request plus one call per new release. Artist pages use the same
-scope; the Collection page does not. Everything else comes from the Miso read API and CDN.
+API once and cached, so a poll costs one GraphQL request plus one call per new release. Everything else comes from the Miso read API and CDN.
 
 `cdn.miso.fm` serves only media that Miso uploaded itself, which includes the ten workshop releases. Anything
 else (for example a release you published yourself through the public Walrus publisher) 404s there, so covers
@@ -81,7 +78,7 @@ src/config.ts                     network constants (ids, URLs, preview timing)
 src/styles.css                    all styles; light and dark themes via CSS variables
 src/lib/http.ts                   fetch wrapper: in-memory cache, 404 -> null, request logging
 src/lib/requestLog.ts             request log store + useRequestLog(); media requests via PerformanceObserver
-src/lib/sui.ts                    listReleaseIds() (GraphQL, since MIN_CHECKPOINT) and derivePressingId()
+src/lib/sui.ts                    listReleaseIds() (GraphQL, every Release) and derivePressingId()
 src/lib/miso.ts                   typed read functions for the Miso API + small release helpers
 src/lib/useCatalog.ts            catalog with 15 s polling and "new" ids
 src/lib/media.ts                  CDN URLs, aggregator fallback and formatting (time, kind, roles, ids)

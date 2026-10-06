@@ -5,7 +5,7 @@ import { shortId } from "../lib/media";
 import { useRequestLog, type LoggedRequest } from "../lib/requestLog";
 
 const ENDPOINTS = [
-  `POST ${SUI_GRAPHQL}  (Release objects created since the demo checkpoint; polled every 15 s)`,
+  `POST ${SUI_GRAPHQL}  (every Release object; polled every 15 s)`,
   `GET  ${MISO_API}/protocol/releases/{id}?include=trackCredits`,
   `GET  ${MISO_API}/compositions/{id}/lyrics`,
   `GET  ${MISO_API}/platform/artists/{id}`,
@@ -54,7 +54,7 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
 
         <ol className="steps">
           <li>
-            <strong>Sui GraphQL</strong> lists the Release objects created since the demo started (the query is below).
+            <strong>Sui GraphQL</strong> lists every Release object on the chain (the query is below).
           </li>
           <li>
             <strong>The Miso read API</strong> returns the release, credits, artist, pressings and wallet

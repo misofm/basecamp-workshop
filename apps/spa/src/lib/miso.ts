@@ -9,7 +9,7 @@ export function getRelease(id: string) {
   return getJson<Release>(`${MISO_API}/protocol/releases/${id}?include=trackCredits`);
 }
 
-/** Every published release in the publisher scope, newest first. Safe to poll: releases are cached per id. */
+/** Every published release created since the demo checkpoint, newest first. Safe to poll: releases are cached per id. */
 export async function loadCatalog(): Promise<Release[]> {
   const ids = await listReleaseIds();
   // One request per release. allSettled: a single broken release should not hide the rest.

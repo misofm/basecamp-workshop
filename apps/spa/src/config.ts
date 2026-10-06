@@ -10,9 +10,9 @@ export const SUI_GRAPHQL = "https://graphql.testnet.sui.io/graphql";
 export const RELEASE_TYPE =
   "0x02dda3f548d9d38a9122a714663b4d304dad03499879f270f5769bc96e235c67::release::Release";
 
-// Wallet whose published releases the catalog shows by default (the workshop's stage publisher).
-// Override with ?publisher=0x... in the URL, or ?publisher=all for every Release on testnet.
-export const PUBLISHER = "0xf5ef55754ed5a2ab4cac85f0370c77417b8ac406fbbe620616e53981b3095446";
+// The catalog shows releases created at or after this Sui checkpoint: set it to the checkpoint the
+// workshop demo starts at. Override with ?since=<checkpoint> in the URL; ?since=0 shows every release.
+export const MIN_CHECKPOINT = 391643490;
 
 // How often the home page re-checks the chain for new releases (while the tab is visible)
 export const POLL_MS = 15_000;

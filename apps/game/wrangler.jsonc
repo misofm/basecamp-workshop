@@ -8,7 +8,7 @@
   // made without .env.local has no keys: mock mode works, ?chain=testnet shows the live
   // catalog and "Testnet keys missing".
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "basecamp-workshop",
+  "name": "basecamp-workshop-game",
   "compatibility_date": "2026-10-01",
   // Keyed builds sit behind Cloudflare Access on the workers.dev hostname; per-version
   // preview URLs are separate hostnames, so keep them off.

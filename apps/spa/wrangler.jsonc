@@ -1,0 +1,11 @@
+{
+  // Pure static-assets deploy of dist/ (no Worker code, no server): `npm run deploy`.
+  // The app is keyless: every request goes from the browser to public endpoints.
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "basecamp-workshop-app",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}

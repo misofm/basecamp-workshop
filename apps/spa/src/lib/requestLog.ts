@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { MISO_CDN, WALRUS_AGGREGATOR } from "../config";
+import { MISO_CDN, SUI_FULLNODE, WALRUS_AGGREGATOR } from "../config";
 
 // A tiny global store of every network request the app made, shown live in the "How this works" drawer.
 
@@ -9,7 +9,7 @@ export type LoggedRequest = {
   url: string;
   status: number | null; // null = network error or unknown (media timing without status)
   ms: number;
-  kind: "api" | "media";
+  kind: "api" | "media" | "rpc"; // rpc = wallet-only calls to the Sui fullnode (gRPC-web)
   cached?: boolean;
 };
 
@@ -35,17 +35,22 @@ export function useRequestLog() {
 
 // Covers and audio are loaded by <img> and hls.js, not by our fetch wrapper,
 // so we pick them up from the browser's Resource Timing API instead.
+// The same goes for the wallet's calls to the Sui fullnode (balances, simulation, transaction status),
+// which the Sui SDK makes itself over gRPC-web (always POST).
 export function observeMediaRequests() {
   const mediaHosts = [new URL(MISO_CDN).host, new URL(WALRUS_AGGREGATOR).host];
+  const rpcHost = new URL(SUI_FULLNODE).host;
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries() as PerformanceResourceTiming[]) {
-      if (!mediaHosts.includes(new URL(entry.name).host)) continue;
+      const host = new URL(entry.name).host;
+      const kind = mediaHosts.includes(host) ? "media" : host === rpcHost ? "rpc" : null;
+      if (!kind) continue;
       logRequest({
-        method: "GET",
+        method: kind === "rpc" ? "POST" : "GET",
         url: entry.name,
         status: entry.responseStatus || null,
         ms: Math.round(entry.duration),
-        kind: "media",
+        kind,
       });
     }
   });

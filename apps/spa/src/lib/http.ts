@@ -32,26 +32,35 @@ async function send(method: "GET" | "POST", url: string, body?: unknown): Promis
   }
 }
 
-function cached(key: string, method: "GET" | "POST", url: string, body?: unknown) {
+function cached(key: string, method: "GET" | "POST", url: string, body?: unknown, reload = false) {
   const hit = cache.get(key);
-  if (hit) {
+  if (hit && !reload) {
     logRequest({ method, url, status: 200, ms: 0, kind: "api", cached: true });
     return hit;
   }
   const promise = send(method, url, body);
   cache.set(key, promise);
-  promise.catch(() => cache.delete(key)); // a failed request should be retryable
+  // A failed request should be retryable (but never evict a newer entry for the same key).
+  promise.catch(() => cache.get(key) === promise && cache.delete(key));
   return promise;
 }
 
+/**
+ * cache: true     use the cached response if there is one (default),
+ *        false    always fetch, leave the cache alone (polled data),
+ *        "reload" always fetch and replace the cached response, so later cached reads see the new value
+ *                 (used right before and after a purchase, when supply or price may have changed).
+ */
+export type CacheMode = { cache: boolean | "reload" };
+
 /** GET a JSON resource; resolves to null on 404. */
-export function getJsonOrNull<T>(url: string, options = { cache: true }): Promise<T | null> {
-  const promise = options.cache ? cached(url, "GET", url) : send("GET", url);
+export function getJsonOrNull<T>(url: string, options: CacheMode = { cache: true }): Promise<T | null> {
+  const promise = options.cache ? cached(url, "GET", url, undefined, options.cache === "reload") : send("GET", url);
   return promise as Promise<T | null>;
 }
 
 /** GET a JSON resource that must exist; a 404 becomes an HttpError. */
-export async function getJson<T>(url: string, options = { cache: true }): Promise<T> {
+export async function getJson<T>(url: string, options: CacheMode = { cache: true }): Promise<T> {
   const data = await getJsonOrNull<T>(url, options);
   if (data === null) throw new HttpError(404, url);
   return data;

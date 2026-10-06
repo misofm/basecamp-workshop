@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
-import { MISO_API, MISO_CDN, SUI_GRAPHQL, WALRUS_AGGREGATOR } from "../config";
+import {
+  FAKEUSD_FAUCET_PACKAGE,
+  MISO_API,
+  MISO_CDN,
+  RECORD_SHOP_PACKAGE,
+  SUI_FULLNODE,
+  SUI_GRAPHQL,
+  WALRUS_AGGREGATOR,
+} from "../config";
 import { RELEASES_QUERY } from "../lib/sui";
 import { shortId } from "../lib/media";
 import { useRequestLog, type LoggedRequest } from "../lib/requestLog";
@@ -16,10 +24,17 @@ const ENDPOINTS = [
   `GET  ${MISO_CDN}/blobs/by-quilt-id/{quiltId}/aac-96.m3u8`,
   `GET  ${WALRUS_AGGREGATOR}/blobs/{blobId}  (fallback when the CDN 404s)`,
   `GET  ${WALRUS_AGGREGATOR}/blobs/by-quilt-id/{quiltId}/aac-96.m3u8  (fallback)`,
+  `POST ${SUI_FULLNODE}  (gRPC-web: balances, simulate, transaction status; wallet only)`,
+];
+
+// The only two Move functions a wallet is ever asked to call.
+const MOVE_CALLS = [
+  `${RECORD_SHOP_PACKAGE}::listing::purchase`,
+  `${FAKEUSD_FAUCET_PACKAGE}::faucet::mint`,
 ];
 
 function statusClass(entry: LoggedRequest) {
-  if (entry.status === null) return entry.kind === "media" ? "" : "status-bad";
+  if (entry.status === null) return entry.kind === "api" ? "status-bad" : "";
   // 404 is an expected answer here ("no such pressing"), so it is shown neutral, not as an error.
   if (entry.status === 404) return "status-neutral";
   return entry.status >= 400 ? "status-bad" : "status-ok";
@@ -64,10 +79,16 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
             <strong>cdn.miso.fm</strong> streams covers and audio (HLS) for media Miso uploaded itself. Anything else
             falls back to the public Walrus aggregator.
           </li>
+          <li>
+            <strong>Buying a record and the faucet are the only writes:</strong> your wallet signs a transaction
+            that calls the record shop's <code>listing::purchase</code> or the FakeUSD <code>faucet::mint</code> Move
+            function. The app simulates it first (gas, sold out) and never sees a key.
+          </li>
         </ol>
 
         <p className="big-line">
-          No API key. No signup. No backend. Every request below went straight from your browser.
+          No API key. No signup. No backend. Reading needs no wallet. Every request below went straight from your
+          browser.
         </p>
 
         <h3>Endpoints</h3>
@@ -75,6 +96,15 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
           {ENDPOINTS.map((endpoint) => (
             <li key={endpoint}>
               <code>{endpoint}</code>
+            </li>
+          ))}
+        </ul>
+
+        <h3>Move calls (signed by your wallet)</h3>
+        <ul className="endpoints">
+          {MOVE_CALLS.map((target) => (
+            <li key={target}>
+              <code>{target}</code>
             </li>
           ))}
         </ul>
@@ -98,6 +128,7 @@ export function HowItWorks({ onClose }: { onClose: () => void }) {
                 </span>
                 {entry.cached && <span className="tag">cached</span>}
                 {entry.kind === "media" && <span className="tag">media</span>}
+                {entry.kind === "rpc" && <span className="tag">wallet</span>}
               </li>
             );
           })}

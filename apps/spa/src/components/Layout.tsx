@@ -1,7 +1,18 @@
-import { useState } from "react";
+import { lazy, Suspense, useState, type ComponentType } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { PlayerBar } from "../player/PlayerBar";
 import { HowItWorks } from "./HowItWorks";
+import { WalletButton } from "./WalletButton";
+
+// The wallet kit is a separate chunk, loaded after the page: reading the catalog never waits for it.
+// If it fails to load, the app stays read-only (the wallet buttons stay disabled).
+const WalletRuntime = lazy(
+  (): Promise<{ default: ComponentType }> =>
+    import("../wallet/WalletRuntime").catch((error) => {
+      console.error("Wallet failed to load", error);
+      return { default: () => null };
+    }),
+);
 
 export function Layout() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -19,10 +30,12 @@ export function Layout() {
               Catalog
             </NavLink>
             <NavLink to="/collection">Collection</NavLink>
+            <NavLink to="/faucet">Faucet</NavLink>
             <button className="button-secondary" onClick={() => setDrawerOpen(true)}>
               How this works
             </button>
           </nav>
+          <WalletButton />
         </div>
       </header>
 
@@ -32,6 +45,9 @@ export function Layout() {
 
       <PlayerBar />
       {drawerOpen && <HowItWorks onClose={() => setDrawerOpen(false)} />}
+      <Suspense fallback={null}>
+        <WalletRuntime />
+      </Suspense>
     </>
   );
 }

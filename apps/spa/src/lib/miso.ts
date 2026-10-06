@@ -29,24 +29,30 @@ export function getArtist(partyId: string) {
   return getJson<Artist>(`${MISO_API}/platform/artists/${partyId}`);
 }
 
-export function getPressing(pressingId: string) {
-  return getJsonOrNull<Pressing>(`${MISO_API}/platform/pressings/${pressingId}`);
+// `fresh`: bypass the cache and replace the cached entry (supply and listings change when someone buys).
+const cacheMode = (fresh: boolean) => (fresh ? { cache: "reload" as const } : undefined);
+
+export function getPressing(pressingId: string, fresh = false) {
+  return getJsonOrNull<Pressing>(`${MISO_API}/platform/pressings/${pressingId}`, cacheMode(fresh));
 }
 
 /** Probe editions 1, 2, 3... until the first 404 (normally two requests). */
-export async function getPressings(releaseId: string): Promise<Pressing[]> {
+export async function getPressings(releaseId: string, fresh = false): Promise<Pressing[]> {
   const pressings: Pressing[] = [];
   for (let edition = 1; edition <= 20; edition++) {
-    const pressing = await getPressing(derivePressingId(releaseId, edition));
+    const pressing = await getPressing(derivePressingId(releaseId, edition), fresh);
     if (!pressing) break;
     pressings.push(pressing);
   }
   return pressings;
 }
 
-export function getListing(pressingId: string) {
+export function getListing(pressingId: string, fresh = false) {
   const currency = encodeURIComponent(FAKEUSD_TYPE);
-  return getJsonOrNull<Listing>(`${MISO_API}/platform/pressings/${pressingId}/listing?currencyType=${currency}`);
+  return getJsonOrNull<Listing>(
+    `${MISO_API}/platform/pressings/${pressingId}/listing?currencyType=${currency}`,
+    cacheMode(fresh),
+  );
 }
 
 /** Records owned by a wallet. Never cached: this changes whenever someone buys a record. */

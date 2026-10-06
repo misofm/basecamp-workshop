@@ -903,13 +903,162 @@ button:disabled {
   }
 }
 
+/* ---------- Wallet ---------- */
+.nav {
+  margin-left: auto; /* nav and wallet sit together on the right */
+}
+.wallet-connect {
+  padding: 0.45em 1.1em;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+.wallet-widget {
+  position: relative;
+}
+.wallet-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.4em 0.9em;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.wallet-pill:hover,
+.wallet-pill[aria-expanded="true"] {
+  border-color: var(--text-muted);
+}
+.wallet-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #16a34a;
+}
+.wallet-address {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+}
+.wallet-balance {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.wallet-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: min(20rem, calc(100vw - 2 * var(--gutter)));
+  padding: 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.wallet-menu-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.wallet-full-address {
+  overflow-wrap: anywhere;
+  font-size: 0.72rem;
+}
+
+.buy-panel {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.buy-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.buy-note {
+  margin: 0.75rem 0 0;
+}
+.buy-note p {
+  margin: 0 0 0.4rem;
+}
+.buy-note p:last-child {
+  margin-bottom: 0;
+}
+.buy-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+}
+.buy-success {
+  padding: 0.75rem 1rem;
+  border-left: 4px solid #16a34a;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface-2);
+}
+.buy-error {
+  padding: 0.75rem 1rem;
+  border: 1px solid #dc2626;
+  border-radius: var(--radius);
+}
+
+.faucet-box {
+  max-width: 40rem;
+}
+.faucet-box > p:first-child {
+  margin-top: 0;
+}
+.faucet-gas {
+  max-width: 40rem;
+}
+.collection-owner {
+  font-weight: 700;
+}
+
+/* dApp Kit's connect modal (a web component). The kit reads shadcn-style variables; --border and --radius
+   mean the same thing here and are inherited, but --accent does not (the kit uses it as a hover background),
+   so map the kit's palette to ours explicitly. */
+mysten-dapp-kit-connect-modal {
+  --background: var(--surface);
+  --foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: #c2410c;
+  --primary-foreground: #ffffff;
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--text);
+  --accent: var(--surface-2);
+  --accent-foreground: var(--text);
+  --muted: var(--surface-2);
+  --muted-foreground: var(--text-muted);
+  --ring: #c2410c;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --cursor-button: pointer;
+  --cursor-menu-item: pointer;
+}
+@media (prefers-color-scheme: dark) {
+  mysten-dapp-kit-connect-modal {
+    --primary: #fb923c;
+    --primary-foreground: #1a0d02;
+    --ring: #fb923c;
+  }
+}
+
 /* ---------- Small screens ---------- */
 @media (max-width: 800px) {
   :root {
     --gutter: 16px;
   }
   .site-header {
-    position: static; /* save vertical space on phones */
+    position: relative; /* not sticky: save vertical space on phones (relative keeps the wallet menu on top) */
   }
   .nav .button-secondary {
     padding: 0.35em 0.8em;
@@ -925,6 +1074,29 @@ button:disabled {
   .nav {
     gap: 1rem;
     font-size: 0.95rem;
+    margin-left: 0;
+  }
+  /* Phones: brand on the first line; links, "How this works" and the wallet flow and wrap after it. */
+  .header-inner {
+    justify-content: flex-start;
+    gap: 0.6rem 1rem;
+  }
+  .brand {
+    flex-basis: 100%;
+  }
+  .nav {
+    display: contents;
+  }
+  .wallet-widget,
+  .wallet-connect {
+    margin-left: auto;
+  }
+  .wallet-connect,
+  .wallet-pill {
+    font-size: 0.8rem;
+  }
+  .wallet-pill .wallet-address {
+    display: none; /* the full address is in the menu */
   }
   .release-hero {
     grid-template-columns: 1fr;

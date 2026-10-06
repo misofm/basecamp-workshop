@@ -2,9 +2,8 @@ import { expect, test } from "@playwright/test";
 
 const EXAMPLE_COLLECTOR = "0xad69173b206b5c0be6a83f6e6cde2a282d2ada46c4c81ab491b0fdc646e5795f";
 // Media comes from the CDN, or from the Walrus aggregator when the CDN does not host it.
-// The rehearsal wallet has published releases; "all" is every Release on testnet (the old behaviour).
-const REHEARSAL = "0x09fc758d6cce80ec4dafedb1e2bb8f52d5a5687eceafa130e1e4e42fae04571e";
-const SCOPES = [`/?publisher=${REHEARSAL}`, "/?publisher=all"];
+// The home page lists every Release on testnet (there is no publisher scope any more).
+const SCOPES = ["/"];
 const MEDIA_HOST = /cdn\.miso\.fm|aggregator\.walrus-testnet\.walrus\.space/;
 
 for (const scope of SCOPES) {
@@ -48,19 +47,6 @@ for (const scope of SCOPES) {
     expect(await audio.evaluate((el: HTMLAudioElement) => el.paused)).toBe(false);
   });
 }
-
-test("default publisher with no releases shows the empty state", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByText("No releases published yet")).toBeVisible({ timeout: 20_000 });
-});
-
-test("publisher scope hides releases of other wallets", async ({ page }) => {
-  await page.goto(`/?publisher=${REHEARSAL}`);
-  await expect(page.locator("a.card").first()).toBeVisible({ timeout: 20_000 });
-  const scoped = await page.locator("a.card").count();
-  await page.goto("/?publisher=all");
-  await expect(page.locator("a.card").nth(scoped)).toBeVisible({ timeout: 20_000 });
-});
 
 test("collection shows records for the example wallet", async ({ page }) => {
   await page.goto(`/collection?address=${EXAMPLE_COLLECTOR}`);

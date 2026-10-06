@@ -206,7 +206,7 @@ function makeGame(opts: { latencyMs?: number; adapter?: MockAdapter } = {}) {
   const world = new FakeWorld();
   const hud = new Hud(app);
   const dialogs = new Dialogs(app);
-  const intro = new Intro(app, adapter.network);
+  const intro = new Intro(app);
   const titleCard = new TitleCard(app);
   /** The app scope: closing it interrupts every running flow (effect-flows.spec.ts). */
   const scope = Effect.runSync(Scope.make());

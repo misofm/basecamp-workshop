@@ -3,7 +3,7 @@
  *
  * Owns: a tiny, stable surface for driving the game from outside. Installed in
  * every build (it can't spend real money: chain writes still go through the
- * adapter, and the mock-only knobs are no-ops on testnet).
+ * adapter, and the mock-only knobs are no-ops outside e2e test builds).
  * Must not: contain game logic. Everything here calls the controller/world/adapter.
  *
  *   __game.state()                    current GameState (pure data)
@@ -11,9 +11,9 @@
  *   __game.teleportTo({x, z, heading})  "car:0", "buyer:collector", "atm", "home"…), facing it, or a point
  *   __game.interact()                 same as pressing E where you stand
  *   __game.press("KeyN")              dispatch a key (code or single letter) on window
- *   __game.failNext("purchase")       mock: next purchase/sell/withdraw/any fails once
- *   __game.setFailureMode("none")     mock: purchase|sell|withdraw|all|none, sticky
- *   __game.setLatency(1500)           mock: simulated chain latency (ms)
+ *   __game.failNext("purchase")       e2e mock: next purchase/sell/withdraw/any fails once
+ *   __game.setFailureMode("none")     e2e mock: purchase|sell|withdraw|all|none, sticky
+ *   __game.setLatency(1500)           e2e mock: simulated chain latency (ms)
  *   __game.measure()                  draw calls / triangles for one frame
  *   ?debug=1                          corner overlay: backend, quality tier, render scale / AO / bloom, FPS / frame time, draw calls
  *   __game.deckDebug()                deck source, <audio> currentTime, preview window start
@@ -22,7 +22,7 @@
  *   __game.tamashiGallery()           open the Tamashi gallery (?gallery=1) instead of the game
  */
 import type { MisoAdapter } from "./miso/adapter";
-import { MockAdapter, type FailKind, type FailureMode } from "./miso/mock-adapter";
+import type { FailKind, FailureMode, MockAdapter } from "./miso/mock-adapter";
 import type { GameController } from "./game/controller";
 import type { GameWorld } from "./world/world";
 import type { RecordDeck } from "./audio/deck";
@@ -63,7 +63,9 @@ function faceHeading(i: Interactable): number {
 }
 
 export function installDebugHooks(world: GameWorld, adapter: MisoAdapter, controller: GameController, deck: RecordDeck): void {
-  const mock = adapter instanceof MockAdapter ? adapter : null;
+  // Type-only import + a network check (not instanceof): MockAdapter must stay out of
+  // production bundles (it exists only in e2e test builds, see miso/select.ts).
+  const mock = adapter.network === "mock" ? (adapter as MockAdapter) : null;
   const hooks = {
     state: () => controller.state,
     world,

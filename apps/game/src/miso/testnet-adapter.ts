@@ -1,9 +1,9 @@
 /**
- * TestnetAdapter: the game on Sui TESTNET (`?chain=testnet`).
+ * TestnetAdapter: the game on Sui TESTNET (the only adapter the game ships with).
  *
  * This file is deliberately thin and dependency-free: every method lazily imports
- * ./testnet/backend (Sui SDK, @misofm/platform, effect), so mock mode never downloads
- * that chunk. Sui SDK types never leave src/miso/; callers get ./types data, and every
+ * ./testnet/backend (Sui SDK, @misofm/platform, effect), so the e2e mock test build never
+ * downloads that chunk. Sui SDK types never leave src/miso/; callers get ./types data, and every
  * rejection is a PlayerError with a player-safe message (./testnet/errors.ts).
  *
  * How each piece works (details in ./testnet/*):

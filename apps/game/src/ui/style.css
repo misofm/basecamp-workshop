@@ -226,7 +226,7 @@ html[data-mouse-look="true"] #world::after {
   animation-delay: 0.4s;
 }
 
-/* "offline demo": a tiny sticker on the bezel (mock only). */
+/* Connection indicator: always hidden (data-network / data-address for tests only). */
 .net-status {
   align-self: flex-end;
   margin: calc(-16 * var(--u)) calc(10 * var(--u)) 0 0;
@@ -1185,12 +1185,6 @@ html[data-mouse-look="true"] #world::after {
 .intro-card::after {
   right: calc(-34 * var(--u));
   transform: rotate(38deg);
-}
-.intro-card .net-status {
-  position: absolute;
-  bottom: calc(18 * var(--u));
-  right: calc(24 * var(--u));
-  margin: 0;
 }
 .intro-title {
   margin: 0;

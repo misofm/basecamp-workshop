@@ -43,7 +43,7 @@ receipt, Stonks's offer, the loading screen, speech bubbles):
 - Money: an amber vacuum-fluorescent (VFD) / 7-segment readout in a dark metal bezel,
   `¥`-free: `FUSD 0100.00` style with leading zeros dimmed.
 - Controls bar: square keycaps like an old arcade cabinet label, smaller, lower contrast.
-- "Offline demo" indicator: tiny, like a sticker on the bezel; only in mock mode.
+- No connection indicator: the game is testnet-only, nothing about the network is shown.
 - Speech bubbles: hand-cut paper or a small paper lantern tag with the speaker's name stamped.
 - Minimap: frame it like a station map plate (enamel ring, Japanese-style N marker).
 

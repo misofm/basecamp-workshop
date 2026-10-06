@@ -32,7 +32,7 @@ export class Intro {
   private ready = false;
   private timer: ReturnType<typeof setInterval>;
 
-  constructor(host: HTMLElement, network: "mock" | "testnet") {
+  constructor(host: HTMLElement) {
     this.fill = h("i");
     this.bar = h("div", { class: "intro-bar", role: "progressbar", "aria-label": "Loading", "aria-valuemin": 0, "aria-valuemax": 100 }, this.fill);
     this.button = h("button", { class: "intro-start", type: "button", hidden: true }, h("span", { class: "intro-word" }, "Press"), h("kbd", null, "Enter"), h("span", { class: "intro-word" }, "to continue"));
@@ -43,7 +43,6 @@ export class Intro {
       h(
         "div",
         { class: "intro-card" },
-        network === "mock" ? h("span", { class: "net-status", "data-network": network }, "offline demo") : null,
         h("h1", { id: "intro-title", class: "intro-title" }, h("span", null, "NOZOMI"), " · ", h("span", { class: "jp" }, "再生")),
         this.bar,
         this.button,

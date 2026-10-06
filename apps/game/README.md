@@ -13,16 +13,18 @@ wallet), smash the **dead Triangle self-driving sedan** across the street with i
 than you paid. Then you head home with Inicio, and the ground starts shaking. A GTA-style
 HUD tracks your FakeUSD, mission, minimap and the record in your hands.
 
-All chain access goes through one interface, `MisoAdapter`. `npm run dev` runs on
-`MockAdapter` (in-memory, fake ids, no network); `npm run stage` builds and serves the game on
-`TestnetAdapter` (real Sui testnet, real Records, real FakeUSD; see [Sui testnet](#sui-testnet)).
+All chain access goes through one interface, `MisoAdapter`. The game always runs on
+`TestnetAdapter` (real Sui testnet, real Records, real FakeUSD; see [Sui testnet](#sui-testnet));
+there is no offline or mock mode. `MockAdapter` (in-memory, fake ids, no network) exists only
+for the automated tests: unit tests construct it directly and the e2e suite runs on a
+`vite build --mode e2e` test build, the only build that contains it.
 There is no server: everything runs in the browser.
 
 ## Run
 
 ```sh
 npm install
-npm run dev          # http://localhost:5173  (mock chain by default)
+npm run dev          # http://localhost:5173  (Sui testnet; keys from .env.local)
 npm run build && npm run preview   # production build, for rehearsals
 npm run stage        # Sui TESTNET: keyed build (.env.local) + vite preview on http://localhost:4173
 npm run deploy       # npm run build && wrangler deploy (see "Hosted build" first!)
@@ -41,11 +43,6 @@ starts hidden (after the loading screen). Look and copy rules: `docs/UI-STYLE.md
 
 | Param | Values | What it does |
 | --- | --- | --- |
-| `?chain=` | `mock` (default) \| `testnet` | Picks the adapter (`src/miso/select.ts`). Fallback: `VITE_MISO_CHAIN` at build time, then `mock`. |
-| `?latency=` | ms (default 800) | Mock only: simulated latency for every adapter call. |
-| `?fail=` | `purchase` \| `sell` \| `withdraw` \| `all` | Mock only: those transactions fail, to show the error + Retry UI. |
-| `?fail=` | `purchase-lost` \| `sell-lost` \| `withdraw-lost` | Mock only: the transaction lands, then its answer is "lost" (timeout message), like a testnet response that never arrived. Retry returns the earlier purchase / sale (charged / paid once), as on testnet. |
-| `?mockhls=1` | | Mock only: every track streams a real testnet HLS quilt from `cdn.miso.fm` instead of the synth loop. |
 | `?quality=` | `high` \| `medium` \| `low` | `high` is the default on WebGPU (2K textures, full post-processing); `medium` is the WebGL2 fallback tier; `low` = 1K textures, tone mapping only, lowest render scale, low Tamashi detail, fewer particles (weak GPUs, projectors on battery). Automated browsers (`navigator.webdriver`, e.g. Playwright) start at `low` unless a tier is given. |
 | `?backend=` | `webgpu` \| `webgl` | Forces the renderer backend (default: WebGPU when available, else WebGL2). The game logic never depends on it. |
 | `?debug=1` | | Developer overlay (top centre): active backend, quality tier, render scale / AO / bloom, FPS / frame time, draw calls. Never shown otherwise. |
@@ -55,7 +52,11 @@ starts hidden (after the loading screen). Look and copy rules: `docs/UI-STYLE.md
 | `?rain=1` | | Enables drizzle over the dusk street (off by default). |
 | `?gallery=` | `1` \| `<id>` (1–100) | Visual QA for the Tamashi characters instead of the game (`src/tamashi/gallery.ts`): `1` shows all 100 in a grid, an id shows that one up close next to its artwork. |
 
-Example: `/?chain=mock&latency=1500&fail=purchase`.
+Example: `/?quality=low&ui=0`.
+
+The e2e test build (`vite build --mode e2e`, see [Verify](#verify)) also reads test-only knobs
+for its MockAdapter (`?latency=`, `?fail=`, `?mockhls=1`, `?chain=testnet`; documented in
+`src/miso/select.ts`). Every other build ignores them.
 
 ### Rerunning the demo
 
@@ -63,9 +64,8 @@ Example: `/?chain=mock&latency=1500&fail=purchase`.
   table), and the sold release is back on the shelf, so you can run the whole loop again
   without reloading. The exit beat (heading home) happens once per session; the loop
   keeps working afterwards.
-- **H → Reset demo (reload page)** reloads with the same URL parameters. The mock chain
-  lives in memory, so that is a fresh wallet with 100 FUSD. On testnet the wallet is the
-  baked-in player key, so a reload keeps its balance and collection.
+- **H → Reset demo (reload page)** reloads with the same URL parameters. The wallet is the
+  baked-in testnet player key, so a reload keeps its balance and collection.
 
 ## Controls
 
@@ -103,7 +103,7 @@ curb across from the shop.
 
 0. Short on FakeUSD? The mission points you to the **ATM in TriMart, next door**:
    **E** → *Withdraw 50* (its CRT greeting glitches on Gamer's real name, then reads
-   "ACCOUNT HOLDER: GAMER") (minted from the testnet faucet; on mock, from thin air) →
+   "ACCOUNT HOLDER: GAMER") (minted from the testnet faucet) →
    "済 CASH OUT +50.00 FUSD" + *View receipt ↗* (devxplorer). The balance counter counts up.
 1. Spawn at the hotel side door, walk east and into Saisei Records.
 2. **E** on a record → a price tag: title, "Artist · #106/250" (the copy you would get), price → *Pick up*.
@@ -124,7 +124,7 @@ curb across from the shop.
 
 Everything the player sees reads like a normal game: no "Sui", "chain", "testnet", "wallet",
 "digest" or "object" in the HUD, dialogs, toasts or errors (developer detail goes to the
-console). The HUD shows only a quiet **online** (testnet) / **offline demo** (mock) indicator;
+console). The HUD shows no connection indicator at all;
 receipts link out with one *View receipt ↗* (devxplorer). See `docs/UX.md`.
 
 ## Architecture
@@ -150,8 +150,8 @@ src/
   miso/              ALL chain access. Nothing outside this folder knows about Sui.
     adapter.ts       interface MisoAdapter
     types.ts         ShopRecord, OwnedRecord, Wallet, NpcBuyer, WithdrawResult, …
-    select.ts        createAdapter() from ?chain=
-    mock-adapter.ts  MockAdapter (deterministic fake chain, latency + failure injection)
+    select.ts        createAdapter(): TestnetAdapter (MockAdapter only in the e2e test build)
+    mock-adapter.ts  MockAdapter, TESTS ONLY (deterministic fake chain, latency + failure injection)
     testnet-adapter.ts  TestnetAdapter (lazy-loads testnet/: keys, catalog, chain, sell)
     format.ts explorer.ts mock-catalog.ts
   world/             Three.js rendering + simulation behind WorldApi (api.ts); no money, no menus
@@ -190,7 +190,7 @@ Every chain call follows one pattern (in `game/flows/`):
 
 ```ts
 interface MisoAdapter {
-  readonly network: "mock" | "testnet";
+  readonly network: "mock" | "testnet"; // "mock" only in tests
   loadShopCatalog(): Promise<ShopRecord[]>;
   getWallet(): Promise<Wallet>;
   purchase(record: ShopRecord): Promise<{ recordId: string; digest: string }>; // resolves after finality
@@ -208,7 +208,7 @@ Rejections must carry a message that is safe to show the player.
 
 ## Sui testnet
 
-Mock mode needs nothing. Testnet mode runs **entirely in the browser** (no server, no `/api`)
+The game runs **entirely in the browser** (no server, no `/api`)
 on two testnet keys that are compiled into the build:
 
 | Env var | Who | Signs |
@@ -246,12 +246,12 @@ Setup:
 4. Build and serve on testnet (keys are read at build time, so rebuild after changing them):
 
    ```sh
-   npm run stage    # VITE_MISO_CHAIN=testnet vite build && vite preview → http://localhost:4173
+   npm run stage    # vite build && vite preview → http://localhost:4173
    ```
 
-   `npm run dev` also picks up `.env.local`; open it with `?chain=testnet`.
+   `npm run dev` also picks up `.env.local`.
 
-Without keys the testnet build still loads the live catalog, and a purchase says
+Without keys the game still loads the live catalog, and a purchase says
 "The till's offline. Try later." (players never see chain
 details); the browser console says "Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and
 VITE_GAME_SUI_PRIVATE_KEY in apps/game/.env.local, then rebuild." Buying, the ATM and selling
@@ -282,7 +282,7 @@ faucet.sui.io", or `VITE_GAME_SUI_PRIVATE_KEY` for the collector).
 | Piece | Where | Notes |
 | --- | --- | --- |
 | Shop catalog | `public/shop.testnet.json` | Thin list `[{ releaseId, edition, section }]`, up to 10 (one stand per entry; fewer leaves stands empty). `section` is one of the ten in-store bins. Everything else (title, artist, cover, tracks/quilts, price, minted / max supply) is read live. |
-| Adapter | `src/miso/testnet-adapter.ts` | Thin class; lazy-loads `src/miso/testnet/*` so mock mode never downloads the Sui SDK or reads the keys. |
+| Adapter | `src/miso/testnet-adapter.ts` | Thin class; lazy-loads `src/miso/testnet/*` (the Sui SDK and the keys) as a separate chunk, so the e2e mock build never downloads it. |
 | Keys | `src/miso/testnet/keys.ts` | Parses the two `VITE_*` keys (ED25519 `suiprivkey`), cached. Missing / invalid → a player-safe message that never contains key text. |
 | Catalog reads | `src/miso/testnet/catalog.ts`, `miso-api.ts` | Keyless `api.testnet.miso.fm`: release, pressing, FakeUSD listing (cached). Covers and HLS from `cdn.miso.fm`. |
 | Chain calls | `src/miso/testnet/chain.ts` | gRPC fullnode (`fullnode.testnet.sui.io`). Purchase = `purchaseRecord()` from `@misofm/platform/pressing`; ATM and payout = `faucet::mint<FakeUsd>` → `coin::from_balance` → transfer. One transaction at a time per signer. |
@@ -325,7 +325,8 @@ collection so you can Retry. The entry is cleared after a confirmed payout.
 
 `tests/e2e/testnet.spec.ts` runs read-only checks by default (no gas): the real catalog, gRPC
 from the browser, the purchase PTB resolving for a funded sender (simulate only), and that
-mock mode never loads the SDK. Built without keys it checks the player-facing "till is
+the e2e mock build never loads the SDK. In the e2e build `?chain=testnet` switches it to the
+TestnetAdapter. Built without keys it checks the player-facing "till is
 offline" message; with keys, the player address on the HUD indicator's `data-address`. The full ATM → buy → smash → sell loop spends
 testnet gas and is opt-in; it needs a keyed build with both addresses funded:
 
@@ -337,8 +338,8 @@ MISO_E2E_BASE_URL=http://127.0.0.1:4173 MISO_TESTNET_E2E=1 npx playwright test t
 
 It buys the cheapest record on the shelves (`MISO_TESTNET_RECORD=<releaseId>` to choose) and
 logs the ATM digest, purchase digest, Record id, sale digest and payout. Without
-`MISO_E2E_BASE_URL`, Playwright builds its own copy with `vite build`, which reads `.env.local`
-too.
+`MISO_E2E_BASE_URL`, Playwright builds its own copy with `vite build --mode e2e`, which reads
+`.env.local` too.
 
 ## Verify
 
@@ -347,29 +348,30 @@ npm run typecheck                 # tsc --noEmit (strict)
 npm run build                     # typecheck + vite build
 npm run test:unit                 # state machine (every state × event), input routing (DOM), mock adapter, testnet keys + sell logic
 npx playwright install chromium   # first time only
-npm test                          # e2e: tests/e2e/*.spec.ts (mock mode + read-only testnet)
+npm test                          # e2e: tests/e2e/*.spec.ts (MockAdapter test build + read-only testnet)
 ```
 
-The e2e suite builds the app, serves it with `vite preview` on port 5287 and drives the
+The e2e suite builds the app with `vite build --mode e2e` (the only build that contains the
+MockAdapter: deterministic data, `?latency=`, `?fail=` failure injection), serves it with `vite preview` on port 5287 and drives the
 whole loop with the keyboard at 1600×900 on SwiftShader (slow: several minutes; it runs
 at `quality=low` automatically). `loop.spec.ts` covers the full loop including the ATM,
 the exit beat (title card), Stonks's return and the failure/Retry paths; `state-safety.spec.ts`
 covers the nasty sequences (double confirm, Esc / tab switch / U / Reset during a pending
 transaction, lost answers and Retry, keys during the smash and the exit beat, keys on the
 loading screen); `hls.spec.ts` plays a real HLS preview
-(`?mockhls=1`, needs network access to `cdn.miso.fm`) and checks the deck's `<audio>`
+(the MockAdapter's `?mockhls=1`, needs network access to `cdn.miso.fm`) and checks the deck's `<audio>`
 time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (default:
 `test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run;
 the testnet spec uses `test-results/shots-testnet/`). `window.__game` (see `src/debug.ts`)
-offers `teleportTo`, `interact`, `press`, `failNext`, `setFailureMode`, `setLatency`,
+offers `teleportTo`, `interact`, `press`, `failNext`, `setFailureMode`, `setLatency` (the last three: e2e mock build only),
 `state()`, `measure()`, `deckDebug()`, `buyerReturnNow()`, `crowdStats()` (street crowd:
 on screen now, distinct Tamashi ids shown so far, and the named cast with id, name, spot, onScreen) and `tamashiGallery()` (opens `?gallery=1`).
 
 ## Assets
 
 See [docs/ASSETS.md](docs/ASSETS.md). UX notes: [docs/UX.md](docs/UX.md). Every Japanese sign, with its English and where it hangs: [docs/SIGNAGE.md](docs/SIGNAGE.md) (`node scripts/gen-signage-doc.mjs` regenerates it; all Japanese is still awaiting native-speaker review). Tamashi and Nozomi © Studio Mirai.
-In mock mode all releases, artists and prices are fictional. Mock ids and digests are fake; their
-explorer (devxplorer) links will not resolve.
+In the MockAdapter (tests only) all releases, artists and prices are fictional. Mock ids and
+digests are fake; their explorer (devxplorer) links will not resolve.
 
 ## Hosted build
 
@@ -378,11 +380,10 @@ explorer (devxplorer) links will not resolve.
 
 **What gets deployed depends on whether `.env.local` holds keys when you build:**
 
-- **No keys:** mock mode by default; `?chain=testnet` shows the live catalog and plays real
-  previews, and says "The shop's till is offline right now" for the cash (the console says
+- **No keys:** the game shows the live testnet catalog and plays real previews, and says "The shop's till is offline right now" for the cash (the console says
   "Testnet keys missing"). Safe to host publicly.
-- **Keys:** both testnet keys are inside the deployed JavaScript (even if the default chain is
-  mock: the testnet chunk ships in `dist/`). **Only deploy this behind Cloudflare Access**
+- **Keys:** both testnet keys are inside the deployed JavaScript (in the testnet chunk in
+  `dist/`). **Only deploy this behind Cloudflare Access**
   (or equivalent access control on the whole hostname, including `/assets/*`). Everyone behind
   Access shares the one player wallet and its collection; anyone who can load the page can
-  extract the keys. Set `VITE_MISO_CHAIN=testnet` when building to make testnet the default.
+  extract the keys.

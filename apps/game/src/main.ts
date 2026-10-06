@@ -1,7 +1,7 @@
 /**
  * Bootstrap only: one Layer graph (AppLayer) and one Effect.runFork (see docs/EFFECT.md).
  *
- *   Chain      (src/app/chain.ts → src/miso)  chain access, chosen by ?chain=mock|testnet
+ *   Chain      (src/app/chain.ts → src/miso)  chain access (Sui testnet)
  *   World      (src/app/world.ts → src/world) Three.js city + shop, behind WorldApi
  *   Audio      (src/app/audio.ts → src/audio) deck preview, sfx, ambience, unlock
  *   Ui         (src/app/ui.ts → src/ui)       HUD, minimap, dialogs, boot cover (DOM only)

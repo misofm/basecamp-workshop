@@ -5,7 +5,6 @@ import { uiVisibleFromSearch } from "../../src/ui/ui-visibility";
 import { adapterOptionsFromUrl } from "../../src/miso/select";
 
 const DEFAULTS: AppConfig = {
-  chain: null,
   latencyMs: null,
   failureMode: null,
   mockHls: false,
@@ -43,9 +42,6 @@ test("empty search gives the defaults", () => {
 });
 
 const cases: [string, Partial<AppConfig>][] = [
-  ["?chain=testnet", { chain: "testnet" }],
-  ["?chain=bogus", { chain: "bogus" }],
-  ["?chain=", { chain: "" }],
   ["?latency=1500", { latencyMs: 1500 }],
   ["?latency=-5", { latencyMs: 0 }],
   ["?latency=", { latencyMs: 0 }], // Number("") === 0, as select.ts
@@ -127,7 +123,7 @@ test("an unknown ?fail= falls back to null with the select.ts warning", () => {
 });
 
 test("uiVisibleFromSearch delegates to parseConfig", () => {
-  for (const s of ["", "?ui=0", "?ui=off", "?ui=false", "?ui=1", "?chain=mock&ui=off"]) {
+  for (const s of ["", "?ui=0", "?ui=off", "?ui=false", "?ui=1", "?latency=0&ui=off"]) {
     expect(uiVisibleFromSearch(s)).toBe(parseConfig(s).uiVisible);
   }
 });

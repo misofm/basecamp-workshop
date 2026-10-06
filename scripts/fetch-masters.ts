@@ -8,7 +8,7 @@
 // Each download is verified: when the miso CLI is runnable (MISO_CLI, see scripts/lib/miso.ts)
 // `miso blobs id` must reproduce the blob id; otherwise the byte length must match
 // master.bytes (covers are only checked for being non-empty). Files already present with
-// the right size are skipped. cover-512.png, used by the game's mock mode, is already
+// the right size are skipped. cover-512.png, used by the game's test MockAdapter, is already
 // committed in apps/game/public/covers.
 //
 //   bun scripts/fetch-masters.ts [--only <folder>] [--track <NN-slug>] [--no-cover] [--out <dir>]

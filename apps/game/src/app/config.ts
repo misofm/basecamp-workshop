@@ -4,14 +4,15 @@
  * Owns: the parse of `location.search` (memoised per search string) and the `Config`
  * service. Invalid values fall back exactly as the old per-module readers did; parsing
  * never throws.
- * Must not: decide anything (mock vs testnet stays in miso/select.ts, the tier in
+ * Must not: decide anything (the adapter choice stays in miso/select.ts, the tier in
  * world/quality.ts); this is only the decoded params.
  *
- *   ?chain=<raw>          raw string (select.ts resolves it)
+ *   e2e test builds only (miso/select.ts; ignored by the game otherwise):
  *   ?latency=<ms>         finite → max(0, n), else null
  *   ?fail=<mode>          purchase|sell|withdraw|all|purchase-lost|sell-lost|withdraw-lost,
  *                         else null (+ the select.ts warning for an unknown value)
  *   ?mockhls=1|true       mockHls
+ *   Everything else:
  *   ?quality=high|medium|low, ?backend=webgl|webgpu (else null)
  *   ?adapt=0              adapt false (anything else true)
  *   ?exposure=<0.3–4>     finite, in range, else null
@@ -25,7 +26,6 @@ import { Context, Layer, Option, Schema } from "effect";
 import type { FailureMode } from "../miso/mock-adapter";
 
 export interface AppConfig {
-  readonly chain: string | null;
   readonly latencyMs: number | null;
   readonly failureMode: FailureMode | null;
   readonly mockHls: boolean;
@@ -87,7 +87,6 @@ export function parseConfig(search: string, options?: ParseOptions): AppConfig {
   }
 
   return {
-    chain: get("chain"),
     latencyMs: latency === null ? null : Math.max(0, latency),
     failureMode,
     mockHls: isMockHlsOn(get("mockhls")),

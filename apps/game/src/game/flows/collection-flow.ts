@@ -103,8 +103,8 @@ export class CollectionFlow {
           id: "reset",
           label: "Reset demo",
           disabled: txPending,
-          // Reload keeps the URL (and its ?chain=…&latency=… params). The mock chain
-          // lives in memory, so a reload is a fresh wallet; testnet state is on chain.
+          // Reload keeps the URL and its params. Testnet state is on chain (the e2e
+          // test build's MockAdapter lives in memory, so there a reload is a fresh wallet).
           run: () => window.location.reload(),
         },
       ],

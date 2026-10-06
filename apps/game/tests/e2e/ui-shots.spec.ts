@@ -1,5 +1,5 @@
 /**
- * Screenshots of every UI moment in docs/UI-STYLE.md (1600×900, mock mode), named by moment.
+ * Screenshots of every UI moment in docs/UI-STYLE.md (1600×900, e2e MockAdapter build), named by moment.
  *   SHOTS_DIR=/some/dir npx playwright test tests/e2e/ui-shots.spec.ts
  * Also asserts the U toggle: everything hidden, the 3D world kept, dialogs unaffected.
  */
@@ -9,7 +9,7 @@ import { chooseAction, goTo, shot, startGame, teleport, until } from "./helpers"
 const RECORD = "low-tide-tapes";
 
 test("ui moments", async ({ page }) => {
-  await page.goto("/?chain=mock&latency=2500");
+  await page.goto("/?latency=2500");
   await page.waitForFunction(() => document.documentElement.dataset.gameReady === "true", null, { timeout: 60_000 });
   await expect(page.locator(".intro[data-ready='true'] .intro-start")).toBeVisible({ timeout: 120_000 });
   await page.waitForTimeout(600);
@@ -127,7 +127,7 @@ test("ui moments", async ({ page }) => {
 });
 
 test("error moment", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=300&fail=withdraw");
+  await startGame(page, "?latency=300&fail=withdraw");
   await goTo(page, "atm");
   await page.keyboard.press("KeyE");
   const dialog = page.locator("dialog.dlg[open]");
@@ -138,7 +138,7 @@ test("error moment", async ({ page }) => {
 });
 
 test("?ui=0 shows the loading screen, then starts hidden", async ({ page }) => {
-  await page.goto("/?chain=mock&ui=0");
+  await page.goto("/?ui=0");
   await expect(page.locator(".intro[data-ready='true'] .intro-start")).toBeVisible({ timeout: 120_000 });
   await page.keyboard.press("Enter");
   await expect(page.locator(".intro")).toHaveCount(0, { timeout: 5000 });

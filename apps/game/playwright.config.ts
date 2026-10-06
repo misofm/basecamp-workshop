@@ -34,12 +34,14 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   // A production build served by `vite preview`: no HMR, so edits elsewhere in the
-  // repo can't reload the page mid-test (and it's closer to what ships). `vite build`
-  // reads .env.local, so with testnet keys there this build is keyed too.
+  // repo can't reload the page mid-test (and it's closer to what ships). `--mode e2e`
+  // makes the game run on the MockAdapter (deterministic, failure injection; see
+  // src/miso/select.ts); only e2e builds contain it. `vite build` reads .env.local, so
+  // with testnet keys there this build is keyed too (testnet.spec.ts, ?chain=testnet).
   webServer: EXTERNAL
     ? undefined
     : {
-        command: `npx vite build --logLevel warn --outDir dist-e2e && npx vite preview --outDir dist-e2e --port ${PORT} --strictPort --host 127.0.0.1`,
+        command: `npx vite build --mode e2e --logLevel warn --outDir dist-e2e && npx vite preview --outDir dist-e2e --port ${PORT} --strictPort --host 127.0.0.1`,
         url: `http://127.0.0.1:${PORT}`,
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,

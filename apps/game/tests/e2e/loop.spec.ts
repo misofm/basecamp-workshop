@@ -1,5 +1,5 @@
 /**
- * The full game loop in mock mode, driven like a player: keyboard for menus and
+ * The full game loop on the e2e build's MockAdapter, driven like a player: keyboard for menus and
  * interactions (E / Enter / arrows), a real W-walk through the shop door, and
  * __game.teleportTo for the long walks. Screenshots of every step go to SHOTS.
  */
@@ -12,7 +12,7 @@ const CAR = "car:0"; // the dead Triangle sedan across the street
 const SHOP_FRONT = { x: 0, z: 1.8, heading: Math.PI };
 
 test("full loop: ATM → shop → deck → buy → smash → sell → collection → home", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=400", "01-intro");
+  await startGame(page, "?latency=400", "01-intro");
 
   // 1. Spawn at the hotel side door, west end of the street.
   let s = await state(page);
@@ -20,8 +20,9 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
   expect(s.balance).toBe("100000000");
   await expect(page.locator(".mission-text")).toHaveText(/Find a record/i);
   await expect(page.locator(".money-value")).toHaveText("100.00");
-  // Player-facing copy reads like a normal game: a quiet "offline demo" indicator, no chain jargon.
-  await expect(page.locator("#hud .net-status")).toHaveText("offline demo");
+  // Player-facing copy reads like a normal game: no connection sticker, no chain jargon.
+  await expect(page.locator("#hud .net-status")).toBeHidden();
+  await expect(page.locator(".intro .net-status")).toHaveCount(0);
   await expect(page.locator("#hud .controls")).toContainText("Space");
   expect(await page.locator("#hud").innerText()).not.toMatch(/\b(sui|chain|testnet|wallet|digest)\b/i);
   await page.waitForTimeout(600);
@@ -240,7 +241,7 @@ test("full loop: ATM → shop → deck → buy → smash → sell → collection
 });
 
 test("purchase failure shows Retry; retry succeeds once the chain recovers; sell retry too", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=300&fail=purchase");
+  await startGame(page, "?latency=300&fail=purchase");
   await teleport(page, { x: 0, z: -2, heading: Math.PI });
   await goTo(page, `record:${RECORD}`);
   await page.keyboard.press("KeyE");
@@ -285,7 +286,7 @@ test("purchase failure shows Retry; retry succeeds once the chain recovers; sell
 });
 
 test("ATM withdraw failure shows Retry; retry succeeds once the faucet recovers", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=300&fail=withdraw");
+  await startGame(page, "?latency=300&fail=withdraw");
   await goTo(page, "atm");
   await page.keyboard.press("KeyE");
   const dialog = page.locator("dialog.dlg[open]");

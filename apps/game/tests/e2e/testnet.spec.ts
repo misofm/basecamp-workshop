@@ -4,21 +4,23 @@
  * VITE_GAME_SUI_PRIVATE_KEY from apps/game/.env.local; see README "Sui testnet").
  *
  * Always runs (spends no gas), with or without keys in the build:
- *  - mock mode never downloads the Sui SDK chunk (`assets/backend-*.js`) or touches the chain;
- *  - `?chain=testnet` loads the real catalog from shop.testnet.json (titles from chain,
+ *  - the e2e build's MockAdapter (its default) never downloads the Sui SDK chunk
+ *    (`assets/backend-*.js`) or touches the chain;
+ *  - `?chain=testnet` (e2e builds only; the shipped game is always testnet) loads the real catalog from shop.testnet.json (titles from chain,
  *    cdn.miso.fm covers, tracks with quilt ids + durations) and gRPC works from the browser
  *    origin (CORS); the purchase PTB resolves for a funded sender (build + simulate, unsigned);
  *  - keyless build: the intro says "Cash: The shop's till is offline right now. …" (the
  *    developer hint "Testnet keys missing: …" goes to the console) and every wallet call
- *    rejects with that message; keyed build: the HUD shows a quiet "online" indicator (the
- *    player's address only in data-address) and the collector is the GAME address.
+ *    rejects with that message; keyed build: no connection indicator is shown (the player's
+ *    address only in data-address) and the collector is the GAME address.
  *
  * Opt-in full loop (spends testnet gas; needs a keyed build with both addresses funded with
  * testnet SUI): ATM (+50 FUSD) → shop → buy the cheapest record → smash → sell.
  *   npm run stage   # in another shell: keyed testnet build + vite preview on :4173
  *   MISO_E2E_BASE_URL=http://127.0.0.1:4173 MISO_TESTNET_E2E=1 npx playwright test tests/e2e/testnet.spec.ts
- * Without MISO_E2E_BASE_URL the default webServer builds with `vite build`, which also reads
- * .env.local. MISO_TESTNET_RECORD=<releaseId> picks the record instead of the cheapest.
+ * (The stage build is a normal testnet build, so `?chain=testnet` is simply ignored there.)
+ * Without MISO_E2E_BASE_URL the default webServer builds with `vite build --mode e2e`, which
+ * also reads .env.local. MISO_TESTNET_RECORD=<releaseId> picks the record instead of the cheapest.
  * Screenshots go to $SHOTS_DIR.
  */
 import { expect, test, type Page } from "@playwright/test";
@@ -67,10 +69,10 @@ async function call<T = any>(page: Page, method: string, ...args: unknown[]): Pr
   );
 }
 
-test("mock mode does not load the Sui SDK chunk", async ({ page }) => {
+test("the e2e mock build does not load the Sui SDK chunk", async ({ page }) => {
   const urls: string[] = [];
   page.on("request", (r) => urls.push(r.url()));
-  await page.goto("/?chain=mock&latency=0");
+  await page.goto("/?latency=0");
   await page.waitForFunction(() => document.documentElement.dataset.gameReady === "true", null, { timeout: 60_000 });
   await page.waitForTimeout(1000);
   expect(urls.filter((u) => /\/assets\/backend-[^/]*\.js/.test(u))).toEqual([]);
@@ -161,13 +163,14 @@ test("testnet: real catalog, gRPC from the browser, keys or a clear 'keys missin
   expect(grpc.length).toBeGreaterThan(0);
   expect(grpc.every((r) => r.status === 200)).toBe(true);
 
-  // Into the game: a quiet "online" indicator; the address is only a data attribute (keyed).
+  // Into the game: no connection indicator on screen; the address is only a data attribute (keyed).
   await page.waitForFunction(() => document.documentElement.dataset.character !== undefined, null, { timeout: 120_000 });
   await frames(page, 4);
   await shot(page, "tn-01-intro");
   await page.keyboard.press("Enter");
   await expect(page.locator("#hud")).toBeVisible();
-  await expect(page.locator("#hud .net-status")).toHaveText("online");
+  await expect(page.locator("#hud .net-status")).toBeHidden();
+  await expect(page.locator("#hud .net-status")).toHaveAttribute("data-network", "testnet");
   if (wallet.ok) await expect(page.locator("#hud .net-status")).toHaveAttribute("data-address", wallet.value.address);
   await shot(page, "tn-02-hud");
   await teleport(page, `record:${RELEASES[0]}`);

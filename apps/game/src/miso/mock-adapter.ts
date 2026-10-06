@@ -3,7 +3,9 @@
  *
  * Owns: a pretend wallet, pretend shop supply and pretend Record objects, with
  * simulated latency and optional failure injection so the pending/error UI can
- * be exercised on stage without a network.
+ * be exercised by automated tests without a network. TEST INFRASTRUCTURE ONLY: the
+ * game never uses it; select.ts picks it only in e2e test builds (`vite build --mode e2e`),
+ * and unit tests construct it directly.
  * Must not: do network I/O, import Sui SDKs, or know about rendering.
  *
  * Everything is deterministic for a given seed: ids and digests come from a
@@ -11,7 +13,7 @@
  * (0x + 64 hex) and digests look like base58 transaction digests (44 chars), but
  * none of them exist anywhere; explorer links for them will not resolve.
  *
- * URL knobs (parsed in select.ts): ?latency=ms, ?fail=purchase|sell|withdraw|all, ?mockhls=1.
+ * URL knobs (e2e test builds, parsed in select.ts): ?latency=ms, ?fail=purchase|sell|withdraw|all, ?mockhls=1.
  *
  * "Lost answer" failures (?fail=purchase-lost|sell-lost|withdraw-lost, or failNext): the
  * transaction LANDS (money moves, the Record is minted / handed over), then the call rejects

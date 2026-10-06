@@ -44,11 +44,11 @@ export class UiParts extends Context.Service<UiParts, UiPartsApi>()("app/UiParts
     UiParts,
     Effect.gen(function* () {
       const { app } = yield* Shell;
-      const chain = yield* Chain;
+      yield* Chain; // built before the UI parts (construction order, see above)
       const hud = new Hud(app);
       const minimap = new Minimap(hud.root);
       const dialogs = new Dialogs(app);
-      const intro = new Intro(app, chain.network);
+      const intro = new Intro(app);
       return { app, hud, minimap, dialogs, intro };
     }),
   );

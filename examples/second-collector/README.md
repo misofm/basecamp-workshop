@@ -50,12 +50,14 @@ git apply examples/second-collector/second-collector.patch
 cd apps/game && npm install && npm run dev
 ```
 
-Mock mode (`npm run dev`) runs the whole thing with fake money: buy Warehouse Gospel (HOUSE),
-walk across the street, sell it for 2×. On testnet (at commit `cc23ffb`), real payouts needed
+At that commit, mock mode (`npm run dev`) ran the whole thing with fake money: buy Warehouse
+Gospel (HOUSE), walk across the street, sell it for 2×. The current game has no mock mode (it
+is testnet-only; the mock adapter exists only for its automated tests). On testnet (at commit `cc23ffb`), real payouts needed
 the bank server with your own funded keys.
 
 Tests: `npm run test:unit` covers the offer rules; `npx playwright test tests/e2e/house-digger.spec.ts`
-plays the refusal and the 2× sale in mock mode.
+plays the refusal and the 2× sale on the mock adapter (at that commit; the current e2e test
+build, `vite build --mode e2e`, is the only place the mock adapter still runs).
 
 ## Revert
 

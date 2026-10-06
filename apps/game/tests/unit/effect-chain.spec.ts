@@ -254,5 +254,6 @@ test("Chain.fromAdapter and Chain.layer provide the service", async () => {
       return chain.network;
     }).pipe(Effect.provide(Chain.layer.pipe(Layer.provide(PendingSales.memory)))),
   );
-  expect(network).toBe("mock");
+  // Outside the e2e test build the game always runs on testnet (the mock is test-only).
+  expect(network).toBe("testnet");
 });

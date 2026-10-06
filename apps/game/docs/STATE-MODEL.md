@@ -139,7 +139,7 @@ idle ──xStart──► pending ──adapter resolves──► xSuccess ─�
   the wallet (and for purchase / sale the collection) is re-read, so a transaction that
   landed but whose answer was lost never leaves a stale balance.
 - **Lost answer** (landed on chain, response timed out): Retry of a purchase or sale returns
-  the earlier result (testnet: stored digest; mock: `?fail=purchase-lost|sell-lost`), so
+  the earlier result (testnet: stored digest; the MockAdapter in tests: `?fail=purchase-lost|sell-lost`), so
   nothing is charged or paid twice. If you don't retry, the re-read collection already
   shows the Record and you can hold it from C. The earlier answer is only handed back while
   that Record is unsold (selling it and buying the release again is a new purchase), and the
@@ -149,8 +149,7 @@ idle ──xStart──► pending ──adapter resolves──► xSuccess ─�
   in `localStorage` before each submission; the Record stays in your hand and collection
   and Retry pays exactly once (`src/miso/testnet/sell.ts`). A reload keeps that entry.
 - **Reload / Reset demo mid-transaction**: Reset is disabled while a transaction is
-  pending. A browser reload (F5) is still possible: mock state is in memory (a reload is a
-  fresh wallet); on testnet the transaction may still land and is picked up from chain on
+  pending. A browser reload (F5) is still possible: the transaction may still land and is picked up from chain on
   the next load (pending sales from `localStorage`).
 - **Results arriving late**: a success whose dialog was closed becomes a toast; a result for
   an action the state machine no longer accepts is refused (no-op + dev warning).

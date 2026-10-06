@@ -4,8 +4,8 @@
  * Every catalog read, wallet read and transaction goes through a MisoAdapter.
  * The game never imports @mysten/* or fetches chain data anywhere else.
  *
- * Select an implementation with `?chain=mock|testnet` (default: VITE_MISO_CHAIN
- * env var, else "mock"). See mock-adapter.ts and testnet-adapter.ts.
+ * The game runs on testnet-adapter.ts; mock-adapter.ts is for automated tests only
+ * (e2e test builds, unit tests). select.ts makes the choice.
  *
  * Contract for implementations:
  * - All methods are async and may take seconds; callers show pending UI and never

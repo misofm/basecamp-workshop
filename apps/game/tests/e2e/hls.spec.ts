@@ -21,7 +21,7 @@ const deckDebug = (page: import("@playwright/test").Page): Promise<DeckDebug> =>
   page.evaluate(() => (window as any).__game.deckDebug());
 
 test("HLS preview streams from mid-track and advances", async ({ page }) => {
-  await startGame(page, "?chain=mock&mockhls=1&latency=200&quality=low");
+  await startGame(page, "?mockhls=1&latency=200&quality=low");
   expect(await page.evaluate(() => document.documentElement.dataset.quality)).toBe("low");
 
   // Pick the record.

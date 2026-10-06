@@ -36,7 +36,7 @@ main.ts ── Effect.runFork(App) ── one top-level error boundary (log with
 
 | Service | File | Notes |
 | --- | --- | --- |
-| `Config` | `app/config.ts` | `parseConfig(search)` decodes every URL param once with `Schema` (chain, latency, fail, mockhls, quality, backend, adapt, exposure, ui, cameo, debug, gallery, particles, rain, hide, shadows). Invalid values fall back exactly as before (same console warnings). `urlConfig()` is the memoised parse of `location.search`; the low-level readers (quality.ts, atmosphere.ts, world.ts, cameo.ts, ui-visibility.ts, select.ts, debug.ts, main.ts) read it instead of `URLSearchParams`. |
+| `Config` | `app/config.ts` | `parseConfig(search)` decodes every URL param once with `Schema` (latency, fail, mockhls (e2e test build only), quality, backend, adapt, exposure, ui, cameo, debug, gallery, particles, rain, hide, shadows). Invalid values fall back exactly as before (same console warnings). `urlConfig()` is the memoised parse of `location.search`; the low-level readers (quality.ts, atmosphere.ts, world.ts, cameo.ts, ui-visibility.ts, select.ts, debug.ts, main.ts) read it instead of `URLSearchParams`. |
 | `Chain` | `app/chain.ts`, `app/errors.ts` | Wraps a `MisoAdapter`. Every operation is an `Effect<A, ChainError>`. Methods call the adapter lazily (`adapter.purchase(...)` at run time) so test spies on the adapter still count calls. |
 | `PendingSales` | `app/pending-sales.ts` | Schema for `PendingSale`; localStorage with the in-memory fallback the testnet backend had. Corrupt JSON or an invalid entry is dropped and logged, never thrown. Exposes the synchronous `PendingStore` that `miso/testnet/sell.ts` needs (it saves the digest *before* submission, synchronously). Injected into `TestnetAdapter` → `TestnetBackend`. |
 | `GameState` | `app/game-state.ts` | `SubscriptionRef<GameState>`; `dispatch(action)` runs the pure `step()` (unchanged, still in `game/state.ts`), logs refusals and, in dev builds, `invariantViolations()` exactly as before. `changes` is a `Stream` for observers. |
@@ -60,8 +60,8 @@ exactly the words they showed before.
 | `SoldOut` | every copy minted (`soldOut`) |
 | `Network` | connection dropped (`network`); the only error reads retry on |
 | `Timeout` | a read (or our outer safety timeout on a read) took too long |
-| `ResponseLost` | a transaction's answer was lost (adapter timeout on purchase / sell / withdraw, mock `*-lost`, or our outer safety timeout): it may have landed; Retry is idempotent in the adapter |
-| `Rejected` | everything else the adapter refused (gas / keys / disabled / price changed / not owned / mock failures) |
+| `ResponseLost` | a transaction's answer was lost (adapter timeout on purchase / sell / withdraw, the test MockAdapter's `*-lost`, or our outer safety timeout): it may have landed; Retry is idempotent in the adapter |
+| `Rejected` | everything else the adapter refused (gas / keys / disabled / price changed / not owned / injected MockAdapter failures in tests) |
 
 ### Timeouts
 

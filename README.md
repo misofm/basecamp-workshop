@@ -89,18 +89,15 @@ All of these need [Node.js](https://nodejs.org) and npm; the repo scripts need [
 cd apps/spa && npm install && npm run dev     # http://localhost:5173
 ```
 
-### The game, mock mode (no wallet)
+### The game (Sui testnet)
 
 ```sh
 cd apps/game && npm install && npm run dev    # http://localhost:5173
 ```
 
-Mock mode runs the whole loop on an in-memory fake chain: fictional prices, fake ids, no
-network.
-
-### The game on testnet
-
-Testnet mode runs fully in the browser on two testnet keys you create and fund yourself (a
+The game always runs on Sui testnet; there is no offline or mock mode (an in-memory mock
+adapter exists only for the game's automated tests). Without keys it shows the live catalog
+and real previews, but the till stays closed. It runs fully in the browser on two testnet keys you create and fund yourself (a
 player wallet and the game's collector), baked into the build from `apps/game/.env.local`.
 FakeUSD comes from an in-game ATM that mints from the public faucet. The keys end up in the
 built JavaScript, so a hosted keyed build must sit behind access control; see
@@ -200,7 +197,7 @@ parties/            parties.json (31 fictional parties) + parties.testnet.json (
 releases/           one folder per release (table above) + registry.testnet.json
 scripts/            the pipeline, new-key.ts and fetch-masters.ts
 apps/spa/           keyless catalog web app (React + Vite)
-apps/game/          record-shop game (Three.js), static: mock or Sui testnet
+apps/game/          record-shop game (Three.js), static, Sui testnet
 examples/           live-mini-spa, billboard.patch, second-collector.patch
 keys/               your own testnet keys (gitignored; created by scripts/new-key.ts)
 ```

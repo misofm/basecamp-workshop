@@ -5,8 +5,8 @@
   // VITE_GAME_SUI_PRIVATE_KEY from .env.local into the testnet chunk in dist/, so anyone
   // who can load the site can read both testnet keys. Only deploy a keyed build behind
   // Cloudflare Access (or equivalent access control); never deploy one publicly. A build
-  // made without .env.local has no keys: mock mode works, ?chain=testnet shows the live
-  // catalog and "Testnet keys missing".
+  // made without .env.local has no keys: the game shows the live testnet catalog and
+  // "Testnet keys missing".
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "basecamp-workshop-game",
   "compatibility_date": "2026-10-01",

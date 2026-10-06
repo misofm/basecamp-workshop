@@ -1,16 +1,20 @@
 /**
- * Adapter selection: the only place that decides mock vs testnet.
+ * Adapter selection: the only place that decides which MisoAdapter the game runs on.
  *
- * Owns: reading `?chain=`, `VITE_MISO_CHAIN` and the mock debug knobs from the URL.
+ * Owns: the choice of adapter. The game always runs on Sui testnet (TestnetAdapter);
+ * without keys in the build the "Testnet keys missing" behaviour applies.
  * Must not: hold state or be imported by world/ code.
  *
- * URL params:
- *   ?chain=mock|testnet   (fallback: import.meta.env.VITE_MISO_CHAIN, then "mock")
- *   ?latency=<ms>         mock only: simulated latency per call (default 800)
- *   ?fail=purchase|sell|withdraw|all  mock only: force those transactions to fail
- *   ?fail=purchase-lost|sell-lost|withdraw-lost  mock only: they land, then the answer is
+ * Automated tests only: a build made with `vite build --mode e2e` (the Playwright e2e
+ * webServer) runs on the in-memory MockAdapter instead, with these URL knobs:
+ *   ?chain=testnet        use the TestnetAdapter anyway (testnet.spec.ts)
+ *   ?latency=<ms>         simulated latency per call (default 800)
+ *   ?fail=purchase|sell|withdraw|all  force those transactions to fail
+ *   ?fail=purchase-lost|sell-lost|withdraw-lost  they land, then the answer is
  *                         lost (timeout message); Retry returns the earlier purchase / sale
- *   ?mockhls=1            mock only: every track streams a real testnet HLS quilt
+ *   ?mockhls=1            every track streams a real testnet HLS quilt
+ * In any other build the e2e check is a constant false, so the MockAdapter is tree-shaken
+ * out of the bundle.
  */
 import type { MisoAdapter } from "./adapter";
 import { MockAdapter, type FailureMode, type MockAdapterOptions } from "./mock-adapter";
@@ -42,17 +46,19 @@ export function adapterOptionsFromUrl(search?: string): MockAdapterOptions {
   return options;
 }
 
+/**
+ * True only in a `vite build --mode e2e` bundle: vite.config.ts defines `__MISO_E2E__` as
+ * a literal per build, so in any other build this folds to `false` and the MockAdapter
+ * branch is tree-shaken out. Outside Vite (unit tests under Node) it is undefined: false.
+ */
+function isE2eBuild(): boolean {
+  return typeof __MISO_E2E__ !== "undefined" && __MISO_E2E__;
+}
+
 /** `deps.pending`: the pending-sale store handed to the TestnetAdapter (default: its own). */
 export function createAdapter(search?: string, deps: { pending?: PendingSalesStore } = {}): MisoAdapter {
-  const requested =
-    params(search).get("chain") ?? (import.meta.env?.VITE_MISO_CHAIN as string | undefined) ?? "mock";
-  switch (requested) {
-    case "testnet":
-      return new TestnetAdapter({ pending: deps.pending });
-    case "mock":
-      return new MockAdapter(adapterOptionsFromUrl(search));
-    default:
-      console.warn(`[miso] unknown chain "${requested}", using mock`);
-      return new MockAdapter(adapterOptionsFromUrl(search));
+  if (isE2eBuild() && params(search).get("chain") !== "testnet") {
+    return new MockAdapter(adapterOptionsFromUrl(search));
   }
+  return new TestnetAdapter({ pending: deps.pending });
 }

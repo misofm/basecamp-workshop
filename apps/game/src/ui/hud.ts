@@ -2,7 +2,7 @@
  * The heads-up display: everything drawn over the 3D scene while playing.
  *
  * Owns: the DOM for the VFD money readout (count-up animation, green/red flash, pending
- * dots), the "offline demo" sticker (mock only), the masking-tape mission note, the held-record
+ * dots), the (always hidden) connection element, the masking-tape mission note, the held-record
  * tag, the now-playing chip, the [E] interaction prompt, toasts (paper strips, speech tags with
  * a stamped name, big enamel banners), the mute badge and the keycap controls bar.
  * Must not: contain game logic, read game state or call the adapter/world. The
@@ -80,7 +80,7 @@ export class Hud {
     this.moneyEl = h("div", { class: "money", role: "status", "aria-label": "FakeUSD balance" }, this.moneySymbol, this.moneyPad, this.moneyValue);
     this.pendingText = h("span", null, "Processing");
     this.pendingEl = h("div", { class: "money-pending", hidden: true }, this.pendingText, h("span", { class: "dots", "aria-hidden": "true" }, h("i", null, "▮"), h("i", null, "▮"), h("i", null, "▮")));
-    this.netEl = h("div", { class: "net-status", "aria-label": "Connection" });
+    this.netEl = h("div", { class: "net-status", "aria-label": "Connection", hidden: true });
     this.missionText = h("p", { class: "mission-text" });
     this.missionEl = h("section", { class: "mission", "aria-live": "polite" }, this.missionText);
     this.heldEl = h("section", { class: "held-card", hidden: true, "aria-live": "polite" });
@@ -183,16 +183,15 @@ export class Hud {
   }
 
   /**
-   * The small connection indicator: "online" (testnet) or "offline demo" (mock). No
-   * network names or addresses are shown to the player; the address (if known) is kept
-   * in data-address for developers and tests only.
+   * The connection indicator: never shown to the player (no network names or addresses
+   * on screen). The network and the address (if known) are kept in data-network /
+   * data-address for developers and tests only.
    */
   setNetwork(network: "mock" | "testnet", address: string | null = null): void {
     this.netEl.dataset.network = network;
     if (address) this.netEl.dataset.address = address;
     else delete this.netEl.dataset.address;
-    this.netEl.hidden = network !== "mock";
-    this.netEl.replaceChildren(network === "mock" ? "offline demo" : "");
+    this.netEl.hidden = true;
   }
 
   setMuted(muted: boolean): void {

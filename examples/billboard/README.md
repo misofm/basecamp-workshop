@@ -38,9 +38,9 @@ git apply examples/billboard/billboard.patch
 cd apps/game && npm install && npm run dev
 ```
 
-In mock mode (`npm run dev`) mock records have no publish time, so the billboard shows the
-first record in the shop. On testnet (`?chain=testnet`, or `npm run stage`; see the game
-README) it shows the shop release with the latest publish time. Reading the catalog on testnet
+The game runs on testnet (`npm run dev` or `npm run stage`; see the game README), where the
+billboard shows the shop release with the latest publish time. (In the game's e2e test build,
+whose mock records have no publish time, it shows the first record in the shop.) Reading the catalog on testnet
 needs no keys; only buying and selling need the game's testnet keys in `.env.local`.
 
 ## Revert

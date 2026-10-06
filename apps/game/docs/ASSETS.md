@@ -114,12 +114,12 @@ draws a per-release SVG motif (seeded from the release slug, coloured from the
 release palette) with the artist name and title as text, and rasterises it with
 `sharp`. `scripts/organize-releases.ts` copied the 512 px PNGs to
 `releases/<artist>-<release>/assets/cover-512.png`; the game copies are
-byte-identical to those. In mock mode the game serves them locally; on testnet
-covers come from `https://cdn.miso.fm/v1/blobs/<blobId>?w=512&f=webp`.
+byte-identical to those. The MockAdapter (automated tests only) serves them
+locally; the game (testnet) loads covers from `https://cdn.miso.fm/v1/blobs/<blobId>?w=512&f=webp`.
 
 ## Real-audio test stream
 
-With `?mockhls=1` the mock adapter streams one real testnet quilt
+In the e2e test build, `?mockhls=1` makes the MockAdapter (tests only) stream one real testnet quilt
 (its quilt id is in `src/miso/mock-catalog.ts`; aac-96 HLS, 141.11 s) from
 `cdn.miso.fm` for every track. Without that flag all deck audio is the
 procedural synth loop (`src/audio/synth.ts`); sound effects (`src/audio/sfx.ts`)

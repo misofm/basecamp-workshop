@@ -1,5 +1,5 @@
 /**
- * Live Sui TESTNET constants for the TestnetAdapter (lazy chunk: only loaded with ?chain=testnet).
+ * Live Sui TESTNET constants for the TestnetAdapter (lazy chunk: loaded on the first adapter call).
  *
  * Owns: endpoints, coin/record types, package ids (Miso records from the published
  * @misofm/platform deployment map; the permissionless FakeUSD faucet), timeouts, the ATM

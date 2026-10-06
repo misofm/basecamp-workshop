@@ -1,6 +1,6 @@
 /**
  * State safety: the nasty sequences from docs/STATE-MODEL.md §2-3 in a real build,
- * mock chain only. Black-box: keyboard / DOM plus the public `__game.state()` slice,
+ * MockAdapter (e2e test build) only. Black-box: keyboard / DOM plus the public `__game.state()` slice,
  * so these survive a rewrite of the controller internals.
  *
  * Each game start costs ~1 min on SwiftShader, so scenarios that share a setup share a
@@ -74,7 +74,7 @@ async function simulateHidden(page: Page, hidden: boolean): Promise<void> {
 }
 
 test("double confirm: Pay (Enter Enter, dblclick), Withdraw and Sell each happen once", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=600");
+  await startGame(page, "?latency=600");
 
   await test.step("Pay: Enter, Enter with no wait → one Record, 88.00", async () => {
     await teleport(page, SHOP_INSIDE);
@@ -154,7 +154,7 @@ test("double confirm: Pay (Enter Enter, dblclick), Withdraw and Sell each happen
 });
 
 test("pending purchase: Esc keeps it running; hand, door, Reset and U stay safe until it settles", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=400");
+  await startGame(page, "?latency=400");
   await teleport(page, SHOP_INSIDE);
   await pickUp(page, RECORD);
 
@@ -234,7 +234,7 @@ test("pending purchase: Esc keeps it running; hand, door, Reset and U stay safe 
 });
 
 test("tab hidden during a purchase; window blur releases held movement keys", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=2500");
+  await startGame(page, "?latency=2500");
   await teleport(page, SHOP_INSIDE);
   await pickUp(page, RECORD);
 
@@ -284,7 +284,7 @@ test("tab hidden during a purchase; window blur releases held movement keys", as
 });
 
 test("lost answers: purchase and sale retried after a timeout are charged / paid once", async ({ page }) => {
-  await startGame(page, "?chain=mock&latency=500");
+  await startGame(page, "?latency=500");
   await teleport(page, SHOP_INSIDE);
   await pickUp(page, RECORD);
   let recordId = "";
@@ -351,7 +351,7 @@ test("loading screen eats keys; no smash mid-sale; exit beat refuses menus and r
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     (page as any).__errors = errors;
-    await page.goto("/?chain=mock&latency=400");
+    await page.goto("/?latency=400");
     await expect(page.locator(".intro")).toBeVisible({ timeout: 60_000 });
     for (const key of ["KeyE", "Space", "KeyC", "KeyH", "KeyU", "KeyW", "KeyI", "Escape"]) await page.keyboard.press(key);
     await page.waitForFunction(() => document.documentElement.dataset.gameReady === "true", null, { timeout: 60_000 });

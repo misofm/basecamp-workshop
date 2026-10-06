@@ -85,9 +85,9 @@ waypoint points at the ATM.
 - Top-left: **MISSION** label + objective (≥ 22 px, outlined white).
 - Top-right: money counter `FUSD 100.00` (≥ 40 px), animates over ~1 s, flashes green
   up / red down with a floating delta; pending spinner ("Ringing it up…", "Closing the
-  deal…", "Withdrawing FakeUSD…"); a tiny dot + "online" (testnet) / "offline demo" (mock)
-  indicator (no address; it is only in `data-address` for developers); mute badge.
-- Intro: dusk card (see step 0): kicker + the same small indicator, the intro text, the
+  deal…", "Withdrawing FakeUSD…"); mute badge. No connection indicator is shown (the game is
+  always on testnet; the address is only in `data-address` for developers).
+- Intro: dusk card (see step 0): kicker, the intro text, the
   pitch, loading lines "N records in the crates" and "Cash: 100.00 FUSD".
 - Bottom-left: circular north-up minimap (roads, buildings, shop highlighted, ♪ deck,
   $ counter, ★ Stonks, ¤ ATM in TriMart, ⌂ hotel door (only once the exit beat is open),
@@ -107,8 +107,9 @@ player but never the render loop.
 ## Onstage rehearsal
 
 - `npm run build && npm run preview`, desktop Chrome, real projector resolution.
-- `?latency=1500` makes the pending states readable from the back of the room;
-  `?fail=purchase` (then reload without it) demos the error path; `?fail=withdraw` does
-  the same for the ATM.
-- Reload the page (or H → Reset demo) to reset the mock chain (balance 100.00 FUSD); that
-  also resets the exit beat.
+- The game always runs on Sui testnet (keyed build, see README "Sui testnet"); there is no
+  offline mode. The pending states and errors are real testnet timings and failures.
+- Reload the page (or H → Reset demo) to reset the exit beat. The testnet wallet keeps its
+  balance and collection across reloads.
+- The error / Retry paths with injected failures (`?fail=`, `?latency=`) exist only in the
+  e2e test build (MockAdapter, `vite build --mode e2e`), not in anything you rehearse with.

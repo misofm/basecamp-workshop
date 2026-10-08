@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "hrNfVq40dDSA-LCX-8TwuABzFXQ8SDgb8HmxM6pUfvQ"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-woodsmoke.flac",
+      "master": {
+        "blobId": "-FHiFP8DwMnvhgUznLbUhcGDBZxopJ8ATOh3aCwuOf0",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "dd97a5d04e9dd86703f6c18362b415f8c76fd6d2bcd7e56b0bcb9649258dc811"
+      },
+      "stream": {
+        "quiltId": "PRRNg2f6R0tlWVvWi8vOtbipQ513jm5mc9XNJFPOc-8",
+        "transcodeDigest": "86aafb0f8a1cd0879f93c5ee2f3ac47be043f8b99bf921352f962edb80a2e5ae",
+        "packageDigest": "b8b0da5c6a15fb8d0e089fe64179fb34213d82e091841fe4459526847644f5fd"
+      }
+    },
+    {
+      "file": "audio/02-river-names.flac",
+      "master": {
+        "blobId": "yzlcqAmDHWEHakr8nhzxWTCIL3fwNjRPvOUGMXaSmnk",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "f1b6359b450d6807fb06e4aa9bec637ba69360b16da10384f3e67300761fb23c"
+      },
+      "stream": {
+        "quiltId": "B5t7GuDOY0m-XD6OhGZxTnVP34ynf5fCRl4Drn1TTeI",
+        "transcodeDigest": "a4dc324085938cef1246fce2690a841251c0e07f1d72e143b44654c51fb2d30a",
+        "packageDigest": "4fd624470d91fbf59a5064b290a22801339ce0abef2ba44b0c31d40bd170009b"
+      }
+    },
+    {
+      "file": "audio/03-stove-light.flac",
+      "master": {
+        "blobId": "obIHKXCna5LbVr3d1w9K9WRfc_WgSwntrlx5m144B2E",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4851712",
+        "pcmDigest": "1fd6840066b315cfde71c4b004ec8fef6a0795f8719ff550e4dc998e900b66fb"
+      },
+      "stream": {
+        "quiltId": "uj31ZP9FzolC6GPLlOJbtxjgPIx7wpl3WLGhVGl9_Zw",
+        "transcodeDigest": "a8a8f413b659a0d573f40b1e5941c17960345a7825fe0a378d4eff95465b9246",
+        "packageDigest": "d40610759d1735cae8b475c80b6b687d95585337bc13fb937f928a6ed4a2c520"
+      }
+    },
+    {
+      "file": "audio/04-northbound-train.flac",
+      "master": {
+        "blobId": "QbypvDHJ-GJ9f9skTmzJ1NhAqLcJdp0UVVWUEue-vBw",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "0eaab10de6899f76bb4969e87cdbf9dc71d4e27921f4232b376f954ead77c1ba"
+      },
+      "stream": {
+        "quiltId": "A0utvqM39lgTJEMMaRwGLWKjDT07rM4vx515bwCELuA",
+        "transcodeDigest": "5c1ab5f6d81530d2dc79d031078dd42d9823fe1a0a9b4aeefe797b864fe8e74f",
+        "packageDigest": "4971515ef05469d6048c45ee0bf519361ae2cefa026ebf19d47639badcbecdd7"
+      }
+    },
+    {
+      "file": "audio/05-embers.flac",
+      "master": {
+        "blobId": "u6MRZ_v7--FJgimezK4d7phP9uosvkoVDmXD-WSA-cs",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6395904",
+        "pcmDigest": "f3f2ab6b0e3ec079baa2ce91389eddbe2d125b1a6d26e8c34b12d4c78106b095"
+      },
+      "stream": {
+        "quiltId": "PTEAyBIi5HBFrfEyzCz5e4P5qVsm4oDYKgr74JuhLqc",
+        "transcodeDigest": "ed9b9219713ae12e1c57f94b52afb91cec27dadc1a09ff5d81896d3b1aa15ee2",
+        "packageDigest": "c6d7da0bd2f9ca790d150dc29a2b0faf632d3d25b2047c439c1d6cff8aff3e93"
+      }
+    }
+  ]
+}

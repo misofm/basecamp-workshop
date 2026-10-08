@@ -1,0 +1,141 @@
+basement-choir-warehouse-gospel — Warehouse Gospel (5 tracks)
+  manifest   ✓  5 tracks, "Warehouse Gospel"
+  parties    ✓  7 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 12:00 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  DANCE, GOSPEL, ELECTRONIC
+  pressing   ✓  18.00 FakeUsd fixed (18000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 42 credits, 7 parties
+
+harbor-lights-low-tide-tapes — Low Tide Tapes (5 tracks)
+  manifest   ✓  5 tracks, "Low Tide Tapes"
+  parties    ✓  5 credited, from ../parties.json; unused: neon-cartography, juniper-and-coal, selene-ok…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 10:00 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  HIP_HOP, ELECTRONIC
+  pressing   ✓  12.00 FakeUsd fixed (12000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 31 credits, 5 parties
+
+juniper-and-coal-kindling — Kindling (5 tracks)
+  manifest   ✓  5 tracks, "Kindling"
+  parties    ✓  6 credited, from ../parties.json; unused: harbor-lights, neon-cartography, selene-okafo…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 11:00 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  ALTERNATIVE, COUNTRY
+  pressing   ✓  10.00 FakeUsd fixed (10000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 41 credits, 6 parties
+
+kiko-arai-summer-static — Summer Static (5 tracks)
+  manifest   ✓  5 tracks, "Summer Static"
+  parties    ✓  5 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 10:50 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  POP, DANCE
+  pressing   ✓  15.00 FakeUsd fixed (15000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 30 credits, 5 parties
+
+moss-protocol-field-notes — Field Notes (5 tracks)
+  manifest   ✓  5 tracks, "Field Notes"
+  parties    ✓  5 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 12:00 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  ELECTRONIC, SOUNDTRACK
+  pressing   ✓  8.00 FakeUsd fixed (8000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 31 credits, 5 parties
+
+neon-cartography-night-drive-atlas — Night Drive Atlas (5 tracks)
+  manifest   ✓  5 tracks, "Night Drive Atlas"
+  parties    ✓  7 credited, from ../parties.json; unused: harbor-lights, juniper-and-coal, selene-okafo…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 11:15 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  ELECTRONIC, SOUNDTRACK, POP
+  pressing   ✓  15.00 FakeUsd fixed (15000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 42 credits, 7 parties
+
+palomino-static-sun-bleached — Sun Bleached (5 tracks)
+  manifest   ✓  5 tracks, "Sun Bleached"
+  parties    ✓  6 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 10:10 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  ROCK, ALTERNATIVE
+  pressing   ✓  10.00 FakeUsd fixed (10000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 41 credits, 6 parties
+
+selene-okafor-lagos-after-dark — Lagos After Dark (5 tracks)
+  manifest   ✓  5 tracks, "Lagos After Dark"
+  parties    ✓  5 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 11:05 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  POP, R_AND_B, DANCE
+  pressing   ✓  18.00 FakeUsd fixed (18000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 29 credits, 5 parties
+
+subway-prophet-third-rail — Third Rail (5 tracks)
+  manifest   ✓  5 tracks, "Third Rail"
+  parties    ✓  4 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 11:15 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  ELECTRONIC, DANCE
+  pressing   ✓  12.00 FakeUsd fixed (12000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 26 credits, 4 parties
+
+the-velvet-index-blue-hours — Blue Hours (5 tracks)
+  manifest   ✓  5 tracks, "Blue Hours"
+  parties    ✓  7 credited, from ../parties.json; unused: harbor-lights, neon-cartography, juniper-and-…
+  files      ✓  5 masters + cover present
+  titles     ✓  5 unique
+  audio      ✓  FLAC 44.1 kHz/16-bit, STREAMINFO only, 11:15 total
+  true peak  ✓  max -4.0 dBTP over 5 tracks (target -4.0)
+  cover      ✓  WEBP 1600x1600
+  media      ✓  media uploaded earlier: cover + 5 masters + 5 streams, blob ids match the local files
+  splits     ✓  equal: 2000 / 2000 / 2000 / 2000 / 2000 bps
+  genres     ✓  R_AND_B, CLASSICAL
+  pressing   ✓  20.00 FakeUsd fixed (20000000 base units), 250 editions
+  intent     ✓  5 compositions, 5 recordings, 51 credits, 7 parties
+
+verify: 10 packages — 10 ready (0 errors, 0 warnings)

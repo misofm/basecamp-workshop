@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "yEToVBRQRRhv09KLwNw5St-86TEpNGexbA_QQuQ-PeQ"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-ferry-at-dawn.flac",
+      "master": {
+        "blobId": "YzRssQh7KGye_PaHFFIN3Cx7rkm3cRBhw-jmdUWVFI0",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "e8c11a5f078c48886e104d83f7579fee3771f0926ac47d4c0d0dded7a818ca0f"
+      },
+      "stream": {
+        "quiltId": "BMyBrdoPS3eYKVCEL2i3y5awvzkQvHhb2yeXjgIbi5I",
+        "transcodeDigest": "52e6944a83491459d4da59bff172bb2e864feb0951da6fe952dbc9e4e5a1ce33",
+        "packageDigest": "3aef119ac1b4c680a9af27193ed0e4cd3abeac11c045939c9ccfe8da559af335"
+      }
+    },
+    {
+      "file": "audio/02-salt-on-the-window.flac",
+      "master": {
+        "blobId": "XPwUk7KolePz1j9z2kJ3_ZMCBFO8Wf-oi8BkS8cVus0",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "4849664",
+        "pcmDigest": "80b45209346e5af8c1148d9f91b46955ced27c497afe3c0099acfb8d876644d0"
+      },
+      "stream": {
+        "quiltId": "KLZ_FcFx4Keg5JXRxmfqOTvKovKMu8o9IJYkK_zTIDY",
+        "transcodeDigest": "1e408ac2117fe772e938ffb32c740db842dac4b84600fd680d0eec93d54d3c54",
+        "packageDigest": "64b43bfbfeaa5dba9da6a0409ec8027a8bd90bf79a18e70247bf7807f0ae58f8"
+      }
+    },
+    {
+      "file": "audio/03-pier-lamps.flac",
+      "master": {
+        "blobId": "hNsvKPRwtjFqAYt8ksOBIxeWLkn9JOppOC4YEImM0ME",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5511168",
+        "pcmDigest": "64c2b1779dedf1f95bf0e8d7c84c7d3d92f0c4cfe499569c670002553ec60387"
+      },
+      "stream": {
+        "quiltId": "VtW7W-wdj5W-4O2zvuVJA50YB7Zay4slJwd-jzLPnk8",
+        "transcodeDigest": "159b78456eb348369c6ebb2f7677e5b632c2fd5b3c70418146dc79b770d3ab22",
+        "packageDigest": "6e096ad8478d00621e7648322f14499a74a25684f904e377b7fdf31cd186946c"
+      }
+    },
+    {
+      "file": "audio/04-slow-current.flac",
+      "master": {
+        "blobId": "t89BkR98jCyTHSnhvJyKIlelyz9wQGMDqsLj_GqbD5Y",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5072896",
+        "pcmDigest": "7379b44f6c2e67cf351e37a582cb59d77002cd9e23850706ae426c8c46285ee3"
+      },
+      "stream": {
+        "quiltId": "5ut9mxIqCSKFoN1iwuhYDgl0iI_kMh2Hexj8gzl7LQ8",
+        "transcodeDigest": "a89eb864b8d285d6eae3d53af09ca25278c6bc891eeca7a89453c15a60ec29c9",
+        "packageDigest": "13e3230c6a3e645153941618e2604e6428801de844a3dd5a957d2a44ad23f754"
+      }
+    },
+    {
+      "file": "audio/05-last-ferry-home.flac",
+      "master": {
+        "blobId": "t0nBa3Uvqs00f1nKC41m3N_-q_SCoi6NxAcnIXj5dxw",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "c447c7a3fdb1fe38e165e9c14ded6015a033ef751153283fd391e66f11400787"
+      },
+      "stream": {
+        "quiltId": "2k3XbFIhhj8v1vfGB-I4f5l4_Jz1C-SEprHveH7TpRE",
+        "transcodeDigest": "d70b6d8793dbc2390f98904c7642c557128042432faffee536b86374fe108a40",
+        "packageDigest": "75d7bfbe1f8776879747a8c4a0e192a41d4bd65900dcdf67beacdee9284c7bdc"
+      }
+    }
+  ]
+}

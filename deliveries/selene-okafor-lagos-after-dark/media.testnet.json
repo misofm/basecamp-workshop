@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "sUMINvbxSZwrsb5p7_jmhCfi1oSNLxVwoFJGElmKrQU"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-rooftop-signal.flac",
+      "master": {
+        "blobId": "HWbWZhUwlvWh-eWyczjjzDhjPJTHXJTRdLSgzKh2r4M",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "77250d40535e9e941a08e3c36218517222a7fbde100f78c561b46a41cf44e59c"
+      },
+      "stream": {
+        "quiltId": "KMRwXaA9zc_xSQiQD0bZWA4LQncCqQ32EZeFLvVix2o",
+        "transcodeDigest": "1aedae07d96c53f948ecd951d82c259af1d464051333926ad06b8aff09588525",
+        "packageDigest": "3ea91947e9423890f9a5e165a20056a172ea2e7b5becaf1d49d79c2c7827795c"
+      }
+    },
+    {
+      "file": "audio/02-danfo-ride.flac",
+      "master": {
+        "blobId": "dn0fh9NIISsXrBSsEb8bKgd-V1NSnzbXKYxdAHY2YWY",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "de395cb687873e7685383ff5f97d71adac670f3a19edf74c1a8d2f2af697a4ac"
+      },
+      "stream": {
+        "quiltId": "99GZdKyEMcj4gjBAC1FWQUA9oRSYJ4juBb0iLwfMNCo",
+        "transcodeDigest": "ef840aa166437c7354dab7bf9e64b69f310202eee2077fce949dc49f372e3c22",
+        "packageDigest": "b8c78f3bd7c865040a30e3d84f14d86d2c631f5d5239b98ee24b6ca356f9a206"
+      }
+    },
+    {
+      "file": "audio/03-golden-hour-lekki.flac",
+      "master": {
+        "blobId": "aoTFu6YwrWWoX3SevT2e_XkWhUjNXaez5lo3WWpPMOU",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "93a4ac83645b7f203400f7b4c8109860141c314489bdc05cf65a98e28a1ab406"
+      },
+      "stream": {
+        "quiltId": "wcu-aXxzc0D56bW_wKfwXrw5FUCHwPVwK2LTi36dRZQ",
+        "transcodeDigest": "3d253a34d34dcafa7d9e20d2d468fe851c7861e0fc7f4e00ec363de687790637",
+        "packageDigest": "1cf5f709fb659e9644f4587213d418979b5ac3d22ef95851d4987795252b55c4"
+      }
+    },
+    {
+      "file": "audio/04-third-mainland.flac",
+      "master": {
+        "blobId": "epPQg7-RJ8I-zFgt8y7Wr8yr29wyoVZvPiy-zXnTJkc",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "8f97294b0c788376c33761682c52ae6486dec91499aca16f3176e9b4b25358f3"
+      },
+      "stream": {
+        "quiltId": "ci4JSURkbH8jms04wiW6u0r3lwf3RmW4LRPQC9Bnm0k",
+        "transcodeDigest": "d1da10a6f95840a72597da3f261bd3a1abf96f37ee5cc43836e8973494bc1a46",
+        "packageDigest": "b256e67b0444622ba7c88c2b35441266484ea7292682f31bae376f046420e369"
+      }
+    },
+    {
+      "file": "audio/05-taxi-home.flac",
+      "master": {
+        "blobId": "Bn3txxhAX-dmWVKcMAwxcC97ES9iaHEoWU5r1aiVHKk",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "3f4a55bb322592ddc3dff7d88fa2c1fd5880d756b9c28226a79f3e47325562bb"
+      },
+      "stream": {
+        "quiltId": "0xETmGpN1TRYECG7YKcjk4PcPD74AZkQzQ7FolnJ5ps",
+        "transcodeDigest": "ba3f8c5b6197ffc59daf2493c858b4beac2ef6a8bb0fdd570364a40f94a52fe9",
+        "packageDigest": "8de45996afc5a4ab2871a58163aef79f877852ad346d5d9820510ea1c3701c99"
+      }
+    }
+  ]
+}

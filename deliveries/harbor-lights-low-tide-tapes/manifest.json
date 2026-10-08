@@ -1,0 +1,341 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Low Tide Tapes",
+    "kind": "ExtendedPlay",
+    "description": "Five tape-saturated beats recorded between ferry crossings.",
+    "genres": {
+      "primary": "HIP_HOP",
+      "secondary": [
+        "ELECTRONIC"
+      ]
+    },
+    "credits": [
+      {
+        "party": "harbor-lights",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-ferry-at-dawn.flac",
+      "title": "Ferry at Dawn",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "harbor-lights",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-salt-on-the-window.flac",
+      "title": "Salt on the Window",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "harbor-lights",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-pier-lamps.flac",
+      "title": "Pier Lamps",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "harbor-lights",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-slow-current.flac",
+      "title": "Slow Current",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "harbor-lights",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-last-ferry-home.flac",
+      "title": "Last Ferry Home",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "harbor-lights",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "mara-quinlan",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "12.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

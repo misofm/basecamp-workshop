@@ -1,0 +1,417 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Night Drive Atlas",
+    "kind": "ExtendedPlay",
+    "description": "A retro-futurist road map drawn in analog synths and gated reverb.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "SOUNDTRACK",
+        "POP"
+      ]
+    },
+    "credits": [
+      {
+        "party": "neon-cartography",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-interstate-zero.flac",
+      "title": "Interstate Zero",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "neon-cartography",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-chrome-horizon.flac",
+      "title": "Chrome Horizon",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "neon-cartography",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kiko-arai",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Featured"
+              }
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-grid-runner.flac",
+      "title": "Grid Runner",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "neon-cartography",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-motel-pool-glow.flac",
+      "title": "Motel Pool Glow",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "neon-cartography",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-dawn-off-ramp.flac",
+      "title": "Dawn Off-Ramp",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "neon-cartography",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "dex-moreau",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "ines-varga",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "15.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

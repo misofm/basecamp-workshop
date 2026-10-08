@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "iJdIFik2yxA0Z4oeGL27wpqRrje0ul7ZGqptG_v0g1Y"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-lichen.flac",
+      "master": {
+        "blobId": "G3gA-iRMdwp7gt-TuGR8HdzD7WPX0i0aN0e_raPeBAs",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6615040",
+        "pcmDigest": "23053d61a9ec96b18dca1d495e4989e26ac7ca7eb06ae95f77242049f07db28f"
+      },
+      "stream": {
+        "quiltId": "514xejOyrCjEvs2dvG-tYulee3M6U6WwOAIfHBcaGfE",
+        "transcodeDigest": "bf7fee575392fac9f37131548c9408ce781388005810af4707a5b4f718fba4b3",
+        "packageDigest": "40e8ea281b31af126241c3378bb77a3b3fcd0b36a4a6e5492e31f193651dc8a0"
+      }
+    },
+    {
+      "file": "audio/02-canopy.flac",
+      "master": {
+        "blobId": "0ReB7P74CIv8ZfNxOvKCZIuXOqO9u8CJ5T3_3xi1L5Q",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "98559e0a3e011ab5ed1eb9341ab54a29b9cf32f5fbd448e1624a85d6a0380c47"
+      },
+      "stream": {
+        "quiltId": "6HaUfwNsMxvuLDluZgI3ZbLxw2GWDS-M2fPs6pt2yNs",
+        "transcodeDigest": "f9bcab9de218d4cf9b47b9b5c1e6c0ead05c928473edf0e88b0e12f16940d14a",
+        "packageDigest": "50595c3a24b7eafd2d127eb5d337b918151e2e3c6fc77e2ac3cdcc86d44f5571"
+      }
+    },
+    {
+      "file": "audio/03-understory.flac",
+      "master": {
+        "blobId": "PeX6eVpXtijI4DSOnAyGh1T-I-tr6XN8iBTRzo9CujI",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "89fd9893b274d695e0aa13015f2d4a82199b0a7d0c46d8169ee4897f0c03a653"
+      },
+      "stream": {
+        "quiltId": "ps7Lwhjf0gcf_EQi4Tjr-UKRMRXjMDRo1vu7b_M9wqw",
+        "transcodeDigest": "4d9fdabd9e6a48c7c427c092908bd21ff395170cf00f56d68a06c21be761ff47",
+        "packageDigest": "096bf3eed74f7b3e45aeb51d39812b9f9d39c32606de7d85f546273e53a9ac96"
+      }
+    },
+    {
+      "file": "audio/04-mycelium.flac",
+      "master": {
+        "blobId": "qt-QeY6LWFiNqEnA26CxxA6ESb0OqMd6IZHa98zpeGg",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "4937ea2b430267822550b06eb6226452b9b648f22c411bfd4be635a5ff5c59c0"
+      },
+      "stream": {
+        "quiltId": "HLpFrEeYu62fZvKIMrREyWfNdM6CNLqEofWBP_9eOGY",
+        "transcodeDigest": "fdb0bb8c76c8a12ff3816a164634e8fb34862a88510c4615e449eea96aa06133",
+        "packageDigest": "4af50ba19a789998e87649decf456711556466f59664d3c9fd81dc85a5365dd3"
+      }
+    },
+    {
+      "file": "audio/05-clearing.flac",
+      "master": {
+        "blobId": "COJAqh0CKXDFJ0A-qqRMylQjeQ890ZTNhvSlZgEnjdI",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6612992",
+        "pcmDigest": "70b574e8e6d05fca61f91708b5014cd1c615de3da4f8f197aab99a9bb0124699"
+      },
+      "stream": {
+        "quiltId": "MOExAqEyUtJrjk8nGlArl8Wx-DxWGmHJZltj1xLjyJ8",
+        "transcodeDigest": "bfa8c4f01ef4f6300843085f45734ef3c24951a162118216cb6f541767619b95",
+        "packageDigest": "0d6609702ee1c0c758399b290b5e71f838eedaeeca584ac62d7bb2c9753d7c54"
+      }
+    }
+  ]
+}

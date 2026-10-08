@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "mhlnPtpxT-UliT7ggiq7M0TJcy3Dh2E5MIiV6pnbexA"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-after-hours.flac",
+      "master": {
+        "blobId": "26GR1H4bJHsIQWKL1_SaAD0UTzIp58rUnc3_HFwasas",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "e745b705798145e39876bed00d4cdf1d7c1fba637dde64adb7515a9ac5c353aa"
+      },
+      "stream": {
+        "quiltId": "nFwVIvmtyHEQRS-Ss0Jy4LhLKdZKxaU6wxA_jmHg5Kk",
+        "transcodeDigest": "0c3fae78f1e424856fa9c9b68560b0eaba4b3419e81c4587d351a950065a0064",
+        "packageDigest": "b49c80e27d6be8ebea96ff8f7820df5909c639338e76b5bbe2567a63e8da0edf"
+      }
+    },
+    {
+      "file": "audio/02-velvet-rope.flac",
+      "master": {
+        "blobId": "t8wOUqTgnNVpj3S8ZiOdfpv4Es678Yy62j-N5JTbFdI",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "964861eb0192d523a3da79e6833ea923b5ccd6dcfd0d1fc7b479cab451703ee2"
+      },
+      "stream": {
+        "quiltId": "rogUU81dvRdCOsqfQQQ3vlyKSPbMWWHvkI0Xwi0l_mM",
+        "transcodeDigest": "c8a47a094bcab5c4193b040bebc255cb83b246e84f720c0598eda8e6ef70d30d",
+        "packageDigest": "2cf3d2f363b97ee252c175c38fb1acc1509388fb0a9dd2ea1b6e972968a76e38"
+      }
+    },
+    {
+      "file": "audio/03-uptown-transfer.flac",
+      "master": {
+        "blobId": "-7GwuQapAg-evKVDatZuedQJylE_mtWlfl6y4P8kbIk",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "6e53595009341e0e95f46892dba6c5d337f1a71112d27f3dbb3257cd15d2fdf0"
+      },
+      "stream": {
+        "quiltId": "s9dpdWZUTDW4d1LVMcYGHY_twGGbC2hun1x3l1GvtlI",
+        "transcodeDigest": "122e8398c99a70e95a9d1d567bdd2fb25d9684d943f86fa6eaa138cb73138758",
+        "packageDigest": "4eb1473d430634a005253f0954cf6e8af49fe83445afa4c93e453547c5f60a63"
+      }
+    },
+    {
+      "file": "audio/04-rain-check.flac",
+      "master": {
+        "blobId": "nkFYA4PJjRosCQzjFhPAWFDkbPyCyzjNF-2gcTZZXA8",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "024039a09b977f56964d93e2aeb1e19021cb36add40243a4792c923c278a8892"
+      },
+      "stream": {
+        "quiltId": "1oupUgKOyKxD4xPg1acuRQZVpA5c9vTSxNt4XqljPS8",
+        "transcodeDigest": "efb58d1175e329bc651f0680d08b2f86b891bfd3042f4b030b9f47d962a3b79d",
+        "packageDigest": "a408abad9137b2a6d96b28cf589d25b2b68148c30f348037dacbe010094fd9c9"
+      }
+    },
+    {
+      "file": "audio/05-last-call.flac",
+      "master": {
+        "blobId": "e8u4udExly2KkYuwuK3BHbkmMod_9FknNvEMXQchnpU",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6395904",
+        "pcmDigest": "c227faa1a04e4db8b6c348b2d8cf66f1bd0a8aa9344defad5936123a8b7d13b3"
+      },
+      "stream": {
+        "quiltId": "cibzQIVeO449EXWiK80zniP45wHhky90gmW3ALzDLfw",
+        "transcodeDigest": "dae56e66936739272037497f0d2d693d741de6b981bb62c0b95763be633d56cf",
+        "packageDigest": "c1c98d5efa94a641862415209af11276059b75a2fed5227e1817c5de8970bb01"
+      }
+    }
+  ]
+}

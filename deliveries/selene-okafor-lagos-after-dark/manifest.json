@@ -1,0 +1,348 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Lagos After Dark",
+    "kind": "ExtendedPlay",
+    "description": "Late-night Afrobeats and Afro-house for rooftops and taxis home.",
+    "genres": {
+      "primary": "POP",
+      "secondary": [
+        "R_AND_B",
+        "DANCE"
+      ]
+    },
+    "credits": [
+      {
+        "party": "selene-okafor",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-rooftop-signal.flac",
+      "title": "Rooftop Signal",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "rio-takeda",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-danfo-ride.flac",
+      "title": "Danfo Ride",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-golden-hour-lekki.flac",
+      "title": "Golden Hour",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "rio-takeda",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-third-mainland.flac",
+      "title": "Third Mainland",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-taxi-home.flac",
+      "title": "Taxi Home",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "rio-takeda",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "18.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

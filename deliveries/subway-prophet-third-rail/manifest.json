@@ -1,0 +1,295 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Third Rail",
+    "kind": "ExtendedPlay",
+    "description": "Liquid and jump-up drum & bass recorded under the city.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "DANCE"
+      ]
+    },
+    "credits": [
+      {
+        "party": "subway-prophet",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-platform-nine.flac",
+      "title": "Platform Nine",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "subway-prophet",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-mind-the-gap.flac",
+      "title": "Mind the Gap",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "subway-prophet",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-signal-failure.flac",
+      "title": "Signal Failure",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "subway-prophet",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-night-bus.flac",
+      "title": "Night Bus",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "subway-prophet",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-end-of-the-line.flac",
+      "title": "End of the Line",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "subway-prophet",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "omar-reyes",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "12.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

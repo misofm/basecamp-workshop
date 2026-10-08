@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "Uh0ZuunQI4_xkp-wavw_YjC7CBp3bPNX3tP8N-uc87Q"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-coastline-fm.flac",
+      "master": {
+        "blobId": "J-iGNJLzBiPGDYkKByUJKRwFh9RLX8_RLH9N2rbqMN4",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5951488",
+        "pcmDigest": "50245cdc4a45a3b1eff8a8f2c0c43d932e57c6762ac7cf1ca5dc2b8b8998a85d"
+      },
+      "stream": {
+        "quiltId": "Vy3RBEhAH2JSon8mR7UU-KV3jAZ0DcAH0BZJsyya3Do",
+        "transcodeDigest": "060e8d541e27476c4bd03ed86a7fffc4f6c537341eece589d511036525487806",
+        "packageDigest": "ca2f9524038fda61bdecc44e698a2c80e8252fae1cfdf4e8bb9ffadebd7523ae"
+      }
+    },
+    {
+      "file": "audio/02-late-train.flac",
+      "master": {
+        "blobId": "5uHLMeR4cvYIO9Iqt5Vo2X2wom8uKNjb9BtY7YlYa1I",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "a0114503140dd5b4639c53c434b178548785072e01d02739558ef622285b847d"
+      },
+      "stream": {
+        "quiltId": "Tvp_AVuB_yF12OAbc9GtJ6iwSrQRIvOQJmtmg31f18Y",
+        "transcodeDigest": "a951352f75a54f0f457f21dde1b7629d4ba2b7a3c1ecf6f0341d0949338ba4d3",
+        "packageDigest": "d76a68b97287d7613929b6ed22a8e307bc535eba03d6eca3fec2cc6c6d9788a9"
+      }
+    },
+    {
+      "file": "audio/03-polaroid-sunset.flac",
+      "master": {
+        "blobId": "tOrOhe5rf6rYz-Y4cJGJbmsomSbJoW4g9P_xXl-7L7A",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5294080",
+        "pcmDigest": "50ccb47efc1d75cd8fa37b23c041f405cfd0b92e9c26a2fda0c3f8656056ebf6"
+      },
+      "stream": {
+        "quiltId": "_H-6qSjum5pFhWkrLpC0v_aXOcMKkYSH4g1HefA3B88",
+        "transcodeDigest": "b1a0724d54f8d2463a847a5f376719b9fb60ebd276ff2b2b9a8c5926da181bf4",
+        "packageDigest": "d6ddeca519564e8f3e6983390be643b12ed758eadaf7fea95aeef5f87e3990f2"
+      }
+    },
+    {
+      "file": "audio/04-vending-machine-love.flac",
+      "master": {
+        "blobId": "duIKljC3eVh1D7dt4to8ohtAmQ7_Bsap7JKFxTCHXP8",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "d732d66ab3ae93a873ee3f19f912f7bdada26f778af2b28806fe0998ad0d0781"
+      },
+      "stream": {
+        "quiltId": "YetDjZhY3SyhxJ14r3PUVfJoewBy8mRExNLVENB6w48",
+        "transcodeDigest": "d9c66db35a438b04e5a3c9ef45f7fccae184ea4036d3c92dfaace557a2786fe9",
+        "packageDigest": "ff5cda254960f4b718a323591bf280a3ba20f3e58e61c70208f603830bb241b0"
+      }
+    },
+    {
+      "file": "audio/05-cassette-rewind.flac",
+      "master": {
+        "blobId": "VAR23cI8vBIM-te3J9hj3Eyz3CuwGarJyDVa4C4oCao",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "6ab90b537b7f0b405ce70134e8924420e2decb8c0fd795e3b6836fa85594ad9b"
+      },
+      "stream": {
+        "quiltId": "iD3tRiMVMhF6ZCh_Thmvuu-jjy7lbHdOvJl8PKe1-jo",
+        "transcodeDigest": "66c3502b001ef67669f4a8d1cad9018260f0fcdf950a467e2b51ce38a2118858",
+        "packageDigest": "c56750c4c03b8238e00388bf9efdbdfab1d45ceb70f672e59b12ee7fb9aa84f7"
+      }
+    }
+  ]
+}

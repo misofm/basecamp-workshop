@@ -13,3 +13,14 @@ keys/
 *.pcm
 .claude/scheduled_tasks.lock
 .claude/worktrees/
+
+# Apps built during the workshop (the prompts create them here)
+/examples/
+
+# Release packages: the FLAC masters are committed; publish state is not
+# (after a rehearsal publish, reset with: git clean -fdX deliveries/)
+!/deliveries/**/*.flac
+/deliveries/**/.miso/
+/deliveries/**/publication.testnet.json
+
+.claude/settings.local.json

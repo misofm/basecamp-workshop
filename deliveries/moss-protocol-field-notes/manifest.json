@@ -1,0 +1,341 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Field Notes",
+    "kind": "ExtendedPlay",
+    "description": "Generative ambience built from forest recordings and modular synths.",
+    "genres": {
+      "primary": "ELECTRONIC",
+      "secondary": [
+        "SOUNDTRACK"
+      ]
+    },
+    "credits": [
+      {
+        "party": "moss-protocol",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-lichen.flac",
+      "title": "Lichen",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "moss-protocol",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-canopy.flac",
+      "title": "Canopy",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "moss-protocol",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-understory.flac",
+      "title": "Understory",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "moss-protocol",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-mycelium.flac",
+      "title": "Mycelium",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "moss-protocol",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-clearing.flac",
+      "title": "Clearing",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "moss-protocol",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "wren-alder",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "chromefield",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "8.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

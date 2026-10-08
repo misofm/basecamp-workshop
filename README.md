@@ -7,53 +7,42 @@ a small record-shop game where the records you buy are real on-chain objects pai
 FakeUsd. Everything targets **Sui testnet**. Reading needs no account and no API key;
 anything that writes to the chain needs a testnet wallet with a little SUI for gas.
 
-The tools used throughout are public: [misofm/cli](https://github.com/misofm/cli) (the
-`miso` command) and [misofm/skills](https://github.com/misofm/skills) (agent skills and
-small scripts for Claude Code or any agent that reads `SKILL.md` files).
+## Follow along
 
-## What the workshop showed
+Everything the workshop does on stage works from this folder with [Claude Code](https://claude.com/claude-code):
+the skills it needs are in [`.claude/skills`](.claude/skills), and [`AGENTS.md`](AGENTS.md) tells the agent
+where things are.
 
-### 1. Publishing fresh music
+1. Install [Bun](https://bun.sh), ffmpeg (`brew install ffmpeg`) and Claude Code, then clone this repo.
+2. Start `claude` in the repo folder.
+3. Give it the prompts below, in order. The skills install the [`miso`](https://github.com/misofm/cli) CLI
+   the first time they need it. For the publishing step you need a testnet wallet: ask Claude to "create a
+   Miso wallet with the miso-wallet skill" (it writes `~/.miso/wallet.key`), then fund it with testnet SUI
+   from [faucet.sui.io](https://faucet.sui.io/?network=testnet).
 
-The catalog in this repo was generated, mastered, stored and published with the pipeline
-described [below](#how-the-catalog-was-made). Each release folder shows the three questions
-a release answers: what the music is (`release.json`), who is credited and paid
-(`release-config.testnet.json`), and where the audio came from (`generation.json`). The
-publication log (`publication-*.testnet.log`) shows the four transactions a publish takes:
-share packages, share init, and one atomic catalog transaction.
+### 1. Publish an artist's releases
 
-On stage, the presenter then built a single live in Claude Code with only misofm/skills and
-misofm/cli: generate a 30-second track, create a party for a new artist named by the room,
-publish it as a single with a 5 FakeUsd pressing of 50, and buy the first record. From a fresh
-wallet that takes about 2.5 minutes of commands and about 0.15 SUI of gas. The skills'
-`scripts/scaffold-single.ts` writes the two release files.
+[`deliveries/`](deliveries) holds what an artist hands over: 10 release packages with metadata, credits,
+covers, FLAC masters and a pressing each. Their media is already stored on Walrus, so publishing only
+creates the parties, the releases and their FakeUsd pressings on Sui (about 5 SUI of gas, about 5 minutes).
 
-### 2. Open music infrastructure, no API key
+> Check out the release packages in ./deliveries. Verify them with the verify-release skill, then publish them with the publish-release skill.
 
-The catalog is readable by anyone from a browser with no signup: discovery from Sui
-GraphQL (every object of the Release type), data from the open Miso API
-(`api.testnet.miso.fm`), media from the Miso CDN (`cdn.miso.fm`) with the public Walrus
-aggregator as fallback.
+To publish the same packages again, reset them first: `git clean -fdX deliveries/`.
 
-- [`apps/spa`](apps/spa/README.md) is the finished reference app: release grid, release page
-  with credits and 30-second previews, artist and collection pages, and a "How this works"
-  drawer that logs every public request it makes.
-- [`examples/live-mini-spa`](examples/live-mini-spa/README.md) is what was built live from a
-  one-sentence prompt during the session.
+### 2. Build a catalog app, no API key
+
+> Using the miso-read-catalog skill, build a single-page web app in examples/catalog that lists every Miso release on testnet with its cover and plays a 30-second preview of any track. No API key. New releases should appear without a reload. Keep it small: Vite and plain TypeScript. Don't write tests or browser-test it yourself; when it builds, start the dev server on localhost and give me the URL.
+
+[`apps/spa`](apps/spa/README.md) is the finished reference app: release grid, release page with credits and
+previews, artist and collection pages, buying with a Sui wallet, a FakeUsd faucet page, and a "How this
+works" drawer that logs every public request it makes.
 
 ### 3. Miso inside a game
 
-[`apps/game`](apps/game/README.md) is a third-person Three.js game: walk into a record shop,
-dig through crates of the ten releases, preview a track on the listening deck, buy a Record
-at the counter (minted to your wallet on testnet), smash a parked car with it, and sell it to
-a collector on the street for 1.5× what you paid.
-
-Two changes to the game were shown as patches you can apply yourself:
-
-- [`examples/billboard`](examples/billboard/README.md): a billboard outside the shop that shows
-  the newest release, read live from the Miso API. Built live on stage.
-- [`examples/second-collector`](examples/second-collector/README.md): a second street buyer who
-  pays 2× for HOUSE records. Shown from a prepared branch, because it touches more than it seems.
+[`apps/game`](apps/game/README.md) is a third-person Three.js game: walk into a record shop, dig through
+crates of the ten releases, preview a track on the listening deck, buy a Record at the counter, smash a
+parked car with it, and sell it to a collector on the street.
 
 ## What's on Sui testnet
 
@@ -103,23 +92,13 @@ FakeUSD comes from an in-game ATM that mints from the public faucet. The keys en
 built JavaScript, so a hosted keyed build must sit behind access control; see
 [apps/game/README.md, "Sui testnet"](apps/game/README.md#sui-testnet).
 
-### Explore the catalog with misofm/skills
+### Explore the catalog
 
-Clone [misofm/skills](https://github.com/misofm/skills) and work inside the checkout, or
-install it as a Claude Code plugin (see its README). Its scripts cover what the workshop
-did:
-
-- Catalog reads, no key: `bun scripts/releases.ts list | show <releaseId> | records <address>`.
-- A testnet wallet and FakeUsd: `bun scripts/wallet.ts new`, then SUI from
-  <https://faucet.sui.io>, then `bun scripts/fakeusd.ts 100`.
-- Music generation: `bun scripts/generate-track.ts "<prompt>" --seconds 30` (needs your own
-  ElevenLabs API key).
-- A single's release files: `bun scripts/scaffold-single.ts`.
-- Buying and moving Records: `bun scripts/buy-record.ts <releaseId>` and
-  `bun scripts/transfer-record.ts <recordId> <toAddress>`.
-
-Or ask an agent with the skills installed, for example: "Use the miso skills to list every
-release on Miso testnet and show me the credits for one of them."
+The skills in `.claude/skills` cover more than the workshop shows. Ask Claude in this folder, for example:
+"list every release on Miso testnet and show me the credits for one", "buy a record with the
+miso-record-shop skill", or "send that record to my friend's address". In a terminal, the `miso` CLI does
+the same: `miso releases`, `miso release show <id>`, `miso wallet`, `miso fakeusd mint 100`,
+`miso record buy <releaseId>`, `miso record transfer <recordId> <address>`.
 
 ## How the catalog was made
 
@@ -198,7 +177,9 @@ releases/           one folder per release (table above) + registry.testnet.json
 scripts/            the pipeline, new-key.ts and fetch-masters.ts
 apps/spa/           keyless catalog web app (React + Vite)
 apps/game/          record-shop game (Three.js), static, Sui testnet
-examples/           live-mini-spa, billboard.patch, second-collector.patch
+deliveries/         an artist's 10 release packages (verify and publish them in step 1)
+examples/           apps you build during the workshop (not committed)
+.claude/skills/     the Miso skills Claude Code uses in this repo
 keys/               your own testnet keys (gitignored; created by scripts/new-key.ts)
 ```
 

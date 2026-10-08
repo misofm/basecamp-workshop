@@ -1,0 +1,469 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Blue Hours",
+    "kind": "ExtendedPlay",
+    "description": "A piano trio caught live-to-tape after closing time.",
+    "genres": {
+      "primary": "R_AND_B",
+      "secondary": [
+        "CLASSICAL"
+      ]
+    },
+    "credits": [
+      {
+        "party": "the-velvet-index",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-after-hours.flac",
+      "title": "After Hours",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "the-velvet-index",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-velvet-rope.flac",
+      "title": "Velvet Rope",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "the-velvet-index",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-uptown-transfer.flac",
+      "title": "Uptown Transfer",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "the-velvet-index",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-rain-check.flac",
+      "title": "Rain Check",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "the-velvet-index",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-last-call.flac",
+      "title": "Last Call",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "the-velvet-index",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "theo-bramwell",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "rosa-lind",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "august-pike",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "20.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

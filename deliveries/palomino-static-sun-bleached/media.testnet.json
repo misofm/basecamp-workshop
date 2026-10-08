@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "-w9exU8l0F20S5q0xL88MdoZhlnqBDZXFPbhmzd83nY"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-riptide-rendezvous.flac",
+      "master": {
+        "blobId": "mUVbuoLXocto903WncB7Qtq7KVhqSf5381cLNrjTj3o",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "93225a29df74e1628f5b2333d8276e1383c308bfe4c0ba79627d30e130d6ea67"
+      },
+      "stream": {
+        "quiltId": "HHjPk7n3PH7VCPeFskr7aaKL9Rp91Ylamq5ytlhR6m4",
+        "transcodeDigest": "dc448334795e002a999efd6837ce304081de2011a8e10769e36eca15770c8e80",
+        "packageDigest": "d727fc1983d174f2b0f39c34ac3cacd85ccbbe49fe67dca2e6717e5fe601fa5a"
+      }
+    },
+    {
+      "file": "audio/02-boardwalk-heat.flac",
+      "master": {
+        "blobId": "4vpxIpRJ6tzzkZREiHvpQTsok4zOHyQl3M61gpjiw48",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "493eb9847ed7174a8946ebe89b96adaad62c9d86305d19da18a155c5e43390c4"
+      },
+      "stream": {
+        "quiltId": "cLN_-5n9sYkmqQLJE8jO3NeNwhD14djpjiT1blFAR7k",
+        "transcodeDigest": "f43e0200d4a947034575e3cbcf07835847a31170891db6140e1d96c78dd9dcf6",
+        "packageDigest": "6e9099a521f2a9ad59df313d776fb1b38f702bf063797ea35b1d5088c841038f"
+      }
+    },
+    {
+      "file": "audio/03-tiki-lounge.flac",
+      "master": {
+        "blobId": "SjVzMGUkDSRW77NsP5H7vSyhMaGovxjEGvIK26xpsAo",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5070848",
+        "pcmDigest": "ed40601b93b80ae04a0d0f311198c4c7a958633c6cc5106a103a596f83e617cf"
+      },
+      "stream": {
+        "quiltId": "zcA-_Cx6F2Pq6Y-SLGI_JcNzKhYkRDLa5csm-Hj6tMM",
+        "transcodeDigest": "d305a5d8680031b83e831ce82d15a597080cae4bcbe77ec2bc09919027910426",
+        "packageDigest": "5127cf003f42d0ef669244af23e2a4fe7d043cab012eba6c7be73de480442bf5"
+      }
+    },
+    {
+      "file": "audio/04-wipeout-weather.flac",
+      "master": {
+        "blobId": "il_tre9DSANDJZMZPvmlZBFcu9yFAMCG-gLv1uTGu7I",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5292032",
+        "pcmDigest": "c8577fe8f0e42a01a0415a79d312441314ddd5aa5867edd8f37561a61decc554"
+      },
+      "stream": {
+        "quiltId": "Ugs6SmoVHVKI7hyk4yH5jthClgrNzphFSyMcWlL1BAc",
+        "transcodeDigest": "4aece122023f2aa7b8664589887356d0e647557afc7992c8a7b9931c3960c440",
+        "packageDigest": "0fc3bd73d0c9b33b74db5a435009aa49c41bc0c83e834eeae1353c04fbacc3a9"
+      }
+    },
+    {
+      "file": "audio/05-salt-in-the-amp.flac",
+      "master": {
+        "blobId": "ZT8AfXGGS8yWcv-T0_ld7ZXiJmUgQ2RSTb4vyERmXcY",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5732352",
+        "pcmDigest": "67ae979d9e21987a6470004ba0686787375a9fe25fda7102b346477485b26851"
+      },
+      "stream": {
+        "quiltId": "4CjedSiBm0cUIHClT9EOG1EhLip2IlVNwqsbj-PfLQg",
+        "transcodeDigest": "66c631ee8f9c8165472c48c0946d4664d90ee3ae2acaf2ca205240f908709d46",
+        "packageDigest": "0177bc6b65488ab639fe229a8a1ca21f3a5bd411e65623d130a65920b2217db7"
+      }
+    }
+  ]
+}

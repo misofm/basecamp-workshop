@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "GAAz3MXLpxO4j7USOA9O6H20UO8q3VPlpeNgnY4zGts"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-lift-me-higher.flac",
+      "master": {
+        "blobId": "AwZJue-OSJy-7wXeAPQp-mmaCrJ0Gioqq8upfxsV-YI",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6612992",
+        "pcmDigest": "df3c535ff97e7b2de31789983a4f684b0f4c03bdaaa6499591cd845f5fd8ccb8"
+      },
+      "stream": {
+        "quiltId": "oMiFbm0YIUZ5imW1ODCvI3x1xRhfUX_FWA9sPt7Z16g",
+        "transcodeDigest": "ed7cc5cdfc4e4bcfd455d009d57d814f9a3aa75fd2d75dce236aeb2ed61fb5fe",
+        "packageDigest": "1e08c077903fcbfa66536f544970a4bb8bc6556fb80527a32b90a3db9370682b"
+      }
+    },
+    {
+      "file": "audio/02-concrete-cathedral.flac",
+      "master": {
+        "blobId": "IjQyEoxgolreq_vedvYLDn9q1S58KvRNyM7ErLt66Io",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "78277072fbc686699735da6972bb7be0d1262d3d53a1bdfc2c1f828026c58366"
+      },
+      "stream": {
+        "quiltId": "I8rEiWA2z1SaA7dCC-qM_tglQ9MOW5Oyq05Tj-IoQ4k",
+        "transcodeDigest": "ccfb9820da45b9320ddb2514eb54f8e8612ac246ac1d95ca88e793fae2a7ea7c",
+        "packageDigest": "5c2184dc94dc3e447ed8afb66d041cc97026c51086f12c18575c93396f33e3a2"
+      }
+    },
+    {
+      "file": "audio/03-sunday-at-sunrise.flac",
+      "master": {
+        "blobId": "qoKOQktfNidjYR1me_TaMCtWkryud76hlCKzGl05dt0",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6172672",
+        "pcmDigest": "f69d2e6a77ddbe56e6a987af7b645dd37d77d9cf168b0fb042816693443778b6"
+      },
+      "stream": {
+        "quiltId": "ggRpkq2201CDrMNtszGAt1jgg-A-5bq3xOCatYZ48yA",
+        "transcodeDigest": "44c70f28371fbf2d00acfcb155d47652be68af0bff3eb220519fde0e369c3fe4",
+        "packageDigest": "6c36bf629c49d84c79174b051d42b787971dab15b6a214b6f1324344569cf290"
+      }
+    },
+    {
+      "file": "audio/04-strobe-psalm.flac",
+      "master": {
+        "blobId": "01KhQMgWDwRDqr6iXhC4o_h9lcw_xIo-CPLbRDfh2es",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5955584",
+        "pcmDigest": "8ef54467b805464f4dac515f99939ac24867c800f81173cca2d58f45cd970b73"
+      },
+      "stream": {
+        "quiltId": "ohSfy8DMxFW2EBspTJiALkJ5v5y_8f2YrOKS-Mu2Q_4",
+        "transcodeDigest": "a878d02e36b350ec9f9c1f04dc5b4d545ba63bd797d9348b3c893648753c380a",
+        "packageDigest": "a0e43a528a681465bb72ea2a90335bbfb1b57d72502fc524f6e17e8a28508014"
+      }
+    },
+    {
+      "file": "audio/05-doors-close-at-six.flac",
+      "master": {
+        "blobId": "ROaU9wfahsikz13QEDYNMt2i9I9_g-SkVfTBArwcSzQ",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6615040",
+        "pcmDigest": "90248fbef09b0647b669793d2a53043f9e6e903701a35e611eec78def1999b9f"
+      },
+      "stream": {
+        "quiltId": "pJiLmJw5jFjwbuQXtecHvfbfZ_jVaFiBNW3Uf09vWSY",
+        "transcodeDigest": "ec01c0a5b5a8a1d84c48095a8ffbff6219cd2dd431d432a40c8b5a7b2f1b936c",
+        "packageDigest": "5f4f31ed5d04b97c87963439da1f102269fe9df3a718f36be14c111654a1fd21"
+      }
+    }
+  ]
+}

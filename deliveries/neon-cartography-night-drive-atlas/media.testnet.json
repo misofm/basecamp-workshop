@@ -1,0 +1,97 @@
+{
+  "format": "miso.release-media/1",
+  "network": "testnet",
+  "publisher": "https://publisher.walrus-testnet.walrus.space",
+  "endEpoch": 595,
+  "cover": {
+    "file": "cover.webp",
+    "blobId": "_X9UB0638UvDL7ADjV-TaXyx8cmEc11bq_C15nuDIbc"
+  },
+  "tracks": [
+    {
+      "file": "audio/01-interstate-zero.flac",
+      "master": {
+        "blobId": "hSSHvaUDkJkKpEyk9YbJo3SdZOZ4pVA50EO0ru6ldt0",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6174720",
+        "pcmDigest": "9e8fa97e5948232ad09e9e052b7240d85814f03c1e8d1ba34bba7ce4b9ac37a9"
+      },
+      "stream": {
+        "quiltId": "G6BHi4yVb9H5bnS2grUZ-bfQHcMCAmeeEuVL0n6rToA",
+        "transcodeDigest": "58544981a1d246d5ec735891fde3027b1a1a5e4c78335bc2cbae4b7906c55ea0",
+        "packageDigest": "84b818da858b7305767cf81b7a367b970e5ce71eb5f2c39d51043c65ea8a4d7d"
+      }
+    },
+    {
+      "file": "audio/02-chrome-horizon.flac",
+      "master": {
+        "blobId": "vzLd7epekTueKVuxxtWZMZjzFqXgTrtSgM3U_iowFkE",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5953536",
+        "pcmDigest": "e23ba366a357b8f8cc665c912caa466044d29eee4306fc6166129ff91cb70c95"
+      },
+      "stream": {
+        "quiltId": "GfRCTNi8_uace1msnCqe_oh9d7940AVmElkBDakJ0WQ",
+        "transcodeDigest": "056bab55cbc0c231b399f7ad94ab7f450475fa30aff96f5181b2d48a1375de3c",
+        "packageDigest": "654b9e9e4207853eb536242842c1ea32c379a2a26f36a9d5cdc3750f7ca99acf"
+      }
+    },
+    {
+      "file": "audio/03-grid-runner.flac",
+      "master": {
+        "blobId": "jfSEuUd_bEUjN7w1lhyxnDIHpdBDHwCmKf3sZVqrDvI",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5734400",
+        "pcmDigest": "919983b5c7c1608a4757588bb842854380ff6179129067714f1ea0491ccc523e"
+      },
+      "stream": {
+        "quiltId": "RdlUbWUzvNq_59y_GDJLAxkd5w0L2a0hqe-cQRQ492E",
+        "transcodeDigest": "365c86780bb030f103f714b9893cff0eb1dd9bb2b91ea290ac682353ee548c02",
+        "packageDigest": "a2b485920ec711da784b676d66ccc3080b33bb311f19db329d7f3d58a8a9c385"
+      }
+    },
+    {
+      "file": "audio/04-motel-pool-glow.flac",
+      "master": {
+        "blobId": "6vaW4tc3szJBpwiAEbEAiYoeOK-jQrmM7zMy52_7fMo",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "5513216",
+        "pcmDigest": "f471085244c0b39bf79bcb5ca88ff8d3e17568f6b1ebaa7caf3038b30ddf6e92"
+      },
+      "stream": {
+        "quiltId": "1yczX3X8iAN_yokEt8JVxhacnwDdqezNPbronSkcOYg",
+        "transcodeDigest": "01b217c64c873eebcfb3b797e99cb7077d0da15162122787706b48dd24921b9f",
+        "packageDigest": "9ed5a93b91f8ef6e62fd76af340a45737fc90854a1db1f1b5079bc04dd47ba9f"
+      }
+    },
+    {
+      "file": "audio/05-dawn-off-ramp.flac",
+      "master": {
+        "blobId": "XIMH3jz7KNmO8ki3M85MzEDob9zjl7ckRaXvsjj8XuE",
+        "format": "flac",
+        "channels": 2,
+        "bitDepth": 16,
+        "sampleRateHz": 44100,
+        "samples": "6393856",
+        "pcmDigest": "19d401ca2103f6b8d6de91075a4d4d976ab0266897ab6dd168944c0c8d2931d4"
+      },
+      "stream": {
+        "quiltId": "7ng-erxig3M8UKAuKj1ALExDu4WRDwU4se84OBR88Go",
+        "transcodeDigest": "8fd3ea97d20d44a0b0b46efb82a6baab5a7c7538082f9aa2f91c7cdade54d977",
+        "packageDigest": "48f44706e097d047bb342ffb327f4a3ad5e39e54ea3a5cddff37f91e3f953e09"
+      }
+    }
+  ]
+}

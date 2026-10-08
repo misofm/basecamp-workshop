@@ -1,0 +1,425 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Kindling",
+    "kind": "ExtendedPlay",
+    "description": "A duo's cabin record: two voices, two guitars, one woodstove.",
+    "genres": {
+      "primary": "ALTERNATIVE",
+      "secondary": [
+        "COUNTRY"
+      ]
+    },
+    "credits": [
+      {
+        "party": "juniper-and-coal",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-woodsmoke.flac",
+      "title": "Woodsmoke",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "juniper-and-coal",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-river-names.flac",
+      "title": "River Names",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "juniper-and-coal",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-stove-light.flac",
+      "title": "Stove Light",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "juniper-and-coal",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-northbound-train.flac",
+      "title": "Northbound Train",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "juniper-and-coal",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-embers.flac",
+      "title": "Embers",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "juniper-and-coal",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "june-holloway",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "callum-coal",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "nadia-flint",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "tidepool-records",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "10.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

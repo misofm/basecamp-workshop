@@ -1,0 +1,429 @@
+{
+  "format": "miso.release-package/1",
+  "release": {
+    "title": "Warehouse Gospel",
+    "kind": "ExtendedPlay",
+    "description": "Gospel-house for 5am warehouses, with a choir that never sleeps.",
+    "genres": {
+      "primary": "DANCE",
+      "secondary": [
+        "GOSPEL",
+        "ELECTRONIC"
+      ]
+    },
+    "credits": [
+      {
+        "party": "basement-choir",
+        "role": "Primary"
+      }
+    ]
+  },
+  "tracks": [
+    {
+      "file": "audio/01-lift-me-higher.flac",
+      "title": "Lift Me Higher",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "basement-choir",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "selene-okafor",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Featured"
+              }
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/02-concrete-cathedral.flac",
+      "title": "Concrete Cathedral",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "basement-choir",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/03-sunday-at-sunrise.flac",
+      "title": "Sunday at Sunrise",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "basement-choir",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/04-strobe-psalm.flac",
+      "title": "Strobe Psalm",
+      "advisory": "NotExplicit",
+      "instrumental": true,
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Composer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Composer"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "basement-choir",
+            "roles": [
+              {
+                "type": "Performer",
+                "level": "Primary"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "file": "audio/05-doors-close-at-six.flac",
+      "title": "Doors Close at Six",
+      "advisory": "NotExplicit",
+      "languages": [
+        "en"
+      ],
+      "composition": {
+        "royaltyRateBps": 2000,
+        "credits": [
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Composer",
+              "Songwriter",
+              "Lyricist"
+            ]
+          }
+        ]
+      },
+      "recording": {
+        "credits": [
+          {
+            "party": "basement-choir",
+            "roles": [
+              {
+                "type": "Vocalist",
+                "level": "Lead"
+              }
+            ],
+            "primaryArtist": true
+          },
+          {
+            "party": "grace-adeyemi",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "marcus-hale",
+            "roles": [
+              "Performer"
+            ]
+          },
+          {
+            "party": "kofi-mensah",
+            "roles": [
+              {
+                "type": "Producer",
+                "level": "Principal"
+              },
+              "MixingEngineer"
+            ]
+          },
+          {
+            "party": "elsa-brandt",
+            "roles": [
+              "MasteringEngineer"
+            ]
+          },
+          {
+            "party": "goldline-music",
+            "roles": [
+              {
+                "type": "Custom",
+                "name": "Label"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "cover": "cover.webp",
+  "pressing": {
+    "price": {
+      "kind": "fixed",
+      "amount": "18.00",
+      "currency": "FakeUsd"
+    },
+    "maxSupply": 250
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "parties": [
+    {
+      "ref": "harbor-lights",
+      "name": "Harbor Lights",
+      "kind": "group",
+      "bio": "Beatmaker recording on a four-track between ferry shifts.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "mara-quinlan"
+      ]
+    },
+    {
+      "ref": "neon-cartography",
+      "name": "Neon Cartography",
+      "kind": "group",
+      "bio": "Synth duo mapping imaginary highways.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "dex-moreau",
+        "ines-varga"
+      ]
+    },
+    {
+      "ref": "juniper-and-coal",
+      "name": "Juniper & Coal",
+      "kind": "group",
+      "bio": "Folk duo writing from a cabin with no cell signal.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "june-holloway",
+        "callum-coal"
+      ]
+    },
+    {
+      "ref": "selene-okafor",
+      "name": "Selene Okafor",
+      "kind": "individual",
+      "bio": "Singer-songwriter blending Afrobeats, highlife, and house.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "the-velvet-index",
+      "name": "The Velvet Index",
+      "kind": "group",
+      "bio": "Piano trio that only plays after midnight.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "theo-bramwell",
+        "rosa-lind",
+        "august-pike"
+      ]
+    },
+    {
+      "ref": "moss-protocol",
+      "name": "Moss Protocol",
+      "kind": "group",
+      "bio": "Ambient project built from field recordings and modular synths.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "wren-alder"
+      ]
+    },
+    {
+      "ref": "kiko-arai",
+      "name": "Kiko Arai",
+      "kind": "individual",
+      "bio": "City pop vocalist with a cassette-deck heart.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "subway-prophet",
+      "name": "Subway Prophet",
+      "kind": "group",
+      "bio": "Drum & bass producer recording under the city.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "omar-reyes"
+      ]
+    },
+    {
+      "ref": "palomino-static",
+      "name": "Palomino Static",
+      "kind": "group",
+      "bio": "Garage surf quartet that has never surfed.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "billy-sands",
+        "lou-tremont"
+      ]
+    },
+    {
+      "ref": "basement-choir",
+      "name": "Basement Choir",
+      "kind": "group",
+      "bio": "Gospel-house collective for 5am warehouses.",
+      "languages": [
+        "en"
+      ],
+      "members": [
+        "grace-adeyemi",
+        "marcus-hale"
+      ]
+    },
+    {
+      "ref": "mara-quinlan",
+      "name": "Mara Quinlan",
+      "kind": "individual",
+      "bio": "Mara Quinlan, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "dex-moreau",
+      "name": "Dex Moreau",
+      "kind": "individual",
+      "bio": "Dex Moreau, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "ines-varga",
+      "name": "Ines Varga",
+      "kind": "individual",
+      "bio": "Ines Varga, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "june-holloway",
+      "name": "June Holloway",
+      "kind": "individual",
+      "bio": "June Holloway, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "callum-coal",
+      "name": "Callum Coal",
+      "kind": "individual",
+      "bio": "Callum Coal, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "theo-bramwell",
+      "name": "Theo Bramwell",
+      "kind": "individual",
+      "bio": "Theo Bramwell, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "rosa-lind",
+      "name": "Rosa Lind",
+      "kind": "individual",
+      "bio": "Rosa Lind, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "august-pike",
+      "name": "August Pike",
+      "kind": "individual",
+      "bio": "August Pike, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "wren-alder",
+      "name": "Wren Alder",
+      "kind": "individual",
+      "bio": "Wren Alder, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "omar-reyes",
+      "name": "Omar Reyes",
+      "kind": "individual",
+      "bio": "Omar Reyes, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "billy-sands",
+      "name": "Billy Sands",
+      "kind": "individual",
+      "bio": "Billy Sands, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "lou-tremont",
+      "name": "Lou Tremont",
+      "kind": "individual",
+      "bio": "Lou Tremont, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "grace-adeyemi",
+      "name": "Grace Adeyemi",
+      "kind": "individual",
+      "bio": "Grace Adeyemi, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "marcus-hale",
+      "name": "Marcus Hale",
+      "kind": "individual",
+      "bio": "Marcus Hale, credited on the Miso Basecamp workshop catalog.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "nadia-flint",
+      "name": "Nadia Flint",
+      "kind": "individual",
+      "bio": "Producer and mix engineer.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "kofi-mensah",
+      "name": "Kofi Mensah",
+      "kind": "individual",
+      "bio": "Producer.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "elsa-brandt",
+      "name": "Elsa Brandt",
+      "kind": "individual",
+      "bio": "Mastering engineer.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "rio-takeda",
+      "name": "Rio Takeda",
+      "kind": "individual",
+      "bio": "Songwriter and arranger.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "tidepool-records",
+      "name": "Tidepool Records",
+      "kind": "group",
+      "bio": "Tidepool Records is an independent record label.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "chromefield",
+      "name": "Chromefield",
+      "kind": "group",
+      "bio": "Chromefield is an independent record label.",
+      "languages": [
+        "en"
+      ]
+    },
+    {
+      "ref": "goldline-music",
+      "name": "Goldline Music",
+      "kind": "group",
+      "bio": "Goldline Music is an independent record label.",
+      "languages": [
+        "en"
+      ]
+    }
+  ]
+}

@@ -30,9 +30,9 @@ creates the parties, the releases and their FakeUsd pressings on Sui (about 5 SU
 
 To publish the same packages again, reset them first: `git clean -fdX deliveries/`.
 
-### 2. Build a catalog app, no API key
+### 2. Build a catalog app with a record shop
 
-> Using the miso-read-catalog skill, build a single-page web app in examples/catalog that lists every Miso release on testnet with its cover and plays a 30-second preview of any track. No API key. New releases should appear without a reload. Keep it small: Vite and plain TypeScript. Don't write tests or browser-test it yourself; when it builds, start the dev server on localhost and give me the URL.
+> Using the miso-read-catalog and miso-record-shop skills, build a single-page web app in examples/catalog that lists every Miso release on testnet with its cover, plays a 30-second preview of any track, and lets me connect a Sui wallet to buy a release's record with FakeUSD, with a button to get 100 FakeUSD. No API key. New releases should appear without a reload. Keep it small: Vite, React and TypeScript. Don't write tests or browser-test it yourself; when it builds, start the dev server on localhost and give me the URL.
 
 [`apps/spa`](apps/spa/README.md) is the finished reference app: release grid, release page with credits and
 previews, artist and collection pages, buying with a Sui wallet, a FakeUsd faucet page, and a "How this

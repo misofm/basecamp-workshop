@@ -14,7 +14,7 @@ than you paid. Then you head home with Inicio, and the ground starts shaking. A 
 HUD tracks your FakeUSD, mission, minimap and the record in your hands.
 
 All chain access goes through one interface, `MisoAdapter`. The game always runs on
-`TestnetAdapter` (real Sui testnet, real Records, real FakeUSD; see [Sui testnet](#sui-testnet));
+`TestnetAdapter` (real Sui testnet, real Records, real FakeUSD; see [Connecting the shop to Miso testnet](#connecting-the-shop-to-miso-testnet));
 there is no offline or mock mode. `MockAdapter` (in-memory, fake ids, no network) exists only
 for the automated tests: unit tests construct it directly and the e2e suite runs on a
 `vite build --mode e2e` test build, the only build that contains it.
@@ -103,7 +103,7 @@ curb across from the shop.
 
 0. Short on FakeUSD? The mission points you to the **ATM in TriMart, next door**:
    **E** → *Withdraw 50* (its CRT greeting glitches on Gamer's real name, then reads
-   "ACCOUNT HOLDER: GAMER") (minted from the testnet faucet) →
+   "ACCOUNT HOLDER: GAMER") →
    "済 CASH OUT +50.00 FUSD" + *View receipt ↗* (devxplorer). The balance counter counts up.
 1. Spawn at the hotel side door, walk east and into Saisei Records.
 2. **E** on a record → a price tag: title, "Artist · #106/250" (the copy you would get), price → *Pick up*.
@@ -152,7 +152,7 @@ src/
     types.ts         ShopRecord, OwnedRecord, Wallet, NpcBuyer, WithdrawResult, …
     select.ts        createAdapter(): TestnetAdapter (MockAdapter only in the e2e test build)
     mock-adapter.ts  MockAdapter, TESTS ONLY (deterministic fake chain, latency + failure injection)
-    testnet-adapter.ts  TestnetAdapter (lazy-loads testnet/: keys, catalog, chain, sell)
+    testnet-adapter.ts  TestnetAdapter (a stub in this starter: implement it)
     format.ts explorer.ts mock-catalog.ts
   world/             Three.js rendering + simulation behind WorldApi (api.ts); no money, no menus
     layout.ts        every coordinate of the street (buildings, ATM, sedan, Stonks, hotel door, sound sources)
@@ -206,7 +206,14 @@ interface MisoAdapter {
 Money is `bigint` base units (FakeUSD, 6 decimals); display with `formatAmount()`.
 Rejections must carry a message that is safe to show the player.
 
-## Sui testnet
+## Connecting the shop to Miso testnet
+
+The game runs on `src/miso/testnet-adapter.ts`, which is a **stub** in this starter: the
+street, the shop, the deck and the smash all work, but every chain call (shelves, wallet,
+buying, the ATM, the collection, selling to Stonks) fails with "Shop not connected yet."
+Implement `MisoAdapter` in that file; the contract is in its header comment and in
+`src/miso/adapter.ts` (data shapes in `src/miso/types.ts`). `public/shop.testnet.json` lists
+the shelves (up to 10 `{ releaseId, edition, section }` entries).
 
 The game runs **entirely in the browser** (no server, no `/api`)
 on two testnet keys that are compiled into the build:
@@ -218,9 +225,9 @@ on two testnet keys that are compiled into the build:
 
 > [!WARNING]
 > **`VITE_*` values are baked into the built JavaScript.** Anyone who can load a build made
-> with these keys can read both of them from the bundle (they sit in the lazily loaded testnet
-> chunk). Use testnet keys only, never a key that holds anything of value. **A hosted keyed
-> build MUST be behind access control (Cloudflare Access). Never deploy a keyed build publicly.**
+> with these keys can read both of them from the bundle. Use testnet keys only, never a key
+> that holds anything of value. **A hosted keyed build MUST be behind access control
+> (Cloudflare Access). Never deploy a keyed build publicly.**
 > Everyone who gets through Access shares one player wallet and one collection.
 
 Setup:
@@ -234,8 +241,7 @@ Setup:
    ```
 
 2. Fund **both** addresses with testnet SUI at <https://faucet.sui.io> (each pays its own
-   gas). FakeUSD needs no funding: the ATM and the collector's payout mint it from the
-   permissionless testnet FakeUSD faucet.
+   gas). FakeUSD needs no funding: the player gets it at the in-game ATM.
 3. In `apps/game`, copy `.env.example` to `.env.local` (gitignored) and paste each key file's
    `suiprivkey1…` line:
 
@@ -251,104 +257,14 @@ Setup:
 
    `npm run dev` also picks up `.env.local`.
 
-Without keys the game still loads the live catalog, and a purchase says
-"The till's offline. Try later." (players never see chain
-details); the browser console says "Testnet keys missing: set VITE_PLAYER_SUI_PRIVATE_KEY and
-VITE_GAME_SUI_PRIVATE_KEY in apps/game/.env.local, then rebuild." Buying, the ATM and selling
-stay unavailable.
-
-Costs per loop: gas only, four transactions (ATM mint, purchase, Record transfer: player;
-payout: game). FakeUSD is free.
-
-Measured on testnet (one full loop, net gas after storage rebates):
-
-| Transaction | Signer | Gas (SUI) |
-| --- | --- | --- |
-| ATM: withdraw 50 FUSD | player | 0.0024 |
-| Purchase (8 FUSD record) | player | 0.0050 |
-| Transfer Record to the collector | player | 0.0010 |
-| Payout (12 FUSD) | game | 0.0024 |
-| **Whole loop** | | **≈ 0.011** (player ≈ 0.0085, game ≈ 0.0024) |
-
-So 1 testnet SUI in the player wallet covers roughly 100 loops.
-
-When the player wallet runs out of gas the player sees "The shop's till is offline right
-now. Try again later." (the collector's payout: "The collector's till is offline right now.");
-the console says which address to fund ("…fund VITE_PLAYER_SUI_PRIVATE_KEY's address at
-faucet.sui.io", or `VITE_GAME_SUI_PRIVATE_KEY` for the collector).
-
-### What lives where
-
-| Piece | Where | Notes |
-| --- | --- | --- |
-| Shop catalog | `public/shop.testnet.json` | Thin list `[{ releaseId, edition, section }]`, up to 10 (one stand per entry; fewer leaves stands empty). `section` is one of the ten in-store bins. Everything else (title, artist, cover, tracks/quilts, price, minted / max supply) is read live. |
-| Adapter | `src/miso/testnet-adapter.ts` | Thin class; lazy-loads `src/miso/testnet/*` (the Sui SDK and the keys) as a separate chunk, so the e2e mock build never downloads it. |
-| Keys | `src/miso/testnet/keys.ts` | Parses the two `VITE_*` keys (ED25519 `suiprivkey`), cached. Missing / invalid → a player-safe message that never contains key text. |
-| Catalog reads | `src/miso/testnet/catalog.ts`, `miso-api.ts` | Keyless `api.testnet.miso.fm`: release, pressing, FakeUSD listing (cached). Covers and HLS from `cdn.miso.fm`. |
-| Chain calls | `src/miso/testnet/chain.ts` | gRPC fullnode (`fullnode.testnet.sui.io`). Purchase = `purchaseRecord()` from `@misofm/platform/pressing`; ATM and payout = `faucet::mint<FakeUsd>` → `coin::from_balance` → transfer. One transaction at a time per signer. |
-| Sell | `src/miso/testnet/sell.ts` | The two-transaction sale and its retry rules (pure, injected chain; unit-tested in `tests/unit/testnet-sell.spec.ts`). |
-| Session state | `src/miso/testnet/backend.ts` | Catalog cache, recent purchases / sales merged into lagging chain reads, pending sales in `localStorage` (`miso-game:pending-sales:testnet`). |
-| Constants | `src/miso/testnet/config.ts` | Package ids, FakeUSD faucet + treasury ids, ATM max (100 FUSD), payout rule (3/2, cap 150 FUSD). |
-
-### Trust model (honest version)
-
-Selling to the collector is **not an atomic swap**. It is two transactions:
-
-1. the **player** key transfers the Record to the GAME address;
-2. the **GAME** key mints `min(floor(purchase_price × 3/2), 150 FUSD)` FakeUSD to the player.
-   The price and currency (must be FakeUSD) are read from the Record on chain, never from the
-   caller.
-
-A Sui transaction has one sender (plus at most a gas sponsor) and owned objects can only be
-spent by their owner, so neither key can move both the Record and the payment in one
-transaction. Making it atomic needs a shared escrow, kiosk or offer contract, which is out of
-scope for a workshop demo on permissionless FakeUSD. Since both keys are in the same bundle,
-this protects against nothing anyway: it is about the game behaving correctly, not security.
-
-Retry safety: a pending-sale entry in `localStorage` (`miso-game:pending-sales:testnet`, in
-memory if storage is blocked) stores the transfer digest **before** the transfer is submitted
-and the payout digest **before** the payout is submitted. On Retry:
-
-- the player still owns the Record → if the stored transfer landed after all, skip to payment;
-  otherwise start over (one transfer);
-- the GAME owns it and no payout was attempted → pay now;
-- the GAME owns it and a payout digest is stored → if it landed, return it (paid once); if it
-  failed, pay again; if the node still doesn't know it after ~10 s, pay again. That last case
-  is the one double-pay window (a payout that was submitted but not visible yet can land
-  later); it only ever over-pays testnet FakeUSD, so it is accepted;
-- the GAME owns it and there is no pending entry → "Stonks already has this one."
-
-A payout failure reads "Stonks hasn't paid yet. …" with *Retry* (the record won't be sent twice). Until it is paid the Record keeps showing in your
-collection so you can Retry. The entry is cleared after a confirmed payout.
-
-### Testing on testnet
-
-`tests/e2e/testnet.spec.ts` runs read-only checks by default (no gas): the real catalog, gRPC
-from the browser, the purchase PTB resolving for a funded sender (simulate only), and that
-the e2e mock build never loads the SDK. In the e2e build `?chain=testnet` switches it to the
-TestnetAdapter. Built without keys it checks the player-facing "till is
-offline" message; with keys, the player address on the HUD indicator's `data-address`. The full ATM → buy → smash → sell loop spends
-testnet gas and is opt-in; it needs a keyed build with both addresses funded:
-
-```sh
-npm run stage    # in one shell (keyed build + vite preview on :4173)
-# use the URL vite preview prints (4173, or the next free port)
-MISO_E2E_BASE_URL=http://127.0.0.1:4173 MISO_TESTNET_E2E=1 npx playwright test tests/e2e/testnet.spec.ts
-```
-
-It buys the cheapest record on the shelves (`MISO_TESTNET_RECORD=<releaseId>` to choose) and
-logs the ATM digest, purchase digest, Record id, sale digest and payout. Without
-`MISO_E2E_BASE_URL`, Playwright builds its own copy with `vite build --mode e2e`, which reads
-`.env.local` too.
-
 ## Verify
 
 ```sh
 npm run typecheck                 # tsc --noEmit (strict)
 npm run build                     # typecheck + vite build
-npm run test:unit                 # state machine (every state × event), input routing (DOM), mock adapter, testnet keys + sell logic
+npm run test:unit                 # state machine (every state × event), input routing (DOM), mock adapter, Effect services
 npx playwright install chromium   # first time only
-npm test                          # e2e: tests/e2e/*.spec.ts (MockAdapter test build + read-only testnet)
+npm test                          # e2e: tests/e2e/*.spec.ts (MockAdapter test build)
 ```
 
 The e2e suite builds the app with `vite build --mode e2e` (the only build that contains the
@@ -361,8 +277,7 @@ transaction, lost answers and Retry, keys during the smash and the exit beat, ke
 loading screen); `hls.spec.ts` plays a real HLS preview
 (the MockAdapter's `?mockhls=1`, needs network access to `cdn.miso.fm`) and checks the deck's `<audio>`
 time advances from mid-track. It saves a screenshot per step to `$SHOTS_DIR` (default:
-`test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run;
-the testnet spec uses `test-results/shots-testnet/`). `window.__game` (see `src/debug.ts`)
+`test-results/shots-loop/`, gitignored and cleared by Playwright at the start of each run). `window.__game` (see `src/debug.ts`)
 offers `teleportTo`, `interact`, `press`, `failNext`, `setFailureMode`, `setLatency` (the last three: e2e mock build only),
 `state()`, `measure()`, `deckDebug()`, `buyerReturnNow()`, `crowdStats()` (street crowd:
 on screen now, distinct Tamashi ids shown so far, and the named cast with id, name, spot, onScreen) and `tamashiGallery()` (opens `?gallery=1`).
@@ -380,10 +295,8 @@ digests are fake; their explorer (devxplorer) links will not resolve.
 
 **What gets deployed depends on whether `.env.local` holds keys when you build:**
 
-- **No keys:** the game shows the live testnet catalog and plays real previews, and says "The shop's till is offline right now" for the cash (the console says
-  "Testnet keys missing"). Safe to host publicly.
-- **Keys:** both testnet keys are inside the deployed JavaScript (in the testnet chunk in
-  `dist/`). **Only deploy this behind Cloudflare Access**
+- **No keys:** no secrets in the bundle. Safe to host publicly.
+- **Keys:** both testnet keys are inside the deployed JavaScript in `dist/`. **Only deploy this behind Cloudflare Access**
   (or equivalent access control on the whole hostname, including `/assets/*`). Everyone behind
   Access shares the one player wallet and its collection; anyone who can load the page can
   extract the keys.

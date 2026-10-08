@@ -12,8 +12,8 @@ pay for, abuse and resell, and the chain round-trips are part of the fun, not a 
 **Player-facing copy never mentions the chain.** No "Sui", "blockchain", "chain",
 "testnet", "wallet address", "object", "digest", "PTB", "gas", "faucet", "mint" (in the
 chain sense) or "explorer" in the HUD, intro, missions, dialogs, toasts, help, collection,
-in-world signs or error messages. Errors are mapped to plain game language
-(`src/miso/testnet/errors.ts`); developer detail goes to `console.warn`. Money is FakeUSD /
+in-world signs or error messages. Adapters reject with plain game language (see
+`src/miso/testnet-adapter.ts`); developer detail goes to `console.warn`. Money is FakeUSD /
 FUSD. ("Mint condition" is the vinyl sense and stays.)
 
 ## The loop
@@ -53,8 +53,7 @@ waypoint points at the ATM.
 - No silent mints anywhere: when the balance is known to be short, the counter does not
   call the chain and says "Not enough FakeUSD — the ATM in TriMart next door dispenses
   cash." (an adapter "Not enough FakeUSD" rejection gets the hint "The ATM in TriMart next
-  door dispenses cash." unless it already mentions the ATM; the testnet adapter's own
-  message still says "The ATM outside dispenses cash.").
+  door dispenses cash." unless it already mentions the ATM).
 
 ## Rules the player can feel
 
@@ -107,7 +106,7 @@ player but never the render loop.
 ## Onstage rehearsal
 
 - `npm run build && npm run preview`, desktop Chrome, real projector resolution.
-- The game always runs on Sui testnet (keyed build, see README "Sui testnet"); there is no
+- The game always runs on Sui testnet (keyed build, see README "Connecting the shop to Miso testnet"); there is no
   offline mode. The pending states and errors are real testnet timings and failures.
 - Reload the page (or H → Reset demo) to reset the exit beat. The testnet wallet keeps its
   balance and collection across reloads.

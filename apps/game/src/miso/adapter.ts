@@ -14,9 +14,10 @@
  * - `purchase()` resolves only after the transaction is final (effects success),
  *   with the newly created Record object id.
  * - `withdrawFakeUsd()` credits `amount` FakeUSD (base units) to the player (the street
- *   ATM; on testnet a player-signed faucet mint), resolving after finality.
- * - `sellToNpc()` transfers the Record to `npc.address` and the NPC pays
- *   `npc.offer` FakeUSD to the player; resolves with the digest and amount paid.
+ *   ATM), resolving after finality.
+ * - `sellToNpc()` transfers the Record to the collector (on testnet `collectorAddress()`;
+ *   `npc.address` is display only) and the collector pays `npc.offer` FakeUSD to the
+ *   player; resolves with the digest and amount paid.
  */
 import type {
   NpcBuyer,
@@ -34,7 +35,7 @@ export interface MisoAdapter {
   loadShopCatalog(): Promise<ShopRecord[]>;
   getWallet(): Promise<Wallet>;
   purchase(record: ShopRecord): Promise<PurchaseResult>;
-  /** The street ATM: get `amount` FakeUSD (base units) from the testnet faucet. */
+  /** The street ATM: credit `amount` FakeUSD (base units) to the player. */
   withdrawFakeUsd(amount: bigint): Promise<WithdrawResult>;
   listOwnedRecords(): Promise<OwnedRecord[]>;
   sellToNpc(recordId: string, npc: NpcBuyer): Promise<SellResult>;

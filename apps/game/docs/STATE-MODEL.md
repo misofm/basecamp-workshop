@@ -144,10 +144,10 @@ idle ──xStart──► pending ──adapter resolves──► xSuccess ─�
   shows the Record and you can hold it from C. The earlier answer is only handed back while
   that Record is unsold (selling it and buying the release again is a new purchase), and the
   state machine refuses a `purchaseSuccess` for a Record sold this session. A lost ATM withdrawal retried dispenses
-  again (testnet has no idempotency for the faucet; play money, accepted).
+  again (play money, accepted).
 - **Sale half done** (testnet: Record transferred, payout failed): the pending sale is kept
   in `localStorage` before each submission; the Record stays in your hand and collection
-  and Retry pays exactly once (`src/miso/testnet/sell.ts`). A reload keeps that entry.
+  and Retry pays exactly once. A reload keeps that entry.
 - **Reload / Reset demo mid-transaction**: Reset is disabled while a transaction is
   pending. A browser reload (F5) is still possible: the transaction may still land and is picked up from chain on
   the next load (pending sales from `localStorage`).

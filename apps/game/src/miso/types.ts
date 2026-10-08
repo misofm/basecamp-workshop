@@ -95,7 +95,7 @@ export interface PurchaseResult {
   digest: string;
 }
 
-/** FakeUSD withdrawn from the testnet faucet (the street ATM). */
+/** FakeUSD withdrawn at the street ATM. */
 export interface WithdrawResult {
   digest: string;
   /** FakeUSD base units credited to the player. */

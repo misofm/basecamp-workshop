@@ -72,7 +72,7 @@ const SELL_FAILED_MESSAGE =
 
 const WITHDRAW_FAILED_MESSAGE =
   "Card reader jammed. Try again.";
-/** Same words as the testnet adapter's timeout (src/miso/testnet/errors.ts MESSAGES.timeout). */
+/** The player-facing timeout copy (same words as TIMEOUT_MESSAGE in ../app/errors.ts). */
 const TIMEOUT_MESSAGE = "Shop took too long. Try again.";
 
 const BASE58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";

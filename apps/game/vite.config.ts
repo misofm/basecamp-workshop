@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 // Static app: no server, no /api. Testnet keys (VITE_*_PRIVATE_KEY) come from .env.local
-// and are compiled into the lazily loaded testnet chunk (see README "Sui testnet").
+// and are compiled into the build (see README "Connecting the shop to Miso testnet").
 // `--mode e2e` (Playwright's test build only) sets __MISO_E2E__, which makes the game run
 // on the MockAdapter (src/miso/select.ts); every other build is testnet-only and contains
 // no MockAdapter.

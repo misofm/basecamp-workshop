@@ -3,8 +3,8 @@
  *
  * Owns: the tagged error classes and `classifyChainError`, which maps whatever a
  * MisoAdapter rejected with onto one of them.
- * Must not: import ../miso/testnet/* (that code is a lazy chunk). Testnet errors are
- * recognised by shape (`name === "PlayerError"` + `kind`), mock errors by message.
+ * Must not: import adapter implementations. Adapter errors are recognised by shape
+ * (`name === "PlayerError"` + `kind`), anything else by message.
  *
  * `message` is always exactly the text the flows showed before the port
  * (`error instanceof Error ? error.message : String(error)`), so dialogs keep their words.

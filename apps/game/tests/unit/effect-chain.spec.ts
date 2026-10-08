@@ -7,7 +7,7 @@ import type { MisoAdapter } from "../../src/miso/adapter";
 import { MockAdapter } from "../../src/miso/mock-adapter";
 import type { NpcBuyer, ShopRecord } from "../../src/miso/types";
 
-/** A PlayerError look-alike (the real class lives in the lazy testnet chunk). */
+/** A PlayerError look-alike (the shape an adapter rejects with). */
 function playerError(message: string, kind: string): Error {
   const error = new Error(message) as Error & { kind: string };
   error.name = "PlayerError";

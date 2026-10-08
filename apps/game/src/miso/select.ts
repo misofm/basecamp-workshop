@@ -1,13 +1,12 @@
 /**
  * Adapter selection: the only place that decides which MisoAdapter the game runs on.
  *
- * Owns: the choice of adapter. The game always runs on Sui testnet (TestnetAdapter);
- * without keys in the build the "Testnet keys missing" behaviour applies.
+ * Owns: the choice of adapter. The game always runs on Sui testnet (TestnetAdapter).
  * Must not: hold state or be imported by world/ code.
  *
  * Automated tests only: a build made with `vite build --mode e2e` (the Playwright e2e
  * webServer) runs on the in-memory MockAdapter instead, with these URL knobs:
- *   ?chain=testnet        use the TestnetAdapter anyway (testnet.spec.ts)
+ *   ?chain=testnet        use the TestnetAdapter anyway
  *   ?latency=<ms>         simulated latency per call (default 800)
  *   ?fail=purchase|sell|withdraw|all  force those transactions to fail
  *   ?fail=purchase-lost|sell-lost|withdraw-lost  they land, then the answer is

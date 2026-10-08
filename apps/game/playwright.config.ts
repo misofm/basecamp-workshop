@@ -37,7 +37,7 @@ export default defineConfig({
   // repo can't reload the page mid-test (and it's closer to what ships). `--mode e2e`
   // makes the game run on the MockAdapter (deterministic, failure injection; see
   // src/miso/select.ts); only e2e builds contain it. `vite build` reads .env.local, so
-  // with testnet keys there this build is keyed too (testnet.spec.ts, ?chain=testnet).
+  // with testnet keys there this build is keyed too (?chain=testnet).
   webServer: EXTERNAL
     ? undefined
     : {

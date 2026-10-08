@@ -1,99 +1,82 @@
 /**
- * TestnetAdapter: the game on Sui TESTNET (the only adapter the game ships with).
+ * TestnetAdapter: the game on Miso / Sui TESTNET. The game always runs on this adapter
+ * (select.ts); right now it is a STUB and every chain call fails with
+ * "Shop not connected yet." Implement MisoAdapter here (see also ./adapter.ts and ./types.ts).
  *
- * This file is deliberately thin and dependency-free: every method lazily imports
- * ./testnet/backend (Sui SDK, @misofm/platform, effect), so the e2e mock test build never
- * downloads that chunk. Sui SDK types never leave src/miso/; callers get ./types data, and every
- * rejection is a PlayerError with a player-safe message (./testnet/errors.ts).
+ * CONTRACT (what the game expects from each method):
  *
- * How each piece works (details in ./testnet/*):
- * - Catalog: public/shop.testnet.json lists { releaseId, edition, section } (validated,
- *   ≤10 stands). Each entry is hydrated in parallel from the keyless Miso API (release,
- *   pressing, FakeUSD listing; cached in memory); ids via deriveSaleIds. Entries without
- *   an enabled FakeUSD listing are skipped with a console warning. Palette / synth are
- *   local fallbacks by section (not on chain); label is "Miso".
- * - Cover / audio: https://cdn.miso.fm/v1/blobs/{blobId}?w=512&f=webp, tracks carry the
- *   Walrus transcode quilt id; duration = samples / sample_rate_hz. Media the CDN does not
- *   host is retried once from the Walrus aggregator (../miso/media.ts).
- * - Keys: TWO testnet keys baked in at build time from apps/game/.env.local
- *   (./testnet/keys.ts): VITE_PLAYER_SUI_PRIVATE_KEY (the single player wallet) and
- *   VITE_GAME_SUI_PRIVATE_KEY (the game world = the collector NPC). They are read only in
- *   the lazy testnet chunk; VITE_* values end up in the shipped JS, so a hosted keyed build
- *   must sit behind access control. Missing / invalid keys: the catalog still loads, every
- *   wallet call rejects with the player-safe "The shop's till is offline right now" (the
- *   developer hint "Testnet keys missing: …" goes to the console). No server, no /api.
- * - Wallet: the player address; balances via gRPC getBalance (coins + address balance).
- *   The player pays its own gas (fund its address at faucet.sui.io).
- * - ATM (withdrawFakeUsd): a player-signed mint from the permissionless FakeUSD faucet
- *   (faucet::mint → coin::from_balance → transfer to the player), ≤ 100 FUSD per call.
- * - Purchase: purchaseRecord() from @misofm/platform/pressing (tx.balance FakeUsd →
- *   record_shop::listing::purchase with the listing's exact pricing → transfer to the
- *   player), signed by the player, executed over gRPC, waited to finality; the new
- *   Record id comes from the effects' created objects of type record::Record. Short on
- *   FakeUSD? The error points at the ATM; nothing is minted silently.
- * - Owned records: gRPC listOwnedObjects(type = record::Record, json) for the player,
- *   merged with recent local purchases / minus recent sales until the index agrees.
- * - Sell (./testnet/sell.ts): the player transfers the Record to the GAME address
- *   (collectorAddress(); npc.address is display only), then the GAME pays
- *   min(floor(purchase_price × 3/2), 150 FUSD) from the faucet, price and currency read
- *   from the Record on chain. Both digests are kept in localStorage before submission,
- *   so Retry never transfers twice and only pays again if the earlier payout never landed.
- * - Transactions are serialized per signer (no gas-coin races between ATM, buy and sell).
- * - Errors / timeouts: Move aborts (sold out, listing disabled, price changed, wrong
- *   payment), FakeUSD / gas shortfalls, not-owned, missing keys and timeouts (10 s reads,
- *   30 s txs) map to short messages; raw errors go to console.warn only.
- * - Explorer links: devxplorer (./explorer).
+ * Shelves
+ * - public/shop.testnet.json is the pinned shelf list: up to 10 entries
+ *   `{ releaseId, edition, section }`. `releaseId` is a Miso release on testnet, `edition`
+ *   picks which of its editions is on sale, and `section` is one of the ten in-store bins:
+ *   HIP HOP, SYNTHWAVE, FOLK, AFROBEATS, JAZZ, AMBIENT, CITY POP, DRUM & BASS, SURF ROCK, HOUSE.
+ * - loadShopCatalog(): one ShopRecord per entry, in file order, with real data (title,
+ *   artist, cover, tracks, price in FakeUSD, minted / maxSupply, ...). ShopRecord.id must be
+ *   the releaseId. `palette` and `synth` are not on chain: copy them from the
+ *   MOCK_CATALOG entry with the same section (./mock-catalog.ts).
+ *
+ * Keys (baked in at build time from apps/game/.env.local, see .env.example)
+ * - import.meta.env.VITE_PLAYER_SUI_PRIVATE_KEY: the player. Buys records, uses the ATM,
+ *   sells records.
+ * - import.meta.env.VITE_GAME_SUI_PRIVATE_KEY: the game world = the collector NPC "Stonks".
+ *   Receives sold Records and pays for them.
+ * - Both are `suiprivkey1…` strings. Never log them.
+ *
+ * Methods
+ * - getWallet(): the player's address and balances (FakeUSD base units + decimals, SUI in MIST).
+ * - purchase(record): the player buys one copy of `record`. Resolves only after the
+ *   transaction is final, with the new Record object id and the digest.
+ * - withdrawFakeUsd(amount): the street ATM. Credits `amount` FakeUSD (base units) to the
+ *   player; resolves after finality.
+ * - listOwnedRecords(): the player's Records. OwnedRecord.shopRecordId = the release id
+ *   (so it matches ShopRecord.id).
+ * - collectorAddress(): the GAME wallet's address.
+ * - sellToNpc(recordId, npc): transfers the Record from the player to collectorAddress()
+ *   (`npc.address` is display only), then the game wallet pays the player `npc.offer`
+ *   FakeUSD (base units). Resolves after finality with the digest and the amount paid.
+ * - explorerTxUrl / explorerObjectUrl: already done (./explorer.ts).
+ *
+ * Errors
+ * - Reject with an Error whose `message` is short and safe to show the player (dialogs show
+ *   it verbatim). To get a specific reaction, give the error `name = "PlayerError"` and a
+ *   `kind`: "fusd" (not enough FakeUSD: the game points at the ATM), "soldOut", "network",
+ *   "timeout" or "other". See classifyChainError in ../app/errors.ts.
+ *
+ * ../app/pending-sales.ts is a ready-made localStorage store for sales whose Record was
+ * transferred but not yet paid; it is passed in as `options.pending` if you want it.
  */
 import type { MisoAdapter } from "./adapter";
 import { explorerObjectUrl, explorerTxUrl } from "./explorer";
 import type { NpcBuyer, OwnedRecord, PurchaseResult, SellResult, ShopRecord, Wallet, WithdrawResult } from "./types";
-import type { TestnetBackend } from "./testnet/backend";
 import type { PendingSalesStore } from "../app/pending-sales";
+
+const notConnected = (): Promise<never> => Promise.reject(new Error("Shop not connected yet."));
 
 export class TestnetAdapter implements MisoAdapter {
   readonly network = "testnet" as const;
-  private backend: Promise<TestnetBackend> | null = null;
 
-  /** `pending`: the pending-sale store (default: localStorage, see ../app/pending-sales.ts). */
-  constructor(private readonly options: { pending?: PendingSalesStore } = {}) {}
+  constructor(_options: { pending?: PendingSalesStore } = {}) {}
 
-  private load(): Promise<TestnetBackend> {
-    if (!this.backend) {
-      this.backend = import("./testnet/backend").then((m) => new m.TestnetBackend({ pending: this.options.pending }));
-      this.backend.catch((error: unknown) => {
-        console.warn("[miso testnet] failed to load the testnet module:", error);
-        this.backend = null;
-      });
-    }
-    return this.backend.catch(() => {
-      throw new Error("Shop won't open. Check your connection.");
-    });
+  loadShopCatalog(): Promise<ShopRecord[]> {
+    return notConnected();
   }
-
-  async loadShopCatalog(): Promise<ShopRecord[]> {
-    return (await this.load()).loadShopCatalog();
+  getWallet(): Promise<Wallet> {
+    return notConnected();
   }
-  async getWallet(): Promise<Wallet> {
-    return (await this.load()).getWallet();
+  purchase(_record: ShopRecord): Promise<PurchaseResult> {
+    return notConnected();
   }
-  async purchase(record: ShopRecord): Promise<PurchaseResult> {
-    return (await this.load()).purchase(record);
+  withdrawFakeUsd(_amount: bigint): Promise<WithdrawResult> {
+    return notConnected();
   }
-  async withdrawFakeUsd(amount: bigint): Promise<WithdrawResult> {
-    return (await this.load()).withdrawFakeUsd(amount);
+  listOwnedRecords(): Promise<OwnedRecord[]> {
+    return notConnected();
   }
-  async listOwnedRecords(): Promise<OwnedRecord[]> {
-    return (await this.load()).listOwnedRecords();
+  sellToNpc(_recordId: string, _npc: NpcBuyer): Promise<SellResult> {
+    return notConnected();
   }
-  async sellToNpc(recordId: string, npc: NpcBuyer): Promise<SellResult> {
-    return (await this.load()).sellToNpc(recordId, npc);
-  }
-  async collectorAddress(): Promise<string> {
-    return (await this.load()).collectorAddress();
-  }
-  /** Debug / tests only: build + simulate a purchase PTB without signing (sender defaults to the player). */
-  async debugSimulatePurchase(shopRecordId: string, sender?: string) {
-    return (await this.load()).debugSimulatePurchase(shopRecordId, sender);
+  collectorAddress(): Promise<string> {
+    return notConnected();
   }
   explorerTxUrl(digest: string): string {
     return explorerTxUrl(digest);

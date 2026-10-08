@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { Effect } from "effect";
-import { makePendingSalesStore, memoryStorage, PendingSales, parsePendingSales, type StorageLike } from "../../src/app/pending-sales";
-import type { PendingSale } from "../../src/miso/testnet/sell";
-import { PENDING_SALES_KEY } from "../../src/miso/testnet/storage-keys";
+import { makePendingSalesStore, memoryStorage, PENDING_SALES_KEY, PendingSales, parsePendingSales, type PendingSale, type StorageLike } from "../../src/app/pending-sales";
 
 const PLAYER = `0x${"a".repeat(64)}`;
 
@@ -102,8 +100,8 @@ test("one invalid entry next to a valid one: the valid one is kept, the invalid 
   const storage = memoryStorage();
   const invalid = { player: PLAYER, transferDigest: 7, owned: sale(2).owned };
   const noOwned = { ...sale(4), owned: null };
-  // Same check as the TestnetBackend before the port: a partial `owned` (e.g. a serial the
-  // API sent as a string) is KEPT as stored, so Retry can still pay that sale.
+  // A partial `owned` (e.g. a serial sent as a string) is KEPT as stored, so Retry can
+  // still pay that sale.
   const partialOwned = { ...sale(3), owned: { recordId: "0x3", serial: "3" } };
   storage.setItem(PENDING_SALES_KEY, JSON.stringify({ good: sale(1), bad: invalid, none: noOwned, partial: partialOwned }));
   const store = makePendingSalesStore(() => storage);

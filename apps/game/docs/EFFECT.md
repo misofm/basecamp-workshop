@@ -38,7 +38,7 @@ main.ts ── Effect.runFork(App) ── one top-level error boundary (log with
 | --- | --- | --- |
 | `Config` | `app/config.ts` | `parseConfig(search)` decodes every URL param once with `Schema` (latency, fail, mockhls (e2e test build only), quality, backend, adapt, exposure, ui, cameo, debug, gallery, particles, rain, hide, shadows). Invalid values fall back exactly as before (same console warnings). `urlConfig()` is the memoised parse of `location.search`; the low-level readers (quality.ts, atmosphere.ts, world.ts, cameo.ts, ui-visibility.ts, select.ts, debug.ts, main.ts) read it instead of `URLSearchParams`. |
 | `Chain` | `app/chain.ts`, `app/errors.ts` | Wraps a `MisoAdapter`. Every operation is an `Effect<A, ChainError>`. Methods call the adapter lazily (`adapter.purchase(...)` at run time) so test spies on the adapter still count calls. |
-| `PendingSales` | `app/pending-sales.ts` | Schema for `PendingSale`; localStorage with the in-memory fallback the testnet backend had. Corrupt JSON or an invalid entry is dropped and logged, never thrown. Exposes the synchronous `PendingStore` that `miso/testnet/sell.ts` needs (it saves the digest *before* submission, synchronously). Injected into `TestnetAdapter` → `TestnetBackend`. |
+| `PendingSales` | `app/pending-sales.ts` | Schema for `PendingSale`; localStorage with an in-memory fallback. Corrupt JSON or an invalid entry is dropped and logged, never thrown. Exposes a synchronous `PendingStore` for adapter code that must save a digest *before* submission. Injected into `TestnetAdapter` (select.ts). |
 | `GameState` | `app/game-state.ts` | `SubscriptionRef<GameState>`; `dispatch(action)` runs the pure `step()` (unchanged, still in `game/state.ts`), logs refusals and, in dev builds, `invariantViolations()` exactly as before. `changes` is a `Stream` for observers. |
 | `Flows` | `game/flows/*` | purchase / sell / withdraw / smash / exit beat are `Effect`s run in the controller's `FiberSet` (started synchronously, so the pending screen still swaps in within the same key press). |
 | `Audio` | `app/audio.ts` | `start()` (called by the controller on the Enter gesture) is the old unlock: resume + ambience now, capture-phase keydown / pointerdown retry listeners until it works. Release: drop those listeners, `closeAudio()` (audio/context.ts; also removes its visibility listener). Visibility suspend/resume unchanged. |
@@ -56,7 +56,7 @@ exactly the words they showed before.
 
 | Tag | When |
 | --- | --- |
-| `InsufficientFunds` | short on FakeUSD (testnet `PlayerError.kind === "fusd"`) |
+| `InsufficientFunds` | short on FakeUSD (`PlayerError.kind === "fusd"`) |
 | `SoldOut` | every copy minted (`soldOut`) |
 | `Network` | connection dropped (`network`); the only error reads retry on |
 | `Timeout` | a read (or our outer safety timeout on a read) took too long |
@@ -66,24 +66,21 @@ exactly the words they showed before.
 ### Timeouts
 
 Outer safety nets only, for an adapter promise that never settles (before the port that
-left the op `pending` forever). Each is well above the slowest path the testnet adapter
-can take before it gives up on its own (10 s per read, 30 s per tx step: build, submit,
-wait for finality), so they never fire on a slow-but-working call. Firing early would be
-worse than useless: the transaction keeps running, and a Retry could queue a second one
-behind it on the signer lock (a review found the first draft's 180 s sell net could fire
-before a ~200 s worst-case sale).
+left the op `pending` forever). Each must stay well above the slowest path an adapter
+can take before it gives up on its own, so they never fire on a slow-but-working call.
+Firing early would be worse than useless: the transaction keeps running, and a Retry
+could start a second one.
 
-| Op | Adapter worst case | Net |
-| --- | --- | --- |
-| reads | 10 s list + 10 s per-record lookups + ~20 s first catalog hydrate | 90 s |
-| purchase | ~30 s catalog + 8 s earlier-digest lookup + 3 × 30 s tx + 10 s read | 300 s |
-| withdraw | 3 × 30 s tx | 300 s |
-| sell | 10 s owner read + 8/10 s digest lookups + 2 × 90 s txs ≈ 200 s | 420 s |
+| Op | Net |
+| --- | --- |
+| reads | 90 s |
+| purchase | 300 s |
+| withdraw | 300 s |
+| sell | 420 s |
 
 Retry: reads only (catalog, wallet, collection, collector), on `Network` only, 2 retries,
 exponential from 250 ms. Transactions are **never** retried automatically; idempotency
-per operation stays inside the adapters exactly as before (testnet in-flight digest per
-release, pending sales; mock lost-result maps).
+per operation stays inside the adapters (mock: lost-result maps).
 
 ## Interruption
 
@@ -111,7 +108,7 @@ is never stuck in `pending`; the adapter's idempotency makes a later Retry safe.
 
 1. Bump `@unconfirmed/sui-effect` to 0.2.2.
 2. This plan.
-3. `errors.ts`, `chain.ts`, `pending-sales.ts` (+ testnet backend injection) with unit tests.
+3. `errors.ts`, `chain.ts`, `pending-sales.ts` with unit tests.
 4. `config.ts` + readers, `game-state.ts`, with unit tests.
 5. Controller + flows on `Chain` / `GameState` / `FiberSet`; harness `makeGame()` rewired.
 6. `World`, `Ui`, `Audio`, `Input`, `Loading`, `ErrorBoundary`; `main.ts` = one Layer graph + `Effect.runFork`.

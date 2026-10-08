@@ -9,8 +9,7 @@
  * Adapter methods are called lazily at run time (`adapter.purchase(record)` inside the
  * Effect), never pre-bound, so test spies that replace methods on the instance still count.
  *
- * Must not: statically import ../miso/testnet/* beyond what ../miso/select.ts already does
- * (the testnet backend stays a lazy chunk).
+ * Must not: import adapter implementations beyond what ../miso/select.ts already does.
  */
 import { Context, Effect, Layer, Schedule } from "effect";
 import type { MisoAdapter } from "../miso/adapter";
@@ -48,15 +47,10 @@ export interface ChainOptions {
 }
 
 /**
- * Last-resort safety nets only: each is well above the slowest path the testnet adapter
- * can take before it gives up on its own (10 s per read, 30 s per tx step: build, submit,
- * wait), so they fire only if an adapter promise never settles. Firing earlier would turn a
- * slow-but-landing transaction into an error while it still runs, and a Retry could then
- * queue a second one behind it (docs/EFFECT.md "Timeouts").
- *   read      worst ≈ 10 s list + 10 s per-record lookups + 20 s first catalog hydrate → 90 s
- *   purchase  worst ≈ 30 s catalog + 8 s earlier-digest lookup + 90 s tx + 10 s read → 300 s
- *   withdraw  worst ≈ 90 s tx → 300 s
- *   sell      worst ≈ 10 s + 8/10 s lookups + 2 × 90 s txs ≈ 200 s → 420 s
+ * Last-resort safety nets only: each must stay well above the slowest path an adapter can
+ * take before it gives up on its own, so they fire only if an adapter promise never
+ * settles. Firing earlier would turn a slow-but-landing transaction into an error while it
+ * still runs, and a Retry could then start a second one (docs/EFFECT.md "Timeouts").
  */
 export const CHAIN_DEFAULTS = {
   readTimeoutMs: 90_000,

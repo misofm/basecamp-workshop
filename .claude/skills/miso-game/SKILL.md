@@ -90,11 +90,12 @@ async function getJson<T>(url: string): Promise<T> {
 export async function loadShopRecord(releaseId: string, edition: number) {
   const { pressingId, listingId } = deriveSaleIds(releaseId, edition, FAKE_USD_TYPE, RECORD_PACKAGE_ID, RECORD_SHOP_PACKAGE_ID);
   const [release, pressing, listing] = await Promise.all([
-    getJson<any>(`${MISO_API}/protocol/releases/${releaseId}`),
+    getJson<any>(`${MISO_API}/protocol/releases/${releaseId}?include=trackCredits`),
     getJson<any>(`${MISO_API}/platform/pressings/${pressingId}`),
     getJson<any>(`${MISO_API}/platform/pressings/${pressingId}/listing?currencyType=${encodeURIComponent(FAKE_USD_TYPE)}`),
   ]);
   const primary = (release.credits ?? []).filter((c: any) => c.roles.includes("Primary")).map((c: any) => c.displayName);
+  const labelCredit = Object.values(release.trackCredits ?? {}).flatMap((t: any) => t.recordingCredits?.credits ?? []).find((c: any) => c.roles.includes("Label"));
   return {
     releaseId,
     edition,
@@ -103,6 +104,7 @@ export async function loadShopRecord(releaseId: string, edition: number) {
     title: release.title as string,
     artist: (primary.length ? primary : release.primaryArtists ?? []).join(", ") as string,
     genre: (release.genres?.[0] ?? "") as string,
+    label: (labelCredit?.displayName ?? "Independent") as string,
     description: (release.description ?? "") as string,
     year: new Date(release.publishedAtMs ?? Date.now()).getUTCFullYear(),
     coverUrl: release.cover?.still?.blobId ? `${MISO_CDN}/blobs/${release.cover.still.blobId}?w=512&f=webp` : "",
@@ -174,12 +176,18 @@ export function run(tx: Transaction, signer: Ed25519Keypair): Promise<{ digest: 
     const result = await sui.core.signAndExecuteTransaction({ transaction: tx, signer, include: { effects: true, objectTypes: true } });
     const t = result.Transaction ?? result.FailedTransaction;
     if (!t.status.success) throw new Error(`Transaction failed: ${t.status.error?.message ?? "unknown"}`);
-    await sui.core.waitForTransaction({ digest: t.digest });
+    await sui.core.waitForTransaction({ digest: t.digest, pollSchedule: [500, 1500, 3000] });
     const created = t.effects.changedObjects.filter((c) => c.idOperation === "Created").map((c) => c.objectId);
     return { digest: t.digest, recordId: created.find((id) => t.objectTypes[id] === RECORD_TYPE) ?? null };
   });
   queues.set(key, job.catch(() => undefined));
   return job;
+}
+
+/** One Record's serial in its edition (e.g. 7 of 250), read right after a purchase. */
+export async function recordSerial(recordId: string): Promise<number> {
+  const { object } = await sui.core.getObject({ objectId: recordId, include: { json: true } });
+  return Number((object.json as any)?.number ?? 0);
 }
 
 /** Records an address owns, with what the chain stores on each. */

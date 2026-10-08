@@ -44,6 +44,18 @@ works" drawer that logs every public request it makes.
 crates of the ten releases, preview a track on the listening deck, buy a Record at the counter, smash a
 parked car with it, and sell it to a collector on the street.
 
+To build its Miso layer yourself, switch to the starter (the same game with `src/miso/testnet-adapter.ts`
+left as a stub), put two funded testnet keys in `apps/game/.env.local` (see `apps/game/.env.example`),
+and run Claude Code from `apps/game`:
+
+```sh
+git checkout stage/starter && cd apps/game && npm install && claude
+```
+
+> Use the miso-game skill to connect this game to Miso testnet: implement src/miso/testnet-adapter.ts per its contract. Real shelves from public/shop.testnet.json (covers, titles, artists, turntable previews), buying at the counter with the player wallet, the ATM via the FakeUSD faucet, selling to Stonks with the game wallet, explorer links on receipts. No tests or browser checks. When it builds, start the dev server and give me the URL.
+
+`git checkout main` brings back the finished game.
+
 ## What's on Sui testnet
 
 - **10 releases, 50 tracks** (5 per release), defined in [`catalog/catalog.json`](catalog/catalog.json).

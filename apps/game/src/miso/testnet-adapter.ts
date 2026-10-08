@@ -20,7 +20,8 @@
  *   sells records.
  * - import.meta.env.VITE_GAME_SUI_PRIVATE_KEY: the game world = the collector NPC "Stonks".
  *   Receives sold Records and pays for them.
- * - Both are `suiprivkey1…` strings. Never log them.
+ * - Both are `suiprivkey1…` strings, already set in .env.local, and both wallets are funded
+ *   with testnet SUI. Don't open, print or check .env.local; never log the keys.
  *
  * Methods
  * - getWallet(): the player's address and balances (FakeUSD base units + decimals, SUI in MIST).
@@ -42,8 +43,9 @@
  *   `kind`: "fusd" (not enough FakeUSD: the game points at the ATM), "soldOut", "network",
  *   "timeout" or "other". See classifyChainError in ../app/errors.ts.
  *
- * ../app/pending-sales.ts is a ready-made localStorage store for sales whose Record was
- * transferred but not yet paid; it is passed in as `options.pending` if you want it.
+ * Keep it simple: Retry in the game just calls the method again, so no idempotency layer,
+ * pending-sale bookkeeping or SDK spelunking is needed. (select.ts passes `options.pending`,
+ * a localStorage store; ignore it.)
  */
 import type { MisoAdapter } from "./adapter";
 import { explorerObjectUrl, explorerTxUrl } from "./explorer";

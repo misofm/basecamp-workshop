@@ -35,3 +35,9 @@ includes:
 
 - `apps/game/src/tamashi/traits.json`
 - `apps/game/public/tamashi/`
+
+## Third-party skills
+
+`.claude/skills/sui-frontend` and `.claude/skills/sui-ts-sdk` are copied unchanged from
+[MystenLabs/sui-dev-skills](https://github.com/MystenLabs/sui-dev-skills) (commit e365785), which recommends
+committing them into projects. They remain Mysten Labs' work.

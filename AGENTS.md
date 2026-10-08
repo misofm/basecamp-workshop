@@ -8,6 +8,7 @@ This is the Miso workshop repo for Sui Basecamp 2026. Everything targets Sui tes
 - `deliveries/`: an artist's release packages (10 albums, ready to verify and publish). Their media is
   already uploaded (`media.testnet.json`), so publishing only creates parties and releases on Sui.
 - `examples/`: put new apps built during the workshop here, one folder per app. It is not committed.
-- `apps/spa` and `apps/game` are the finished reference apps.
+- `apps/spa` is the finished reference app. `apps/game` is the game with its Miso layer still a stub
+  (`apps/game/src/miso/testnet-adapter.ts`).
 - The wallet key is a file outside the repo, `~/.miso/wallet.key`. Never print, copy or commit key files
   or `apps/game/.env.local`.
